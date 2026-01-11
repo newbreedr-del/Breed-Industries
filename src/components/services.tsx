@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Tab } from '@radix-ui/react-tabs';
 import { Shield, PenTool, Code, Rocket, ChevronRight } from 'lucide-react';
 
 const servicesData = [

@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
     await browser.close();
     
     // Convert PDF to base64 for email attachment
-    const pdfBase64 = pdf.toString('base64');
+    const pdfBase64 = Buffer.from(pdf).toString('base64');
     
     // Send email with PDF attachment
     const msg = {
