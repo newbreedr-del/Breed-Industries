@@ -210,7 +210,7 @@ export const Services = () => {
               
               <div className="flex flex-col sm:flex-row gap-4 mt-6">
                 <a 
-                  href="/pricing" 
+                  href="#packages" 
                   className="btn btn-outline-light"
                 >
                   View Full Details

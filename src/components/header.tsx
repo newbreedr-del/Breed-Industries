@@ -25,7 +25,7 @@ export const Header = () => {
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image 
-            src="/assets/images/breed-logo.png" 
+            src="/assets/images/breed-logo.svg" 
             alt="Breed Industries logo" 
             width={40} 
             height={40} 
@@ -36,21 +36,21 @@ export const Header = () => {
 
         <div className="hidden md:flex items-center gap-8">
           <nav className="flex items-center gap-6">
-            <Link href="/" className="text-white hover:text-gold transition-colors">
+            <a href="#hero" className="text-white hover:text-gold transition-colors">
               Home
-            </Link>
-            <Link href="/services" className="text-white hover:text-gold transition-colors">
+            </a>
+            <a href="#services" className="text-white hover:text-gold transition-colors">
               Services
-            </Link>
-            <Link href="/pricing" className="text-white hover:text-gold transition-colors">
+            </a>
+            <a href="#packages" className="text-white hover:text-gold transition-colors">
               Pricing
-            </Link>
-            <Link href="/about" className="text-white hover:text-gold transition-colors">
+            </a>
+            <a href="#about" className="text-white hover:text-gold transition-colors">
               About Us
-            </Link>
-            <Link href="/contact" className="text-white hover:text-gold transition-colors">
+            </a>
+            <a href="#contact" className="text-white hover:text-gold transition-colors">
               Contact
-            </Link>
+            </a>
           </nav>
           
           <div className="flex items-center gap-4">
@@ -78,41 +78,41 @@ export const Header = () => {
       {isMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-navy/95 backdrop-blur-md py-4 shadow-lg">
           <nav className="container mx-auto px-4 flex flex-col gap-4">
-            <Link 
-              href="/" 
+            <a 
+              href="#hero" 
               className="text-white hover:text-gold transition-colors py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               Home
-            </Link>
-            <Link 
-              href="/services" 
+            </a>
+            <a 
+              href="#services" 
               className="text-white hover:text-gold transition-colors py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               Services
-            </Link>
-            <Link 
-              href="/pricing" 
+            </a>
+            <a 
+              href="#packages" 
               className="text-white hover:text-gold transition-colors py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               Pricing
-            </Link>
-            <Link 
-              href="/about" 
+            </a>
+            <a 
+              href="#about" 
               className="text-white hover:text-gold transition-colors py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               About Us
-            </Link>
-            <Link 
-              href="/contact" 
+            </a>
+            <a 
+              href="#contact" 
               className="text-white hover:text-gold transition-colors py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               Contact
-            </Link>
+            </a>
             <a 
               href="https://wa.me/27685037221" 
               target="_blank" 

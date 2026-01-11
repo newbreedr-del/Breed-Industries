@@ -1,0 +1,10 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" rx="24" fill="#001F3F" opacity="0.08" />
+  <rect x="32" y="32" width="336" height="236" rx="20" fill="#001F3F" opacity="0.12" />
+  <rect x="64" y="80" width="272" height="24" rx="12" fill="#001F3F" opacity="0.3" />
+  <rect x="64" y="120" width="224" height="16" rx="8" fill="#001F3F" opacity="0.2" />
+  <rect x="64" y="152" width="240" height="16" rx="8" fill="#001F3F" opacity="0.2" />
+  <rect x="64" y="184" width="208" height="16" rx="8" fill="#001F3F" opacity="0.2" />
+  <circle cx="320" cy="216" r="32" fill="#D4AF37" opacity="0.6" />
+  <text x="200" y="230" text-anchor="middle" font-family="Montserrat, Arial" font-size="24" font-weight="600" fill="#001F3F">Portfolio Image</text>
+</svg>

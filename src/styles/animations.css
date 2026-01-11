@@ -1,0 +1,222 @@
+/**
+ * Breed Industries Animation System
+ * Empire Platform - Motion Patterns
+ */
+
+/* Keyframes Definitions */
+
+@keyframes grid-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes rise-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-accent {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 159, 0, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 159, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 159, 0, 0);
+  }
+}
+
+@keyframes grid-line-flow {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: var(--grid-base) var(--grid-base);
+  }
+}
+
+/* Animation Classes */
+
+.animate-grid-fade {
+  animation: grid-fade-in 1s var(--transition-timing) forwards;
+}
+
+.animate-rise {
+  animation: rise-up 0.5s var(--transition-timing) forwards;
+}
+
+.animate-slide-right {
+  animation: slide-in-right 0.5s var(--transition-timing) forwards;
+}
+
+.animate-slide-left {
+  animation: slide-in-left 0.5s var(--transition-timing) forwards;
+}
+
+.animate-scale {
+  animation: scale-in 0.5s var(--transition-timing) forwards;
+}
+
+.animate-pulse-accent {
+  animation: pulse-accent 2s infinite;
+}
+
+.animate-grid-flow {
+  animation: grid-line-flow 20s linear infinite;
+}
+
+/* Delay Utilities */
+
+.delay-0 {
+  animation-delay: 0ms;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-400 {
+  animation-delay: 400ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+.delay-700 {
+  animation-delay: 700ms;
+}
+
+.delay-1000 {
+  animation-delay: 1000ms;
+}
+
+/* Staggered Children */
+.stagger-children > * {
+  opacity: 0;
+}
+
+.stagger-children > *:nth-child(1) {
+  animation: rise-up 0.5s var(--transition-timing) forwards;
+  animation-delay: 0ms;
+}
+
+.stagger-children > *:nth-child(2) {
+  animation: rise-up 0.5s var(--transition-timing) forwards;
+  animation-delay: 100ms;
+}
+
+.stagger-children > *:nth-child(3) {
+  animation: rise-up 0.5s var(--transition-timing) forwards;
+  animation-delay: 200ms;
+}
+
+.stagger-children > *:nth-child(4) {
+  animation: rise-up 0.5s var(--transition-timing) forwards;
+  animation-delay: 300ms;
+}
+
+.stagger-children > *:nth-child(5) {
+  animation: rise-up 0.5s var(--transition-timing) forwards;
+  animation-delay: 400ms;
+}
+
+.stagger-children > *:nth-child(n+6) {
+  animation: rise-up 0.5s var(--transition-timing) forwards;
+  animation-delay: 500ms;
+}
+
+/* Scroll Reveal Base Classes */
+.reveal-on-scroll {
+  opacity: 0;
+  transition: opacity 0.6s var(--transition-timing), 
+              transform 0.6s var(--transition-timing);
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+}
+
+.reveal-up {
+  transform: translateY(20px);
+}
+
+.reveal-up.is-visible {
+  transform: translateY(0);
+}
+
+.reveal-left {
+  transform: translateX(-20px);
+}
+
+.reveal-left.is-visible {
+  transform: translateX(0);
+}
+
+.reveal-right {
+  transform: translateX(20px);
+}
+
+.reveal-right.is-visible {
+  transform: translateX(0);
+}
+
+.reveal-scale {
+  transform: scale(0.95);
+}
+
+.reveal-scale.is-visible {
+  transform: scale(1);
+}

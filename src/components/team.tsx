@@ -38,7 +38,7 @@ const teamData = [
     id: 'james',
     name: 'James Thompson',
     position: 'Lead Developer',
-    image: '/assets/images/team/placeholder.jpg',
+    image: '/assets/images/team/james.jpg',
     bio: 'James leads our development team with expertise in web and mobile applications. He specializes in creating scalable, user-friendly digital experiences that drive business growth.',
     linkedin: 'https://www.linkedin.com/',
     email: 'james@thebreed.co.za'
@@ -47,7 +47,7 @@ const teamData = [
     id: 'sophia',
     name: 'Sophia Chen',
     position: 'Design Director',
-    image: '/assets/images/team/placeholder.jpg',
+    image: '/assets/images/team/sophia.jpg',
     bio: 'Sophia oversees our creative direction and design processes. Her background in visual communication and brand identity helps our clients establish distinctive and memorable brands.',
     linkedin: 'https://www.linkedin.com/',
     email: 'sophia@thebreed.co.za'
@@ -56,7 +56,7 @@ const teamData = [
     id: 'michael',
     name: 'Michael Ndlovu',
     position: 'Business Development',
-    image: '/assets/images/team/placeholder.jpg',
+    image: '/assets/images/team/michael.jpg',
     bio: 'Michael focuses on growing our client base and identifying new market opportunities. His deep understanding of the South African business landscape is invaluable to our expansion strategy.',
     linkedin: 'https://www.linkedin.com/',
     email: 'michael@thebreed.co.za'

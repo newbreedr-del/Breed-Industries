@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF9F00" />
+      <stop offset="100%" stop-color="#D75C00" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" rx="56" fill="#0B1118" />
+  <path d="M200 40L52 126v148l148 86 148-86V126L200 40Zm0 30 118 69v122l-118 69-118-69V139l118-69Z" fill="url(#accentGradient)" opacity="0.75" />
+  <path d="M119 132h162v44h-95v26h73c25.7 0 41 15.2 41 39.8V256c0 26.2-18.8 44-48.6 44H119v-44h95v-26h-73c-25.7 0-41-15.3-41-39.9v-18.3c0-26.1 18.9-44.8 48.6-44.8Z" fill="#FF9F00" />
+</svg>

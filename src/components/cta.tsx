@@ -55,7 +55,7 @@ export const Cta = () => {
             </a>
             
             <a 
-              href="/contact" 
+              href="#contact" 
               className="btn btn-outline-light"
             >
               Contact Us

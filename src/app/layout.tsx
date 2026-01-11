@@ -1,5 +1,8 @@
 import './globals.css';
-import { Inter, Montserrat } from 'next/font/google';
+import '../styles/tokens.css';
+import '../styles/animations.css';
+import '../styles/mixins.css';
+import { Inter, Montserrat, JetBrains_Mono } from 'next/font/google';
 import type { Metadata } from 'next';
 
 const inter = Inter({ 
@@ -12,13 +15,23 @@ const montserrat = Montserrat({
   subsets: ['latin'],
   variable: '--font-montserrat',
   display: 'swap',
-  weight: ['600', '700', '800'],
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
   title: 'Breed Industries – Premium South African Business Agency',
   description: 'Breed Industries is a premium South African business agency providing business registration, branding, and digital solutions for entrepreneurs.',
   keywords: 'business registration, branding, web development, South Africa, Durban, digital marketing',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
@@ -27,9 +40,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
-      <body className="bg-offWhite min-h-screen font-sans">
-        {children}
+    <html lang="en" className={`${inter.variable} ${montserrat.variable} ${jetbrainsMono.variable}`}>
+      <body className="bg-color-bg-deep min-h-screen font-sans text-white">
+        <div className="blueprint-bg min-h-screen flex flex-col">
+          {children}
+        </div>
       </body>
     </html>
   );

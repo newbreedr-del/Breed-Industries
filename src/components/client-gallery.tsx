@@ -5,12 +5,23 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ChevronRight, ChevronLeft, ExternalLink } from 'lucide-react';
 
+const CLIENT_LOGO_PLACEHOLDER = '/assets/images/clients/logo-aurora.jpg';
+const CLIENT_LOGO_ALT_1 = '/assets/images/clients/logo-kinetic.jpg';
+const CLIENT_LOGO_ALT_2 = '/assets/images/clients/logo-simplified.jpg';
+const CLIENT_LOGO_ALT_3 = '/assets/images/clients/logo-breed.png';
+
+const PORTFOLIO_CASE_GRID = '/assets/images/portfolio/case-study-grid.jpg';
+const PORTFOLIO_CLIENT_SHOWCASE = '/assets/images/portfolio/client-showcase.jpg';
+const PORTFOLIO_BRANDING = '/assets/images/portfolio/branding-suite.jpg';
+const PORTFOLIO_DIGITAL = '/assets/images/portfolio/digital-experience.jpg';
+const PORTFOLIO_ENTERPRISE = '/assets/images/portfolio/enterprise-success.jpg';
+
 // Sample client data - in a real implementation, this would come from a CMS or API
 const clientsData = [
   {
     id: 'cvs',
     name: 'CVS Health',
-    logo: '/assets/images/clients/cvs-health.png',
+    logo: CLIENT_LOGO_PLACEHOLDER,
     industry: 'Healthcare',
     description: 'Comprehensive brand refresh and digital marketing strategy for the healthcare giant.',
     featured: true
@@ -18,7 +29,7 @@ const clientsData = [
   {
     id: 'berkshire',
     name: 'Berkshire Hathaway',
-    logo: '/assets/images/clients/berkshire-hathaway.png',
+    logo: CLIENT_LOGO_ALT_1,
     industry: 'Finance',
     description: 'Custom web portal development and ongoing digital support.',
     featured: true
@@ -26,7 +37,7 @@ const clientsData = [
   {
     id: 'att',
     name: 'AT&T',
-    logo: '/assets/images/clients/att.png',
+    logo: CLIENT_LOGO_ALT_2,
     industry: 'Telecommunications',
     description: 'Strategic digital transformation consulting and implementation.',
     featured: true
@@ -34,7 +45,7 @@ const clientsData = [
   {
     id: 'wordpress',
     name: 'WordPress.com',
-    logo: '/assets/images/clients/wordpress.png',
+    logo: CLIENT_LOGO_ALT_3,
     industry: 'Technology',
     description: 'Brand strategy and marketing collateral for product launch.',
     featured: true
@@ -42,7 +53,7 @@ const clientsData = [
   {
     id: 'client5',
     name: 'Tech Innovators',
-    logo: '/assets/images/clients/placeholder.png',
+    logo: CLIENT_LOGO_ALT_2,
     industry: 'Technology',
     description: 'Complete brand identity and website development for tech startup.',
     featured: false
@@ -50,7 +61,7 @@ const clientsData = [
   {
     id: 'client6',
     name: 'Global Finance',
-    logo: '/assets/images/clients/placeholder.png',
+    logo: CLIENT_LOGO_ALT_1,
     industry: 'Finance',
     description: 'Custom financial portal with secure client dashboard.',
     featured: false
@@ -58,7 +69,7 @@ const clientsData = [
   {
     id: 'client7',
     name: 'Health Partners',
-    logo: '/assets/images/clients/placeholder.png',
+    logo: CLIENT_LOGO_PLACEHOLDER,
     industry: 'Healthcare',
     description: 'Brand refresh and marketing strategy for healthcare provider.',
     featured: false
@@ -66,7 +77,7 @@ const clientsData = [
   {
     id: 'client8',
     name: 'Retail Solutions',
-    logo: '/assets/images/clients/placeholder.png',
+    logo: CLIENT_LOGO_ALT_3,
     industry: 'Retail',
     description: 'E-commerce platform development and digital marketing.',
     featured: false
@@ -79,42 +90,42 @@ const portfolioProjects = [
     id: 'project1',
     title: 'Financial Services Portal',
     category: 'Web Development',
-    image: '/assets/images/portfolio/placeholder-1.jpg',
+    image: PORTFOLIO_ENTERPRISE,
     description: 'Custom financial portal with client dashboard, reporting tools, and secure document management.'
   },
   {
     id: 'project2',
     title: 'Healthcare Brand Identity',
     category: 'Branding',
-    image: '/assets/images/portfolio/placeholder-2.jpg',
+    image: PORTFOLIO_BRANDING,
     description: 'Complete brand identity system including logo, color palette, typography, and brand guidelines.'
   },
   {
     id: 'project3',
     title: 'E-commerce Platform',
     category: 'Web Development',
-    image: '/assets/images/portfolio/placeholder-3.jpg',
+    image: PORTFOLIO_CLIENT_SHOWCASE,
     description: 'Fully responsive e-commerce platform with product management, payment processing, and inventory tracking.'
   },
   {
     id: 'project4',
     title: 'Corporate Identity Package',
     category: 'Branding',
-    image: '/assets/images/portfolio/placeholder-4.jpg',
+    image: PORTFOLIO_CASE_GRID,
     description: 'Corporate identity package including logo, business cards, letterhead, and email signatures.'
   },
   {
     id: 'project5',
     title: 'Mobile App Development',
     category: 'App Development',
-    image: '/assets/images/portfolio/placeholder-5.jpg',
+    image: PORTFOLIO_DIGITAL,
     description: 'Custom mobile application for iOS and Android with user authentication and real-time data synchronization.'
   },
   {
     id: 'project6',
     title: 'Marketing Campaign',
     category: 'Marketing',
-    image: '/assets/images/portfolio/placeholder-6.jpg',
+    image: PORTFOLIO_ENTERPRISE,
     description: 'Integrated marketing campaign across digital and traditional channels with performance tracking.'
   }
 ];

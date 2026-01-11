@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Zap, Crown, Users, Gem, Headset } from 'lucide-react';
+import { Zap, Crown, Users, Gem, Headphones } from 'lucide-react';
 
 const benefitsData = [
   {
@@ -30,7 +30,7 @@ const benefitsData = [
   },
   {
     id: 'easy-support',
-    icon: <Headset className="w-8 h-8" />,
+    icon: <Headphones className="w-8 h-8" />,
     title: 'Easy Quotes & Support',
     description: 'Speak to us directly on WhatsApp for quick answers, clear pricing, and ongoing support.'
   }

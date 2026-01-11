@@ -16,7 +16,7 @@ export const Footer = () => {
           <div className="mb-8 md:mb-0">
             <Link href="/" className="inline-flex items-center gap-2 mb-6">
               <Image 
-                src="/assets/images/breed-logo.png" 
+                src="/assets/images/breed-logo.svg" 
                 alt="Breed Industries logo" 
                 width={40} 
                 height={40} 
@@ -75,29 +75,29 @@ export const Footer = () => {
               <h4 className="text-white font-bold mb-4">Quick Links</h4>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/" className="text-white/70 hover:text-gold transition-colors">
+                  <a href="#hero" className="text-white/70 hover:text-gold transition-colors">
                     Home
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link href="/services" className="text-white/70 hover:text-gold transition-colors">
+                  <a href="#services" className="text-white/70 hover:text-gold transition-colors">
                     Services
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link href="/pricing" className="text-white/70 hover:text-gold transition-colors">
+                  <a href="#packages" className="text-white/70 hover:text-gold transition-colors">
                     Pricing
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link href="/about" className="text-white/70 hover:text-gold transition-colors">
+                  <a href="#about" className="text-white/70 hover:text-gold transition-colors">
                     About
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-white/70 hover:text-gold transition-colors">
+                  <a href="#contact" className="text-white/70 hover:text-gold transition-colors">
                     Contact
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>
