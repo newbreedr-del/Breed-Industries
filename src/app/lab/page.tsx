@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useMemo, useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
@@ -87,12 +87,14 @@ const quickBundles = [
   },
 ];
 
+const allOptions = [...complianceOptions, ...brandingOptions, ...digitalOptions];
+
 export default function LabPage() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [activeStep, setActiveStep] = useState('compliance');
   const [selectedBundle, setSelectedBundle] = useState<string | null>(null);
   const [showQuoteModal, setShowQuoteModal] = useState(false);
-  
+
   const handleOptionToggle = (optionId: string) => {
     setSelectedBundle(null);
     setSelectedOptions(prev => {
@@ -103,6 +105,18 @@ export default function LabPage() {
       }
     });
   };
+
+  const selectedQuoteItems = useMemo(() => {
+    return selectedOptions.map((optionId, index) => {
+      const option = allOptions.find((item) => item.id === optionId);
+      return {
+        id: `${index + 1}-${optionId}`,
+        name: option?.name ?? 'Custom Item',
+        description: '',
+        price: option?.price ?? 0,
+      };
+    });
+  }, [selectedOptions]);
   
   const handleBundleSelect = (bundleId: string) => {
     const bundle = quickBundles.find(b => b.id === bundleId);
@@ -415,7 +429,7 @@ export default function LabPage() {
             </button>
             
             <div className="max-h-[90vh] overflow-y-auto">
-              <QuoteGenerator />
+              <QuoteGenerator selectedItems={selectedQuoteItems} />
             </div>
           </div>
         </div>

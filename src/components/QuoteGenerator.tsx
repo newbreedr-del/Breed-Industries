@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { PlusCircle, MinusCircle, Loader2, CheckCircle, Send } from 'lucide-react';
 
 interface QuoteItem {
@@ -11,7 +11,20 @@ interface QuoteItem {
   rate: number;
 }
 
-export default function QuoteGenerator() {
+interface SelectedItem {
+  id: string;
+  name: string;
+  description?: string;
+  price: number;
+  quantity?: number;
+  rate?: number;
+}
+
+interface QuoteGeneratorProps {
+  selectedItems: SelectedItem[];
+}
+
+export default function QuoteGenerator({ selectedItems }: QuoteGeneratorProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,15 +42,29 @@ export default function QuoteGenerator() {
   const [notes, setNotes] = useState('');
   
   // Items state
-  const [items, setItems] = useState<QuoteItem[]>([
-    {
-      id: '1',
-      name: '',
-      description: '',
-      quantity: 1,
-      rate: 0
+  const defaultItem: QuoteItem = useMemo(
+    () => ({ id: '1', name: '', description: '', quantity: 1, rate: 0 }),
+    []
+  );
+
+  const [items, setItems] = useState<QuoteItem[]>([defaultItem]);
+
+  useEffect(() => {
+    if (selectedItems.length === 0) {
+      setItems([defaultItem]);
+      return;
     }
-  ]);
+
+    setItems(
+      selectedItems.map((item, index) => ({
+        id: item.id ?? (index + 1).toString(),
+        name: item.name,
+        description: item.description ?? '',
+        quantity: item.quantity ?? 1,
+        rate: item.rate ?? item.price ?? 0,
+      }))
+    );
+  }, [defaultItem, selectedItems]);
   
   // Add new item
   const addItem = () => {

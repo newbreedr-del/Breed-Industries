@@ -3,6 +3,8 @@ import puppeteer from 'puppeteer';
 import sgMail from '@sendgrid/mail';
 import { randomUUID } from 'crypto';
 import { format } from 'date-fns';
+import { readFile } from 'fs/promises';
+import { join } from 'path';
 
 // Set SendGrid API key
 // In production, use environment variables
@@ -11,6 +13,25 @@ sgMail.setApiKey(SENDGRID_API_KEY);
 
 // Company email to CC
 const COMPANY_EMAIL = 'info@thebreed.co.za';
+
+let cachedLogoDataUri: string | null = null;
+
+async function getLogoDataUri() {
+  if (cachedLogoDataUri) {
+    return cachedLogoDataUri;
+  }
+
+  try {
+    const logoPath = join(process.cwd(), 'assets', 'images', 'breed-logo.png');
+    const logoBuffer = await readFile(logoPath);
+    cachedLogoDataUri = `data:image/png;base64,${logoBuffer.toString('base64')}`;
+    return cachedLogoDataUri;
+  } catch (error) {
+    console.error('Failed to load logo asset for quote template:', error);
+    cachedLogoDataUri = null;
+    return null;
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -56,6 +77,8 @@ export async function POST(req: NextRequest) {
     const total = subtotal + tax;
     
     // Generate HTML for the quote
+    const logoDataUri = await getLogoDataUri();
+
     const quoteHTML = generateQuoteHTML({
       quoteNumber,
       currentDate,
@@ -73,63 +96,68 @@ export async function POST(req: NextRequest) {
       tax,
       taxRate,
       total,
-      notes
+      notes,
+      logoDataUri
     });
     
     // Generate PDF using Puppeteer
-    const browser = await puppeteer.launch({
+    let browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      defaultViewport: { width: 1280, height: 720 }
     });
     
-    const page = await browser.newPage();
-    await page.setContent(quoteHTML, { waitUntil: 'networkidle0' });
-    
-    const pdf = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: {
-        top: '20px',
-        right: '20px',
-        bottom: '20px',
-        left: '20px'
-      }
-    });
-    
-    await browser.close();
-    
-    // Convert PDF to base64 for email attachment
-    const pdfBase64 = Buffer.from(pdf).toString('base64');
-    
-    // Send email with PDF attachment
-    const msg = {
-      to: customerEmail,
-      cc: COMPANY_EMAIL,
-      from: COMPANY_EMAIL,
-      subject: `Quote #${quoteNumber} from Breed Industries`,
-      text: `Dear ${customerName},\n\nThank you for your interest in our services. Please find attached your quote #${quoteNumber}.\n\nThis quote is valid until ${validUntil}.\n\nIf you have any questions, please don't hesitate to contact us.\n\nBest regards,\nBreed Industries Team`,
-      attachments: [
-        {
-          content: pdfBase64,
-          filename: `Breed_Industries_Quote_${quoteNumber}.pdf`,
-          type: 'application/pdf',
-          disposition: 'attachment'
+    try {
+      const page = await browser.newPage();
+      await page.setContent(quoteHTML, { waitUntil: 'domcontentloaded', timeout: 0 });
+      await page.emulateMediaType('screen');
+      
+      const pdf = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: {
+          top: '20px',
+          right: '20px',
+          bottom: '20px',
+          left: '20px'
         }
-      ]
-    };
-    
-    await sgMail.send(msg);
-    
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Quote generated and sent successfully',
-      quoteNumber
-    });
+      });
+      
+      // Convert PDF to base64 for email attachment
+      const pdfBase64 = Buffer.from(pdf).toString('base64');
+      
+      // Send email with PDF attachment
+      const msg = {
+        to: customerEmail,
+        cc: COMPANY_EMAIL,
+        from: COMPANY_EMAIL,
+        subject: `Quote #${quoteNumber} from Breed Industries`,
+        text: `Dear ${customerName},\n\nThank you for your interest in our services. Please find attached your quote #${quoteNumber}.\n\nThis quote is valid until ${validUntil}.\n\nIf you have any questions, please don't hesitate to contact us.\n\nBest regards,\nBreed Industries Team`,
+        attachments: [
+          {
+            content: pdfBase64,
+            filename: `Breed_Industries_Quote_${quoteNumber}.pdf`,
+            type: 'application/pdf',
+            disposition: 'attachment'
+          }
+        ]
+      };
+      
+      await sgMail.send(msg);
+      
+      return NextResponse.json({ 
+        success: true, 
+        message: 'Quote generated and sent successfully',
+        quoteNumber
+      });
+    } finally {
+      await browser.close();
+    }
     
   } catch (error) {
     console.error('Error generating quote:', error);
     return NextResponse.json(
-      { error: 'Failed to generate quote' },
+      { error: error instanceof Error ? error.message : 'Failed to generate quote' },
       { status: 500 }
     );
   }
@@ -153,7 +181,8 @@ function generateQuoteHTML(data: any) {
     tax,
     taxRate,
     total,
-    notes
+    notes,
+    logoDataUri
   } = data;
   
   // Format currency
@@ -410,7 +439,9 @@ function generateQuoteHTML(data: any) {
         <!-- Header -->
         <div class="header">
             <div class="logo-section">
-                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8IS0tIEJyZWVkIEluZHVzdHJpZXMgTG9nbyAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMCwgMTApIj4KICAgIDwhLS0gSGV4YWdvbiBTaGFwZSAtLT4KICAgIDxwYXRoIGQ9Ik0yMCw1IEw0MCwyMCBMNDAsNTAgTDIwLDY1IEwwLDUwIEwwLDIwIFoiIGZpbGw9IiNDQTgxMTQiLz4KICAgIDxwYXRoIGQ9Ik0yMCw1IEw0MCwyMCBMNDAsNTAgTDIwLDY1IEwyMCw1IFoiIGZpbGw9IiNENjYxMEQiLz4KICAgIDxwYXRoIGQ9Ik0yMCw2NSBMMCw1MCBMMCwyMCBMMjAsNSBMMjAsNjUgWiIgZmlsbD0iI0NBODExNCIgb3BhY2l0eT0iMC44Ii8+CiAgICA8IS0tIElubmVyIEIgU2hhcGUgLS0+CiAgICA8cGF0aCBkPSJNMTUsMjAgTDI1LDI1IEwyNSw0NSBMMTUsNTAgTDE1LDIwIFoiIGZpbGw9IndoaXRlIi8+CiAgPC9nPgogIDx0ZXh0IHg9IjcwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzFkMWQxZiI+QlJFRUQ8L3RleHQ+CiAgPHRleHQgeD0iNzAiIHk9Ijc1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiMxZDFkMWYiPklORFVTVFJJRVM8L3RleHQ+Cjwvc3ZnPg==" alt="Breed Industries" style="height: 60px; margin-bottom: 10px;">
+                ${logoDataUri
+                  ? `<img src="${logoDataUri}" alt="Breed Industries" style="height: 60px; margin-bottom: 10px;">`
+                  : `<div class="company-name">Breed Industries</div>`}
                 <div class="company-details">
                     4 Ivy Road<br>
                     Pinetown, 3610<br>
