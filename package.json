@@ -11,7 +11,6 @@
     "export": "next build && next export"
   },
   "dependencies": {
-    "@next/swc-win32-x64-msvc": "^16.1.1",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.5",
     "@radix-ui/react-slider": "^1.1.2",
