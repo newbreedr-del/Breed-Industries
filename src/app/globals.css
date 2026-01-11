@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy: #001F3F;
+  --navy-light: #003366;
+  --navy-dark: #00152A;
+  --gold: #D4AF37;
+  --gold-light: #F4D03F;
+  --gold-dark: #B38728;
+  --tech-blue: #0070F3;
+  --charcoal: #333333;
+  --off-white: #F8F5F0;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-offWhite text-charcoal;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-bold;
+  }
+  
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+  
+  h4 {
+    @apply text-xl md:text-2xl;
+  }
+  
+  p {
+    @apply mb-4;
+  }
+}
+
+@layer components {
+  .container {
+    @apply px-4 mx-auto max-w-7xl;
+  }
+  
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-md font-medium transition-all duration-300 focus:outline-none;
+  }
+  
+  .btn-primary {
+    @apply bg-gold text-navy shadow-gold hover:shadow-gold-hover hover:-translate-y-1;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-navy text-navy hover:bg-navy/5;
+  }
+  
+  .btn-outline-light {
+    @apply border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50;
+  }
+  
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-md border border-white/10 rounded-xl shadow-lg;
+  }
+  
+  .section {
+    @apply py-16 md:py-24;
+  }
+  
+  .section-heading {
+    @apply mb-12 text-center;
+  }
+  
+  .section-heading span {
+    @apply text-gold font-semibold uppercase tracking-wider text-sm;
+  }
+  
+  .section-heading h2 {
+    @apply mt-2 mb-4;
+  }
+  
+  .section-heading p {
+    @apply max-w-3xl mx-auto text-lg text-charcoal/80;
+  }
+}
+
+/* Animations */
+.fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scroll Progress Bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  z-index: 100;
+  background: rgba(0, 31, 63, 0.1);
+}
+
+.scroll-progress__bar {
+  height: 100%;
+  background: var(--gold);
+  width: 0%;
+  transition: width 0.1s ease;
+}
+
+/* Floating WhatsApp Button */
+.floating-whatsapp {
+  @apply fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center text-2xl shadow-lg z-50 transition-all hover:scale-110;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); }
+  50% { box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7); }
+}
