@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { 
   Phone, Mail, MapPin, 
   Facebook, Instagram, Linkedin, 
-  Twitter, Tiktok, ChevronRight 
+  Twitter, ChevronRight 
 } from 'lucide-react';
 
 export const Footer = () => {
@@ -82,7 +82,7 @@ export const Footer = () => {
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-accent hover:text-color-bg-deep transition-colors"
                 aria-label="TikTok"
               >
-                <Tiktok size={18} />
+                <i className="fab fa-tiktok text-lg"></i>
               </a>
             </div>
           </div>

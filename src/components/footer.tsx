@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Facebook, Instagram, Linkedin, Twitter, Tiktok } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -73,7 +73,7 @@ export const Footer = () => {
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-gold hover:text-navy transition-colors"
                 aria-label="TikTok"
               >
-                <Tiktok size={18} />
+                <i className="fab fa-tiktok text-lg"></i>
               </a>
             </div>
           </div>
