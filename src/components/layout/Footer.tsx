@@ -172,8 +172,8 @@ export const Footer = () => {
                 <Phone className="w-5 h-5 text-accent mr-3 mt-1" />
                 <div>
                   <p className="text-white font-medium">Call Us</p>
-                  <a href="tel:+27685037221" className="text-white/70 hover:text-accent transition-colors">
-                    068 503 7221
+                  <a href="tel:+27604964105" className="text-white/70 hover:text-accent transition-colors">
+                    +27 60 496 4105
                   </a>
                 </div>
               </li>

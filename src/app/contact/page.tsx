@@ -2,7 +2,8 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
-import { Phone, Mail, MapPin, Clock, Send, MessageSquare } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, MessageSquare } from 'lucide-react';
+import { ContactForm } from '@/components/forms/ContactForm';
 
 const contactChannels = [
   {
@@ -37,8 +38,13 @@ export default function ContactPage() {
           <Link href="tel:+27604964105" className="btn btn-primary inline-flex items-center gap-2">
             <Phone className="w-4 h-4" /> Call Now
           </Link>
-          <Link href="https://wa.me/27604964105" className="btn btn-outline">
-            <MessageSquare className="w-4 h-4" /> WhatsApp
+          <Link
+            href="https://wa.me/message/4FOGIOMM2A35L1"
+            className="btn btn-outline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <MessageSquare className="w-4 h-4" /> Message Breed Industries on WhatsApp
           </Link>
         </div>
       </PageHero>
@@ -91,64 +97,10 @@ export default function ContactPage() {
 
           <div className="glass-card p-8">
             <h2 className="text-xl font-heading font-semibold text-white mb-6">Send Us a Message</h2>
-            <form className="space-y-5">
-              <div>
-                <label htmlFor="name" className="text-white/70 text-sm font-medium">
-                  Full Name
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  placeholder="Ayanda M."
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:border-accent focus:outline-none"
-                />
-              </div>
-              <div className="grid gap-5 md:grid-cols-2">
-                <div>
-                  <label htmlFor="email" className="text-white/70 text-sm font-medium">
-                    Email Address
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="you@company.co.za"
-                    className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:border-accent focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="phone" className="text-white/70 text-sm font-medium">
-                    Phone / WhatsApp
-                  </label>
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    placeholder="+27 10 123 4567"
-                    className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:border-accent focus:outline-none"
-                  />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="message" className="text-white/70 text-sm font-medium">
-                  How can we help?
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  placeholder="Share your compliance requirements, launch date, and target outcomes."
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:border-accent focus:outline-none"
-                />
-              </div>
-              <button type="submit" className="btn btn-primary w-full justify-center gap-2">
-                <Send className="w-4 h-4" /> Submit Enquiry
-              </button>
-              <p className="text-white/50 text-xs text-center">
-                We’ll respond within one business day. After-hours? WhatsApp us using the floating button.
-              </p>
-            </form>
+            <ContactForm
+              variant="dark"
+              helperText="We’ll respond within one business day. After-hours? WhatsApp us using the floating button."
+            />
           </div>
         </div>
       </section>

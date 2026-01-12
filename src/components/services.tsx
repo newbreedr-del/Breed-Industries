@@ -24,7 +24,7 @@ const servicesData = [
       { name: 'Professional profiles & business email', description: 'Bank-ready business profile, signature, setup' },
       { name: 'Bank account & funding support', description: 'Letters, documents, and pitch-ready assets' }
     ],
-    ctaLink: 'https://wa.me/27813074708?text=Hi!%20I%20need%20business%20setup%20support'
+    ctaLink: 'https://wa.me/message/4FOGIOMM2A35L1'
   },
   {
     id: 'branding',
@@ -43,7 +43,7 @@ const servicesData = [
       { name: 'Brand roll-out toolkit', description: 'Letterhead, 500 business cards, email signature' },
       { name: 'Launch-ready mockups', description: 'Social, signage, pitch decks & apparel visuals' }
     ],
-    ctaLink: 'https://wa.me/27685037221?text=Hi!%20Let\'s%20design%20my%20branding'
+    ctaLink: 'https://wa.me/message/4FOGIOMM2A35L1'
   },
   {
     id: 'digital',
@@ -60,7 +60,7 @@ const servicesData = [
       { name: 'Posters & Business Cards', description: 'R550 – R559+ · Print-ready marketing collateral' },
       { name: 'Full Media Kit', description: 'R2,500 · Photography, video, press-ready assets' }
     ],
-    ctaLink: 'https://wa.me/27813074708?text=Hi!%20I\'d%20like%20a%20digital%20and%20marketing%20proposal'
+    ctaLink: 'https://wa.me/message/4FOGIOMM2A35L1'
   },
   {
     id: 'bundles',
@@ -98,7 +98,7 @@ const servicesData = [
         ]
       }
     ],
-    ctaLink: 'https://wa.me/27685037221?text=Hi!%20I\'m%20ready%20for%20an%20all-in-one%20package'
+    ctaLink: 'https://wa.me/message/4FOGIOMM2A35L1'
   }
 ];
 

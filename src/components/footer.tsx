@@ -139,12 +139,12 @@ export const Footer = () => {
                 <li className="text-white/70">
                   <strong className="text-white">WhatsApp:</strong><br />
                   <a 
-                    href="https://wa.me/27685037221" 
+                    href="https://wa.me/message/4FOGIOMM2A35L1" 
                     className="hover:text-gold transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    068 503 7221
+                    +27 60 496 4105
                   </a>
                 </li>
                 <li className="text-white/70">

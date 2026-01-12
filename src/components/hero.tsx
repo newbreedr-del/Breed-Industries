@@ -97,7 +97,7 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
           >
             <a 
-              href="https://wa.me/27685037221?text=Hi%20Breed%20Industries!%20I'd%20like%20to%20get%20a%20custom%20quote%20for:" 
+              href="https://wa.me/message/4FOGIOMM2A35L1" 
               target="_blank" 
               rel="noopener noreferrer"
               className="btn btn-primary w-full sm:w-auto"

@@ -17,7 +17,7 @@ const packageData = [
     ],
     popular: false,
     ctaText: 'Get Launch Starter',
-    ctaLink: 'https://wa.me/27685037221?text=Hi!%20I\'m%20interested%20in%20the%20Launch%20Starter%20package'
+    ctaLink: 'https://wa.me/27604964105?text=Hi!%20I\'m%20interested%20in%20the%20Launch%20Starter%20package'
   },
   {
     id: 'growth',
@@ -34,7 +34,7 @@ const packageData = [
     ],
     popular: true,
     ctaText: 'Get Growth Professional',
-    ctaLink: 'https://wa.me/27685037221?text=Hi!%20I\'m%20interested%20in%20the%20Growth%20Professional%20package'
+    ctaLink: 'https://wa.me/27604964105?text=Hi!%20I\'m%20interested%20in%20the%20Growth%20Professional%20package'
   },
   {
     id: 'empire',
@@ -51,7 +51,7 @@ const packageData = [
     ],
     popular: false,
     ctaText: 'Get Empire Premium',
-    ctaLink: 'https://wa.me/27685037221?text=Hi!%20I\'m%20interested%20in%20the%20Empire%20Premium%20package'
+    ctaLink: 'https://wa.me/27604964105?text=Hi!%20I\'m%20interested%20in%20the%20Empire%20Premium%20package'
   }
 ];
 

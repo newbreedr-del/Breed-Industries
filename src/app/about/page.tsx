@@ -71,11 +71,11 @@ export default function AboutPage() {
             <div className="flex flex-wrap gap-4">
               <div className="rounded-lg border border-white/10 bg-white/5 p-4">
                 <p className="text-sm text-white/60 uppercase">Businesses launched</p>
-                <p className="text-2xl font-heading font-bold text-accent">450+</p>
+                <p className="text-2xl font-heading font-bold text-accent">45</p>
               </div>
               <div className="rounded-lg border border-white/10 bg-white/5 p-4">
                 <p className="text-sm text-white/60 uppercase">Average launch timeline</p>
-                <p className="text-2xl font-heading font-bold text-accent">21 days</p>
+                <p className="text-2xl font-heading font-bold text-accent">3–14 days</p>
               </div>
               <div className="rounded-lg border border-white/10 bg-white/5 p-4">
                 <p className="text-sm text-white/60 uppercase">Team hubs</p>

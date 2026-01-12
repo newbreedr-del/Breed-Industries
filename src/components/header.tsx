@@ -55,7 +55,7 @@ export const Header = () => {
           
           <div className="flex items-center gap-4">
             <a 
-              href="https://wa.me/27685037221" 
+              href="https://wa.me/message/4FOGIOMM2A35L1" 
               target="_blank" 
               rel="noopener noreferrer"
               className="btn btn-primary"
@@ -114,7 +114,7 @@ export const Header = () => {
               Contact
             </a>
             <a 
-              href="https://wa.me/27685037221" 
+              href="https://wa.me/message/4FOGIOMM2A35L1" 
               target="_blank" 
               rel="noopener noreferrer"
               className="btn btn-primary mt-2"

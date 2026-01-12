@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, Clock, Send, MessageSquare } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, MessageSquare } from 'lucide-react';
+import { ContactForm } from '@/components/forms/ContactForm';
 
 const contactDetails = [
   {
@@ -138,73 +139,17 @@ export const Contact = () => {
           >
             <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-gold/40 via-navy/20 to-gold/40 blur-2xl opacity-40" />
             <div className="relative rounded-3xl border border-white/60 bg-white/90 p-8 shadow-2xl">
-              <h3 className="text-2xl font-heading font-semibold text-navy">Book a discovery call</h3>
+              <h3 className="text-2xlhã font-heading font-semibold text-navy">Book a discovery call</h3>
               <p className="mt-2 text-sm text-charcoal/70">
                 Tell us about your goals and we’ll prepare a custom roadmap.
               </p>
 
-              <form className="mt-6 space-y-4">
-                <div>
-                  <label htmlFor="name" className="text-sm font-medium text-charcoal/80">
-                    Full Name
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="Ayanda M."
-                    className="mt-2 w-full rounded-xl border border-navy/10 bg-white/70 px-4 py-3 text-charcoal placeholder:text-charcoal/40 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/40"
-                  />
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label htmlFor="email" className="text-sm font-medium text-charcoal/80">
-                      Email Address
-                    </label>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="you@company.co.za"
-                      className="mt-2 w-full rounded-xl border border-navy/10 bg-white/70 px-4 py-3 text-charcoal placeholder:text-charcoal/40 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/40"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="phone" className="text-sm font-medium text-charcoal/80">
-                      Phone / WhatsApp
-                    </label>
-                    <input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      placeholder="+27 10 123 4567"
-                      className="mt-2 w-full rounded-xl border border-navy/10 bg-white/70 px-4 py-3 text-charcoal placeholder:text-charcoal/40 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/40"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor="message" className="text-sm font-medium text-charcoal/80">
-                    How can we help?
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={4}
-                    placeholder="Share a bit about your business, timelines, and the outcomes you need."
-                    className="mt-2 w-full rounded-xl border border-navy/10 bg-white/70 px-4 py-3 text-charcoal placeholder:text-charcoal/40 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/40"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-navy py-3 text-white transition-colors hover:bg-gold hover:text-navy"
-                >
-                  <Send className="w-4 h-4" />
-                  Submit Enquiry
-                </button>
-                <p className="text-xs text-charcoal/60">
-                  We’ll follow up within 24 hours. Prefer WhatsApp? Reply directly to our floating chat button.
-                </p>
-              </form>
+              <div className="mt-6">
+                <ContactForm
+                  variant="light"
+                  helperText="We’ll follow up within 24 hours. Prefer WhatsApp? Reply directly to our floating chat button."
+                />
+              </div>
             </div>
           </motion.div>
         </div>

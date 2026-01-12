@@ -77,7 +77,7 @@ export const PackageBuilder = () => {
     const servicesList = cart.map(item => item.name).join(', ');
     const message = `Hi Breed Industries! I'd like to get a quote for my custom package including: ${servicesList}. Total estimate: R${total}`;
     
-    return `https://wa.me/27685037221?text=${encodeURIComponent(message)}`;
+    return `https://wa.me/27604964105?text=${encodeURIComponent(message)}`;
   };
   
   return (
@@ -227,7 +227,7 @@ export const PackageBuilder = () => {
         <div className="mt-12 text-center">
           <p className="text-charcoal/70 mb-2">Need help building your perfect package?</p>
           <a
-            href="https://wa.me/27685037221?text=Hi%20Breed%20Industries!%20I%20need%20help%20choosing%20the%20right%20services%20for%20my%20business."
+            href="https://wa.me/message/4FOGIOMM2A35L1"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center text-gold hover:text-navy transition-colors font-medium"
