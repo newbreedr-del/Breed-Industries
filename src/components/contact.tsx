@@ -8,17 +8,9 @@ const contactDetails = [
     id: 'phone-primary',
     icon: <Phone className="w-5 h-5" />,
     label: 'Call Us',
-    value: '060 496 4105',
+    value: '+27 60 496 4105',
     href: 'tel:+27604964105',
     description: 'Speak directly with our launch specialists.'
-  },
-  {
-    id: 'phone-secondary',
-    icon: <Phone className="w-5 h-5" />,
-    label: 'Sales & Partnerships',
-    value: '081 307 4708',
-    href: 'tel:+27813074708',
-    description: 'For proposals, partnerships, and collaborations.'
   },
   {
     id: 'email',
@@ -185,7 +177,7 @@ export const Contact = () => {
                       id="phone"
                       name="phone"
                       type="tel"
-                      placeholder="+27 68 503 7221"
+                      placeholder="+27 10 123 4567"
                       className="mt-2 w-full rounded-xl border border-navy/10 bg-white/70 px-4 py-3 text-charcoal placeholder:text-charcoal/40 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/40"
                     />
                   </div>

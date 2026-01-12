@@ -24,19 +24,19 @@ const values = [
 
 const leadership = [
   {
-    name: 'Gabrielle Winn',
+    name: 'Sabelo Mandubu',
     role: 'Chief Executive Officer',
-    bio: 'Drives strategic partnerships, compliance innovation, and continental expansion.',
+    bio: 'Sabelo leads Breed Industries with a strong background in IT and graphic design, combining technical expertise, system-building skills, and creative vision to deliver powerful, polished solutions for entrepreneurs.',
   },
   {
-    name: 'Mario Palmer',
-    role: 'Managing Partner',
-    bio: 'Leads pricing intelligence, client success, and finance operations across hubs.',
+    name: 'Nono Msimang',
+    role: 'Head of Marketing',
+    bio: 'Nono drives our marketing strategy with sharp insight into digital trends, audience engagement, and brand storytelling, helping clients connect and grow effectively.',
   },
   {
-    name: 'Kelly Williams',
-    role: 'Marketing Strategist',
-    bio: 'Architects go-to-market narratives, launch campaigns, and brand ecosystems.',
+    name: 'Malaikaa Hlombe',
+    role: 'Media and Public Relations',
+    bio: 'Malaikaa handles media and PR with creativity and strategic focus, crafting compelling narratives and building strong public presence for Breed Industries and our clients.',
   },
 ];
 

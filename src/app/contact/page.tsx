@@ -8,16 +8,9 @@ const contactChannels = [
   {
     icon: <Phone className="w-5 h-5" />,
     title: 'Call Us',
-    value: '068 503 7221',
-    href: 'tel:+27685037221',
+    value: '+27 60 496 4105',
+    href: 'tel:+27604964105',
     description: 'Speak directly with our launch specialists Monday – Friday.',
-  },
-  {
-    icon: <Phone className="w-5 h-5" />,
-    title: 'Partnerships',
-    value: '081 307 4708',
-    href: 'tel:+27813074708',
-    description: 'Collaborations and strategic alliances.',
   },
   {
     icon: <Mail className="w-5 h-5" />,
@@ -41,10 +34,10 @@ export default function ContactPage() {
         align="left"
       >
         <div className="flex flex-wrap gap-4">
-          <Link href="tel:+27685037221" className="btn btn-primary inline-flex items-center gap-2">
+          <Link href="tel:+27604964105" className="btn btn-primary inline-flex items-center gap-2">
             <Phone className="w-4 h-4" /> Call Now
           </Link>
-          <Link href="https://wa.me/27685037221" className="btn btn-outline">
+          <Link href="https://wa.me/27604964105" className="btn btn-outline">
             <MessageSquare className="w-4 h-4" /> WhatsApp
           </Link>
         </div>
@@ -132,7 +125,7 @@ export default function ContactPage() {
                     id="phone"
                     name="phone"
                     type="tel"
-                    placeholder="+27 68 503 7221"
+                    placeholder="+27 10 123 4567"
                     className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:border-accent focus:outline-none"
                   />
                 </div>

@@ -7,7 +7,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Menu, X, ChevronDown, Phone, 
   MessageSquare, Layers, Briefcase, 
-  Users, LayoutGrid, Settings
+  Users, LayoutGrid, Settings,
+  Search
 } from 'lucide-react';
 
 const navItems = [
@@ -256,20 +257,46 @@ export const Header = () => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div 
-            className="lg:hidden fixed inset-0 z-50 bg-[rgba(11,17,24,0.95)] backdrop-blur-2xl overflow-y-auto pt-[88px] pb-16"
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ duration: 0.3 }}
+            className="lg:hidden fixed inset-0 z-[60] flex h-screen w-screen bg-[#020b16]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
           >
-            <div className="container mx-auto px-4 py-6">
-              <nav className="flex flex-col gap-6">
+            <motion.div
+              className="flex h-full w-full flex-col overflow-hidden px-6 py-10 pt-24 text-white"
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="self-end text-white/70 hover:text-accent transition-colors mb-6"
+                aria-label="Close menu"
+              >
+                <X size={28} />
+              </button>
+
+              {/* Mobile Search Bar */}
+              <div className="flex items-center bg-navy-dark/80 rounded-md mb-6">
+                <input 
+                  type="text" 
+                  placeholder="Search..." 
+                  className="bg-transparent text-white py-2 px-4 w-full focus:outline-none"
+                />
+                <button className="bg-accent hover:bg-accent/90 text-white py-2 px-4 rounded-r-md transition-colors">
+                  <Search size={18} />
+                </button>
+              </div>
+              
+              <nav className="flex flex-col flex-1 overflow-y-auto pr-1">
                 {navItems.map((item) => (
-                  <div key={item.name} className="border-b border-white/10 pb-4">
+                  <div key={item.name} className="border-b border-white/10 py-3">
                     {item.megaMenu ? (
                       <div>
                         <button 
-                          className="flex items-center justify-between w-full text-white text-xl font-heading mb-4"
+                          className="flex items-center justify-between w-full text-white text-lg font-heading"
                           onClick={() => toggleMegaMenu(item.name)}
                         >
                           {item.name}
@@ -280,25 +307,27 @@ export const Header = () => {
                         </button>
                         
                         {activeMegaMenu === item.name && item.children && (
-                          <div className="pl-4 space-y-4 mb-4">
-                            {item.children.map((child) => (
+                          <div className="mt-3 bg-navy-dark/90 border-l-2 border-accent">
+                            <div className="py-1">
+                              {item.children.map((child) => (
                               <Link 
                                 key={child.title} 
                                 href={child.link}
-                                className="flex items-center gap-3 text-white/80 hover:text-accent"
+                                className="flex items-center gap-3 text-white hover:text-accent py-3 px-4 border-b border-white/10"
                                 onClick={() => setIsMobileMenuOpen(false)}
                               >
                                 <div className="text-accent">{child.icon}</div>
                                 <span>{child.title}</span>
                               </Link>
                             ))}
+                            </div>
                           </div>
                         )}
                       </div>
                     ) : (
                       <Link 
                         href={item.path} 
-                        className="text-white text-xl font-heading hover:text-accent active:text-accent focus:text-accent block"
+                        className="text-white text-lg font-heading hover:text-accent active:text-accent focus:text-accent block py-3"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {item.name}
@@ -308,7 +337,7 @@ export const Header = () => {
                 ))}
                 
                 {/* Mobile Service Tiers */}
-                <div className="mt-4">
+                <div className="mt-6 pt-2">
                   <h3 className="text-sm uppercase tracking-wider text-accent mb-4">Service Packages</h3>
                   <div className="space-y-4">
                     {tiers.map((tier) => (
@@ -345,11 +374,11 @@ export const Header = () => {
                     className="flex items-center justify-center gap-2 text-white/80 hover:text-accent"
                   >
                     <Phone size={16} />
-                    <span>060 496 4105</span>
+                    <span>+27 60 496 4105</span>
                   </a>
                 </div>
               </nav>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
