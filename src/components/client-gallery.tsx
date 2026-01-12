@@ -5,10 +5,12 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ChevronRight, ChevronLeft, ExternalLink } from 'lucide-react';
 
-const CLIENT_LOGO_PLACEHOLDER = '/assets/images/clients/logo-aurora.jpg';
-const CLIENT_LOGO_ALT_1 = '/assets/images/clients/logo-kinetic.jpg';
-const CLIENT_LOGO_ALT_2 = '/assets/images/clients/logo-simplified.jpg';
-const CLIENT_LOGO_ALT_3 = '/assets/images/clients/logo-breed.png';
+const CLIENT_LOGO_EBODWENI = '/assets/images/Client portfolio/Ebodweni-01.jpg';
+const CLIENT_LOGO_IGROUP = '/assets/images/Client portfolio/I Group Logo White-01-01.png';
+const CLIENT_LOGO_GOBIZZ = '/assets/images/Client portfolio/gobizz-logo White-01.png';
+const CLIENT_LOGO_MCWAYS = '/assets/images/Client portfolio/MC Ways New-03.png';
+const CLIENT_LOGO_NSPIRAXION = '/assets/images/Client portfolio/NSPIRAXION IMPULSE PROJECTS LOGO [Recovered]-01.png';
+const CLIENT_LOGO_GENERIC = '/assets/images/Client portfolio/Logo-01.png';
 
 const PORTFOLIO_CASE_GRID = '/assets/images/portfolio/case-study-grid.jpg';
 const PORTFOLIO_CLIENT_SHOWCASE = '/assets/images/portfolio/client-showcase.jpg';
@@ -20,66 +22,66 @@ const PORTFOLIO_ENTERPRISE = '/assets/images/portfolio/enterprise-success.jpg';
 const clientsData = [
   {
     id: 'cvs',
-    name: 'CVS Health',
-    logo: CLIENT_LOGO_PLACEHOLDER,
-    industry: 'Healthcare',
-    description: 'Comprehensive brand refresh and digital marketing strategy for the healthcare giant.',
+    name: 'Ebodweni Logistics',
+    logo: CLIENT_LOGO_EBODWENI,
+    industry: 'Logistics & Transport',
+    description: 'Fleet branding, compliance registrations, and digital profile to secure municipal contracts.',
     featured: true
   },
   {
     id: 'berkshire',
-    name: 'Berkshire Hathaway',
-    logo: CLIENT_LOGO_ALT_1,
-    industry: 'Finance',
-    description: 'Custom web portal development and ongoing digital support.',
+    name: 'iGroup Tech',
+    logo: CLIENT_LOGO_IGROUP,
+    industry: 'Technology',
+    description: 'Product launch campaign, investor deck, and website for a Durban SaaS collective.',
     featured: true
   },
   {
     id: 'att',
-    name: 'AT&T',
-    logo: CLIENT_LOGO_ALT_2,
-    industry: 'Telecommunications',
-    description: 'Strategic digital transformation consulting and implementation.',
+    name: 'GoBizz Africa',
+    logo: CLIENT_LOGO_GOBIZZ,
+    industry: 'Business Services',
+    description: 'Brand identity, portal, and B2B marketing assets for an SME service marketplace.',
     featured: true
   },
   {
     id: 'wordpress',
-    name: 'WordPress.com',
-    logo: CLIENT_LOGO_ALT_3,
-    industry: 'Technology',
-    description: 'Brand strategy and marketing collateral for product launch.',
+    name: 'MC Ways Projects',
+    logo: CLIENT_LOGO_MCWAYS,
+    industry: 'Construction',
+    description: 'CIDB compliance set-up, project portfolio, and corporate profile for tenders.',
     featured: true
   },
   {
     id: 'client5',
-    name: 'Tech Innovators',
-    logo: CLIENT_LOGO_ALT_2,
-    industry: 'Technology',
-    description: 'Complete brand identity and website development for tech startup.',
+    name: 'Nspiraxion Impulse',
+    logo: CLIENT_LOGO_NSPIRAXION,
+    industry: 'Energy',
+    description: 'Brand refresh, investor documentation, and safety compliance kit.',
     featured: false
   },
   {
     id: 'client6',
-    name: 'Global Finance',
-    logo: CLIENT_LOGO_ALT_1,
-    industry: 'Finance',
-    description: 'Custom financial portal with secure client dashboard.',
+    name: 'iGroup Tech (Events)',
+    logo: CLIENT_LOGO_IGROUP,
+    industry: 'Technology',
+    description: 'Live event branding, motion graphics, and social media rollout.',
     featured: false
   },
   {
     id: 'client7',
-    name: 'Health Partners',
-    logo: CLIENT_LOGO_PLACEHOLDER,
-    industry: 'Healthcare',
-    description: 'Brand refresh and marketing strategy for healthcare provider.',
+    name: 'Ebodweni Logistics (Fleet)',
+    logo: CLIENT_LOGO_EBODWENI,
+    industry: 'Logistics',
+    description: 'Vehicle wraps, safety documentation, and corporate signage.',
     featured: false
   },
   {
     id: 'client8',
-    name: 'Retail Solutions',
-    logo: CLIENT_LOGO_ALT_3,
-    industry: 'Retail',
-    description: 'E-commerce platform development and digital marketing.',
+    name: 'Generic Portfolio Client',
+    logo: CLIENT_LOGO_GENERIC,
+    industry: 'Professional Services',
+    description: 'Brand kit, stationery suite, and responsive brochure website.',
     featured: false
   }
 ];

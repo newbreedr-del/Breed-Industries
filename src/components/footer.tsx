@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Twitter, Tiktok } from 'lucide-react';
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -31,7 +31,7 @@ export const Footer = () => {
             
             <div className="flex gap-4">
               <a 
-                href="https://www.facebook.com/breedindustries" 
+                href="https://web.facebook.com/BREEDinc" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-gold hover:text-navy transition-colors"
@@ -40,7 +40,7 @@ export const Footer = () => {
                 <Facebook size={18} />
               </a>
               <a 
-                href="https://www.instagram.com/breedindustries" 
+                href="https://www.instagram.com/breedindustries/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-gold hover:text-navy transition-colors"
@@ -49,7 +49,7 @@ export const Footer = () => {
                 <Instagram size={18} />
               </a>
               <a 
-                href="https://www.linkedin.com/company/breedindustries" 
+                href="https://www.linkedin.com/in/breed-industries-premium-growth-agency-durban-312011262/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-gold hover:text-navy transition-colors"
@@ -58,13 +58,22 @@ export const Footer = () => {
                 <Linkedin size={18} />
               </a>
               <a 
-                href="https://twitter.com/breedindustries" 
+                href="https://x.com/breedindustries" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-gold hover:text-navy transition-colors"
-                aria-label="Twitter"
+                aria-label="X"
               >
                 <Twitter size={18} />
+              </a>
+              <a 
+                href="https://www.tiktok.com/@breedindustries" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-gold hover:text-navy transition-colors"
+                aria-label="TikTok"
+              >
+                <Tiktok size={18} />
               </a>
             </div>
           </div>

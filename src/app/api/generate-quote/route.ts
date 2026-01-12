@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import puppeteer from 'puppeteer';
 import sgMail from '@sendgrid/mail';
-import { randomUUID } from 'crypto';
 import { format } from 'date-fns';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
@@ -15,6 +13,40 @@ sgMail.setApiKey(SENDGRID_API_KEY);
 const COMPANY_EMAIL = 'info@thebreed.co.za';
 
 let cachedLogoDataUri: string | null = null;
+
+const VIEWPORT = { width: 1280, height: 720 } as const;
+
+async function launchBrowser() {
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  if (isProduction) {
+    const { default: chromium } = await import('@sparticuz/chrome-aws-lambda');
+    const { default: puppeteerCore } = await import('puppeteer-core');
+
+    const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || (await chromium.executablePath);
+
+    if (!executablePath) {
+      throw new Error('Unable to determine executable path for Chromium in production environment.');
+    }
+
+    return puppeteerCore.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport ?? VIEWPORT,
+      executablePath,
+      headless: chromium.headless,
+      ignoreHTTPSErrors: true
+    });
+  }
+
+  const { default: puppeteer } = await import('puppeteer');
+
+  return puppeteer.launch({
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    defaultViewport: VIEWPORT
+  });
+}
 
 async function getLogoDataUri() {
   if (cachedLogoDataUri) {
@@ -66,15 +98,8 @@ export async function POST(req: NextRequest) {
     const currentDate = format(new Date(), 'MMMM dd, yyyy');
     const validUntil = format(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), 'MMMM dd, yyyy');
     
-    // Calculate totals
-    let subtotal = 0;
-    items.forEach((item: any) => {
-      subtotal += item.quantity * item.rate;
-    });
-    
-    const taxRate = 0.15; // 15% VAT
-    const tax = subtotal * taxRate;
-    const total = subtotal + tax;
+    // Calculate total
+    const total = items.reduce((sum: number, item: any) => sum + (item.quantity * item.rate), 0);
     
     // Generate HTML for the quote
     const logoDataUri = await getLogoDataUri();
@@ -92,20 +117,13 @@ export async function POST(req: NextRequest) {
       contactPerson,
       paymentTerms,
       items,
-      subtotal,
-      tax,
-      taxRate,
       total,
       notes,
       logoDataUri
     });
     
     // Generate PDF using Puppeteer
-    let browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      defaultViewport: { width: 1280, height: 720 }
-    });
+    let browser = await launchBrowser();
     
     try {
       const page = await browser.newPage();
@@ -151,7 +169,9 @@ export async function POST(req: NextRequest) {
         quoteNumber
       });
     } finally {
-      await browser.close();
+      if (browser) {
+        await browser.close();
+      }
     }
     
   } catch (error) {
@@ -177,9 +197,6 @@ function generateQuoteHTML(data: any) {
     contactPerson,
     paymentTerms,
     items,
-    subtotal,
-    tax,
-    taxRate,
     total,
     notes,
     logoDataUri
@@ -495,17 +512,12 @@ function generateQuoteHTML(data: any) {
         <!-- Totals -->
         <div class="totals-section">
             <div class="totals">
-                <div class="total-row subtotal">
-                    <span>Subtotal:</span>
-                    <span>${formatCurrency(subtotal)}</span>
-                </div>
-                <div class="total-row tax">
-                    <span>VAT (${taxRate * 100}%):</span>
-                    <span>${formatCurrency(tax)}</span>
-                </div>
-                <div class="total-row total">
-                    <span>Total:</span>
+                <div class="total-row total" style="border-top: 0; padding-top: 0; margin-top: 0;">
+                    <span>Total (ex VAT):</span>
                     <span>${formatCurrency(total)}</span>
+                </div>
+                <div class="total-row tax" style="margin-top: 8px; font-size: 12px; color: #888;">
+                    <span>Breed Industries is not VAT registered. All pricing is exclusive of VAT.</span>
                 </div>
             </div>
         </div>

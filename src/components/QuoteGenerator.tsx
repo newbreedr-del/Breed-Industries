@@ -96,8 +96,8 @@ export default function QuoteGenerator({ selectedItems }: QuoteGeneratorProps) {
     );
   };
   
-  // Calculate subtotal
-  const calculateSubtotal = () => {
+  // Calculate total
+  const calculateTotal = () => {
     return items.reduce((sum, item) => sum + (item.quantity * item.rate), 0);
   };
   
@@ -347,21 +347,12 @@ export default function QuoteGenerator({ selectedItems }: QuoteGeneratorProps) {
             
             <div className="mt-4 p-4 border border-white/10 rounded-lg bg-white/5">
               <div className="flex justify-between items-center">
-                <span className="text-white">Subtotal:</span>
-                <span className="text-accent font-heading font-bold">
-                  R {calculateSubtotal().toFixed(2)}
-                </span>
-              </div>
-              <div className="flex justify-between items-center text-sm text-white/70 mt-1">
-                <span>VAT (15%):</span>
-                <span>R {(calculateSubtotal() * 0.15).toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/10">
-                <span className="text-white font-medium">Total:</span>
+                <span className="text-white font-medium">Total (ex VAT):</span>
                 <span className="text-accent font-heading font-bold text-xl">
-                  R {(calculateSubtotal() * 1.15).toFixed(2)}
+                  R {calculateTotal().toFixed(2)}
                 </span>
               </div>
+              <p className="text-xs text-white/50 mt-2">Breed Industries is not VAT registered. All figures are exclusive of VAT.</p>
             </div>
           </div>
           

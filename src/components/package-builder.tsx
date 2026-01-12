@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Minus, DollarSign, Check, ShoppingCart, Package, Trash2 } from 'lucide-react';
 
@@ -41,10 +41,30 @@ const serviceCategories = [
   }
 ];
 
+const getTimelineEstimate = (cart: any[]) => {
+  if (cart.length === 0) {
+    return null;
+  }
+
+  const total = cart.reduce((sum, item) => sum + (item.price || 0), 0);
+  const hasHighComplexity = cart.some(item => ['portal-custom', 'website-premium', 'video-ad', 'media-kit'].includes(item.id));
+
+  if (total <= 3000 && !hasHighComplexity && cart.length <= 2) {
+    return '3 – 5 working days';
+  }
+
+  if (total <= 8000 && cart.length <= 5) {
+    return '1 – 2 weeks';
+  }
+
+  return '2 – 3 weeks';
+};
+
 export const PackageBuilder = () => {
   const [selectedCategory, setSelectedCategory] = useState('setup');
   const [cart, setCart] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
+  const timelineEstimate = useMemo(() => getTimelineEstimate(cart), [cart]);
   
   // Calculate total when cart changes
   useEffect(() => {
@@ -75,7 +95,8 @@ export const PackageBuilder = () => {
     if (cart.length === 0) return '';
     
     const servicesList = cart.map(item => item.name).join(', ');
-    const message = `Hi Breed Industries! I'd like to get a quote for my custom package including: ${servicesList}. Total estimate: R${total}`;
+    const messageTimeline = timelineEstimate ? ` Estimated timeline: ${timelineEstimate}.` : '';
+    const message = `Hi Breed Industries! I'd like to get a quote for my custom package including: ${servicesList}. Total estimate: R${total}.${messageTimeline}`;
     
     return `https://wa.me/27604964105?text=${encodeURIComponent(message)}`;
   };
@@ -195,19 +216,18 @@ export const PackageBuilder = () => {
                   ))}
                 </div>
                 
-                <div className="border-t border-white/10 pt-4 mb-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <span>Subtotal</span>
-                    <span>R{total}</span>
+                <div className="border-t border-white/10 pt-4 mb-6 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span>Total Estimate</span>
+                    <span className="text-gold text-xl font-bold">R{total}</span>
                   </div>
-                  <div className="flex justify-between items-center text-sm text-white/70 mb-4">
-                    <span>VAT Included</span>
-                    <span>15%</span>
-                  </div>
-                  <div className="flex justify-between items-center text-xl font-bold">
-                    <span>Total</span>
-                    <span className="text-gold">R{total}</span>
-                  </div>
+                  {timelineEstimate && (
+                    <div className="flex justify-between items-center text-sm text-white/70">
+                      <span>Estimated timeline</span>
+                      <span>{timelineEstimate}</span>
+                    </div>
+                  )}
+                  <p className="text-xs text-white/50">Pricing excludes VAT.</p>
                 </div>
                 
                 <a

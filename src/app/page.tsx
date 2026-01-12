@@ -65,7 +65,7 @@ export default function Home() {
         {/* Floating Tech Elements */}
         <div className="absolute inset-0 pointer-events-none">
           <motion.div 
-            className="hidden sm:block absolute top-[15%] left-[8%] md:left-[14%] text-accent/20"
+            className="hidden sm:block absolute top-[12%] left-[4%] md:left-[6%] text-accent/20"
             animate={{ 
               y: [0, -15, 0],
               rotate: [0, 5, 0]
@@ -80,7 +80,7 @@ export default function Home() {
           </motion.div>
           
           <motion.div 
-            className="hidden sm:block absolute bottom-[12%] right-[12%] md:right-[18%] text-accent/20"
+            className="hidden sm:block absolute bottom-[10%] right-[4%] md:right-[6%] text-accent/20"
             animate={{ 
               y: [0, 15, 0],
               rotate: [0, -5, 0]
@@ -95,7 +95,7 @@ export default function Home() {
           </motion.div>
           
           <motion.div 
-            className="hidden sm:block absolute top-[38%] right-[26%] md:right-[32%] text-accent/20"
+            className="hidden sm:block absolute top-[35%] left-[75%] md:left-[78%] text-accent/20"
             animate={{ 
               y: [0, -20, 0],
               rotate: [0, 10, 0]
