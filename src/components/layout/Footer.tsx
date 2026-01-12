@@ -82,7 +82,15 @@ export const Footer = () => {
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-accent hover:text-color-bg-deep transition-colors"
                 aria-label="TikTok"
               >
-                <i className="fab fa-tiktok text-lg"></i>
+                <svg
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path d="M16.775 5.533c.878.68 1.947 1.086 3.11 1.086V3.35a6.24 6.24 0 01-3.21-1.005 6.36 6.36 0 01-1.437-1.33 6.5 6.5 0 01-.8-1.424h-2.676v14.46c0 1.215-.987 2.201-2.203 2.201-1.215 0-2.203-.986-2.203-2.201 0-1.214.988-2.202 2.203-2.202.35 0 .683.083.98.225V9.59a5.872 5.872 0 00-.98-.084 5.914 5.914 0 00-5.912 5.91c0 3.264 2.647 5.912 5.912 5.912a5.914 5.914 0 005.912-5.912V7.498c.512.329 1.06.603 1.664.772z" />
+                </svg>
               </a>
             </div>
           </div>
