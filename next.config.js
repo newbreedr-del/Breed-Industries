@@ -26,6 +26,14 @@ const nextConfig = {
       ];
     }
 
+    if (!isServer) {
+      config.resolve = config.resolve || {};
+      config.resolve.alias = {
+        ...(config.resolve.alias || {}),
+        '@sparticuz/chrome-aws-lambda': false,
+      };
+    }
+
     return config;
   },
 }

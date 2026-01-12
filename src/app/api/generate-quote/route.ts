@@ -16,11 +16,20 @@ let cachedLogoDataUri: string | null = null;
 
 const VIEWPORT = { width: 1280, height: 720 } as const;
 
+const CHROME_AWS_LAMBDA_SCOPE = '@sparticuz';
+const CHROME_AWS_LAMBDA_PACKAGE = 'chrome-aws-lambda';
+
+async function loadChromiumModule() {
+  const moduleId = [CHROME_AWS_LAMBDA_SCOPE, CHROME_AWS_LAMBDA_PACKAGE].join('/');
+  const module = await (0, eval)(`import('${moduleId}')`);
+  return module?.default ?? module;
+}
+
 async function launchBrowser() {
   const isProduction = process.env.NODE_ENV === 'production';
 
   if (isProduction) {
-    const { default: chromium } = await import('@sparticuz/chrome-aws-lambda');
+    const chromium = await loadChromiumModule();
     const { default: puppeteerCore } = await import('puppeteer-core');
 
     const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || (await chromium.executablePath);
