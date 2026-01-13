@@ -16,13 +16,37 @@ let cachedLogoDataUri: string | null = null;
 
 const VIEWPORT = { width: 1280, height: 720 } as const;
 
-const CHROME_AWS_LAMBDA_SCOPE = '@sparticuz';
-const CHROME_AWS_LAMBDA_PACKAGE = 'chrome-aws-lambda';
+type ChromiumThunk<T> = T | Promise<T> | (() => T | Promise<T>);
 
-async function loadChromiumModule() {
-  const moduleId = [CHROME_AWS_LAMBDA_SCOPE, CHROME_AWS_LAMBDA_PACKAGE].join('/');
-  const module = await (0, eval)(`import('${moduleId}')`);
-  return module?.default ?? module;
+type ChromiumLambda = {
+  executablePath: ChromiumThunk<string | null>;
+  args: ChromiumThunk<string[]>;
+  defaultViewport?: ChromiumThunk<{ width: number; height: number }>;
+  headless?: ChromiumThunk<boolean>;
+};
+
+let chromiumModule: ChromiumLambda | null = null;
+
+async function loadChromiumModule(): Promise<ChromiumLambda> {
+  if (chromiumModule) {
+    return chromiumModule;
+  }
+
+  const module = await import('@sparticuz/chrome-aws-lambda');
+  chromiumModule = (module?.default ?? module) as unknown as ChromiumLambda;
+  return chromiumModule;
+}
+
+async function resolveChromiumValue<T>(value: ChromiumThunk<T>): Promise<T> {
+  if (typeof value === 'function') {
+    return resolveChromiumValue((value as () => T | Promise<T>)());
+  }
+
+  if (value && typeof (value as Promise<T>).then === 'function') {
+    return value as Promise<T>;
+  }
+
+  return value as T;
 }
 
 async function launchBrowser() {
@@ -32,17 +56,18 @@ async function launchBrowser() {
     const chromium = await loadChromiumModule();
     const { default: puppeteerCore } = await import('puppeteer-core');
 
-    const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || (await chromium.executablePath);
+    const executablePath =
+      process.env.PUPPETEER_EXECUTABLE_PATH || (await resolveChromiumValue(chromium.executablePath));
 
     if (!executablePath) {
       throw new Error('Unable to determine executable path for Chromium in production environment.');
     }
 
     return puppeteerCore.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport ?? VIEWPORT,
+      args: await resolveChromiumValue(chromium.args),
+      defaultViewport: (await resolveChromiumValue(chromium.defaultViewport ?? VIEWPORT)) ?? VIEWPORT,
       executablePath,
-      headless: chromium.headless,
+      headless: await resolveChromiumValue(chromium.headless ?? true),
       ignoreHTTPSErrors: true
     });
   }
