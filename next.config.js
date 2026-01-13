@@ -6,6 +6,7 @@ const nextConfig = {
   env: {
     APP_ENV: process.env.NODE_ENV,
   },
+  serverExternalPackages: ['@sparticuz/chrome-aws-lambda', 'puppeteer-core', 'puppeteer'],
   turbopack: {
     root: __dirname,
   },
