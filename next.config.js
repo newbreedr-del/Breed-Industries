@@ -7,9 +7,6 @@ const nextConfig = {
     APP_ENV: process.env.NODE_ENV,
   },
   serverExternalPackages: ['@sparticuz/chrome-aws-lambda', 'puppeteer-core', 'puppeteer'],
-  turbopack: {
-    root: __dirname,
-  },
   webpack: (config, { isServer }) => {
     if (isServer) {
       const originalExternals = Array.isArray(config.externals)
