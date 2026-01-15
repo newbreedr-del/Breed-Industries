@@ -77,7 +77,7 @@ async function launchBrowser() {
   if (isProduction) {
     // Use @sparticuz/chromium for serverless environments
     const chromium = await loadChromiumModule();
-    const { default: puppeteer } = await import('puppeteer');
+    const { default: puppeteer } = await import('puppeteer-core');
     
     try {
       const executablePath = await resolveChromiumValue(chromium.executablePath);
@@ -95,23 +95,43 @@ async function launchBrowser() {
     }
   }
 
-  // Development environment
-  const { default: puppeteer } = await import('puppeteer');
+  // Development environment - use puppeteer-core with local Chrome
+  const { default: puppeteer } = await import('puppeteer-core');
 
-  return puppeteer.launch({
-    headless: true,
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-accelerated-2d-canvas',
-      '--no-first-run',
-      '--no-zygote',
-      '--single-process',
-      '--disable-gpu'
-    ],
-    defaultViewport: VIEWPORT
-  });
+  try {
+    // Try to find local Chrome/Chromium installation
+    const possiblePaths = [
+      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+      '/usr/bin/google-chrome',
+      '/usr/bin/chromium-browser',
+      '/usr/bin/chromium'
+    ];
+
+    for (const path of possiblePaths) {
+      try {
+        console.log(`Trying local Chrome at: ${path}`);
+        return await puppeteer.launch({
+          executablePath: path,
+          headless: true,
+          args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage'
+          ],
+          defaultViewport: VIEWPORT
+        });
+      } catch (e) {
+        // Continue to next path
+      }
+    }
+
+    // If no local Chrome found, throw error
+    throw new Error('No local Chrome/Chromium installation found. Please install Chrome or use puppeteer instead of puppeteer-core for development.');
+  } catch (error) {
+    console.error('Failed to launch browser in development:', error);
+    throw error;
+  }
 }
 
 async function getLogoDataUri() {
