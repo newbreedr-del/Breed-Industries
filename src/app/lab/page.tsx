@@ -9,28 +9,28 @@ import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Brie
 import QuoteGenerator from '@/components/QuoteGenerator';
 
 const complianceOptions = [
-  { id: 'cipc', name: 'CIPC Registration', price: 550, icon: <Shield size={16} /> },
-  { id: 'tax', name: 'Tax Compliance', price: 850, icon: <FileText size={16} /> },
-  { id: 'bee', name: 'BEE Certification', price: 250, icon: <FileText size={16} /> },
-  { id: 'coid', name: 'COID Registration / Letter of Good Standing', price: 850, icon: <FileText size={16} /> },
-  { id: 'uif', name: 'UIF Registration & Compliance Letter', price: 650, icon: <FileText size={16} /> },
-  { id: 'annual', name: 'CIPC Annual Return', price: 450, icon: <FileText size={16} /> },
+  { id: 'cipc', name: 'CIPC Registration', price: 550, icon: <Shield size={16} />, description: 'Complete company registration with CIPC including name reservation and registration certificate' },
+  { id: 'tax', name: 'Tax Compliance', price: 850, icon: <FileText size={16} />, description: 'SARS tax registration, income tax number, and initial tax compliance setup' },
+  { id: 'bee', name: 'BEE Certification', price: 250, icon: <FileText size={16} />, description: 'Basic BEE verification certificate and scorecard for procurement opportunities' },
+  { id: 'coid', name: 'COID Registration / Letter of Good Standing', price: 850, icon: <FileText size={16} />, description: 'Workplace Compensation Fund registration and annual letter of good standing' },
+  { id: 'uif', name: 'UIF Registration & Compliance Letter', price: 650, icon: <FileText size={16} />, description: 'Unemployment Insurance Fund registration and compliance documentation' },
+  { id: 'annual', name: 'CIPC Annual Return', price: 450, icon: <FileText size={16} />, description: 'Annual CIPC return filing to maintain company compliance and good standing' },
 ];
 
 const brandingOptions = [
-  { id: 'logo-basic', name: 'Basic Logo Design', price: 1500, icon: <Briefcase size={16} /> },
-  { id: 'logo-premium', name: 'Premium Logo Design', price: 3500, icon: <Briefcase size={16} /> },
-  { id: 'brand-guide', name: 'Business Branding', price: 2500, icon: <Briefcase size={16} /> },
-  { id: 'business-cards', name: 'Business Cards (250)', price: 800, icon: <Briefcase size={16} /> },
-  { id: 'marketing-materials', name: 'Marketing Materials', price: 1200, icon: <Briefcase size={16} /> },
+  { id: 'logo-basic', name: 'Basic Logo Design', price: 1500, icon: <Briefcase size={16} />, description: 'Professional logo design with 2 initial concepts and 2 revisions, delivered in multiple formats' },
+  { id: 'logo-premium', name: 'Premium Logo Design', price: 3500, icon: <Briefcase size={16} />, description: 'Advanced logo design with 5 concepts, unlimited revisions, brand guidelines, and complete brand kit' },
+  { id: 'brand-guide', name: 'Business Branding', price: 2500, icon: <Briefcase size={16} />, description: 'Comprehensive brand identity guide including color palette, typography, and brand usage guidelines' },
+  { id: 'business-cards', name: 'Business Cards (250)', price: 800, icon: <Briefcase size={16} />, description: 'Professional business card design and printing of 250 high-quality cards with premium finish' },
+  { id: 'marketing-materials', name: 'Marketing Materials', price: 1200, icon: <Briefcase size={16} />, description: 'Custom marketing collateral including brochures, flyers, and promotional materials design' },
 ];
 
 const digitalOptions = [
-  { id: 'website', name: 'Website Development', price: 5000, icon: <Layers size={16} /> },
-  { id: 'app', name: 'Mobile App Development', price: 15000, icon: <Layers size={16} /> },
-  { id: 'ecommerce', name: 'E-commerce Solutions', price: 8000, icon: <Layers size={16} /> },
-  { id: 'seo', name: 'SEO & Digital Marketing', price: 2500, icon: <Layers size={16} /> },
-  { id: 'social', name: 'Social Media Management', price: 3500, icon: <Layers size={16} /> },
+  { id: 'website', name: 'Website Development', price: 5000, icon: <Layers size={16} />, description: 'Custom responsive website development with up to 5 pages, CMS integration, and mobile optimization' },
+  { id: 'app', name: 'Mobile App Development', price: 15000, icon: <Layers size={16} />, description: 'Native mobile app development for iOS and Android with backend integration and deployment' },
+  { id: 'ecommerce', name: 'E-commerce Solutions', price: 8000, icon: <Layers size={16} />, description: 'Full e-commerce platform with product catalog, shopping cart, payment gateway, and order management' },
+  { id: 'seo', name: 'SEO & Digital Marketing', price: 2500, icon: <Layers size={16} />, description: 'Search engine optimization, keyword research, and digital marketing strategy setup' },
+  { id: 'social', name: 'Social Media Management', price: 3500, icon: <Layers size={16} />, description: '3-month social media management including content creation, posting, and analytics reporting' },
 ];
 
 const builderSteps = [
@@ -113,7 +113,7 @@ export default function LabPage() {
       return {
         id: `${index + 1}-${optionId}`,
         name: option?.name ?? 'Custom Item',
-        description: '',
+        description: (option as any)?.description ?? '',
         price: option?.price ?? 0,
       };
     });
