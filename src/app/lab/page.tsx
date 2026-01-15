@@ -1,11 +1,11 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
-import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, X } from 'lucide-react';
+import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, X, CheckCircle2 } from 'lucide-react';
 import QuoteGenerator from '@/components/QuoteGenerator';
 
 const complianceOptions = [
@@ -94,6 +94,7 @@ export default function LabPage() {
   const [activeStep, setActiveStep] = useState('compliance');
   const [selectedBundle, setSelectedBundle] = useState<string | null>(null);
   const [showQuoteModal, setShowQuoteModal] = useState(false);
+  const [quoteSuccess, setQuoteSuccess] = useState<{ quoteNumber: string; customerEmail: string } | null>(null);
 
   const handleOptionToggle = (optionId: string) => {
     setSelectedBundle(null);
@@ -117,7 +118,19 @@ export default function LabPage() {
       };
     });
   }, [selectedOptions]);
-  
+
+  useEffect(() => {
+    if (!quoteSuccess) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setQuoteSuccess(null);
+    }, 6000);
+
+    return () => window.clearTimeout(timer);
+  }, [quoteSuccess]);
+
   const handleBundleSelect = (bundleId: string) => {
     const bundle = quickBundles.find(b => b.id === bundleId);
     if (bundle) {
@@ -125,34 +138,34 @@ export default function LabPage() {
       setSelectedOptions(bundle.components);
     }
   };
-  
+
   const calculateTotal = () => {
     let total = 0;
-    
+
     // Calculate from compliance options
     complianceOptions.forEach(option => {
       if (selectedOptions.includes(option.id)) {
         total += option.price;
       }
     });
-    
+
     // Calculate from branding options
     brandingOptions.forEach(option => {
       if (selectedOptions.includes(option.id)) {
         total += option.price;
       }
     });
-    
+
     // Calculate from digital options
     digitalOptions.forEach(option => {
       if (selectedOptions.includes(option.id)) {
         total += option.price;
       }
     });
-    
+
     return total;
   };
-  
+
   const estimatedTotal = calculateTotal();
   const formattedTotal = new Intl.NumberFormat('en-ZA', {
     style: 'currency',
@@ -160,13 +173,13 @@ export default function LabPage() {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(estimatedTotal).replace('ZAR', 'R');
-  
+
   const getEstimatedTimeframe = () => {
     const hasComplexItems = selectedOptions.includes('app') || 
                           selectedOptions.includes('ecommerce') || 
                           selectedOptions.includes('logo-premium');
     const itemCount = selectedOptions.length;
-    
+
     if (hasComplexItems && itemCount > 3) {
       return '4 – 8 Weeks';
     } else if (hasComplexItems || itemCount > 5) {
@@ -175,7 +188,7 @@ export default function LabPage() {
       return '2 – 4 Weeks';
     }
   };
-  
+
   return (
     <>
       <Header />
@@ -429,7 +442,25 @@ export default function LabPage() {
             </button>
             
             <div className="max-h-[90vh] overflow-y-auto">
-              <QuoteGenerator selectedItems={selectedQuoteItems} />
+              <QuoteGenerator
+                selectedItems={selectedQuoteItems}
+                onSuccess={(details) => {
+                  setShowQuoteModal(false);
+                  setQuoteSuccess(details);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {quoteSuccess && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <div className="flex items-start gap-3 rounded-xl border border-emerald-400/40 bg-emerald-500/10 px-5 py-4 text-emerald-100 shadow-xl backdrop-blur">
+            <CheckCircle2 className="h-6 w-6 text-emerald-300" />
+            <div className="space-y-1">
+              <p className="font-heading text-sm font-semibold uppercase tracking-wide text-emerald-200">Quote Sent</p>
+              <p className="text-sm text-emerald-100/80">Quote #{quoteSuccess.quoteNumber} has been emailed to {quoteSuccess.customerEmail}.</p>
             </div>
           </div>
         </div>

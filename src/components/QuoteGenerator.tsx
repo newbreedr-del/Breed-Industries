@@ -22,9 +22,10 @@ interface SelectedItem {
 
 interface QuoteGeneratorProps {
   selectedItems: SelectedItem[];
+  onSuccess?: (details: { quoteNumber: string; customerEmail: string }) => void;
 }
 
-export default function QuoteGenerator({ selectedItems }: QuoteGeneratorProps) {
+export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGeneratorProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -101,13 +102,54 @@ export default function QuoteGenerator({ selectedItems }: QuoteGeneratorProps) {
     return items.reduce((sum, item) => sum + (item.quantity * item.rate), 0);
   };
   
+  const resetForm = () => {
+    setCustomerName('');
+    setCustomerCompany('');
+    setCustomerAddress('');
+    setCustomerEmail('');
+    setCustomerPhone('');
+    setProjectName('');
+    setContactPerson('');
+    setPaymentTerms('Net 30');
+    setNotes('');
+    setItems([defaultItem]);
+  };
+
+  const validateForm = () => {
+    if (!customerName.trim()) {
+      return 'Customer name is required.';
+    }
+
+    if (!customerEmail.trim()) {
+      return 'Customer email is required.';
+    }
+
+    if (!projectName.trim()) {
+      return 'Project name is required.';
+    }
+
+    if (!contactPerson.trim()) {
+      return 'Contact person is required.';
+    }
+
+    const invalidItems = items.filter(
+      (item) => !item.name.trim() || item.quantity <= 0 || item.rate <= 0
+    );
+
+    if (invalidItems.length > 0) {
+      return 'Each quote item needs a name, quantity of at least 1, and a rate above 0.';
+    }
+
+    return null;
+  };
+
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate form
-    if (!customerName || !customerEmail || items.some(item => !item.name)) {
-      setError('Please fill in all required fields');
+
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
       return;
     }
     
@@ -121,16 +163,22 @@ export default function QuoteGenerator({ selectedItems }: QuoteGeneratorProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          customerName,
-          customerCompany,
-          customerAddress,
-          customerEmail,
-          customerPhone,
-          projectName,
-          contactPerson,
+          customerName: customerName.trim(),
+          customerCompany: customerCompany.trim(),
+          customerAddress: customerAddress.trim(),
+          customerEmail: customerEmail.trim(),
+          customerPhone: customerPhone.trim(),
+          projectName: projectName.trim(),
+          contactPerson: contactPerson.trim(),
           paymentTerms,
-          items,
-          notes
+          items: items.map((item) => ({
+            ...item,
+            name: item.name.trim(),
+            description: item.description.trim(),
+            quantity: Number(item.quantity),
+            rate: Number(item.rate)
+          })),
+          notes: notes.trim()
         }),
       });
       
@@ -140,15 +188,22 @@ export default function QuoteGenerator({ selectedItems }: QuoteGeneratorProps) {
         throw new Error(data.error || 'Failed to generate quote');
       }
       
-      setQuoteNumber(data.quoteNumber);
-      setIsSuccess(true);
-      
-      // Reset form after 5 seconds
-      setTimeout(() => {
+      if (onSuccess) {
         setIsSuccess(false);
         setQuoteNumber(null);
-      }, 5000);
-      
+        onSuccess({ quoteNumber: data.quoteNumber, customerEmail: customerEmail.trim() });
+        resetForm();
+      } else {
+        setQuoteNumber(data.quoteNumber);
+        setIsSuccess(true);
+
+        setTimeout(() => {
+          setIsSuccess(false);
+          setQuoteNumber(null);
+        }, 5000);
+        resetForm();
+      }
+
     } catch (err: any) {
       setError(err.message || 'An error occurred');
     } finally {
@@ -236,21 +291,23 @@ export default function QuoteGenerator({ selectedItems }: QuoteGeneratorProps) {
             <h3 className="text-lg font-heading font-semibold text-white mb-4">Project Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-white/70 text-sm mb-1">Project Name</label>
+                <label className="block text-white/70 text-sm mb-1">Project Name *</label>
                 <input
                   type="text"
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
                   className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
+                  required
                 />
               </div>
               <div>
-                <label className="block text-white/70 text-sm mb-1">Contact Person</label>
+                <label className="block text-white/70 text-sm mb-1">Contact Person *</label>
                 <input
                   type="text"
                   value={contactPerson}
                   onChange={(e) => setContactPerson(e.target.value)}
                   className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
+                  required
                 />
               </div>
               <div>
@@ -301,17 +358,18 @@ export default function QuoteGenerator({ selectedItems }: QuoteGeneratorProps) {
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-white/70 text-sm mb-1">Quantity</label>
+                      <label className="block text-white/70 text-sm mb-1">Quantity *</label>
                       <input
                         type="number"
                         min="1"
                         value={item.quantity}
                         onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 1)}
                         className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
+                        required
                       />
                     </div>
                     <div>
-                      <label className="block text-white/70 text-sm mb-1">Rate (R)</label>
+                      <label className="block text-white/70 text-sm mb-1">Rate (R) *</label>
                       <input
                         type="number"
                         min="0"
@@ -319,6 +377,7 @@ export default function QuoteGenerator({ selectedItems }: QuoteGeneratorProps) {
                         value={item.rate}
                         onChange={(e) => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)}
                         className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
+                        required
                       />
                     </div>
                   </div>

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import sgMail from '@sendgrid/mail';
+import nodemailer from 'nodemailer';
 
 type ContactPayload = {
   name: string;
@@ -8,16 +8,34 @@ type ContactPayload = {
   message: string;
 };
 
-const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY ?? '';
+const SMTP_HOST = process.env.SENDGRID_SMTP_HOST || 'smtp.sendgrid.net';
+const SMTP_PORT = Number(process.env.SENDGRID_SMTP_PORT ?? 587);
+const SMTP_USER = process.env.SENDGRID_SMTP_USER || 'apikey';
+const SMTP_PASS = process.env.SENDGRID_SMTP_PASS || '';
+
 const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'info@thebreed.co.za';
 const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? 'info@thebreed.co.za';
 
-if (SENDGRID_API_KEY) {
-  sgMail.setApiKey(SENDGRID_API_KEY);
+let transporter: nodemailer.Transporter | null = null;
+
+function getTransporter() {
+  if (transporter) return transporter;
+
+  transporter = nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: SMTP_PORT === 465,
+    auth: {
+      user: SMTP_USER,
+      pass: SMTP_PASS,
+    },
+  });
+
+  return transporter;
 }
 
 export async function POST(request: Request) {
-  if (!SENDGRID_API_KEY) {
+  if (!SMTP_PASS) {
     return NextResponse.json(
       { error: 'Email service is not configured.' },
       { status: 500 },
@@ -54,9 +72,15 @@ export async function POST(request: Request) {
       text: content,
     };
 
-    await sgMail.send(emailData);
+    const smtpTransporter = getTransporter();
 
-    return NextResponse.json({ success: true });
+    try {
+      await smtpTransporter.sendMail(emailData);
+      return NextResponse.json({ success: true });
+    } catch (sendError) {
+      console.error('SMTP send error:', sendError);
+      throw new Error('Failed to send email: ' + (sendError instanceof Error ? sendError.message : 'Unknown SMTP error'));
+    }
   } catch (error) {
     console.error('Failed to send contact enquiry:', error);
     return NextResponse.json(

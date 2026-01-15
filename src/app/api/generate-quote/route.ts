@@ -1,16 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server';
-import sgMail from '@sendgrid/mail';
+import nodemailer from 'nodemailer';
 import { format } from 'date-fns';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 
-// Set SendGrid API key
-// In production, use environment variables
-const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || '';
-sgMail.setApiKey(SENDGRID_API_KEY);
+// SMTP configuration (SendGrid)
+const SMTP_HOST = process.env.SENDGRID_SMTP_HOST || 'smtp.sendgrid.net';
+const SMTP_PORT = Number(process.env.SENDGRID_SMTP_PORT ?? 587);
+const SMTP_USER = process.env.SENDGRID_SMTP_USER || 'apikey';
+const SMTP_PASS = process.env.SENDGRID_SMTP_PASS || '';
 
-// Company email to CC
-const COMPANY_EMAIL = 'info@thebreed.co.za';
+if (!SMTP_PASS) {
+  console.error('SendGrid SMTP password (API key) is missing. Please set SENDGRID_SMTP_PASS in your environment variables.');
+}
+
+const COMPANY_EMAIL = process.env.COMPANY_EMAIL || 'info@thebreed.co.za';
+
+let transporter: nodemailer.Transporter | null = null;
+
+function getTransporter() {
+  if (transporter) return transporter;
+
+  transporter = nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: SMTP_PORT === 465,
+    auth: {
+      user: SMTP_USER,
+      pass: SMTP_PASS
+    }
+  });
+
+  return transporter;
+}
 
 let cachedLogoDataUri: string | null = null;
 
@@ -88,7 +110,12 @@ async function getLogoDataUri() {
   }
 
   try {
-    const logoPath = join(process.cwd(), 'assets', 'images', 'breed-logo.png');
+    const logoPath = join(
+      process.cwd(),
+      'assets',
+      'images',
+      'The Breed Industries-01-01.png'
+    );
     const logoBuffer = await readFile(logoPath);
     cachedLogoDataUri = `data:image/png;base64,${logoBuffer.toString('base64')}`;
     return cachedLogoDataUri;
@@ -103,38 +130,64 @@ export async function POST(req: NextRequest) {
   try {
     // Rate limiting (simple implementation)
     // In production, use a proper rate limiting solution
-    
+
     // Parse request body
     const data = await req.json();
-    const { 
-      customerName, 
-      customerCompany, 
-      customerAddress, 
-      customerEmail, 
-      customerPhone,
-      projectName,
-      contactPerson,
-      paymentTerms,
-      items,
-      notes
-    } = data;
-    
-    // Validate required fields
-    if (!customerName || !customerEmail || !items || items.length === 0) {
+    const {
+      customerName = '',
+      customerCompany = '',
+      customerAddress = '',
+      customerEmail = '',
+      customerPhone = '',
+      projectName = '',
+      contactPerson = '',
+      paymentTerms = 'Net 30',
+      items = [],
+      notes = ''
+    } = data ?? {};
+
+    const sanitizedItems = Array.isArray(items)
+      ? items.map((item: any) => ({
+          name: String(item?.name ?? '').trim(),
+          description: String(item?.description ?? '').trim(),
+          quantity: Number(item?.quantity ?? 0),
+          rate: Number(item?.rate ?? 0)
+        }))
+      : [];
+
+    if (!customerName.trim() || !customerEmail.trim() || !projectName.trim() || !contactPerson.trim()) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Customer name, email, project name, and contact person are required.' },
         { status: 400 }
       );
     }
-    
+
+    if (sanitizedItems.length === 0) {
+      return NextResponse.json(
+        { error: 'At least one quote item is required.' },
+        { status: 400 }
+      );
+    }
+
+    const invalidItem = sanitizedItems.find(
+      (item) => !item.name || Number.isNaN(item.quantity) || Number.isNaN(item.rate) || item.quantity <= 0 || item.rate <= 0
+    );
+
+    if (invalidItem) {
+      return NextResponse.json(
+        { error: 'Each quote item must include a name, quantity above 0, and rate above 0.' },
+        { status: 400 }
+      );
+    }
+
     // Generate quote number and date
     const quoteNumber = `Q-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
     const currentDate = format(new Date(), 'MMMM dd, yyyy');
     const validUntil = format(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), 'MMMM dd, yyyy');
-    
+
     // Calculate total
-    const total = items.reduce((sum: number, item: any) => sum + (item.quantity * item.rate), 0);
-    
+    const total = sanitizedItems.reduce((sum: number, item: any) => sum + item.quantity * item.rate, 0);
+
     // Generate HTML for the quote
     const logoDataUri = await getLogoDataUri();
 
@@ -142,22 +195,23 @@ export async function POST(req: NextRequest) {
       quoteNumber,
       currentDate,
       validUntil,
-      customerName,
-      customerCompany,
-      customerAddress,
-      customerEmail,
-      customerPhone,
-      projectName,
-      contactPerson,
+      customerName: customerName.trim(),
+      customerCompany: customerCompany.trim(),
+      customerAddress: customerAddress.trim(),
+      customerEmail: customerEmail.trim(),
+      customerPhone: customerPhone.trim(),
+      projectName: projectName.trim(),
+      contactPerson: contactPerson.trim(),
       paymentTerms,
-      items,
+      items: sanitizedItems,
       total,
-      notes,
+      notes: notes.trim(),
       logoDataUri
     });
-    
+
     // Generate PDF using Puppeteer
     let browser = await launchBrowser();
+
     
     try {
       const page = await browser.newPage();
@@ -178,30 +232,37 @@ export async function POST(req: NextRequest) {
       // Convert PDF to base64 for email attachment
       const pdfBase64 = Buffer.from(pdf).toString('base64');
       
-      // Send email with PDF attachment
-      const msg = {
-        to: customerEmail,
+      // Send email with PDF attachment via SMTP
+      const mailOptions: nodemailer.SendMailOptions = {
+        to: customerEmail.trim(),
         cc: COMPANY_EMAIL,
         from: COMPANY_EMAIL,
         subject: `Quote #${quoteNumber} from Breed Industries`,
-        text: `Dear ${customerName},\n\nThank you for your interest in our services. Please find attached your quote #${quoteNumber}.\n\nThis quote is valid until ${validUntil}.\n\nIf you have any questions, please don't hesitate to contact us.\n\nBest regards,\nBreed Industries Team`,
+        text: `Dear ${customerName.trim()},\n\nThank you for your interest in our services. Please find attached your quote #${quoteNumber}.\n\nThis quote is valid until ${validUntil}.\n\nIf you have any questions, please don't hesitate to contact us.\n\nBest regards,\nBreed Industries Team`,
         attachments: [
           {
             content: pdfBase64,
             filename: `Breed_Industries_Quote_${quoteNumber}.pdf`,
-            type: 'application/pdf',
-            disposition: 'attachment'
+            contentType: 'application/pdf',
+            encoding: 'base64'
           }
         ]
       };
-      
-      await sgMail.send(msg);
-      
-      return NextResponse.json({ 
-        success: true, 
-        message: 'Quote generated and sent successfully',
-        quoteNumber
-      });
+
+      const smtpTransporter = getTransporter();
+
+      try {
+        await smtpTransporter.sendMail(mailOptions);
+
+        return NextResponse.json({ 
+          success: true, 
+          message: 'Quote generated and sent successfully',
+          quoteNumber
+        });
+      } catch (sendError) {
+        console.error('SMTP send error:', sendError);
+        throw new Error('Failed to send email: ' + (sendError instanceof Error ? sendError.message : 'Unknown SMTP error'));
+      }
     } finally {
       if (browser) {
         await browser.close();

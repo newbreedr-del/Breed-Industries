@@ -26,6 +26,7 @@
     "postcss": "^8.4.49",
     "@sparticuz/chrome-aws-lambda": "^17.1.3",
     "puppeteer": "^17.1.3",
+    "nodemailer": "^6.9.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-intersection-observer": "^9.13.0",
