@@ -75,29 +75,12 @@ async function launchBrowser() {
   const isProduction = process.env.NODE_ENV === 'production';
 
   if (isProduction) {
-    try {
-      const chromium = await loadChromiumModule();
-      const { default: puppeteerCore } = await import('puppeteer-core');
-
-      const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || 
-                           (await resolveChromiumValue(chromium.executablePath));
-
-      if (executablePath) {
-        return puppeteerCore.launch({
-          args: await resolveChromiumValue(chromium.args),
-          defaultViewport: (await resolveChromiumValue(chromium.defaultViewport ?? VIEWPORT)) ?? VIEWPORT,
-          executablePath,
-          headless: await resolveChromiumValue(chromium.headless ?? true)
-        });
-      }
-    } catch (error) {
-      console.warn('Failed to load @sparticuz/chromium, falling back to puppeteer:', error);
-    }
-
-    // Final fallback - use puppeteer without local Chromium (will download if needed)
-    const { default: puppeteer } = await import('puppeteer');
-    return puppeteer.launch({
-      headless: true, // Use boolean true instead of 'new'
+    // Use Netlify's Chromium plugin
+    const { default: puppeteerCore } = await import('puppeteer-core');
+    
+    return puppeteerCore.launch({
+      executablePath: process.env.CHROME_PATH || '/usr/bin/chromium-browser',
+      headless: true,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -112,8 +95,7 @@ async function launchBrowser() {
         '--disable-backgrounding-occluded-windows',
         '--disable-renderer-backgrounding'
       ],
-      defaultViewport: VIEWPORT,
-      // Don't specify executablePath to let Puppeteer handle it
+      defaultViewport: VIEWPORT
     });
   }
 

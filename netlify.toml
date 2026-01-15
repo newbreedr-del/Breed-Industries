@@ -5,8 +5,8 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
-  # Enable Puppeteer to download Chromium during build
-  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "false"
+  # Skip Puppeteer Chromium download - use Netlify's Chromium plugin
+  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
 
 [dev]
   command = "npm run dev"
@@ -19,11 +19,11 @@
 [[plugins]]
   package = "@netlify/plugin-functions-install-core"
 
-# Add functions configuration for larger binaries
+# Add functions configuration without Chromium binary
 [functions]
   directory = ".netlify/functions"
   node_bundler = "esbuild"
-  included_files = ["node_modules/puppeteer/.local-chromium/**"]
+  # Remove node_modules/puppeteer/.local-chromium/** to avoid exceeding 250MB limit
 
 [build.processing]
   skip_processing = false
