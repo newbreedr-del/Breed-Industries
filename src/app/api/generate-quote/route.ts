@@ -77,13 +77,13 @@ async function launchBrowser() {
   if (isProduction) {
     // Use @sparticuz/chromium for serverless environments
     const chromium = await loadChromiumModule();
-    const { default: puppeteerCore } = await import('puppeteer-core');
+    const { default: puppeteer } = await import('puppeteer');
     
     try {
       const executablePath = await resolveChromiumValue(chromium.executablePath);
       console.log(`Using @sparticuz/chromium at: ${executablePath}`);
       
-      return puppeteerCore.launch({
+      return puppeteer.launch({
         args: await resolveChromiumValue(chromium.args),
         defaultViewport: (await resolveChromiumValue(chromium.defaultViewport ?? VIEWPORT)) ?? VIEWPORT,
         executablePath,
@@ -99,7 +99,6 @@ async function launchBrowser() {
   const { default: puppeteer } = await import('puppeteer');
 
   return puppeteer.launch({
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
     headless: true,
     args: [
       '--no-sandbox',
