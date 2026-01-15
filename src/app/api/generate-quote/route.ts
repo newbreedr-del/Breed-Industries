@@ -85,7 +85,9 @@ async function launchBrowser() {
       // Fallback to bundled Chromium if external path not available
       console.warn('External Chromium not found, falling back to bundled Puppeteer');
       const { default: puppeteer } = await import('puppeteer');
+      // Use the local Chromium that comes with Puppeteer
       return puppeteer.launch({
+        executablePath: puppeteer.executablePath(),
         headless: true,
         args: [
           '--no-sandbox',
@@ -112,6 +114,7 @@ async function launchBrowser() {
   const { default: puppeteer } = await import('puppeteer');
 
   return puppeteer.launch({
+    executablePath: puppeteer.executablePath(),
     headless: true,
     args: [
       '--no-sandbox',
