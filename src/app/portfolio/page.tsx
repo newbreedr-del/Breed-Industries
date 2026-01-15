@@ -53,13 +53,13 @@ const portfolioProjects = [
 ];
 
 const partnerLogos = [
-  { id: 'partner-1', name: 'Aurora Logistics', logo: '/assets/images/clients/logo-aurora.jpg' },
-  { id: 'partner-2', name: 'Kinetic Holdings', logo: '/assets/images/clients/logo-kinetic.jpg' },
-  { id: 'partner-3', name: 'Simplified Group', logo: '/assets/images/clients/logo-simplified.jpg' },
-  { id: 'partner-4', name: 'Breed Ventures', logo: '/assets/images/clients/logo-breed.png' },
-  { id: 'partner-5', name: 'Global Finance', logo: '/assets/images/clients/logo-kinetic.jpg' },
-  { id: 'partner-6', name: 'Nova Retail', logo: '/assets/images/clients/logo-simplified.jpg' },
-  { id: 'partner-7', name: 'Local Health', logo: '/assets/images/clients/logo-aurora.jpg' },
+  { id: 'partner-1', name: 'Ebodweni', logo: '/assets/images/clients/Ebodweni-01.jpg' },
+  { id: 'partner-2', name: 'I Group', logo: '/assets/images/clients/I Group Logo White-01-01.png' },
+  { id: 'partner-3', name: 'Logo Design', logo: '/assets/images/clients/Logo-01.png' },
+  { id: 'partner-4', name: 'MC Ways', logo: '/assets/images/clients/MC Ways New-03.png' },
+  { id: 'partner-5', name: 'NSPIRAXION', logo: '/assets/images/clients/NSPIRAXION IMPULSE PROJECTS LOGO [Recovered]-01.png' },
+  { id: 'partner-6', name: 'GoBizz', logo: '/assets/images/clients/gobizz-logo White-01.png' },
+  { id: 'partner-7', name: 'Breed Ventures', logo: '/assets/images/clients/logo-breed.png' },
   { id: 'partner-8', name: 'Breed Labs', logo: '/assets/images/clients/logo-breed.png' },
 ];
 
