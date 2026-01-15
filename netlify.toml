@@ -19,6 +19,13 @@
 [[plugins]]
   package = "@netlify/plugin-functions-install-core"
 
+# Configure Netlify's Chromium plugin
+[[plugins]]
+  package = "netlify-plugin-chromium"
+  [plugins.inputs]
+    setChromePathInEnv = true
+    failBuildOnError = true
+
 # Add functions configuration without Chromium binary
 [functions]
   directory = ".netlify/functions"

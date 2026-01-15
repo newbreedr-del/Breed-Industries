@@ -78,25 +78,50 @@ async function launchBrowser() {
     // Use Netlify's Chromium plugin
     const { default: puppeteerCore } = await import('puppeteer-core');
     
-    return puppeteerCore.launch({
-      executablePath: process.env.CHROME_PATH || '/usr/bin/chromium-browser',
-      headless: true,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--no-first-run',
-        '--no-zygote',
-        '--single-process',
-        '--disable-gpu',
-        '--disable-extensions',
-        '--disable-background-timer-throttling',
-        '--disable-backgrounding-occluded-windows',
-        '--disable-renderer-backgrounding'
-      ],
-      defaultViewport: VIEWPORT
-    });
+    // Try multiple possible Chromium paths
+    const possiblePaths = [
+      process.env.CHROME_PATH,
+      '/usr/bin/chromium-browser',
+      '/usr/bin/chromium',
+      '/usr/bin/google-chrome',
+      '/usr/bin/google-chrome-stable',
+      '/snap/bin/chromium'
+    ].filter(Boolean);
+    
+    let lastError: Error | null = null;
+    
+    for (const executablePath of possiblePaths) {
+      try {
+        console.log(`Trying Chromium at: ${executablePath}`);
+        const browser = await puppeteerCore.launch({
+          executablePath: executablePath as string,
+          headless: true,
+          args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--single-process',
+            '--disable-gpu',
+            '--disable-extensions',
+            '--disable-background-timer-throttling',
+            '--disable-backgrounding-occluded-windows',
+            '--disable-renderer-backgrounding'
+          ],
+          defaultViewport: VIEWPORT
+        });
+        console.log(`Successfully launched Chromium at: ${executablePath}`);
+        return browser;
+      } catch (error) {
+        console.warn(`Failed to launch Chromium at ${executablePath}:`, error);
+        lastError = error as Error;
+      }
+    }
+    
+    // If all paths failed, throw the last error
+    throw lastError || new Error('Could not find or launch Chromium browser');
   }
 
   // Development environment
