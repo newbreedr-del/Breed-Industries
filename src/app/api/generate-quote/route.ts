@@ -6,6 +6,8 @@ import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
 import { format } from 'date-fns';
 
+export const runtime = 'nodejs';
+
 // SMTP configuration (SendGrid)
 const SMTP_HOST = process.env.SENDGRID_SMTP_HOST || 'smtp.sendgrid.net';
 const SMTP_PORT = Number(process.env.SENDGRID_SMTP_PORT ?? 587);
@@ -39,12 +41,46 @@ function getTransporter() {
 let cachedLogoDataUri: string | null = null;
 
 async function launchBrowser() {
-  return puppeteer.launch({
-    args: [...chromium.args, '--no-sandbox', '--disable-setuid-sandbox'],
-    defaultViewport: { width: 1280, height: 720 },
-    executablePath: await chromium.executablePath(),
-    headless: true,
-  });
+  const executablePath = await chromium.executablePath();
+  const args = chromium.args ?? [];
+  const defaultViewport = chromium.defaultViewport ?? { width: 1280, height: 720 };
+  const headless = typeof chromium.headless === 'boolean' ? chromium.headless : true;
+
+  if (executablePath) {
+    return puppeteer.launch({
+      args: [...args, '--no-sandbox', '--disable-setuid-sandbox'],
+      defaultViewport,
+      executablePath,
+      headless
+    });
+  }
+
+  const fallbackPaths =
+    process.env.CHROME_PATH
+      ? [process.env.CHROME_PATH]
+      : [
+          'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+          'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+          '/usr/bin/google-chrome',
+          '/usr/bin/chromium-browser',
+          '/usr/bin/chromium'
+        ];
+
+  for (const path of fallbackPaths) {
+    try {
+      const browser = await puppeteer.launch({
+        executablePath: path,
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+        defaultViewport: { width: 1280, height: 720 }
+      });
+      return browser;
+    } catch (error) {
+      console.warn(`Unable to launch Chromium at ${path}:`, error);
+    }
+  }
+
+  throw new Error('Failed to determine a Chromium executable path for puppeteer-core.');
 }
 
 async function getLogoDataUri() {
