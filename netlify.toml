@@ -5,8 +5,9 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
-  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
-  PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium-browser"
+  # Let Puppeteer handle its own Chromium download
+  # PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
+  # PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium-browser"
 
 [dev]
   command = "npm run dev"

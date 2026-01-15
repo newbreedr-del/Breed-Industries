@@ -78,11 +78,27 @@ async function launchBrowser() {
     const chromium = await loadChromiumModule();
     const { default: puppeteerCore } = await import('puppeteer-core');
 
-    const executablePath =
-      process.env.PUPPETEER_EXECUTABLE_PATH || (await resolveChromiumValue(chromium.executablePath));
+    const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || 
+                         (await resolveChromiumValue(chromium.executablePath));
 
     if (!executablePath) {
-      throw new Error('Unable to determine executable path for Chromium in production environment.');
+      // Fallback to bundled Chromium if external path not available
+      console.warn('External Chromium not found, falling back to bundled Puppeteer');
+      const { default: puppeteer } = await import('puppeteer');
+      return puppeteer.launch({
+        headless: true,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--single-process',
+          '--disable-gpu'
+        ],
+        defaultViewport: VIEWPORT
+      });
     }
 
     return puppeteerCore.launch({
@@ -93,9 +109,9 @@ async function launchBrowser() {
     });
   }
 
-  const { default: puppeteerCore } = await import('puppeteer-core');
+  const { default: puppeteer } = await import('puppeteer');
 
-  return puppeteerCore.launch({
+  return puppeteer.launch({
     headless: true,
     args: [
       '--no-sandbox',
