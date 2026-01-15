@@ -72,85 +72,53 @@ async function resolveChromiumValue<T>(value: ChromiumThunk<T>): Promise<T> {
 }
 
 async function launchBrowser() {
-  const isProduction = process.env.NODE_ENV === 'production';
-
-  if (isProduction) {
-    // Use @sparticuz/chromium for serverless environments
-    const chromium = await loadChromiumModule();
-    const { default: puppeteer } = await import('puppeteer-core');
-    
-    try {
-      const executablePath = await resolveChromiumValue(chromium.executablePath);
-      console.log(`Using @sparticuz/chromium at: ${executablePath}`);
-      
-      return puppeteer.launch({
-        args: await resolveChromiumValue(chromium.args),
-        defaultViewport: (await resolveChromiumValue(chromium.defaultViewport ?? VIEWPORT)) ?? VIEWPORT,
-        executablePath,
-        headless: await resolveChromiumValue(chromium.headless ?? true)
-      });
-    } catch (error) {
-      console.error('Failed to launch @sparticuz/chromium:', error);
-      throw new Error('Failed to launch browser in production environment');
-    }
-  }
-
-  // Development environment - try puppeteer-core first, then fallback to puppeteer
+  // Use @sparticuz/chromium for both production and development
+  const chromium = await loadChromiumModule();
+  const { default: puppeteer } = await import('puppeteer-core');
+  
   try {
-    const { default: puppeteerCore } = await import('puppeteer-core');
-    
-    // Try to find local Chrome/Chromium installation
-    const possiblePaths = [
-      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-      '/usr/bin/google-chrome',
-      '/usr/bin/chromium-browser',
-      '/usr/bin/chromium'
-    ];
-
-    for (const path of possiblePaths) {
-      try {
-        console.log(`Trying local Chrome at: ${path}`);
-        return await puppeteerCore.launch({
-          executablePath: path,
-          headless: true,
-          args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage'
-          ],
-          defaultViewport: VIEWPORT
-        });
-      } catch (e) {
-        // Continue to next path
-      }
-    }
-  } catch (error) {
-    console.error('puppeteer-core not available, trying puppeteer:', error);
-  }
-
-  // Fallback to puppeteer with bundled Chromium
-  try {
-    console.log('Falling back to puppeteer with bundled Chromium');
-    const { default: puppeteer } = await import('puppeteer');
+    const executablePath = await resolveChromiumValue(chromium.executablePath);
+    console.log(`Using @sparticuz/chromium at: ${executablePath}`);
     
     return puppeteer.launch({
-      headless: true,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--no-first-run',
-        '--no-zygote',
-        '--single-process',
-        '--disable-gpu'
-      ],
-      defaultViewport: VIEWPORT
+      args: await resolveChromiumValue(chromium.args),
+      defaultViewport: (await resolveChromiumValue(chromium.defaultViewport ?? VIEWPORT)) ?? VIEWPORT,
+      executablePath,
+      headless: await resolveChromiumValue(chromium.headless ?? true)
     });
   } catch (error) {
-    console.error('Failed to launch browser in development:', error);
-    throw new Error('Failed to launch browser. Please install Chrome or ensure Puppeteer Chromium is downloaded by running "npm install".');
+    console.error('Failed to launch @sparticuz/chromium:', error);
+    
+    // For development only, try local Chrome as last resort
+    if (process.env.NODE_ENV !== 'production') {
+      const possiblePaths = [
+        'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+        'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+        '/usr/bin/google-chrome',
+        '/usr/bin/chromium-browser',
+        '/usr/bin/chromium'
+      ];
+
+      for (const path of possiblePaths) {
+        try {
+          console.log(`Trying local Chrome at: ${path}`);
+          return await puppeteer.launch({
+            executablePath: path,
+            headless: true,
+            args: [
+              '--no-sandbox',
+              '--disable-setuid-sandbox',
+              '--disable-dev-shm-usage'
+            ],
+            defaultViewport: VIEWPORT
+          });
+        } catch (e) {
+          // Continue to next path
+        }
+      }
+    }
+    
+    throw new Error('Failed to launch browser. Please ensure @sparticuz/chromium is properly installed or Chrome is available for development.');
   }
 }
 
