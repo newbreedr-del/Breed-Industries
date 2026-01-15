@@ -99,7 +99,7 @@ async function launchBrowser() {
   const { default: puppeteer } = await import('puppeteer');
 
   return puppeteer.launch({
-    executablePath: puppeteer.executablePath(),
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
     headless: true,
     args: [
       '--no-sandbox',
