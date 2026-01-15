@@ -54,8 +54,8 @@ async function loadChromiumModule(): Promise<ChromiumLambda> {
     return chromiumModule;
   }
 
-  const module = await import('@sparticuz/chrome-aws-lambda');
-  chromiumModule = (module?.default ?? module) as unknown as ChromiumLambda;
+  const module = await import('@sparticuz/chromium');
+  chromiumModule = module as unknown as ChromiumLambda;
   return chromiumModule;
 }
 
@@ -89,14 +89,13 @@ async function launchBrowser() {
       args: await resolveChromiumValue(chromium.args),
       defaultViewport: (await resolveChromiumValue(chromium.defaultViewport ?? VIEWPORT)) ?? VIEWPORT,
       executablePath,
-      headless: await resolveChromiumValue(chromium.headless ?? true),
-      ignoreHTTPSErrors: true
+      headless: await resolveChromiumValue(chromium.headless ?? true)
     });
   }
 
-  const { default: puppeteer } = await import('puppeteer');
+  const { default: puppeteerCore } = await import('puppeteer-core');
 
-  return puppeteer.launch({
+  return puppeteerCore.launch({
     headless: true,
     args: [
       '--no-sandbox',
