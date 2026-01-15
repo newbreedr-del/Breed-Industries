@@ -95,10 +95,10 @@ async function launchBrowser() {
     }
   }
 
-  // Development environment - use puppeteer-core with local Chrome
-  const { default: puppeteer } = await import('puppeteer-core');
-
+  // Development environment - try puppeteer-core first, then fallback to puppeteer
   try {
+    const { default: puppeteerCore } = await import('puppeteer-core');
+    
     // Try to find local Chrome/Chromium installation
     const possiblePaths = [
       'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
@@ -111,7 +111,7 @@ async function launchBrowser() {
     for (const path of possiblePaths) {
       try {
         console.log(`Trying local Chrome at: ${path}`);
-        return await puppeteer.launch({
+        return await puppeteerCore.launch({
           executablePath: path,
           headless: true,
           args: [
@@ -125,12 +125,32 @@ async function launchBrowser() {
         // Continue to next path
       }
     }
+  } catch (error) {
+    console.error('puppeteer-core not available, trying puppeteer:', error);
+  }
 
-    // If no local Chrome found, throw error
-    throw new Error('No local Chrome/Chromium installation found. Please install Chrome or use puppeteer instead of puppeteer-core for development.');
+  // Fallback to puppeteer with bundled Chromium
+  try {
+    console.log('Falling back to puppeteer with bundled Chromium');
+    const { default: puppeteer } = await import('puppeteer');
+    
+    return puppeteer.launch({
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process',
+        '--disable-gpu'
+      ],
+      defaultViewport: VIEWPORT
+    });
   } catch (error) {
     console.error('Failed to launch browser in development:', error);
-    throw error;
+    throw new Error('Failed to launch browser. Please install Chrome or ensure Puppeteer Chromium is downloaded by running "npm install".');
   }
 }
 
