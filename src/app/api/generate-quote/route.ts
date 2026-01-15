@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
-import { format } from 'date-fns';
-import { readFile } from 'fs/promises';
 import { join } from 'path';
+import { readFile } from 'fs/promises';
+import nodemailer from 'nodemailer';
+import chromium from '@sparticuz/chromium';
+import puppeteer from 'puppeteer-core';
+import { format } from 'date-fns';
 
 // SMTP configuration (SendGrid)
 const SMTP_HOST = process.env.SENDGRID_SMTP_HOST || 'smtp.sendgrid.net';
@@ -36,90 +38,13 @@ function getTransporter() {
 
 let cachedLogoDataUri: string | null = null;
 
-const VIEWPORT = { width: 1280, height: 720 } as const;
-
-type ChromiumThunk<T> = T | Promise<T> | (() => T | Promise<T>);
-
-type ChromiumLambda = {
-  executablePath: ChromiumThunk<string | null>;
-  args: ChromiumThunk<string[]>;
-  defaultViewport?: ChromiumThunk<{ width: number; height: number }>;
-  headless?: ChromiumThunk<boolean>;
-};
-
-let chromiumModule: ChromiumLambda | null = null;
-
-async function loadChromiumModule(): Promise<ChromiumLambda> {
-  if (chromiumModule) {
-    return chromiumModule;
-  }
-
-  const module = await import('@sparticuz/chromium');
-  chromiumModule = module as unknown as ChromiumLambda;
-  return chromiumModule;
-}
-
-async function resolveChromiumValue<T>(value: ChromiumThunk<T>): Promise<T> {
-  if (typeof value === 'function') {
-    return resolveChromiumValue((value as () => T | Promise<T>)());
-  }
-
-  if (value && typeof (value as Promise<T>).then === 'function') {
-    return value as Promise<T>;
-  }
-
-  return value as T;
-}
-
 async function launchBrowser() {
-  // Use @sparticuz/chromium for both production and development
-  const chromium = await loadChromiumModule();
-  const { default: puppeteer } = await import('puppeteer-core');
-  
-  try {
-    const executablePath = await resolveChromiumValue(chromium.executablePath);
-    console.log(`Using @sparticuz/chromium at: ${executablePath}`);
-    
-    return puppeteer.launch({
-      args: await resolveChromiumValue(chromium.args),
-      defaultViewport: (await resolveChromiumValue(chromium.defaultViewport ?? VIEWPORT)) ?? VIEWPORT,
-      executablePath,
-      headless: await resolveChromiumValue(chromium.headless ?? true)
-    });
-  } catch (error) {
-    console.error('Failed to launch @sparticuz/chromium:', error);
-    
-    // For development only, try local Chrome as last resort
-    if (process.env.NODE_ENV !== 'production') {
-      const possiblePaths = [
-        'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-        'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-        '/usr/bin/google-chrome',
-        '/usr/bin/chromium-browser',
-        '/usr/bin/chromium'
-      ];
-
-      for (const path of possiblePaths) {
-        try {
-          console.log(`Trying local Chrome at: ${path}`);
-          return await puppeteer.launch({
-            executablePath: path,
-            headless: true,
-            args: [
-              '--no-sandbox',
-              '--disable-setuid-sandbox',
-              '--disable-dev-shm-usage'
-            ],
-            defaultViewport: VIEWPORT
-          });
-        } catch (e) {
-          // Continue to next path
-        }
-      }
-    }
-    
-    throw new Error('Failed to launch browser. Please ensure @sparticuz/chromium is properly installed or Chrome is available for development.');
-  }
+  return puppeteer.launch({
+    args: [...chromium.args, '--no-sandbox', '--disable-setuid-sandbox'],
+    defaultViewport: { width: 1280, height: 720 },
+    executablePath: await chromium.executablePath(),
+    headless: true,
+  });
 }
 
 async function getLogoDataUri() {
