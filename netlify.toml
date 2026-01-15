@@ -5,7 +5,7 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
-  # Skip Puppeteer Chromium download - use Netlify's Chromium plugin
+  # Skip Puppeteer Chromium download - use @sparticuz/chromium
   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
 
 [dev]
@@ -18,13 +18,6 @@
 
 [[plugins]]
   package = "@netlify/plugin-functions-install-core"
-
-# Configure Netlify's Chromium plugin
-[[plugins]]
-  package = "netlify-plugin-chromium"
-  [plugins.inputs]
-    setChromePathInEnv = true
-    failBuildOnError = true
 
 # Add functions configuration without Chromium binary
 [functions]
