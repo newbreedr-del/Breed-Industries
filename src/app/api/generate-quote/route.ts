@@ -75,42 +75,49 @@ async function launchBrowser() {
   const isProduction = process.env.NODE_ENV === 'production';
 
   if (isProduction) {
-    const chromium = await loadChromiumModule();
-    const { default: puppeteerCore } = await import('puppeteer-core');
+    try {
+      const chromium = await loadChromiumModule();
+      const { default: puppeteerCore } = await import('puppeteer-core');
 
-    const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || 
-                         (await resolveChromiumValue(chromium.executablePath));
+      const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || 
+                           (await resolveChromiumValue(chromium.executablePath));
 
-    if (!executablePath) {
-      // Fallback to bundled Chromium if external path not available
-      console.warn('External Chromium not found, falling back to bundled Puppeteer');
-      const { default: puppeteer } = await import('puppeteer');
-      // Use the local Chromium that comes with Puppeteer
-      return puppeteer.launch({
-        executablePath: puppeteer.executablePath(),
-        headless: true,
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-accelerated-2d-canvas',
-          '--no-first-run',
-          '--no-zygote',
-          '--single-process',
-          '--disable-gpu'
-        ],
-        defaultViewport: VIEWPORT
-      });
+      if (executablePath) {
+        return puppeteerCore.launch({
+          args: await resolveChromiumValue(chromium.args),
+          defaultViewport: (await resolveChromiumValue(chromium.defaultViewport ?? VIEWPORT)) ?? VIEWPORT,
+          executablePath,
+          headless: await resolveChromiumValue(chromium.headless ?? true)
+        });
+      }
+    } catch (error) {
+      console.warn('Failed to load @sparticuz/chromium, falling back to puppeteer:', error);
     }
 
-    return puppeteerCore.launch({
-      args: await resolveChromiumValue(chromium.args),
-      defaultViewport: (await resolveChromiumValue(chromium.defaultViewport ?? VIEWPORT)) ?? VIEWPORT,
-      executablePath,
-      headless: await resolveChromiumValue(chromium.headless ?? true)
+    // Final fallback - use puppeteer without local Chromium (will download if needed)
+    const { default: puppeteer } = await import('puppeteer');
+    return puppeteer.launch({
+      headless: true, // Use boolean true instead of 'new'
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process',
+        '--disable-gpu',
+        '--disable-extensions',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-renderer-backgrounding'
+      ],
+      defaultViewport: VIEWPORT,
+      // Don't specify executablePath to let Puppeteer handle it
     });
   }
 
+  // Development environment
   const { default: puppeteer } = await import('puppeteer');
 
   return puppeteer.launch({
