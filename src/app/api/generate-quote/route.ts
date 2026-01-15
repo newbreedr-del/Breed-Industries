@@ -43,8 +43,8 @@ let cachedLogoDataUri: string | null = null;
 async function launchBrowser() {
   const executablePath = await chromium.executablePath();
   const args = chromium.args ?? [];
-  const defaultViewport = chromium.defaultViewport ?? { width: 1280, height: 720 };
-  const headless = typeof chromium.headless === 'boolean' ? chromium.headless : true;
+  const defaultViewport = { width: 1280, height: 720 };
+  const headless = true;
 
   if (executablePath) {
     return puppeteer.launch({

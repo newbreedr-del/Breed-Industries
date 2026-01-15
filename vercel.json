@@ -7,6 +7,14 @@
     "api/**/*.ts": {
       "maxDuration": 30,
       "memory": 1024
+    },
+    "app/api/**/*.js": {
+      "maxDuration": 30,
+      "memory": 1024
+    },
+    "app/api/**/*.ts": {
+      "maxDuration": 30,
+      "memory": 1024
     }
   }
 }
