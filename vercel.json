@@ -1,1 +1,1 @@
-{"functions": {"app/api/**/*.ts": {"maxDuration": 30}}, "build": {"env": {"PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "true"}}}
+{"functions": {"app/api/**/*.ts": {"maxDuration": 60}}, "build": {"env": {"PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "true", "PUPPETEER_EXECUTABLE_PATH": "/usr/bin/chromium-browser"}}}
