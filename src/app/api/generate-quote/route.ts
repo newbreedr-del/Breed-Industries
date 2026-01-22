@@ -2,16 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { join } from 'path';
 import { readFile } from 'fs/promises';
 import { Resend } from 'resend';
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-
-// Use puppeteer-extra with stealth plugin
-const puppeteer = require('puppeteer-extra');
-const hidden = require('puppeteer-extra-plugin-stealth');
-
-// require executablePath from puppeteer
-const { executablePath } = require('puppeteer');
-
 import { format } from 'date-fns';
 
 export const runtime = 'nodejs';
@@ -25,31 +15,37 @@ let cachedLogoDataUri: string | null = null;
 
 async function launchBrowser() {
   try {
-    // Launch sequence with puppeteer-extra and stealth
-    puppeteer.use(hidden());
+    // Simple browser launch for Vercel
+    const { createRequire } = await import('module');
+    const require = createRequire(import.meta.url);
     
-    console.log('Attempting to launch browser with puppeteer-extra...');
+    // Try to use puppeteer-core with @sparticuz/chromium
+    const chromium = require('@sparticuz/chromium');
+    const puppeteer = require('puppeteer-core');
     
-    const browser = await puppeteer.launch({
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-gpu',
-        '--no-zygote',
-        '--single-process'
-      ],
-      headless: true,
-      ignoreHTTPSErrors: true,
-      executablePath: executablePath(),
-      timeout: 30000
-    });
+    const executablePath = await chromium.executablePath();
     
-    console.log('Browser launched successfully');
-    return browser;
+    if (executablePath) {
+      return puppeteer.launch({
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu',
+          '--no-zygote',
+          '--single-process'
+        ],
+        defaultViewport: { width: 1280, height: 720 },
+        executablePath,
+        headless: true,
+        timeout: 30000
+      });
+    } else {
+      throw new Error('No executable path found');
+    }
   } catch (error) {
-    console.error('Failed to launch browser:', error);
-    throw new Error(`Failed to launch browser: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error('Browser launch failed:', error);
+    throw new Error('Failed to launch browser for PDF generation');
   }
 }
 
@@ -61,25 +57,23 @@ async function getLogoDataUri() {
   try {
     const logoPath = join(
       process.cwd(),
-      'assets',
+      'public',
       'images',
-      'The Breed Industries-01-01.png'
+      'logo.png'
     );
-    const logoBuffer = await readFile(logoPath);
-    cachedLogoDataUri = `data:image/png;base64,${logoBuffer.toString('base64')}`;
+    
+    const imageBuffer = await readFile(logoPath);
+    const base64 = imageBuffer.toString('base64');
+    cachedLogoDataUri = `data:image/png;base64,${base64}`;
     return cachedLogoDataUri;
   } catch (error) {
-    console.error('Failed to load logo asset for quote template:', error);
-    cachedLogoDataUri = null;
-    return null;
+    console.warn('Logo not found, using placeholder');
+    return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiB2aWV3Qm94PSIwIDAgMjAwIDYwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMUExQTFBIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iMzUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5CUkVFRCBJTkRVU1RSSUVTPC90ZXh0Pgo8L3N2Zz4K';
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
-    // Rate limiting (simple implementation)
-    // In production, use a proper rate limiting solution
-
     // Parse request body
     const data = await req.json();
     const {
@@ -139,7 +133,6 @@ export async function POST(req: NextRequest) {
 
     // Generate HTML for the quote
     const logoDataUri = await getLogoDataUri();
-
     const quoteHTML = generateQuoteHTML({
       quoteNumber,
       currentDate,
@@ -278,314 +271,220 @@ function generateQuoteHTML(data: any) {
       <td class="right">${formatCurrency(item.quantity * item.rate)}</td>
     </tr>
   `).join('');
-  
-  // Return the complete HTML template
-  return `<!DOCTYPE html>
-<html lang="en">
+
+  return `
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quote Template</title>
+    <meta charset="utf-8">
+    <title>Quote #${quoteNumber} - Breed Industries</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            line-height: 1.6;
-            padding: 40px;
-            background: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
         }
-        
         .container {
             max-width: 800px;
             margin: 0 auto;
             background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
-        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: start;
+            align-items: center;
             margin-bottom: 40px;
+            border-bottom: 2px solid #1A1A1B;
             padding-bottom: 20px;
-            border-bottom: 3px solid #CA8114;
         }
-        
-        .logo-section {
-            flex: 1;
-        }
-        
-        .company-name {
-            font-size: 28px;
+        .logo {
+            font-size: 24px;
             font-weight: bold;
-            color: #2563eb;
-            margin-bottom: 5px;
+            color: #1A1A1B;
         }
-        
-        .company-details {
-            font-size: 12px;
-            color: #666;
-            line-height: 1.4;
-        }
-        
-        .quote-info {
+        .quote-details {
             text-align: right;
         }
-        
-        .quote-title {
-            font-size: 32px;
+        .quote-number {
+            font-size: 18px;
             font-weight: bold;
-            color: #CA8114;
-            margin-bottom: 10px;
+            color: #1A1A1B;
         }
-        
-        .quote-meta {
-            font-size: 13px;
-            color: #666;
-        }
-        
-        .quote-meta div {
-            margin: 3px 0;
-        }
-        
-        /* Customer Info */
-        .info-section {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 40px;
-            gap: 40px;
-        }
-        
-        .info-block {
-            flex: 1;
-        }
-        
-        .info-block h3 {
-            font-size: 14px;
-            color: #CA8114;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        
-        .info-block p {
-            font-size: 13px;
-            margin: 3px 0;
-            color: #444;
-        }
-        
-        /* Items Table */
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
+        .section {
             margin-bottom: 30px;
         }
-        
-        .items-table thead {
-            background: #CA8114;
-            color: white;
+        .section h2 {
+            color: #1A1A1B;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
         }
-        
-        .items-table th {
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .info-item {
+            margin-bottom: 10px;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #666;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
             padding: 12px;
             text-align: left;
-            font-size: 13px;
-            font-weight: 600;
+            border-bottom: 1px solid #ddd;
         }
-        
-        .items-table th.right {
+        th {
+            background-color: #1A1A1B;
+            color: white;
+            font-weight: bold;
+        }
+        .right {
             text-align: right;
         }
-        
-        .items-table tbody tr {
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .items-table tbody tr:hover {
-            background: #f9fafb;
-        }
-        
-        .items-table td {
-            padding: 12px;
-            font-size: 13px;
-        }
-        
-        .items-table td.right {
-            text-align: right;
-        }
-        
         .item-description {
-            color: #666;
             font-size: 12px;
-            margin-top: 3px;
+            color: #666;
+            margin-top: 5px;
         }
-        
-        /* Totals */
-        .totals-section {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 40px;
-        }
-        
         .totals {
-            width: 300px;
+            text-align: right;
+            margin-top: 20px;
         }
-        
         .total-row {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            font-size: 14px;
+            margin-bottom: 10px;
+            font-size: 16px;
         }
-        
-        .total-row.subtotal {
-            border-top: 1px solid #e5e7eb;
-        }
-        
-        .total-row.tax {
-            color: #666;
-        }
-        
-        .total-row.total {
-            border-top: 2px solid #CA8114;
-            margin-top: 8px;
-            padding-top: 12px;
-            font-size: 18px;
+        .total {
             font-weight: bold;
-            color: #D6610D;
+            font-size: 18px;
+            border-top: 2px solid #1A1A1B;
+            padding-top: 10px;
         }
-        
-        /* Notes */
-        .notes-section {
-            background: #f9fafb;
-            padding: 20px;
-            border-left: 4px solid #CA8114;
-            margin-bottom: 30px;
-        }
-        
-        .notes-section h3 {
-            font-size: 14px;
-            color: #CA8114;
-            margin-bottom: 8px;
-        }
-        
-        .notes-section p {
-            font-size: 13px;
-            color: #555;
-        }
-        
-        /* Terms */
-        .terms-section {
-            border-top: 2px solid #e5e7eb;
-            padding-top: 20px;
-            font-size: 11px;
-            color: #666;
-            line-height: 1.6;
-        }
-        
-        .terms-section h3 {
-            font-size: 12px;
-            color: #333;
-            margin-bottom: 8px;
-        }
-        
-        /* Footer */
         .footer {
-            text-align: center;
             margin-top: 40px;
             padding-top: 20px;
-            border-top: 1px solid #e5e7eb;
-            font-size: 11px;
-            color: #999;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
-            <div class="logo-section">
-                ${logoDataUri
-                  ? `<img src="${logoDataUri}" alt="Breed Industries" style="height: 60px; margin-bottom: 10px;">`
-                  : `<div class="company-name">Breed Industries</div>`}
-                <div class="company-details">
-                    4 Ivy Road<br>
-                    Pinetown, 3610<br>
-                    Phone: +27 60 496 4105<br>
-                    Email: info@thebreed.co.za
-                </div>
+            <div class="logo">
+                <img src="${logoDataUri}" alt="Breed Industries" style="height: 60px;">
             </div>
-            <div class="quote-info">
-                <div class="quote-title">QUOTE</div>
-                <div class="quote-meta">
-                    <div><strong>Quote #:</strong> ${quoteNumber}</div>
-                    <div><strong>Date:</strong> ${currentDate}</div>
-                    <div><strong>Valid Until:</strong> ${validUntil}</div>
+            <div class="quote-details">
+                <div class="quote-number">Quote #${quoteNumber}</div>
+                <div>Date: ${currentDate}</div>
+                <div>Valid Until: ${validUntil}</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Project Information</h2>
+            <div class="info-grid">
+                <div>
+                    <div class="info-item">
+                        <div class="info-label">Project Name:</div>
+                        <div>${projectName}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Contact Person:</div>
+                        <div>${contactPerson}</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="info-item">
+                        <div class="info-label">Payment Terms:</div>
+                        <div>${paymentTerms}</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Customer Info -->
-        <div class="info-section">
-            <div class="info-block">
-                <h3>Bill To</h3>
-                <p><strong>${customerName}</strong></p>
-                <p>${customerCompany || ''}</p>
-                <p>${customerAddress || ''}</p>
-                <p>${customerEmail}</p>
-                <p>${customerPhone || ''}</p>
-            </div>
-            <div class="info-block">
-                <h3>Project Details</h3>
-                <p><strong>Project:</strong> ${projectName || 'Custom Services'}</p>
-                <p><strong>Contact:</strong> ${contactPerson || customerName}</p>
-                <p><strong>Payment Terms:</strong> ${paymentTerms || 'Net 30'}</p>
+        <div class="section">
+            <h2>Customer Information</h2>
+            <div class="info-grid">
+                <div>
+                    <div class="info-item">
+                        <div class="info-label">Name:</div>
+                        <div>${customerName}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Company:</div>
+                        <div>${customerCompany || 'N/A'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Address:</div>
+                        <div>${customerAddress || 'N/A'}</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="info-item">
+                        <div class="info-label">Email:</div>
+                        <div>${customerEmail}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Phone:</div>
+                        <div>${customerPhone || 'N/A'}</div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Items Table -->
-        <table class="items-table">
-            <thead>
-                <tr>
-                    <th style="width: 50%;">Description</th>
-                    <th class="right" style="width: 15%;">Qty</th>
-                    <th class="right" style="width: 15%;">Rate</th>
-                    <th class="right" style="width: 20%;">Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${itemsHTML}
-            </tbody>
-        </table>
+        <div class="section">
+            <h2>Quote Items</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th class="right">Quantity</th>
+                        <th class="right">Rate</th>
+                        <th class="right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${itemsHTML}
+                </tbody>
+            </table>
 
-        <!-- Totals -->
-        <div class="totals-section">
             <div class="totals">
-                <div class="total-row total" style="border-top: 0; padding-top: 0; margin-top: 0;">
+                <div class="total-row total">
                     <span>Total (ex VAT):</span>
                     <span>${formatCurrency(total)}</span>
                 </div>
-                <div class="total-row tax" style="margin-top: 8px; font-size: 12px; color: #888;">
+                <div class="total-row" style="font-size: 12px; color: #888;">
                     <span>Breed Industries is not VAT registered. All pricing is exclusive of VAT.</span>
                 </div>
             </div>
         </div>
 
-        <!-- Notes -->
-        <div class="notes-section">
-            <h3>Notes</h3>
-            <p>${notes || 'Thank you for considering our services. This quote is valid for 30 days. A 50% deposit is required to begin work, with the remaining balance due upon project completion. Please contact us if you have any questions.'}</p>
+        ${notes ? `
+        <div class="section">
+            <h2>Notes</h2>
+            <p>${notes}</p>
         </div>
+        ` : ''}
 
-        <!-- Terms -->
-        <div class="terms-section">
-            <h3>Terms & Conditions</h3>
+        <div class="section">
+            <h2>Terms & Conditions</h2>
             <p>
                 Payment is due within 30 days of invoice date. Late payments may incur a 1.5% monthly interest charge. 
                 All work is guaranteed for 90 days from completion. Client is responsible for providing all necessary 
@@ -594,10 +493,9 @@ function generateQuoteHTML(data: any) {
             </p>
         </div>
 
-        <!-- Footer -->
         <div class="footer">
-            Thank you for your business!<br>
-            www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105
+            <p>Thank you for your business!</p>
+            <p>www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105</p>
         </div>
     </div>
 </body>
