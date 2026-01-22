@@ -192,14 +192,14 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       
       // Try multiple image paths and add debugging
       const imagePaths = [
-        '/assets/images/The Breed Industries-01-01-01.png',
-        '/The Breed Industries-01-01-01.png',
-        'The Breed Industries-01-01-01.png'
+        '/assets/images/The Breed Industries Just Logo-01 igkjh-01.png',
+        '/The Breed Industries Just Logo-01 igkjh-01.png',
+        'The Breed Industries Just Logo-01 igkjh-01.png'
       ];
       
       headerElement.innerHTML = `
         <div style="position: relative; margin-bottom: 8px;">
-          <img src="${imagePaths[0]}" alt="Breed Industries Logo" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); max-width: 60px; height: auto;" onerror="this.style.display='none'; console.log('Image failed to load');" onload="console.log('Image loaded successfully');" />
+          <img src="${imagePaths[0]}" alt="Breed Industries Logo" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); max-width: 80px; height: auto;" onerror="this.style.display='none'; console.log('Image failed to load');" onload="console.log('Image loaded successfully');" />
           <div style="font-size: 22px; font-weight: bold; text-align: center;">BREED INDUSTRIES</div>
         </div>
         <div style="font-size: 13px; margin-bottom: 5px;">Be seen, be trusted, be unstoppable</div>
