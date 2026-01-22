@@ -36,6 +36,16 @@ const serviceCategories = [
     ]
   },
   {
+    id: 'business-profile',
+    title: 'Business Profile',
+    icon: <Shield className="w-8 h-8" />,
+    description: 'Professional business profiles and company documents designed to impress stakeholders and support tender submissions.',
+    services: [
+      { name: 'Starter (1–4 Pages)', price: 'R850 – R2,160' },
+      { name: 'Standard (5–10 Pages)', price: 'R2,500 – R4,320' }
+    ]
+  },
+  {
     id: 'digital',
     title: 'Digital Solutions',
     icon: <Layers className="w-8 h-8" />,

@@ -63,6 +63,21 @@ const servicesData = [
     ctaLink: 'https://wa.me/message/4FOGIOMM2A35L1'
   },
   {
+    id: 'business-profile',
+    icon: <Shield className="w-6 h-6" />,
+    name: 'Business Profile',
+    description: 'Professional business profiles and company documents designed to impress stakeholders and support tender submissions.',
+    tiers: [
+      { name: 'Starter (1–4 Pages)', price: 'R850 – R2,160' },
+      { name: 'Standard (5–10 Pages)', price: 'R2,500 – R4,320' }
+    ],
+    features: [
+      { name: 'Starter Package', description: 'Best for: Startups, small businesses, or basic tender submissions. Includes: Simple layout, design-only (no copywriting), 2–3 revision rounds, and a print-ready PDF.' },
+      { name: 'Standard Package', description: 'Best for: Small to medium businesses needing to showcase services. Includes: Professional formatting, sometimes digital flipbook formats, and higher quality graphics.' }
+    ],
+    ctaLink: 'https://wa.me/message/4FOGIOMM2A35L1'
+  },
+  {
     id: 'bundles',
     icon: <Rocket className="w-6 h-6" />,
     name: 'All-in-One Bundles',

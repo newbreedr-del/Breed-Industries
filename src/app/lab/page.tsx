@@ -33,6 +33,11 @@ const digitalOptions = [
   { id: 'social', name: 'Social Media Management', price: 3500, icon: <Layers size={16} />, description: '3-month social media management including content creation, posting, and analytics reporting' },
 ];
 
+const businessProfileOptions = [
+  { id: 'profile-starter', name: 'Business Profile - Starter (1–4 Pages)', price: 850, icon: <FileText size={16} />, description: 'Best for startups, small businesses, or basic tender submissions. Simple layout, design-only, 2–3 revision rounds, print-ready PDF.' },
+  { id: 'profile-standard', name: 'Business Profile - Standard (5–10 Pages)', price: 2500, icon: <FileText size={16} />, description: 'Best for small to medium businesses. Professional formatting, digital flipbook formats, higher quality graphics.' },
+];
+
 const builderSteps = [
   {
     id: 'compliance',
@@ -57,6 +62,14 @@ const builderSteps = [
     options: digitalOptions,
     icon: <Layers className="w-5 h-5" />,
     shortLabel: 'Activate',
+  },
+  {
+    id: 'business-profile',
+    title: 'Build your business profile',
+    description: 'Create professional business profiles and documents for tenders, stakeholders, and growth opportunities.',
+    options: businessProfileOptions,
+    icon: <FileText className="w-5 h-5" />,
+    shortLabel: 'Profile',
   },
 ];
 
@@ -87,7 +100,7 @@ const quickBundles = [
   },
 ];
 
-const allOptions = [...complianceOptions, ...brandingOptions, ...digitalOptions];
+const allOptions = [...complianceOptions, ...brandingOptions, ...digitalOptions, ...businessProfileOptions];
 
 export default function LabPage() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
@@ -354,12 +367,14 @@ export default function LabPage() {
             </div>
             
             <div className="flex justify-center">
-              <button 
+              <a 
+                href="https://wa.me/message/4FOGIOMM2A35L1"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn btn-primary flex items-center gap-2"
-                onClick={() => setShowQuoteModal(true)}
               >
-                <ClipboardList className="w-4 h-4" /> Generate Auto Quote
-              </button>
+                <ClipboardList className="w-4 h-4" /> Request Quote on WhatsApp
+              </a>
             </div>
           </div>
 
