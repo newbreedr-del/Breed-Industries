@@ -177,244 +177,197 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
 
       console.log('Total calculated:', total, 'Formatted:', formattedTotal);
 
-      // Add custom font for better rendering
-      pdf.setFont('helvetica');
-      
-      // Brand Header with Logo Placeholder
-      pdf.setFillColor(26, 26, 27); // #1A1A1B
-      pdf.rect(0, 0, 210, 60, 'F');
+      // Brand Header
+      pdf.setFillColor(26, 26, 27);
+      pdf.rect(0, 0, 210, 50, 'F');
       
       pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(24);
+      pdf.setFontSize(20);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('BREED INDUSTRIES', 105, 25, { align: 'center' });
-      
-      pdf.setFontSize(12);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('Professional Business Solutions', 105, 35, { align: 'center' });
+      pdf.text('BREED INDUSTRIES', 105, 20, { align: 'center' });
       
       pdf.setFontSize(10);
-      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, 45, { align: 'center' });
-      
-      // Quote Details Box
-      pdf.setFillColor(245, 245, 245);
-      pdf.rect(20, 70, 170, 25, 'F');
-      
-      pdf.setTextColor(26, 26, 27);
-      pdf.setFontSize(16);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text(`Quote #${quoteNumber}`, 30, 85);
-      
-      pdf.setFontSize(11);
       pdf.setFont('helvetica', 'normal');
-      pdf.text(`Date: ${currentDate}`, 30, 92);
-      pdf.text(`Valid Until: ${validUntil}`, 120, 92);
+      pdf.text('Professional Business Solutions', 105, 30, { align: 'center' });
+      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, 40, { align: 'center' });
       
-      // Customer Information Section
+      // Quote Details
+      pdf.setFillColor(245, 245, 245);
+      pdf.rect(20, 60, 170, 20, 'F');
+      
       pdf.setTextColor(26, 26, 27);
-      pdf.setFontSize(16);
+      pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Customer Information', 20, 115);
+      pdf.text(`Quote #${quoteNumber}`, 30, 72);
       
-      pdf.setDrawColor(200, 200, 200);
-      pdf.line(20, 120, 190, 120);
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Date: ${currentDate}`, 30, 80);
+      pdf.text(`Valid Until: ${validUntil}`, 120, 80);
       
-      pdf.setFontSize(11);
+      // Customer Information
+      pdf.setTextColor(26, 26, 27);
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Customer Information', 20, 95);
+      
+      pdf.setFontSize(9);
       pdf.setFont('helvetica', 'normal');
       pdf.setTextColor(60, 60, 60);
       
-      let yPos = 130;
+      let yPos = 105;
       pdf.text(`Name: ${customerName}`, 20, yPos);
-      yPos += 8;
+      yPos += 6;
       pdf.text(`Company: ${customerCompany || 'N/A'}`, 20, yPos);
-      yPos += 8;
+      yPos += 6;
       pdf.text(`Email: ${customerEmail}`, 20, yPos);
-      yPos += 8;
+      yPos += 6;
       pdf.text(`Phone: ${customerPhone || 'N/A'}`, 20, yPos);
-      yPos += 8;
+      yPos += 6;
       pdf.text(`Project: ${projectName}`, 20, yPos);
-      yPos += 8;
+      yPos += 6;
       pdf.text(`Contact: ${contactPerson}`, 20, yPos);
       
       // Quote Items Table
-      yPos += 15;
+      yPos += 12;
       pdf.setTextColor(26, 26, 27);
-      pdf.setFontSize(16);
+      pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
       pdf.text('Quote Items', 20, yPos);
       
-      pdf.setDrawColor(200, 200, 200);
-      pdf.line(20, yPos + 5, 190, yPos + 5);
+      yPos += 8;
+      
+      // Table headers
+      pdf.setFillColor(26, 26, 27);
+      pdf.rect(20, yPos, 170, 10, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(9);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Service', 25, yPos + 7);
+      pdf.text('Qty', 100, yPos + 7);
+      pdf.text('Rate', 130, yPos + 7);
+      pdf.text('Amount', 160, yPos + 7);
       
       yPos += 10;
       
-      // Table headers with branding
-      pdf.setFillColor(26, 26, 27);
-      pdf.rect(20, yPos, 170, 12, 'F');
-      pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(11);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('Service', 25, yPos + 8);
-      pdf.text('Quantity', 85, yPos + 8);
-      pdf.text('Rate', 125, yPos + 8);
-      pdf.text('Amount', 160, yPos + 8);
-      
-      yPos += 12;
-      
-      // Table rows with alternating colors
+      // Table rows
       pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(10);
+      pdf.setFontSize(8);
       pdf.setFont('helvetica', 'normal');
       
       items.forEach((item, index) => {
         if (yPos > 240) {
           pdf.addPage();
-          // Repeat header on new page
-          pdf.setFillColor(26, 26, 27);
-          pdf.rect(0, 0, 210, 60, 'F');
-          pdf.setTextColor(255, 255, 255);
-          pdf.setFontSize(24);
-          pdf.setFont('helvetica', 'bold');
-          pdf.text('BREED INDUSTRIES', 105, 25, { align: 'center' });
-          pdf.setFontSize(12);
-          pdf.setFont('helvetica', 'normal');
-          pdf.text('Professional Business Solutions', 105, 35, { align: 'center' });
-          pdf.setFontSize(10);
-          pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, 45, { align: 'center' });
-          
-          yPos = 80;
-          
-          // Table headers on new page
-          pdf.setFillColor(26, 26, 27);
-          pdf.rect(20, yPos, 170, 12, 'F');
-          pdf.setTextColor(255, 255, 255);
-          pdf.setFontSize(11);
-          pdf.setFont('helvetica', 'bold');
-          pdf.text('Service', 25, yPos + 8);
-          pdf.text('Quantity', 85, yPos + 8);
-          pdf.text('Rate', 125, yPos + 8);
-          pdf.text('Amount', 160, yPos + 8);
-          
-          yPos += 12;
-          pdf.setTextColor(0, 0, 0);
-          pdf.setFontSize(10);
-          pdf.setFont('helvetica', 'normal');
+          yPos = 20;
         }
         
-        // Alternate row background with brand colors
+        // Alternate row background
         if (index % 2 === 0) {
-          pdf.setFillColor(248, 249, 250); // Light brand color
-          pdf.rect(20, yPos, 170, 10, 'F');
+          pdf.setFillColor(248, 249, 250);
+          pdf.rect(20, yPos, 170, 8, 'F');
         }
         
-        pdf.text(item.name, 25, yPos + 7);
-        pdf.text(item.quantity.toString(), 90, yPos + 7);
-        pdf.text(`R ${item.rate.toLocaleString()}`, 125, yPos + 7);
-        pdf.text(`R ${(item.quantity * item.rate).toLocaleString()}`, 160, yPos + 7);
+        pdf.text(item.name.substring(0, 50), 25, yPos + 5);
+        pdf.text(item.quantity.toString(), 105, yPos + 5);
+        pdf.text(`R${item.rate}`, 135, yPos + 5);
+        pdf.text(`R${item.quantity * item.rate}`, 165, yPos + 5);
         
-        yPos += 10;
+        yPos += 8;
       });
       
-      // Total Section with Brand Styling
-      yPos += 10;
+      // Total
+      yPos += 8;
       pdf.setFillColor(26, 26, 27);
-      pdf.rect(20, yPos, 170, 15, 'F');
+      pdf.rect(20, yPos, 170, 12, 'F');
       
       pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(14);
+      pdf.setFontSize(12);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('TOTAL (EX VAT):', 25, yPos + 10);
-      pdf.text(formattedTotal, 160, yPos + 10, { align: 'right' });
+      pdf.text('TOTAL (EX VAT):', 25, yPos + 8);
+      pdf.text(formattedTotal, 160, yPos + 8, { align: 'right' });
       
       yPos += 20;
-      pdf.setFontSize(9);
+      pdf.setFontSize(8);
       pdf.setFont('helvetica', 'normal');
       pdf.setTextColor(136, 136, 136);
       pdf.text('Breed Industries is not VAT registered. All pricing is exclusive of VAT.', 105, yPos, { align: 'center' });
       
       // Notes if any
       if (notes) {
-        yPos += 20;
+        yPos += 15;
         pdf.setTextColor(26, 26, 27);
-        pdf.setFontSize(14);
+        pdf.setFontSize(12);
         pdf.setFont('helvetica', 'bold');
         pdf.text('Notes', 20, yPos);
         
         yPos += 8;
-        pdf.setDrawColor(200, 200, 200);
-        pdf.line(20, yPos, 190, yPos);
-        
-        yPos += 8;
-        pdf.setFontSize(10);
+        pdf.setFontSize(8);
         pdf.setFont('helvetica', 'normal');
         pdf.setTextColor(60, 60, 60);
         const splitNotes = pdf.splitTextToSize(notes, 170);
-        pdf.text(splitNotes, 20, yPos);
+        splitNotes.forEach((line, index) => {
+          if (yPos > 270) {
+            pdf.addPage();
+            yPos = 20;
+          }
+          pdf.text(line, 20, yPos + (index * 4));
+        });
+        yPos += splitNotes.length * 4;
       }
       
-      // Terms & Conditions
-      yPos += 25;
+      // Terms & Conditions - Simplified
+      yPos += 15;
+      if (yPos > 250) {
+        pdf.addPage();
+        yPos = 20;
+      }
+      
       pdf.setTextColor(26, 26, 27);
-      pdf.setFontSize(14);
+      pdf.setFontSize(12);
       pdf.setFont('helvetica', 'bold');
       pdf.text('Terms & Conditions', 20, yPos);
       
       yPos += 8;
-      pdf.setDrawColor(200, 200, 200);
-      pdf.line(20, yPos, 190, yPos);
-      
-      yPos += 8;
-      pdf.setFontSize(9);
+      pdf.setFontSize(7);
       pdf.setFont('helvetica', 'normal');
       pdf.setTextColor(60, 60, 60);
+      
       const terms = [
-        'Payment is due within 30 days of invoice date. Late payments may incur a 1.5% monthly interest charge.',
-        'All work is guaranteed for 90 days from completion. Client is responsible for providing all necessary',
-        'content and materials. Changes to project scope may result in additional charges. We reserve the right',
-        'to use completed work in our portfolio unless otherwise agreed in writing.'
+        '• Payment due within 30 days. Late payments incur 1.5% monthly interest.',
+        '• Work guaranteed for 90 days. Client responsible for content/materials.',
+        '• Scope changes may incur additional charges. Portfolio rights reserved.'
       ];
       
-      terms.forEach(term => {
+      terms.forEach((term, index) => {
         if (yPos > 270) {
           pdf.addPage();
-          // Repeat header on new page
-          pdf.setFillColor(26, 26, 27);
-          pdf.rect(0, 0, 210, 60, 'F');
-          pdf.setTextColor(255, 255, 255);
-          pdf.setFontSize(24);
-          pdf.setFont('helvetica', 'bold');
-          pdf.text('BREED INDUSTRIES', 105, 25, { align: 'center' });
-          pdf.setFontSize(12);
-          pdf.setFont('helvetica', 'normal');
-          pdf.text('Professional Business Solutions', 105, 35, { align: 'center' });
-          pdf.setFontSize(10);
-          pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, 45, { align: 'center' });
-          
-          yPos = 80;
+          yPos = 20;
         }
-        const splitTerm = pdf.splitTextToSize(term, 170);
-        pdf.text(splitTerm, 20, yPos);
-        yPos += splitTerm.length * 4 + 2;
+        pdf.text(term, 20, yPos + (index * 5));
       });
       
-      // Brand Footer
+      // Footer
       yPos = 280;
+      if (yPos > 270) {
+        pdf.addPage();
+        yPos = 20;
+      }
+      
       pdf.setFillColor(26, 26, 27);
-      pdf.rect(0, yPos - 10, 210, 30, 'F');
+      pdf.rect(0, yPos - 5, 210, 25, 'F');
       
       pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(12);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('Thank you for your business!', 105, yPos + 2, { align: 'center' });
-      
       pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Thank you for your business!', 105, yPos + 5, { align: 'center' });
+      
+      pdf.setFontSize(8);
       pdf.setFont('helvetica', 'normal');
-      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, yPos + 12, { align: 'center' });
+      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, yPos + 15, { align: 'center' });
 
       // Download PDF
       pdf.save(`Breed_Industries_Quote_${quoteNumber}.pdf`);
 
-      // Don't return PDF base64 since we're not sending it as attachment
       return null;
     } catch (error) {
       console.error('Error generating PDF:', error);
