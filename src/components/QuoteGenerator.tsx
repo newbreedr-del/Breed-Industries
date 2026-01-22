@@ -198,9 +198,9 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       ];
       
       headerElement.innerHTML = `
-        <div style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">
-          <img src="${imagePaths[0]}" alt="Breed Industries Logo" style="max-width: 80px; margin-bottom: 8px;" onerror="this.style.display='none'; console.log('Image failed to load');" onload="console.log('Image loaded successfully');" />
-          <div>BREED INDUSTRIES</div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 5px;">
+          <img src="${imagePaths[0]}" alt="Breed Industries Logo" style="max-width: 60px; height: auto;" onerror="this.style.display='none'; console.log('Image failed to load');" onload="console.log('Image loaded successfully');" />
+          <div style="font-size: 20px; font-weight: bold;">BREED INDUSTRIES</div>
         </div>
         <div style="font-size: 12px; margin-bottom: 5px;">Be seen, be trusted, be unstoppable</div>
         <div style="font-size: 10px;">Professional Business Solutions</div>
@@ -383,24 +383,19 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         pdf.text(term, 20, yPos + (index * 5));
       });
       
-      // Footer
-      yPos = 270;
-      if (yPos > 270) {
-        pdf.addPage();
-        yPos = 20;
-      }
-      
+      // Footer - Position at actual bottom
+      const footerY = 290;
       pdf.setFillColor(26, 26, 27);
-      pdf.rect(0, yPos - 5, 210, 20, 'F');
+      pdf.rect(0, footerY, 210, 25, 'F');
       
       pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(9);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Thank you for your business!', 105, yPos + 3, { align: 'center' });
+      pdf.text('Thank you for your business!', 105, footerY + 8, { align: 'center' });
       
       pdf.setFontSize(7);
       pdf.setFont('helvetica', 'normal');
-      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, yPos + 12, { align: 'center' });
+      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, footerY + 18, { align: 'center' });
 
       // Download PDF
       pdf.save(`Breed_Industries_Quote_${quoteNumber}.pdf`);
