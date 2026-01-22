@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { join } from 'path';
-import { readFile } from 'fs/promises';
 import { Resend } from 'resend';
 import { format } from 'date-fns';
 
@@ -10,82 +8,6 @@ export const runtime = 'nodejs';
 const resend = new Resend(process.env.RESEND_API_KEY || 're_hfSbzJmW_JcaVST8yquP4fSZpP7rMUYZs');
 
 const COMPANY_EMAIL = process.env.COMPANY_EMAIL || 'info@thebreed.co.za';
-
-let cachedLogoDataUri: string | null = null;
-
-async function launchBrowser() {
-  try {
-    // For Vercel serverless, try @sparticuz/chromium first
-    try {
-      const { createRequire } = await import('module');
-      const require = createRequire(import.meta.url);
-      
-      const chromium = require('@sparticuz/chromium');
-      const puppeteer = require('puppeteer');
-      
-      const executablePath = await chromium.executablePath();
-      
-      if (executablePath) {
-        const browser = await puppeteer.launch({
-          args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-gpu',
-            '--no-zygote',
-            '--single-process'
-          ],
-          defaultViewport: { width: 1280, height: 720 },
-          executablePath,
-          headless: true,
-          timeout: 30000
-        });
-        console.log('Browser launched successfully with @sparticuz/chromium');
-        return browser;
-      }
-    } catch (chromiumError) {
-      console.warn('@sparticuz/chromium failed, trying default puppeteer:', chromiumError.message);
-    }
-
-    // Fallback to default puppeteer (works locally and on Vercel)
-    const puppeteer = require('puppeteer');
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
-      defaultViewport: { width: 1280, height: 720 },
-      timeout: 30000
-    });
-    console.log('Browser launched successfully with default puppeteer');
-    return browser;
-
-  } catch (error) {
-    console.error('Browser launch failed:', error);
-    throw new Error('Failed to launch browser for PDF generation: ' + (error instanceof Error ? error.message : 'Unknown error'));
-  }
-}
-
-async function getLogoDataUri() {
-  if (cachedLogoDataUri) {
-    return cachedLogoDataUri;
-  }
-
-  try {
-    const logoPath = join(
-      process.cwd(),
-      'public',
-      'images',
-      'logo.png'
-    );
-    
-    const imageBuffer = await readFile(logoPath);
-    const base64 = imageBuffer.toString('base64');
-    cachedLogoDataUri = `data:image/png;base64,${base64}`;
-    return cachedLogoDataUri;
-  } catch (error) {
-    console.warn('Logo not found, using placeholder');
-    return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiB2aWV3Qm94PSIwIDAgMjAwIDYwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMUExQTFBIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iMzUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5CUkVFRCBJTkRVU1RSSUVTPC90ZXh0Pgo8L3N2Zz4K';
-  }
-}
 
 export async function POST(req: NextRequest) {
   try {
@@ -146,9 +68,8 @@ export async function POST(req: NextRequest) {
     // Calculate total
     const total = sanitizedItems.reduce((sum: number, item: any) => sum + item.quantity * item.rate, 0);
 
-    // Generate HTML for the quote
-    const logoDataUri = await getLogoDataUri();
-    const quoteHTML = generateQuoteHTML({
+    // Generate HTML email content
+    const emailHTML = generateQuoteEmail({
       quoteNumber,
       currentDate,
       validUntil,
@@ -162,79 +83,35 @@ export async function POST(req: NextRequest) {
       paymentTerms,
       items: sanitizedItems,
       total,
-      notes: notes.trim(),
-      logoDataUri
+      notes: notes.trim()
     });
 
-    // Generate PDF using Puppeteer
-    let browser;
+    // Send email via Resend
     try {
-      browser = await launchBrowser();
-      
-      const page = await browser.newPage();
-      await page.setContent(quoteHTML, { waitUntil: 'domcontentloaded', timeout: 30000 });
-      await page.emulateMediaType('screen');
-      
-      const pdf = await page.pdf({
-        format: 'A4',
-        printBackground: true,
-        margin: {
-          top: '20px',
-          right: '20px',
-          bottom: '20px',
-          left: '20px'
-        }
+      const { data, error } = await resend.emails.send({
+        from: COMPANY_EMAIL,
+        to: [customerEmail.trim()],
+        subject: `Quote #${quoteNumber} from Breed Industries`,
+        html: emailHTML,
+        replyTo: COMPANY_EMAIL
       });
-      
-      // Convert PDF to buffer for email attachment
-      const pdfBuffer = Buffer.from(pdf);
-      
-      // Send email with PDF attachment via Resend
-      try {
-        const { data, error } = await resend.emails.send({
-          from: COMPANY_EMAIL,
-          to: [customerEmail.trim()],
-          subject: `Quote #${quoteNumber} from Breed Industries`,
-          html: `<p>Dear ${customerName.trim()},</p>
-                 <p>Thank you for your interest in our services. Please find attached your quote #${quoteNumber}.</p>
-                 <p>This quote is valid until ${validUntil}.</p>
-                 <p>If you have any questions, please don't hesitate to contact us.</p>
-                 <p>Best regards,<br>Breed Industries Team</p>`,
-          attachments: [
-            {
-              filename: `Breed_Industries_Quote_${quoteNumber}.pdf`,
-              content: pdfBuffer
-            }
-          ]
-        });
 
-        if (error) {
-          console.error('Resend error:', error);
-          throw new Error('Failed to send email: ' + error.message);
-        }
-
-        return NextResponse.json({ 
-          success: true, 
-          message: 'Quote generated and sent successfully',
-          quoteNumber
-        });
-      } catch (sendError) {
-        console.error('Email send error:', sendError);
-        return NextResponse.json(
-          { error: 'Failed to send email: ' + (sendError instanceof Error ? sendError.message : 'Unknown email error') },
-          { status: 500 }
-        );
+      if (error) {
+        console.error('Resend error:', error);
+        throw new Error('Failed to send email: ' + error.message);
       }
-    } catch (browserError) {
-      console.error('Browser/PDF generation error:', browserError);
+
+      return NextResponse.json({ 
+        success: true, 
+        message: 'Quote sent successfully to your email',
+        quoteNumber
+      });
+    } catch (sendError) {
+      console.error('Email send error:', sendError);
       return NextResponse.json(
-        { error: 'Failed to generate PDF: ' + (browserError instanceof Error ? browserError.message : 'Unknown browser error') },
+        { error: 'Failed to send email: ' + (sendError instanceof Error ? sendError.message : 'Unknown email error') },
         { status: 500 }
       );
-    } finally {
-      if (browser) {
-        await browser.close();
-      }
     }
     
   } catch (error) {
@@ -246,7 +123,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-function generateQuoteHTML(data: any) {
+function generateQuoteEmail(data: any) {
   const {
     quoteNumber,
     currentDate,
@@ -261,8 +138,7 @@ function generateQuoteHTML(data: any) {
     paymentTerms,
     items,
     total,
-    notes,
-    logoDataUri
+    notes
   } = data;
   
   // Format currency
@@ -279,11 +155,11 @@ function generateQuoteHTML(data: any) {
     <tr>
       <td>
         <strong>${item.name}</strong>
-        <div class="item-description">${item.description || ''}</div>
+        <div style="font-size: 12px; color: #666; margin-top: 5px;">${item.description || ''}</div>
       </td>
-      <td class="right">${item.quantity}</td>
-      <td class="right">${formatCurrency(item.rate)}</td>
-      <td class="right">${formatCurrency(item.quantity * item.rate)}</td>
+      <td style="text-align: right;">${item.quantity}</td>
+      <td style="text-align: right;">${formatCurrency(item.rate)}</td>
+      <td style="text-align: right;">${formatCurrency(item.quantity * item.rate)}</td>
     </tr>
   `).join('');
 
@@ -299,6 +175,7 @@ function generateQuoteHTML(data: any) {
             margin: 0;
             padding: 20px;
             background-color: #f5f5f5;
+            line-height: 1.6;
         }
         .container {
             max-width: 800px;
@@ -309,20 +186,20 @@ function generateQuoteHTML(data: any) {
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
             margin-bottom: 40px;
             border-bottom: 2px solid #1A1A1B;
             padding-bottom: 20px;
         }
         .logo {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
             color: #1A1A1B;
+            margin-bottom: 10px;
         }
         .quote-details {
-            text-align: right;
+            text-align: center;
+            margin-bottom: 20px;
         }
         .quote-number {
             font-size: 18px;
@@ -368,11 +245,6 @@ function generateQuoteHTML(data: any) {
         .right {
             text-align: right;
         }
-        .item-description {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
-        }
         .totals {
             text-align: right;
             margin-top: 20px;
@@ -397,14 +269,20 @@ function generateQuoteHTML(data: any) {
             color: #666;
             font-size: 14px;
         }
+        @media (max-width: 600px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">
-                <img src="${logoDataUri}" alt="Breed Industries" style="height: 60px;">
-            </div>
+            <div class="logo">BREED INDUSTRIES</div>
             <div class="quote-details">
                 <div class="quote-number">Quote #${quoteNumber}</div>
                 <div>Date: ${currentDate}</div>
@@ -509,7 +387,7 @@ function generateQuoteHTML(data: any) {
         </div>
 
         <div class="footer">
-            <p>Thank you for your business!</p>
+            <p><strong>Thank you for your business!</strong></p>
             <p>www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105</p>
         </div>
     </div>
