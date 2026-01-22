@@ -198,12 +198,12 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       ];
       
       headerElement.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 5px;">
-          <img src="${imagePaths[0]}" alt="Breed Industries Logo" style="max-width: 60px; height: auto;" onerror="this.style.display='none'; console.log('Image failed to load');" onload="console.log('Image loaded successfully');" />
-          <div style="font-size: 20px; font-weight: bold;">BREED INDUSTRIES</div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 8px;">
+          <img src="${imagePaths[0]}" alt="Breed Industries Logo" style="max-width: 80px; height: auto;" onerror="this.style.display='none'; console.log('Image failed to load');" onload="console.log('Image loaded successfully');" />
+          <div style="font-size: 22px; font-weight: bold;">BREED INDUSTRIES</div>
         </div>
-        <div style="font-size: 12px; margin-bottom: 5px;">Be seen, be trusted, be unstoppable</div>
-        <div style="font-size: 10px;">Professional Business Solutions</div>
+        <div style="font-size: 13px; margin-bottom: 5px;">Be seen, be trusted, be unstoppable</div>
+        <div style="font-size: 11px;">Professional Business Solutions</div>
       `;
 
       document.body.appendChild(headerElement);
@@ -383,8 +383,8 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         pdf.text(term, 20, yPos + (index * 5));
       });
       
-      // Footer - Position at actual bottom
-      const footerY = 290;
+      // Footer - Position at actual bottom of A4 page (297mm height)
+      const footerY = 272; // Position at actual bottom
       pdf.setFillColor(26, 26, 27);
       pdf.rect(0, footerY, 210, 25, 'F');
       
