@@ -198,12 +198,11 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       ];
       
       headerElement.innerHTML = `
-        <div style="position: relative; margin-bottom: 8px; height: 50px;">
-          <img src="${imagePaths[0]}" alt="Breed Industries Logo" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); height: 40px; width: auto;" onerror="this.style.display='none'; console.log('Image failed to load');" onload="console.log('Image loaded successfully');" />
-          <div style="font-size: 22px; font-weight: bold; text-align: center; line-height: 50px;">BREED INDUSTRIES</div>
+        <div style="text-align: center; margin-bottom: 8px;">
+          <div style="font-size: 24px; font-weight: bold; margin-bottom: 5px;">BREED INDUSTRIES</div>
         </div>
-        <div style="font-size: 13px; margin-bottom: 5px;">Be seen, be trusted, be unstoppable</div>
-        <div style="font-size: 11px;">Professional Business Solutions</div>
+        <div style="font-size: 13px; margin-bottom: 5px; text-align: center;">Be seen, be trusted, be unstoppable</div>
+        <div style="font-size: 11px; text-align: center;">Professional Business Solutions</div>
       `;
 
       document.body.appendChild(headerElement);
