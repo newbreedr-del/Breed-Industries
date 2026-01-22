@@ -197,17 +197,63 @@ export default function LabPage() {
   }).format(estimatedTotal).replace('ZAR', 'R');
 
   const getEstimatedTimeframe = () => {
-    const hasComplexItems = selectedOptions.includes('app') || 
-                          selectedOptions.includes('ecommerce') || 
-                          selectedOptions.includes('logo-premium');
-    const itemCount = selectedOptions.length;
+    // Define realistic timeframes for each service (in business days)
+    const serviceTimeframes: Record<string, number> = {
+      // Compliance services (quicker)
+      'cipc': 2,        // CIPC Annual Return
+      'tax': 3,         // Tax Registration
+      'beee': 5,        // B-BBEE Certificate
+      'cofa': 2,        // CIPC CoR
+      'sars': 3,        // Tax Clearance
+      
+      // Branding services (medium)
+      'logo-basic': 3,  // Basic Logo
+      'logo-premium': 7, // Premium Logo
+      'brand-guide': 5, // Brand Guidelines
+      'social': 3,      // Social Media Kit
+      
+      // Digital services (longer)
+      'website-basic': 5,   // Basic Website
+      'website-advanced': 10, // Advanced Website
+      'ecommerce': 14,       // E-commerce
+      'app': 21,             // Mobile App
+      'seo': 7,              // SEO Setup
+      'maintenance': 2,      // Maintenance Plan
+      
+      // Business Profile services (medium)
+      'profile-starter': 3,   // Business Profile Starter
+      'profile-standard': 5,  // Business Profile Standard
+      'plan-basic': 4,        // Business Plan Basic
+      'plan-comprehensive': 8 // Business Plan Comprehensive
+    };
 
-    if (hasComplexItems && itemCount > 3) {
-      return '4 – 8 Weeks';
-    } else if (hasComplexItems || itemCount > 5) {
-      return '3 – 6 Weeks';
+    // Calculate total days based on selected services
+    let totalDays = 0;
+    selectedOptions.forEach(optionId => {
+      totalDays += serviceTimeframes[optionId] || 3; // Default 3 days for unknown services
+    });
+
+    // Add buffer for project management and coordination
+    const coordinationDays = Math.max(2, Math.ceil(selectedOptions.length * 0.5));
+    totalDays += coordinationDays;
+
+    // Convert to weeks and create realistic ranges
+    const weeks = Math.ceil(totalDays / 5); // 5 business days per week
+    
+    if (weeks <= 1) {
+      return '3 – 5 Business Days';
+    } else if (weeks <= 2) {
+      return '1 – 2 Weeks';
+    } else if (weeks <= 3) {
+      return '2 – 3 Weeks';
+    } else if (weeks <= 4) {
+      return '3 – 4 Weeks';
+    } else if (weeks <= 6) {
+      return '4 – 6 Weeks';
+    } else if (weeks <= 8) {
+      return '6 – 8 Weeks';
     } else {
-      return '2 – 4 Weeks';
+      return '8 – 12 Weeks';
     }
   };
 
