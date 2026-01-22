@@ -198,9 +198,9 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       ];
       
       headerElement.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 8px;">
-          <img src="${imagePaths[0]}" alt="Breed Industries Logo" style="max-width: 80px; height: auto;" onerror="this.style.display='none'; console.log('Image failed to load');" onload="console.log('Image loaded successfully');" />
-          <div style="font-size: 22px; font-weight: bold;">BREED INDUSTRIES</div>
+        <div style="position: relative; margin-bottom: 8px;">
+          <img src="${imagePaths[0]}" alt="Breed Industries Logo" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); max-width: 60px; height: auto;" onerror="this.style.display='none'; console.log('Image failed to load');" onload="console.log('Image loaded successfully');" />
+          <div style="font-size: 22px; font-weight: bold; text-align: center;">BREED INDUSTRIES</div>
         </div>
         <div style="font-size: 13px; margin-bottom: 5px;">Be seen, be trusted, be unstoppable</div>
         <div style="font-size: 11px;">Professional Business Solutions</div>
@@ -395,8 +395,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       
       pdf.setFontSize(7);
       pdf.setFont('helvetica', 'normal');
-      // Move to bottom right corner
-      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 205, footerY + 18, { align: 'right' });
+      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, footerY + 18, { align: 'center' });
 
       // Download PDF
       pdf.save(`Breed_Industries_Quote_${quoteNumber}.pdf`);
