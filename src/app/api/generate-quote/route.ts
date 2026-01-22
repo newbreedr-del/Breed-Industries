@@ -17,8 +17,12 @@ let cachedLogoDataUri: string | null = null;
 
 async function launchBrowser() {
   try {
-    // For Vercel serverless, use @sparticuz/chromium with minimal configuration
+    // For Vercel serverless, try different approaches
+    console.log('Attempting to launch browser...');
+    
+    // First try @sparticuz/chromium
     const executablePath = await chromium.executablePath();
+    console.log('Chromium executable path:', executablePath);
     
     if (executablePath) {
       return puppeteer.launch({
@@ -28,16 +32,39 @@ async function launchBrowser() {
           '--disable-dev-shm-usage',
           '--disable-gpu',
           '--no-zygote',
-          '--single-process'
+          '--single-process',
+          '--disable-background-timer-throttling',
+          '--disable-backgrounding-occluded-windows',
+          '--disable-renderer-backgrounding'
         ],
         defaultViewport: { width: 1280, height: 720 },
         executablePath,
         headless: true,
-        ignoreDefaultArgs: ['--disable-extensions']
+        ignoreDefaultArgs: ['--disable-extensions'],
+        timeout: 30000
       });
     }
   } catch (error) {
-    console.warn('Failed to launch @sparticuz/chromium, trying fallback:', error);
+    console.warn('Failed to launch @sparticuz/chromium:', error);
+  }
+
+  // Try direct puppeteer without chromium-core
+  try {
+    console.log('Trying direct puppeteer launch...');
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu'
+      ],
+      defaultViewport: { width: 1280, height: 720 },
+      timeout: 30000
+    });
+    return browser;
+  } catch (error) {
+    console.warn('Failed to launch direct puppeteer:', error);
   }
 
   // Fallback for local development
@@ -51,11 +78,13 @@ async function launchBrowser() {
 
   for (const path of fallbackPaths) {
     try {
+      console.log(`Trying fallback path: ${path}`);
       const browser = await puppeteer.launch({
         executablePath: path,
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
-        defaultViewport: { width: 1280, height: 720 }
+        defaultViewport: { width: 1280, height: 720 },
+        timeout: 30000
       });
       return browser;
     } catch (error) {
@@ -63,7 +92,7 @@ async function launchBrowser() {
     }
   }
 
-  throw new Error('Failed to determine a Chromium executable path for puppeteer-core.');
+  throw new Error('Failed to determine a Chromium executable path for puppeteer-core. All attempts failed.');
 }
 
 async function getLogoDataUri() {
