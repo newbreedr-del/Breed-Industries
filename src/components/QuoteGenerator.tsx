@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { PlusCircle, MinusCircle, Loader2, CheckCircle, Send, Download } from 'lucide-react';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import 'jspdf-autotable';
 
 interface QuoteItem {
   id: string;
@@ -151,15 +151,8 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       console.log('Generating PDF with items:', items);
       console.log('Selected items from props:', selectedItems);
       
-      // Create a temporary div to render the quote content
-      const quoteElement = document.createElement('div');
-      quoteElement.style.position = 'absolute';
-      quoteElement.style.left = '-9999px';
-      quoteElement.style.top = '-9999px';
-      quoteElement.style.width = '800px';
-      quoteElement.style.backgroundColor = 'white';
-      quoteElement.style.padding = '40px';
-      quoteElement.style.fontFamily = 'Arial, sans-serif';
+      // Create new PDF document
+      const pdf = new jsPDF();
       
       // Generate dates
       const currentDate = new Date().toLocaleDateString('en-ZA', { 
@@ -184,122 +177,159 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
 
       console.log('Total calculated:', total, 'Formatted:', formattedTotal);
 
-      // Create HTML content for PDF with logo
-      quoteElement.innerHTML = `
-        <div style="text-align: center; margin-bottom: 40px; border-bottom: 2px solid #1A1A1B; padding-bottom: 20px;">
-          <div style="font-size: 32px; font-weight: bold; color: #1A1A1B; margin-bottom: 10px; letter-spacing: 2px;">BREED INDUSTRIES</div>
-          <div style="font-size: 18px; font-weight: bold; color: #1A1A1B;">Quote #${quoteNumber}</div>
-          <div>Date: ${currentDate}</div>
-          <div>Valid Until: ${validUntil}</div>
-        </div>
-
-        <div style="margin-bottom: 30px;">
-          <h2 style="color: #1A1A1B; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">Customer Information</h2>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-            <div>
-              <div><strong>Name:</strong> ${customerName}</div>
-              <div><strong>Company:</strong> ${customerCompany || 'N/A'}</div>
-              <div><strong>Email:</strong> ${customerEmail}</div>
-            </div>
-            <div>
-              <div><strong>Phone:</strong> ${customerPhone || 'N/A'}</div>
-              <div><strong>Project:</strong> ${projectName}</div>
-              <div><strong>Contact:</strong> ${contactPerson}</div>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-bottom: 30px;">
-          <h2 style="color: #1A1A1B; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">Quote Items</h2>
-          <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-            <thead>
-              <tr>
-                <th style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; background-color: #1A1A1B; color: white;">Item</th>
-                <th style="padding: 12px; text-align: right; border-bottom: 1px solid #ddd; background-color: #1A1A1B; color: white;">Quantity</th>
-                <th style="padding: 12px; text-align: right; border-bottom: 1px solid #ddd; background-color: #1A1A1B; color: white;">Rate</th>
-                <th style="padding: 12px; text-align: right; border-bottom: 1px solid #ddd; background-color: #1A1A1B; color: white;">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${items.map(item => `
-                <tr>
-                  <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd;">
-                    <strong>${item.name}</strong>
-                    <div style="font-size: 12px; color: #666; margin-top: 5px;">${item.description}</div>
-                  </td>
-                  <td style="padding: 12px; text-align: right; border-bottom: 1px solid #ddd;">${item.quantity}</td>
-                  <td style="padding: 12px; text-align: right; border-bottom: 1px solid #ddd;">R ${item.rate.toLocaleString()}</td>
-                  <td style="padding: 12px; text-align: right; border-bottom: 1px solid #ddd;">R ${(item.quantity * item.rate).toLocaleString()}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-
-          <div style="text-align: right; margin-top: 20px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 16px; font-weight: bold; border-top: 2px solid #1A1A1B; padding-top: 10px;">
-              <span>Total (ex VAT):</span>
-              <span>${formattedTotal}</span>
-            </div>
-            <div style="font-size: 12px; color: #888;">Breed Industries is not VAT registered. All pricing is exclusive of VAT.</div>
-          </div>
-        </div>
-
-        ${notes ? `
-        <div style="margin-bottom: 30px;">
-          <h2 style="color: #1A1A1B; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">Notes</h2>
-          <p style="line-height: 1.6;">${notes}</p>
-        </div>
-        ` : ''}
-
-        <div style="margin-bottom: 30px;">
-          <h2 style="color: #1A1A1B; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">Terms & Conditions</h2>
-          <p style="line-height: 1.6;">
-            Payment is due within 30 days of invoice date. Late payments may incur a 1.5% monthly interest charge. 
-            All work is guaranteed for 90 days from completion. Client is responsible for providing all necessary 
-            content and materials. Changes to project scope may result in additional charges. We reserve the right 
-            to use completed work in our portfolio unless otherwise agreed in writing.
-          </p>
-        </div>
-
-        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 14px;">
-          <p><strong>Thank you for your business!</strong></p>
-          <p>www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105</p>
-        </div>
-      `;
-
-      document.body.appendChild(quoteElement);
-
-      // Generate PDF
-      const canvas = await html2canvas(quoteElement, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true
-      });
-
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
+      // Add custom font for better rendering
+      pdf.setFont('helvetica');
       
-      const imgWidth = 210;
-      const pageHeight = 297;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+      // Header
+      pdf.setFontSize(28);
+      pdf.setTextColor(26, 26, 27); // #1A1A1B
+      pdf.text('BREED INDUSTRIES', 105, 30, { align: 'center' });
+      
+      pdf.setFontSize(18);
+      pdf.text(`Quote #${quoteNumber}`, 105, 45, { align: 'center' });
+      
+      pdf.setFontSize(12);
+      pdf.setTextColor(100, 100, 100);
+      pdf.text(`Date: ${currentDate}`, 105, 55, { align: 'center' });
+      pdf.text(`Valid Until: ${validUntil}`, 105, 62, { align: 'center' });
+      
+      // Line under header
+      pdf.setDrawColor(26, 26, 27);
+      pdf.setLineWidth(0.5);
+      pdf.line(20, 70, 190, 70);
+      
+      // Customer Information Section
+      pdf.setFontSize(16);
+      pdf.setTextColor(26, 26, 27);
+      pdf.text('Customer Information', 20, 85);
+      
+      pdf.setFontSize(11);
+      pdf.setTextColor(60, 60, 60);
+      
+      let yPos = 95;
+      pdf.text(`Name: ${customerName}`, 20, yPos);
+      yPos += 7;
+      pdf.text(`Company: ${customerCompany || 'N/A'}`, 20, yPos);
+      yPos += 7;
+      pdf.text(`Email: ${customerEmail}`, 20, yPos);
+      yPos += 7;
+      pdf.text(`Phone: ${customerPhone || 'N/A'}`, 20, yPos);
+      yPos += 7;
+      pdf.text(`Project: ${projectName}`, 20, yPos);
+      yPos += 7;
+      pdf.text(`Contact: ${contactPerson}`, 20, yPos);
+      
+      // Quote Items Table
+      yPos += 15;
+      pdf.setFontSize(16);
+      pdf.setTextColor(26, 26, 27);
+      pdf.text('Quote Items', 20, yPos);
+      
+      yPos += 10;
+      
+      // Table headers
+      pdf.setFillColor(26, 26, 27);
+      pdf.rect(20, yPos, 170, 10, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(11);
+      pdf.text('Item', 25, yPos + 7);
+      pdf.text('Quantity', 80, yPos + 7);
+      pdf.text('Rate', 120, yPos + 7);
+      pdf.text('Amount', 160, yPos + 7);
+      
+      yPos += 10;
+      
+      // Table rows
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(10);
+      
+      items.forEach((item, index) => {
+        if (yPos > 250) {
+          pdf.addPage();
+          yPos = 20;
+        }
+        
+        // Alternate row background
+        if (index % 2 === 0) {
+          pdf.setFillColor(245, 245, 245);
+          pdf.rect(20, yPos, 170, 8, 'F');
+        }
+        
+        pdf.text(item.name, 25, yPos + 5);
+        pdf.text(item.quantity.toString(), 85, yPos + 5);
+        pdf.text(`R ${item.rate.toLocaleString()}`, 125, yPos + 5);
+        pdf.text(`R ${(item.quantity * item.rate).toLocaleString()}`, 160, yPos + 5);
+        
+        yPos += 8;
+      });
+      
+      // Total
+      yPos += 10;
+      pdf.setDrawColor(26, 26, 27);
+      pdf.setLineWidth(0.5);
+      pdf.line(20, yPos, 190, yPos);
+      
+      yPos += 10;
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text(`Total (ex VAT): ${formattedTotal}`, 160, yPos, { align: 'right' });
+      
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(10);
+      pdf.setTextColor(136, 136, 136);
+      yPos += 7;
+      pdf.text('Breed Industries is not VAT registered. All pricing is exclusive of VAT.', 105, yPos, { align: 'center' });
+      
+      // Notes if any
+      if (notes) {
+        yPos += 20;
+        pdf.setFontSize(16);
+        pdf.setTextColor(26, 26, 27);
+        pdf.text('Notes', 20, yPos);
+        
+        yPos += 10;
+        pdf.setFontSize(11);
+        pdf.setTextColor(60, 60, 60);
+        const splitNotes = pdf.splitTextToSize(notes, 170);
+        pdf.text(splitNotes, 20, yPos);
       }
+      
+      // Terms & Conditions
+      yPos += 30;
+      pdf.setFontSize(16);
+      pdf.setTextColor(26, 26, 27);
+      pdf.text('Terms & Conditions', 20, yPos);
+      
+      yPos += 10;
+      pdf.setFontSize(10);
+      pdf.setTextColor(60, 60, 60);
+      const terms = [
+        'Payment is due within 30 days of invoice date. Late payments may incur a 1.5% monthly interest charge.',
+        'All work is guaranteed for 90 days from completion. Client is responsible for providing all necessary',
+        'content and materials. Changes to project scope may result in additional charges. We reserve the right',
+        'to use completed work in our portfolio unless otherwise agreed in writing.'
+      ];
+      
+      terms.forEach(term => {
+        if (yPos > 270) {
+          pdf.addPage();
+          yPos = 20;
+        }
+        const splitTerm = pdf.splitTextToSize(term, 170);
+        pdf.text(splitTerm, 20, yPos);
+        yPos += splitTerm.length * 5;
+      });
+      
+      // Footer
+      yPos = 280;
+      pdf.setFontSize(12);
+      pdf.setTextColor(100, 100, 100);
+      pdf.text('Thank you for your business!', 105, yPos, { align: 'center' });
+      yPos += 7;
+      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, yPos, { align: 'center' });
 
       // Download PDF
       pdf.save(`Breed_Industries_Quote_${quoteNumber}.pdf`);
-
-      // Clean up
-      document.body.removeChild(quoteElement);
 
       // Don't return PDF base64 since we're not sending it as attachment
       return null;
