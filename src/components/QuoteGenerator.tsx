@@ -395,7 +395,8 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       
       pdf.setFontSize(7);
       pdf.setFont('helvetica', 'normal');
-      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, footerY + 18, { align: 'center' });
+      // Move to bottom right corner
+      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 205, footerY + 18, { align: 'right' });
 
       // Download PDF
       pdf.save(`Breed_Industries_Quote_${quoteNumber}.pdf`);
