@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { PlusCircle, MinusCircle, Loader2, CheckCircle, Send, Download } from 'lucide-react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import html2canvas from 'html2canvas';
 
 interface QuoteItem {
   id: string;
@@ -177,20 +178,44 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
 
       console.log('Total calculated:', total, 'Formatted:', formattedTotal);
 
-      // Brand Header
-      pdf.setFillColor(26, 26, 27);
-      pdf.rect(0, 0, 210, 50, 'F');
+      // Create HTML header with logo
+      const headerElement = document.createElement('div');
+      headerElement.style.position = 'absolute';
+      headerElement.style.left = '-9999px';
+      headerElement.style.top = '-9999px';
+      headerElement.style.width = '210mm';
+      headerElement.style.backgroundColor = '#1A1A1B';
+      headerElement.style.padding = '20px';
+      headerElement.style.fontFamily = 'Arial, sans-serif';
+      headerElement.style.textAlign = 'center';
+      headerElement.style.color = 'white';
       
-      pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(20);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('BREED INDUSTRIES', 105, 20, { align: 'center' });
+      headerElement.innerHTML = `
+        <div style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">
+          <img src="/assets/images/The Breed Industries-01-01-01-01.png" alt="Breed Industries Logo" style="max-width: 80px; margin-bottom: 8px;" />
+          <div>BREED INDUSTRIES</div>
+        </div>
+        <div style="font-size: 12px; margin-bottom: 5px;">Be seen, be trusted, be unstoppable</div>
+        <div style="font-size: 10px;">Professional Business Solutions</div>
+      `;
+
+      document.body.appendChild(headerElement);
+
+      // Generate header with logo using html2canvas
+      const headerCanvas = await html2canvas(headerElement, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true
+      });
+
+      const headerImgData = headerCanvas.toDataURL('image/png');
       
-      pdf.setFontSize(10);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('Professional Business Solutions', 105, 30, { align: 'center' });
-      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, 40, { align: 'center' });
-      
+      // Add header to PDF
+      pdf.addImage(headerImgData, 'PNG', 0, 0, 210, 50);
+
+      // Clean up
+      document.body.removeChild(headerElement);
+
       // Quote Details
       pdf.setFillColor(245, 245, 245);
       pdf.rect(20, 60, 170, 20, 'F');
