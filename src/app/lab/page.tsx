@@ -36,6 +36,8 @@ const digitalOptions = [
 const businessProfileOptions = [
   { id: 'profile-starter', name: 'Business Profile - Starter (1–4 Pages)', price: 850, icon: <FileText size={16} />, description: 'Best for startups, small businesses, or basic tender submissions. Simple layout, design-only, 2–3 revision rounds, print-ready PDF.' },
   { id: 'profile-standard', name: 'Business Profile - Standard (5–10 Pages)', price: 2500, icon: <FileText size={16} />, description: 'Best for small to medium businesses. Professional formatting, digital flipbook formats, higher quality graphics.' },
+  { id: 'plan-basic', name: 'Business Plan - Basic/Entry-Level', price: 1190, icon: <FileText size={16} />, description: 'Template-based solution suitable for internal strategy or simple needs, using generic data.' },
+  { id: 'plan-comprehensive', name: 'Business Plan - Standard/Comprehensive', price: 3000, icon: <FileText size={16} />, description: 'Includes more detail, customized content, and often 3-year financial projections, ideal for funding applications.' },
 ];
 
 const builderSteps = [
@@ -367,14 +369,12 @@ export default function LabPage() {
             </div>
             
             <div className="flex justify-center">
-              <a 
-                href="https://wa.me/message/4FOGIOMM2A35L1"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button 
                 className="btn btn-primary flex items-center gap-2"
+                onClick={() => setShowQuoteModal(true)}
               >
-                <ClipboardList className="w-4 h-4" /> Request Quote on WhatsApp
-              </a>
+                <ClipboardList className="w-4 h-4" /> Generate Auto Quote
+              </button>
             </div>
           </div>
 

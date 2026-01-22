@@ -1,42 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { join } from 'path';
 import { readFile } from 'fs/promises';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
 import { format } from 'date-fns';
 
 export const runtime = 'nodejs';
 
-// SMTP configuration (SendGrid)
-const SMTP_HOST = process.env.SENDGRID_SMTP_HOST || 'smtp.sendgrid.net';
-const SMTP_PORT = Number(process.env.SENDGRID_SMTP_PORT ?? 587);
-const SMTP_USER = process.env.SENDGRID_SMTP_USER || 'apikey';
-const SMTP_PASS = process.env.SENDGRID_SMTP_PASS || '';
-
-if (!SMTP_PASS) {
-  console.error('SendGrid SMTP password (API key) is missing. Please set SENDGRID_SMTP_PASS in your environment variables.');
-}
+// Resend configuration
+const resend = new Resend(process.env.RESEND_API_KEY || 're_hfSbzJmW_JcaVST8yquP4fSZpP7rMUYZs');
 
 const COMPANY_EMAIL = process.env.COMPANY_EMAIL || 'info@thebreed.co.za';
-
-let transporter: nodemailer.Transporter | null = null;
-
-function getTransporter() {
-  if (transporter) return transporter;
-
-  transporter = nodemailer.createTransport({
-    host: SMTP_HOST,
-    port: SMTP_PORT,
-    secure: SMTP_PORT === 465,
-    auth: {
-      user: SMTP_USER,
-      pass: SMTP_PASS
-    }
-  });
-
-  return transporter;
-}
 
 let cachedLogoDataUri: string | null = null;
 
@@ -208,30 +183,32 @@ export async function POST(req: NextRequest) {
         }
       });
       
-      // Convert PDF to base64 for email attachment
-      const pdfBase64 = Buffer.from(pdf).toString('base64');
+      // Convert PDF to buffer for email attachment
+      const pdfBuffer = Buffer.from(pdf);
       
-      // Send email with PDF attachment via SMTP
-      const mailOptions: nodemailer.SendMailOptions = {
-        to: customerEmail.trim(),
-        cc: COMPANY_EMAIL,
-        from: COMPANY_EMAIL,
-        subject: `Quote #${quoteNumber} from Breed Industries`,
-        text: `Dear ${customerName.trim()},\n\nThank you for your interest in our services. Please find attached your quote #${quoteNumber}.\n\nThis quote is valid until ${validUntil}.\n\nIf you have any questions, please don't hesitate to contact us.\n\nBest regards,\nBreed Industries Team`,
-        attachments: [
-          {
-            content: pdfBase64,
-            filename: `Breed_Industries_Quote_${quoteNumber}.pdf`,
-            contentType: 'application/pdf',
-            encoding: 'base64'
-          }
-        ]
-      };
-
-      const smtpTransporter = getTransporter();
-
+      // Send email with PDF attachment via Resend
       try {
-        await smtpTransporter.sendMail(mailOptions);
+        const { data, error } = await resend.emails.send({
+          from: COMPANY_EMAIL,
+          to: [customerEmail.trim()],
+          subject: `Quote #${quoteNumber} from Breed Industries`,
+          html: `<p>Dear ${customerName.trim()},</p>
+                 <p>Thank you for your interest in our services. Please find attached your quote #${quoteNumber}.</p>
+                 <p>This quote is valid until ${validUntil}.</p>
+                 <p>If you have any questions, please don't hesitate to contact us.</p>
+                 <p>Best regards,<br>Breed Industries Team</p>`,
+          attachments: [
+            {
+              filename: `Breed_Industries_Quote_${quoteNumber}.pdf`,
+              content: pdfBuffer
+            }
+          ]
+        });
+
+        if (error) {
+          console.error('Resend error:', error);
+          throw new Error('Failed to send email: ' + error.message);
+        }
 
         return NextResponse.json({ 
           success: true, 
@@ -239,8 +216,8 @@ export async function POST(req: NextRequest) {
           quoteNumber
         });
       } catch (sendError) {
-        console.error('SMTP send error:', sendError);
-        throw new Error('Failed to send email: ' + (sendError instanceof Error ? sendError.message : 'Unknown SMTP error'));
+        console.error('Email send error:', sendError);
+        throw new Error('Failed to send email: ' + (sendError instanceof Error ? sendError.message : 'Unknown email error'));
       }
     } finally {
       if (browser) {
