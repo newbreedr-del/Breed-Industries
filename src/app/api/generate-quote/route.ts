@@ -17,7 +17,7 @@ let cachedLogoDataUri: string | null = null;
 
 async function launchBrowser() {
   try {
-    // For Netlify, use @sparticuz/chromium with proper configuration
+    // For Vercel, use @sparticuz/chromium with proper configuration
     const executablePath = await chromium.executablePath();
     
     if (executablePath) {
@@ -27,13 +27,11 @@ async function launchBrowser() {
           '--no-sandbox',
           '--disable-setuid-sandbox',
           '--disable-dev-shm-usage',
-          '--disable-gpu',
-          '--single-process'
+          '--disable-gpu'
         ],
         defaultViewport: { width: 1280, height: 720 },
         executablePath,
-        headless: true,
-        ignoreDefaultArgs: ['--disable-extensions']
+        headless: true
       });
     }
   } catch (error) {
