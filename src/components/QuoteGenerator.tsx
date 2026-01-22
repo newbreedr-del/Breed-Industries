@@ -180,128 +180,192 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       // Add custom font for better rendering
       pdf.setFont('helvetica');
       
-      // Header
-      pdf.setFontSize(28);
-      pdf.setTextColor(26, 26, 27); // #1A1A1B
-      pdf.text('BREED INDUSTRIES', 105, 30, { align: 'center' });
+      // Brand Header with Logo Placeholder
+      pdf.setFillColor(26, 26, 27); // #1A1A1B
+      pdf.rect(0, 0, 210, 60, 'F');
       
-      pdf.setFontSize(18);
-      pdf.text(`Quote #${quoteNumber}`, 105, 45, { align: 'center' });
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(24);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('BREED INDUSTRIES', 105, 25, { align: 'center' });
       
       pdf.setFontSize(12);
-      pdf.setTextColor(100, 100, 100);
-      pdf.text(`Date: ${currentDate}`, 105, 55, { align: 'center' });
-      pdf.text(`Valid Until: ${validUntil}`, 105, 62, { align: 'center' });
+      pdf.setFont('helvetica', 'normal');
+      pdf.text('Professional Business Solutions', 105, 35, { align: 'center' });
       
-      // Line under header
-      pdf.setDrawColor(26, 26, 27);
-      pdf.setLineWidth(0.5);
-      pdf.line(20, 70, 190, 70);
+      pdf.setFontSize(10);
+      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, 45, { align: 'center' });
       
-      // Customer Information Section
-      pdf.setFontSize(16);
+      // Quote Details Box
+      pdf.setFillColor(245, 245, 245);
+      pdf.rect(20, 70, 170, 25, 'F');
+      
       pdf.setTextColor(26, 26, 27);
-      pdf.text('Customer Information', 20, 85);
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text(`Quote #${quoteNumber}`, 30, 85);
       
       pdf.setFontSize(11);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Date: ${currentDate}`, 30, 92);
+      pdf.text(`Valid Until: ${validUntil}`, 120, 92);
+      
+      // Customer Information Section
+      pdf.setTextColor(26, 26, 27);
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Customer Information', 20, 115);
+      
+      pdf.setDrawColor(200, 200, 200);
+      pdf.line(20, 120, 190, 120);
+      
+      pdf.setFontSize(11);
+      pdf.setFont('helvetica', 'normal');
       pdf.setTextColor(60, 60, 60);
       
-      let yPos = 95;
+      let yPos = 130;
       pdf.text(`Name: ${customerName}`, 20, yPos);
-      yPos += 7;
+      yPos += 8;
       pdf.text(`Company: ${customerCompany || 'N/A'}`, 20, yPos);
-      yPos += 7;
+      yPos += 8;
       pdf.text(`Email: ${customerEmail}`, 20, yPos);
-      yPos += 7;
+      yPos += 8;
       pdf.text(`Phone: ${customerPhone || 'N/A'}`, 20, yPos);
-      yPos += 7;
+      yPos += 8;
       pdf.text(`Project: ${projectName}`, 20, yPos);
-      yPos += 7;
+      yPos += 8;
       pdf.text(`Contact: ${contactPerson}`, 20, yPos);
       
       // Quote Items Table
       yPos += 15;
-      pdf.setFontSize(16);
       pdf.setTextColor(26, 26, 27);
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
       pdf.text('Quote Items', 20, yPos);
       
+      pdf.setDrawColor(200, 200, 200);
+      pdf.line(20, yPos + 5, 190, yPos + 5);
+      
       yPos += 10;
       
-      // Table headers
+      // Table headers with branding
       pdf.setFillColor(26, 26, 27);
-      pdf.rect(20, yPos, 170, 10, 'F');
+      pdf.rect(20, yPos, 170, 12, 'F');
       pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(11);
-      pdf.text('Item', 25, yPos + 7);
-      pdf.text('Quantity', 80, yPos + 7);
-      pdf.text('Rate', 120, yPos + 7);
-      pdf.text('Amount', 160, yPos + 7);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Service', 25, yPos + 8);
+      pdf.text('Quantity', 85, yPos + 8);
+      pdf.text('Rate', 125, yPos + 8);
+      pdf.text('Amount', 160, yPos + 8);
       
-      yPos += 10;
+      yPos += 12;
       
-      // Table rows
+      // Table rows with alternating colors
       pdf.setTextColor(0, 0, 0);
       pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
       
       items.forEach((item, index) => {
-        if (yPos > 250) {
+        if (yPos > 240) {
           pdf.addPage();
-          yPos = 20;
+          // Repeat header on new page
+          pdf.setFillColor(26, 26, 27);
+          pdf.rect(0, 0, 210, 60, 'F');
+          pdf.setTextColor(255, 255, 255);
+          pdf.setFontSize(24);
+          pdf.setFont('helvetica', 'bold');
+          pdf.text('BREED INDUSTRIES', 105, 25, { align: 'center' });
+          pdf.setFontSize(12);
+          pdf.setFont('helvetica', 'normal');
+          pdf.text('Professional Business Solutions', 105, 35, { align: 'center' });
+          pdf.setFontSize(10);
+          pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, 45, { align: 'center' });
+          
+          yPos = 80;
+          
+          // Table headers on new page
+          pdf.setFillColor(26, 26, 27);
+          pdf.rect(20, yPos, 170, 12, 'F');
+          pdf.setTextColor(255, 255, 255);
+          pdf.setFontSize(11);
+          pdf.setFont('helvetica', 'bold');
+          pdf.text('Service', 25, yPos + 8);
+          pdf.text('Quantity', 85, yPos + 8);
+          pdf.text('Rate', 125, yPos + 8);
+          pdf.text('Amount', 160, yPos + 8);
+          
+          yPos += 12;
+          pdf.setTextColor(0, 0, 0);
+          pdf.setFontSize(10);
+          pdf.setFont('helvetica', 'normal');
         }
         
-        // Alternate row background
+        // Alternate row background with brand colors
         if (index % 2 === 0) {
-          pdf.setFillColor(245, 245, 245);
-          pdf.rect(20, yPos, 170, 8, 'F');
+          pdf.setFillColor(248, 249, 250); // Light brand color
+          pdf.rect(20, yPos, 170, 10, 'F');
         }
         
-        pdf.text(item.name, 25, yPos + 5);
-        pdf.text(item.quantity.toString(), 85, yPos + 5);
-        pdf.text(`R ${item.rate.toLocaleString()}`, 125, yPos + 5);
-        pdf.text(`R ${(item.quantity * item.rate).toLocaleString()}`, 160, yPos + 5);
+        pdf.text(item.name, 25, yPos + 7);
+        pdf.text(item.quantity.toString(), 90, yPos + 7);
+        pdf.text(`R ${item.rate.toLocaleString()}`, 125, yPos + 7);
+        pdf.text(`R ${(item.quantity * item.rate).toLocaleString()}`, 160, yPos + 7);
         
-        yPos += 8;
+        yPos += 10;
       });
       
-      // Total
+      // Total Section with Brand Styling
       yPos += 10;
-      pdf.setDrawColor(26, 26, 27);
-      pdf.setLineWidth(0.5);
-      pdf.line(20, yPos, 190, yPos);
+      pdf.setFillColor(26, 26, 27);
+      pdf.rect(20, yPos, 170, 15, 'F');
       
-      yPos += 10;
+      pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
-      pdf.text(`Total (ex VAT): ${formattedTotal}`, 160, yPos, { align: 'right' });
+      pdf.text('TOTAL (EX VAT):', 25, yPos + 10);
+      pdf.text(formattedTotal, 160, yPos + 10, { align: 'right' });
       
+      yPos += 20;
+      pdf.setFontSize(9);
       pdf.setFont('helvetica', 'normal');
-      pdf.setFontSize(10);
       pdf.setTextColor(136, 136, 136);
-      yPos += 7;
       pdf.text('Breed Industries is not VAT registered. All pricing is exclusive of VAT.', 105, yPos, { align: 'center' });
       
       // Notes if any
       if (notes) {
         yPos += 20;
-        pdf.setFontSize(16);
         pdf.setTextColor(26, 26, 27);
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
         pdf.text('Notes', 20, yPos);
         
-        yPos += 10;
-        pdf.setFontSize(11);
+        yPos += 8;
+        pdf.setDrawColor(200, 200, 200);
+        pdf.line(20, yPos, 190, yPos);
+        
+        yPos += 8;
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
         pdf.setTextColor(60, 60, 60);
         const splitNotes = pdf.splitTextToSize(notes, 170);
         pdf.text(splitNotes, 20, yPos);
       }
       
       // Terms & Conditions
-      yPos += 30;
-      pdf.setFontSize(16);
+      yPos += 25;
       pdf.setTextColor(26, 26, 27);
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'bold');
       pdf.text('Terms & Conditions', 20, yPos);
       
-      yPos += 10;
-      pdf.setFontSize(10);
+      yPos += 8;
+      pdf.setDrawColor(200, 200, 200);
+      pdf.line(20, yPos, 190, yPos);
+      
+      yPos += 8;
+      pdf.setFontSize(9);
+      pdf.setFont('helvetica', 'normal');
       pdf.setTextColor(60, 60, 60);
       const terms = [
         'Payment is due within 30 days of invoice date. Late payments may incur a 1.5% monthly interest charge.',
@@ -313,20 +377,39 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       terms.forEach(term => {
         if (yPos > 270) {
           pdf.addPage();
-          yPos = 20;
+          // Repeat header on new page
+          pdf.setFillColor(26, 26, 27);
+          pdf.rect(0, 0, 210, 60, 'F');
+          pdf.setTextColor(255, 255, 255);
+          pdf.setFontSize(24);
+          pdf.setFont('helvetica', 'bold');
+          pdf.text('BREED INDUSTRIES', 105, 25, { align: 'center' });
+          pdf.setFontSize(12);
+          pdf.setFont('helvetica', 'normal');
+          pdf.text('Professional Business Solutions', 105, 35, { align: 'center' });
+          pdf.setFontSize(10);
+          pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, 45, { align: 'center' });
+          
+          yPos = 80;
         }
         const splitTerm = pdf.splitTextToSize(term, 170);
         pdf.text(splitTerm, 20, yPos);
-        yPos += splitTerm.length * 5;
+        yPos += splitTerm.length * 4 + 2;
       });
       
-      // Footer
+      // Brand Footer
       yPos = 280;
+      pdf.setFillColor(26, 26, 27);
+      pdf.rect(0, yPos - 10, 210, 30, 'F');
+      
+      pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(12);
-      pdf.setTextColor(100, 100, 100);
-      pdf.text('Thank you for your business!', 105, yPos, { align: 'center' });
-      yPos += 7;
-      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, yPos, { align: 'center' });
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Thank you for your business!', 105, yPos + 2, { align: 'center' });
+      
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, yPos + 12, { align: 'center' });
 
       // Download PDF
       pdf.save(`Breed_Industries_Quote_${quoteNumber}.pdf`);
