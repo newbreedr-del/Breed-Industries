@@ -192,7 +192,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       
       headerElement.innerHTML = `
         <div style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">
-          <img src="/assets/images/The Breed Industries-01-01-01-01.png" alt="Breed Industries Logo" style="max-width: 80px; margin-bottom: 8px;" />
+          <img src="/assets/images/The Breed Industries-01-01-01.png" alt="Breed Industries Logo" style="max-width: 80px; margin-bottom: 8px;" />
           <div>BREED INDUSTRIES</div>
         </div>
         <div style="font-size: 12px; margin-bottom: 5px;">Be seen, be trusted, be unstoppable</div>
