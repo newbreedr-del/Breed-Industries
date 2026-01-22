@@ -178,6 +178,13 @@ export default function LabPage() {
       }
     });
 
+    // Calculate from business profile options
+    businessProfileOptions.forEach(option => {
+      if (selectedOptions.includes(option.id)) {
+        total += option.price;
+      }
+    });
+
     return total;
   };
 
