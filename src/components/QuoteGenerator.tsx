@@ -64,21 +64,18 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
   });
 
   useEffect(() => {
-    if (selectedItems.length === 0) {
-      setItems([defaultItem]);
-      return;
+    if (selectedItems && selectedItems.length > 0) {
+      setItems(
+        selectedItems.map((item, index) => ({
+          id: item.id ?? (index + 1).toString(),
+          name: item.name,
+          description: item.description ?? '',
+          quantity: 1,
+          rate: item.price ?? 0
+        }))
+      );
     }
-
-    setItems(
-      selectedItems.map((item, index) => ({
-        id: item.id ?? (index + 1).toString(),
-        name: item.name,
-        description: item.description ?? '',
-        quantity: item.quantity ?? 1,
-        rate: item.rate ?? item.price ?? 0,
-      }))
-    );
-  }, [defaultItem, selectedItems]);
+  }, [selectedItems]);
   
   // Add new item
   const addItem = () => {
@@ -159,6 +156,9 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
   // Generate PDF function
   const generatePDF = async (quoteNumber: string) => {
     try {
+      console.log('Generating PDF with items:', items);
+      console.log('Selected items from props:', selectedItems);
+      
       // Create a temporary div to render the quote content
       const quoteElement = document.createElement('div');
       quoteElement.style.position = 'absolute';
@@ -190,11 +190,12 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         maximumFractionDigits: 0,
       }).format(total).replace('ZAR', 'R');
 
+      console.log('Total calculated:', total, 'Formatted:', formattedTotal);
+
       // Create HTML content for PDF with logo
       quoteElement.innerHTML = `
         <div style="text-align: center; margin-bottom: 40px; border-bottom: 2px solid #1A1A1B; padding-bottom: 20px;">
-          <img src="/assets/images/The Breed Industries-01-01-01-01.png" alt="Breed Industries Logo" style="max-width: 200px; margin-bottom: 20px;" />
-          <h1 style="font-size: 28px; font-weight: bold; color: #1A1A1B; margin-bottom: 10px;">BREED INDUSTRIES</h1>
+          <div style="font-size: 32px; font-weight: bold; color: #1A1A1B; margin-bottom: 10px; letter-spacing: 2px;">BREED INDUSTRIES</div>
           <div style="font-size: 18px; font-weight: bold; color: #1A1A1B;">Quote #${quoteNumber}</div>
           <div>Date: ${currentDate}</div>
           <div>Valid Until: ${validUntil}</div>
