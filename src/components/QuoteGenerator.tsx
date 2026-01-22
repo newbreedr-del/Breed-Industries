@@ -453,11 +453,13 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         }),
       });
       
-      const data = await response.json();
-      
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to generate quote');
+        const errorText = await response.text();
+        console.error('API Error Response:', errorText);
+        throw new Error(errorText || 'Failed to generate quote');
       }
+      
+      const data = await response.json();
       
       setQuoteNumber(data.quoteNumber);
       setIsSuccess(true);

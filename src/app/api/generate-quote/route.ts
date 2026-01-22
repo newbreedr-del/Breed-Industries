@@ -10,9 +10,13 @@ const resend = new Resend(process.env.RESEND_API_KEY || 're_hfSbzJmW_JcaVST8yquP
 const COMPANY_EMAIL = process.env.COMPANY_EMAIL || 'info@thebreed.co.za';
 
 export async function POST(req: NextRequest) {
+  console.log('API route called');
+  
   try {
     // Parse request body
     const data = await req.json();
+    console.log('Request data received:', { ...data, customerEmail: data.customerEmail ? '[REDACTED]' : 'MISSING' });
+    
     const {
       customerName = '',
       customerCompany = '',
@@ -25,6 +29,16 @@ export async function POST(req: NextRequest) {
       items = [],
       notes = ''
     } = data ?? {};
+
+    // Check if Resend API key is available
+    const resendApiKey = process.env.RESEND_API_KEY || 're_hfSbzJmW_JcaVST8yquP4fSZpP7rMUYZs';
+    if (!resendApiKey) {
+      console.error('Missing Resend API key');
+      return NextResponse.json(
+        { error: 'Email service configuration error' },
+        { status: 500 }
+      );
+    }
 
     const sanitizedItems = Array.isArray(items)
       ? items.map((item: any) => ({
