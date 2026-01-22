@@ -347,23 +347,23 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       });
       
       // Footer
-      yPos = 280;
+      yPos = 270;
       if (yPos > 270) {
         pdf.addPage();
         yPos = 20;
       }
       
       pdf.setFillColor(26, 26, 27);
-      pdf.rect(0, yPos - 5, 210, 25, 'F');
+      pdf.rect(0, yPos - 5, 210, 20, 'F');
       
       pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(10);
+      pdf.setFontSize(9);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Thank you for your business!', 105, yPos + 5, { align: 'center' });
+      pdf.text('Thank you for your business!', 105, yPos + 3, { align: 'center' });
       
-      pdf.setFontSize(8);
+      pdf.setFontSize(7);
       pdf.setFont('helvetica', 'normal');
-      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, yPos + 15, { align: 'center' });
+      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, yPos + 12, { align: 'center' });
 
       // Download PDF
       pdf.save(`Breed_Industries_Quote_${quoteNumber}.pdf`);
