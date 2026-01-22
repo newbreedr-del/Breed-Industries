@@ -2,8 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { join } from 'path';
 import { readFile } from 'fs/promises';
 import { Resend } from 'resend';
-import chromium from '@sparticuz/chromium';
-import puppeteer from 'puppeteer-core';
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
+// Use puppeteer-extra with stealth plugin
+const puppeteer = require('puppeteer-extra');
+const hidden = require('puppeteer-extra-plugin-stealth');
+
+// require executablePath from puppeteer
+const { executablePath } = require('puppeteer');
+
 import { format } from 'date-fns';
 
 export const runtime = 'nodejs';
@@ -17,53 +25,32 @@ let cachedLogoDataUri: string | null = null;
 
 async function launchBrowser() {
   try {
-    // For Vercel serverless, use @sparticuz/chromium with minimal configuration
-    const executablePath = await chromium.executablePath();
+    // Launch sequence with puppeteer-extra and stealth
+    puppeteer.use(hidden());
     
-    if (executablePath) {
-      return puppeteer.launch({
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-gpu',
-          '--no-zygote',
-          '--single-process'
-        ],
-        defaultViewport: { width: 1280, height: 720 },
-        executablePath,
-        headless: true,
-        ignoreDefaultArgs: ['--disable-extensions']
-      });
-    }
+    console.log('Attempting to launch browser with puppeteer-extra...');
+    
+    const browser = await puppeteer.launch({
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--no-zygote',
+        '--single-process'
+      ],
+      headless: true,
+      ignoreHTTPSErrors: true,
+      executablePath: executablePath(),
+      timeout: 30000
+    });
+    
+    console.log('Browser launched successfully');
+    return browser;
   } catch (error) {
-    console.warn('Failed to launch @sparticuz/chromium, trying fallback:', error);
+    console.error('Failed to launch browser:', error);
+    throw new Error(`Failed to launch browser: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
-
-  // Fallback for local development
-  const fallbackPaths = [
-    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-    '/usr/bin/google-chrome',
-    '/usr/bin/chromium-browser',
-    '/usr/bin/chromium'
-  ];
-
-  for (const path of fallbackPaths) {
-    try {
-      const browser = await puppeteer.launch({
-        executablePath: path,
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
-        defaultViewport: { width: 1280, height: 720 }
-      });
-      return browser;
-    } catch (error) {
-      console.warn(`Unable to launch Chromium at ${path}:`, error);
-    }
-  }
-
-  throw new Error('Failed to determine a Chromium executable path for puppeteer-core.');
 }
 
 async function getLogoDataUri() {
