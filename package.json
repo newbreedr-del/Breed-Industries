@@ -22,6 +22,8 @@
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "framer-motion": "^11.3.28",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.0.0",
     "lucide-react": "^0.469.0",
     "next": "^16.1.1",
     "nodemailer": "^6.9.5",

@@ -5,8 +5,10 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
-import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, X, CheckCircle2 } from 'lucide-react';
+import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, X, CheckCircle2, Download } from 'lucide-react';
 import QuoteGenerator from '@/components/QuoteGenerator';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const complianceOptions = [
   { id: 'cipc', name: 'CIPC Registration', price: 550, icon: <Shield size={16} />, description: 'Complete company registration with CIPC including name reservation and registration certificate' },
@@ -186,6 +188,178 @@ export default function LabPage() {
     });
 
     return total;
+  };
+
+  const generatePDF = async () => {
+    try {
+      // Create a temporary div to render the quote content
+      const quoteElement = document.createElement('div');
+      quoteElement.style.position = 'absolute';
+      quoteElement.style.left = '-9999px';
+      quoteElement.style.top = '-9999px';
+      quoteElement.style.width = '800px';
+      quoteElement.style.backgroundColor = 'white';
+      quoteElement.style.padding = '40px';
+      quoteElement.style.fontFamily = 'Arial, sans-serif';
+      
+      // Generate quote number and date
+      const quoteNumber = `Q-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+      const currentDate = new Date().toLocaleDateString('en-ZA', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      const validUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-ZA', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+
+      // Get selected items
+      const selectedItems = allOptions.filter(option => selectedOptions.includes(option.id));
+      const total = calculateTotal();
+      const timeframe = getEstimatedTimeframe();
+
+      // Create HTML content for PDF
+      quoteElement.innerHTML = `
+        <div style="text-align: center; margin-bottom: 40px; border-bottom: 2px solid #1A1A1B; padding-bottom: 20px;">
+          <h1 style="font-size: 28px; font-weight: bold; color: #1A1A1B; margin-bottom: 10px;">BREED INDUSTRIES</h1>
+          <div style="font-size: 18px; font-weight: bold; color: #1A1A1B;">Quote #${quoteNumber}</div>
+          <div>Date: ${currentDate}</div>
+          <div>Valid Until: ${validUntil}</div>
+          <div>Estimated Timeframe: ${timeframe}</div>
+        </div>
+
+        <div style="margin-bottom: 30px;">
+          <h2 style="color: #1A1A1B; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">Quote Items</h2>
+          <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+            <thead>
+              <tr>
+                <th style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; background-color: #1A1A1B; color: white;">Item</th>
+                <th style="padding: 12px; text-align: right; border-bottom: 1px solid #ddd; background-color: #1A1A1B; color: white;">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${selectedItems.map(item => `
+                <tr>
+                  <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd;">
+                    <strong>${item.name}</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 5px;">${item.description}</div>
+                  </td>
+                  <td style="padding: 12px; text-align: right; border-bottom: 1px solid #ddd;">R ${item.price.toLocaleString()}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <div style="text-align: right; margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 16px; font-weight: bold; border-top: 2px solid #1A1A1B; padding-top: 10px;">
+              <span>Total (ex VAT):</span>
+              <span>${formattedTotal}</span>
+            </div>
+            <div style="font-size: 12px; color: #888;">Breed Industries is not VAT registered. All pricing is exclusive of VAT.</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 30px;">
+          <h2 style="color: #1A1A1B; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">Terms & Conditions</h2>
+          <p style="line-height: 1.6;">
+            Payment is due within 30 days of invoice date. Late payments may incur a 1.5% monthly interest charge. 
+            All work is guaranteed for 90 days from completion. Client is responsible for providing all necessary 
+            content and materials. Changes to project scope may result in additional charges. We reserve the right 
+            to use completed work in our portfolio unless otherwise agreed in writing.
+          </p>
+        </div>
+
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 14px;">
+          <p><strong>Thank you for your business!</strong></p>
+          <p>www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105</p>
+        </div>
+      `;
+
+      document.body.appendChild(quoteElement);
+
+      // Generate PDF
+      const canvas = await html2canvas(quoteElement, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      
+      const imgWidth = 210;
+      const pageHeight = 297;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      // Get PDF as base64
+      const pdfBase64 = pdf.output('datauristring');
+
+      // Download PDF
+      pdf.save(`Breed_Industries_Quote_${quoteNumber}.pdf`);
+
+      // Clean up
+      document.body.removeChild(quoteElement);
+
+      // Send email with PDF attachment
+      try {
+        const response = await fetch('/api/generate-quote', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            customerName: 'Customer', // Will be updated in modal
+            customerCompany: '',
+            customerAddress: '',
+            customerEmail: 'customer@example.com', // Will be updated in modal
+            customerPhone: '',
+            projectName: 'Custom Package',
+            contactPerson: 'Customer',
+            paymentTerms: 'Net 30',
+            items: selectedItems.map(item => ({
+              name: item.name,
+              description: item.description,
+              quantity: 1,
+              rate: item.price
+            })),
+            notes: '',
+            pdfBase64: pdfBase64
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to send quote');
+        }
+
+        console.log('Quote sent successfully:', data);
+      } catch (emailError) {
+        console.error('Failed to send email:', emailError);
+        // Don't show error to user since PDF was downloaded successfully
+      }
+
+      // Show quote modal for customer details
+      setShowQuoteModal(true);
+
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
+    }
   };
 
   const estimatedTotal = calculateTotal();
@@ -424,9 +598,10 @@ export default function LabPage() {
             <div className="flex justify-center">
               <button 
                 className="btn btn-primary flex items-center gap-2"
-                onClick={() => setShowQuoteModal(true)}
+                onClick={generatePDF}
+                disabled={selectedOptions.length === 0}
               >
-                <ClipboardList className="w-4 h-4" /> Generate Auto Quote
+                <Download className="w-4 h-4" /> Download & Email Quote
               </button>
             </div>
           </div>

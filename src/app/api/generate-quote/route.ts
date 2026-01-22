@@ -23,7 +23,8 @@ export async function POST(req: NextRequest) {
       contactPerson = '',
       paymentTerms = 'Net 30',
       items = [],
-      notes = ''
+      notes = '',
+      pdfBase64 = '' // PDF data from client-side generation
     } = data ?? {};
 
     const sanitizedItems = Array.isArray(items)
@@ -86,24 +87,68 @@ export async function POST(req: NextRequest) {
       notes: notes.trim()
     });
 
-    // Send email via Resend
+    // Prepare email attachments
+    const attachments = [];
+    
+    // Add PDF if provided
+    if (pdfBase64) {
+      // Convert base64 to buffer
+      const base64Data = pdfBase64.replace(/^data:application\/pdf;base64,/, '');
+      const pdfBuffer = Buffer.from(base64Data, 'base64');
+      
+      attachments.push({
+        filename: `Breed_Industries_Quote_${quoteNumber}.pdf`,
+        content: pdfBuffer
+      });
+    }
+
+    // Send email to customer
     try {
-      const { data, error } = await resend.emails.send({
+      const { data: customerData, error: customerError } = await resend.emails.send({
         from: COMPANY_EMAIL,
         to: [customerEmail.trim()],
         subject: `Quote #${quoteNumber} from Breed Industries`,
         html: emailHTML,
+        attachments: attachments.length > 0 ? attachments : undefined,
         replyTo: COMPANY_EMAIL
       });
 
-      if (error) {
-        console.error('Resend error:', error);
-        throw new Error('Failed to send email: ' + error.message);
+      if (customerError) {
+        console.error('Customer email error:', customerError);
+        throw new Error('Failed to send customer email: ' + customerError.message);
+      }
+
+      // Send work notification to you
+      const workNotificationHTML = generateWorkNotification({
+        quoteNumber,
+        customerName: customerName.trim(),
+        customerCompany: customerCompany.trim(),
+        customerEmail: customerEmail.trim(),
+        customerPhone: customerPhone.trim(),
+        projectName: projectName.trim(),
+        contactPerson: contactPerson.trim(),
+        items: sanitizedItems,
+        total,
+        currentDate
+      });
+
+      const { data: notificationData, error: notificationError } = await resend.emails.send({
+        from: COMPANY_EMAIL,
+        to: [COMPANY_EMAIL], // Send to yourself
+        subject: `New Work Request: Quote #${quoteNumber} - ${customerName.trim()}`,
+        html: workNotificationHTML,
+        replyTo: customerEmail.trim()
+      });
+
+      if (notificationError) {
+        console.error('Notification email error:', notificationError);
+        // Don't throw error for notification failure, just log it
+        console.warn('Failed to send work notification:', notificationError.message);
       }
 
       return NextResponse.json({ 
         success: true, 
-        message: 'Quote sent successfully to your email',
+        message: 'Quote downloaded and sent successfully to your email',
         quoteNumber
       });
     } catch (sendError) {
@@ -121,6 +166,218 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+function generateWorkNotification(data: any) {
+  const {
+    quoteNumber,
+    customerName,
+    customerCompany,
+    customerEmail,
+    customerPhone,
+    projectName,
+    contactPerson,
+    items,
+    total,
+    currentDate
+  } = data;
+  
+  // Format currency
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-ZA', {
+      style: 'currency',
+      currency: 'ZAR',
+      minimumFractionDigits: 2
+    }).format(amount).replace('ZAR', 'R');
+  };
+  
+  // Generate items HTML
+  const itemsHTML = items.map((item: any) => `
+    <tr>
+      <td><strong>${item.name}</strong></td>
+      <td style="text-align: right;">${formatCurrency(item.rate)}</td>
+    </tr>
+  `).join('');
+
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>New Work Request - Breed Industries</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #1A1A1B;
+            padding-bottom: 20px;
+        }
+        .alert {
+            background-color: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section h2 {
+            color: #1A1A1B;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .info-item {
+            margin-bottom: 10px;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #666;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #1A1A1B;
+            color: white;
+            font-weight: bold;
+        }
+        .right {
+            text-align: right;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 18px;
+            border-top: 2px solid #1A1A1B;
+            padding-top: 10px;
+            text-align: right;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        .cta {
+            background-color: #1A1A1B;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="color: #1A1A1B; margin-bottom: 10px;">🎯 New Work Request</h1>
+            <div style="font-size: 18px; font-weight: bold; color: #1A1A1B;">Quote #${quoteNumber}</div>
+            <div>Date: ${currentDate}</div>
+        </div>
+
+        <div class="alert">
+            <strong>🚀 New Business Opportunity!</strong><br>
+            A potential client has requested a quote. Follow up promptly to secure this work.
+        </div>
+
+        <div class="section">
+            <h2>Client Information</h2>
+            <div class="info-grid">
+                <div>
+                    <div class="info-item">
+                        <div class="info-label">Name:</div>
+                        <div>${customerName}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Company:</div>
+                        <div>${customerCompany || 'N/A'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Email:</div>
+                        <div>${customerEmail}</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="info-item">
+                        <div class="info-label">Phone:</div>
+                        <div>${customerPhone || 'N/A'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Contact Person:</div>
+                        <div>${contactPerson}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Project Name:</div>
+                        <div>${projectName}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Requested Services</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th class="right">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${itemsHTML}
+                </tbody>
+            </table>
+            <div class="total">
+                Total Value: ${formatCurrency(total)}
+            </div>
+        </div>
+
+        <div class="cta">
+            <strong>📞 Next Steps:</strong><br>
+            1. Contact the client within 24 hours<br>
+            2. Discuss their specific requirements<br>
+            3. Confirm timeline and deliverables<br>
+            4. Send formal proposal if needed
+        </div>
+
+        <div class="footer">
+            <p><strong>Breed Industries - Work Notification System</strong></p>
+            <p>This is an automated notification. Please follow up with the client promptly.</p>
+        </div>
+    </div>
+</body>
+</html>`;
 }
 
 function generateQuoteEmail(data: any) {
