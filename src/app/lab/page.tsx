@@ -5,8 +5,10 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
-import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, X, CheckCircle2 } from 'lucide-react';
+import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, X, CheckCircle2, Download } from 'lucide-react';
 import QuoteGenerator from '@/components/QuoteGenerator';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const complianceOptions = [
   { id: 'cipc', name: 'CIPC Registration', price: 550, icon: <Shield size={16} />, description: 'Complete company registration with CIPC including name reservation and registration certificate' },
@@ -123,7 +125,7 @@ export default function LabPage() {
   };
 
   const selectedQuoteItems = useMemo(() => {
-    return selectedOptions.map((optionId, index) => {
+    const items = selectedOptions.map((optionId, index) => {
       const option = allOptions.find((item) => item.id === optionId);
       return {
         id: `${index + 1}-${optionId}`,
@@ -132,6 +134,8 @@ export default function LabPage() {
         price: option?.price ?? 0,
       };
     });
+    console.log('Lab selectedQuoteItems:', items);
+    return items;
   }, [selectedOptions]);
 
   useEffect(() => {
@@ -425,8 +429,9 @@ export default function LabPage() {
               <button 
                 className="btn btn-primary flex items-center gap-2"
                 onClick={() => setShowQuoteModal(true)}
+                disabled={selectedOptions.length === 0}
               >
-                <ClipboardList className="w-4 h-4" /> Generate Auto Quote
+                <ClipboardList className="w-4 h-4" /> Complete Quote
               </button>
             </div>
           </div>

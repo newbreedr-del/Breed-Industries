@@ -1,7 +1,10 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { PlusCircle, MinusCircle, Loader2, CheckCircle, Send } from 'lucide-react';
+import { PlusCircle, MinusCircle, Loader2, CheckCircle, Send, Download } from 'lucide-react';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import html2canvas from 'html2canvas';
 
 interface QuoteItem {
   id: string;
@@ -48,24 +51,24 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
     []
   );
 
-  const [items, setItems] = useState<QuoteItem[]>([defaultItem]);
+  const [items, setItems] = useState<QuoteItem[]>([]);
 
   useEffect(() => {
-    if (selectedItems.length === 0) {
-      setItems([defaultItem]);
-      return;
-    }
-
-    setItems(
-      selectedItems.map((item, index) => ({
+    if (selectedItems && selectedItems.length > 0) {
+      const mappedItems = selectedItems.map((item, index) => ({
         id: item.id ?? (index + 1).toString(),
         name: item.name,
         description: item.description ?? '',
-        quantity: item.quantity ?? 1,
-        rate: item.rate ?? item.price ?? 0,
-      }))
-    );
-  }, [defaultItem, selectedItems]);
+        quantity: 1,
+        rate: item.price ?? 0
+      }));
+      setItems(mappedItems);
+      console.log('Set items from selectedItems:', mappedItems);
+    } else {
+      setItems([defaultItem]);
+      console.log('Set default item');
+    }
+  }, [selectedItems]);
   
   // Add new item
   const addItem = () => {
@@ -143,6 +146,266 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
     return null;
   };
 
+  // Generate PDF function
+  const generatePDF = async (quoteNumber: string) => {
+    try {
+      console.log('Generating PDF with items:', items);
+      console.log('Selected items from props:', selectedItems);
+      
+      // Create new PDF document
+      const pdf = new jsPDF();
+      
+      // Generate dates
+      const currentDate = new Date().toLocaleDateString('en-ZA', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      const validUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-ZA', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+
+      // Calculate total
+      const total = items.reduce((sum: number, item: QuoteItem) => sum + item.quantity * item.rate, 0);
+      const formattedTotal = new Intl.NumberFormat('en-ZA', {
+        style: 'currency',
+        currency: 'ZAR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(total).replace('ZAR', 'R');
+
+      console.log('Total calculated:', total, 'Formatted:', formattedTotal);
+
+      // Create HTML header with logo
+      const headerElement = document.createElement('div');
+      headerElement.style.position = 'absolute';
+      headerElement.style.left = '-9999px';
+      headerElement.style.top = '-9999px';
+      headerElement.style.width = '210mm';
+      headerElement.style.backgroundColor = '#1A1A1B';
+      headerElement.style.padding = '20px';
+      headerElement.style.fontFamily = 'Arial, sans-serif';
+      headerElement.style.textAlign = 'center';
+      headerElement.style.color = 'white';
+      
+      // Try multiple image paths and add debugging
+      const imagePaths = [
+        '/assets/images/The Breed Industries Just Logo-01 igkjh-01.png',
+        '/The Breed Industries Just Logo-01 igkjh-01.png',
+        'The Breed Industries Just Logo-01 igkjh-01.png'
+      ];
+      
+      headerElement.innerHTML = `
+        <div style="text-align: center; margin-bottom: 8px;">
+          <div style="font-size: 24px; font-weight: bold; margin-bottom: 5px;">BREED INDUSTRIES</div>
+        </div>
+        <div style="font-size: 13px; margin-bottom: 5px; text-align: center;">Be seen, be trusted, be unstoppable</div>
+        <div style="font-size: 11px; text-align: center;">Professional Business Solutions</div>
+      `;
+
+      document.body.appendChild(headerElement);
+
+      // Wait a bit for image to load
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      console.log('Header element created, attempting to convert to canvas...');
+
+      // Generate header with logo using html2canvas
+      const headerCanvas = await html2canvas(headerElement, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true
+      });
+
+      const headerImgData = headerCanvas.toDataURL('image/png');
+      
+      // Add header to PDF
+      pdf.addImage(headerImgData, 'PNG', 0, 0, 210, 50);
+
+      // Clean up
+      document.body.removeChild(headerElement);
+
+      // Quote Details
+      pdf.setFillColor(245, 245, 245);
+      pdf.rect(20, 60, 170, 20, 'F');
+      
+      pdf.setTextColor(26, 26, 27);
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text(`Quote #${quoteNumber}`, 30, 72);
+      
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Date: ${currentDate}`, 30, 80);
+      pdf.text(`Valid Until: ${validUntil}`, 120, 80);
+      
+      // Customer Information
+      pdf.setTextColor(26, 26, 27);
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Customer Information', 20, 95);
+      
+      pdf.setFontSize(9);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(60, 60, 60);
+      
+      let yPos = 105;
+      pdf.text(`Name: ${customerName}`, 20, yPos);
+      yPos += 6;
+      pdf.text(`Company: ${customerCompany || 'N/A'}`, 20, yPos);
+      yPos += 6;
+      pdf.text(`Email: ${customerEmail}`, 20, yPos);
+      yPos += 6;
+      pdf.text(`Phone: ${customerPhone || 'N/A'}`, 20, yPos);
+      yPos += 6;
+      pdf.text(`Project: ${projectName}`, 20, yPos);
+      yPos += 6;
+      pdf.text(`Contact: ${contactPerson}`, 20, yPos);
+      
+      // Quote Items Table
+      yPos += 12;
+      pdf.setTextColor(26, 26, 27);
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Quote Items', 20, yPos);
+      
+      yPos += 8;
+      
+      // Table headers
+      pdf.setFillColor(26, 26, 27);
+      pdf.rect(20, yPos, 170, 10, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(9);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Service', 25, yPos + 7);
+      pdf.text('Qty', 100, yPos + 7);
+      pdf.text('Rate', 130, yPos + 7);
+      pdf.text('Amount', 160, yPos + 7);
+      
+      yPos += 10;
+      
+      // Table rows
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(8);
+      pdf.setFont('helvetica', 'normal');
+      
+      items.forEach((item, index) => {
+        if (yPos > 240) {
+          pdf.addPage();
+          yPos = 20;
+        }
+        
+        // Alternate row background
+        if (index % 2 === 0) {
+          pdf.setFillColor(248, 249, 250);
+          pdf.rect(20, yPos, 170, 8, 'F');
+        }
+        
+        pdf.text(item.name.substring(0, 50), 25, yPos + 5);
+        pdf.text(item.quantity.toString(), 105, yPos + 5);
+        pdf.text(`R${item.rate}`, 135, yPos + 5);
+        pdf.text(`R${item.quantity * item.rate}`, 165, yPos + 5);
+        
+        yPos += 8;
+      });
+      
+      // Total
+      yPos += 8;
+      pdf.setFillColor(26, 26, 27);
+      pdf.rect(20, yPos, 170, 12, 'F');
+      
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('TOTAL (EX VAT):', 25, yPos + 8);
+      pdf.text(formattedTotal, 160, yPos + 8, { align: 'right' });
+      
+      yPos += 20;
+      pdf.setFontSize(8);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(136, 136, 136);
+      pdf.text('Breed Industries is not VAT registered. All pricing is exclusive of VAT.', 105, yPos, { align: 'center' });
+      
+      // Notes if any
+      if (notes) {
+        yPos += 15;
+        pdf.setTextColor(26, 26, 27);
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Notes', 20, yPos);
+        
+        yPos += 8;
+        pdf.setFontSize(8);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(60, 60, 60);
+        const splitNotes = pdf.splitTextToSize(notes, 170);
+        splitNotes.forEach((line, index) => {
+          if (yPos > 270) {
+            pdf.addPage();
+            yPos = 20;
+          }
+          pdf.text(line, 20, yPos + (index * 4));
+        });
+        yPos += splitNotes.length * 4;
+      }
+      
+      // Terms & Conditions - Simplified
+      yPos += 15;
+      if (yPos > 250) {
+        pdf.addPage();
+        yPos = 20;
+      }
+      
+      pdf.setTextColor(26, 26, 27);
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Terms & Conditions', 20, yPos);
+      
+      yPos += 8;
+      pdf.setFontSize(7);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(60, 60, 60);
+      
+      const terms = [
+        '• Payment due within 30 days. Late payments incur 1.5% monthly interest.',
+        '• Work guaranteed for 90 days. Client responsible for content/materials.',
+        '• Scope changes may incur additional charges. Portfolio rights reserved.'
+      ];
+      
+      terms.forEach((term, index) => {
+        if (yPos > 270) {
+          pdf.addPage();
+          yPos = 20;
+        }
+        pdf.text(term, 20, yPos + (index * 5));
+      });
+      
+      // Footer - Position at actual bottom of A4 page (297mm height)
+      const footerY = 272; // Position at actual bottom
+      pdf.setFillColor(26, 26, 27);
+      pdf.rect(0, footerY, 210, 25, 'F');
+      
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(9);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Thank you for your business!', 105, footerY + 8, { align: 'center' });
+      
+      pdf.setFontSize(7);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text('www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105', 105, footerY + 18, { align: 'center' });
+
+      // Download PDF
+      pdf.save(`Breed_Industries_Quote_${quoteNumber}.pdf`);
+
+      return null;
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      throw new Error('Failed to generate PDF');
+    }
+  };
+
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,6 +420,13 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
     setError(null);
     
     try {
+      // Generate quote number
+      const quoteNumber = `Q-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+      
+      // Generate PDF first (download only, no attachment)
+      await generatePDF(quoteNumber);
+      
+      // Then send email without PDF attachment
       const response = await fetch('/api/generate-quote', {
         method: 'POST',
         headers: {
@@ -178,7 +448,8 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
             quantity: Number(item.quantity),
             rate: Number(item.rate)
           })),
-          notes: notes.trim()
+          notes: notes.trim(),
+          pdfBase64: '' // No PDF attachment
         }),
       });
       
@@ -188,24 +459,14 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         throw new Error(data.error || 'Failed to generate quote');
       }
       
+      setQuoteNumber(data.quoteNumber);
+      setIsSuccess(true);
+      
       if (onSuccess) {
-        setIsSuccess(false);
-        setQuoteNumber(null);
         onSuccess({ quoteNumber: data.quoteNumber, customerEmail: customerEmail.trim() });
-        resetForm();
-      } else {
-        setQuoteNumber(data.quoteNumber);
-        setIsSuccess(true);
-
-        setTimeout(() => {
-          setIsSuccess(false);
-          setQuoteNumber(null);
-        }, 5000);
-        resetForm();
       }
-
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to generate quote');
     } finally {
       setIsLoading(false);
     }
@@ -448,8 +709,8 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
                 </>
               ) : (
                 <>
-                  <Send className="w-5 h-5" />
-                  Generate & Send Quote
+                  <Download className="w-5 h-5" />
+                  Download & Send Quote
                 </>
               )}
             </button>
