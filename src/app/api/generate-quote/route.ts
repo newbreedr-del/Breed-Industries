@@ -521,6 +521,11 @@ function generateQuoteEmail(data: any) {
 </head>
 <body>
     <div class="container">
+        <div style="background-color: #f8f9fa; padding: 20px; margin-bottom: 30px; border-radius: 8px; text-align: center;">
+          <h2 style="color: #1A1A1B; margin-bottom: 10px;">Thank You for Your Business!</h2>
+          <p style="color: #666; margin-bottom: 0;">We appreciate the opportunity to work with you and look forward to bringing your vision to life. Our team is dedicated to delivering exceptional results that exceed your expectations.</p>
+        </div>
+
         <div class="header">
             <div class="logo">BREED INDUSTRIES</div>
             <div class="quote-details">
@@ -627,9 +632,7 @@ function generateQuoteEmail(data: any) {
         </div>
 
         <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 14px;">
-          <p><strong>Thank you for your business!</strong></p>
-          <p>We appreciate the opportunity to work with you and look forward to bringing your vision to life. Our team is dedicated to delivering exceptional results that exceed your expectations.</p>
-          <p style="margin-top: 15px;">www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105</p>
+          <p style="margin-bottom: 15px;">www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105</p>
         </div>
     </div>
 </body>

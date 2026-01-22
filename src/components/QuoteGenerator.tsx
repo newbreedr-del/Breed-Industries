@@ -50,30 +50,22 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
     []
   );
 
-  const [items, setItems] = useState<QuoteItem[]>(() => {
-    if (selectedItems && selectedItems.length > 0) {
-      return selectedItems.map(item => ({
-        id: item.id,
-        name: item.name,
-        description: item.description || '',
-        quantity: 1,
-        rate: item.price || 0
-      }));
-    }
-    return [defaultItem];
-  });
+  const [items, setItems] = useState<QuoteItem[]>([]);
 
   useEffect(() => {
     if (selectedItems && selectedItems.length > 0) {
-      setItems(
-        selectedItems.map((item, index) => ({
-          id: item.id ?? (index + 1).toString(),
-          name: item.name,
-          description: item.description ?? '',
-          quantity: 1,
-          rate: item.price ?? 0
-        }))
-      );
+      const mappedItems = selectedItems.map((item, index) => ({
+        id: item.id ?? (index + 1).toString(),
+        name: item.name,
+        description: item.description ?? '',
+        quantity: 1,
+        rate: item.price ?? 0
+      }));
+      setItems(mappedItems);
+      console.log('Set items from selectedItems:', mappedItems);
+    } else {
+      setItems([defaultItem]);
+      console.log('Set default item');
     }
   }, [selectedItems]);
   

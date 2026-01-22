@@ -125,7 +125,7 @@ export default function LabPage() {
   };
 
   const selectedQuoteItems = useMemo(() => {
-    return selectedOptions.map((optionId, index) => {
+    const items = selectedOptions.map((optionId, index) => {
       const option = allOptions.find((item) => item.id === optionId);
       return {
         id: `${index + 1}-${optionId}`,
@@ -134,6 +134,8 @@ export default function LabPage() {
         price: option?.price ?? 0,
       };
     });
+    console.log('Lab selectedQuoteItems:', items);
+    return items;
   }, [selectedOptions]);
 
   useEffect(() => {
