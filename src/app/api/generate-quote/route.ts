@@ -17,21 +17,23 @@ let cachedLogoDataUri: string | null = null;
 
 async function launchBrowser() {
   try {
-    // For Vercel, use @sparticuz/chromium with proper configuration
+    // For Vercel serverless, use @sparticuz/chromium with minimal configuration
     const executablePath = await chromium.executablePath();
     
     if (executablePath) {
       return puppeteer.launch({
         args: [
-          ...chromium.args,
           '--no-sandbox',
           '--disable-setuid-sandbox',
           '--disable-dev-shm-usage',
-          '--disable-gpu'
+          '--disable-gpu',
+          '--no-zygote',
+          '--single-process'
         ],
         defaultViewport: { width: 1280, height: 720 },
         executablePath,
-        headless: true
+        headless: true,
+        ignoreDefaultArgs: ['--disable-extensions']
       });
     }
   } catch (error) {
