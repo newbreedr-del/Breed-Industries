@@ -159,12 +159,12 @@ export async function POST(req: NextRequest) {
     });
 
     // Generate PDF using Puppeteer
-    let browser = await launchBrowser();
-
-    
+    let browser;
     try {
+      browser = await launchBrowser();
+      
       const page = await browser.newPage();
-      await page.setContent(quoteHTML, { waitUntil: 'domcontentloaded', timeout: 0 });
+      await page.setContent(quoteHTML, { waitUntil: 'domcontentloaded', timeout: 30000 });
       await page.emulateMediaType('screen');
       
       const pdf = await page.pdf({
@@ -212,8 +212,17 @@ export async function POST(req: NextRequest) {
         });
       } catch (sendError) {
         console.error('Email send error:', sendError);
-        throw new Error('Failed to send email: ' + (sendError instanceof Error ? sendError.message : 'Unknown email error'));
+        return NextResponse.json(
+          { error: 'Failed to send email: ' + (sendError instanceof Error ? sendError.message : 'Unknown email error') },
+          { status: 500 }
+        );
       }
+    } catch (browserError) {
+      console.error('Browser/PDF generation error:', browserError);
+      return NextResponse.json(
+        { error: 'Failed to generate PDF: ' + (browserError instanceof Error ? browserError.message : 'Unknown browser error') },
+        { status: 500 }
+      );
     } finally {
       if (browser) {
         await browser.close();
