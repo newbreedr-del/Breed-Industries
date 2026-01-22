@@ -16,30 +16,36 @@ const COMPANY_EMAIL = process.env.COMPANY_EMAIL || 'info@thebreed.co.za';
 let cachedLogoDataUri: string | null = null;
 
 async function launchBrowser() {
-  const executablePath = await chromium.executablePath();
-  const args = chromium.args ?? [];
-  const defaultViewport = { width: 1280, height: 720 };
-  const headless = true;
-
-  if (executablePath) {
-    return puppeteer.launch({
-      args: [...args, '--no-sandbox', '--disable-setuid-sandbox'],
-      defaultViewport,
-      executablePath,
-      headless
-    });
+  try {
+    // For Vercel, use @sparticuz/chromium with proper configuration
+    const executablePath = await chromium.executablePath();
+    
+    if (executablePath) {
+      return puppeteer.launch({
+        args: [
+          ...chromium.args,
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu'
+        ],
+        defaultViewport: { width: 1280, height: 720 },
+        executablePath,
+        headless: true
+      });
+    }
+  } catch (error) {
+    console.warn('Failed to launch @sparticuz/chromium, trying fallback:', error);
   }
 
-  const fallbackPaths =
-    process.env.CHROME_PATH
-      ? [process.env.CHROME_PATH]
-      : [
-          'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-          'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-          '/usr/bin/google-chrome',
-          '/usr/bin/chromium-browser',
-          '/usr/bin/chromium'
-        ];
+  // Fallback for local development
+  const fallbackPaths = [
+    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    '/usr/bin/google-chrome',
+    '/usr/bin/chromium-browser',
+    '/usr/bin/chromium'
+  ];
 
   for (const path of fallbackPaths) {
     try {

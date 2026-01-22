@@ -7,6 +7,7 @@
   NPM_VERSION = "10"
   # Skip Puppeteer Chromium download - use @sparticuz/chromium
   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
+  PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium-browser"
 
 [dev]
   command = "npm run dev"
@@ -19,11 +20,13 @@
 [[plugins]]
   package = "@netlify/plugin-functions-install-core"
 
-# Add functions configuration without Chromium binary
+# Functions configuration for Netlify
 [functions]
   directory = ".netlify/functions"
   node_bundler = "esbuild"
-  # Remove node_modules/puppeteer/.local-chromium/** to avoid exceeding 250MB limit
+  included_files = ["assets/images/**"]
+  # Externalize chromium to avoid bundling issues
+  external_node_modules = ["@sparticuz/chromium", "puppeteer-core"]
 
 [build.processing]
   skip_processing = false
