@@ -190,9 +190,16 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       headerElement.style.textAlign = 'center';
       headerElement.style.color = 'white';
       
+      // Try multiple image paths and add debugging
+      const imagePaths = [
+        '/assets/images/The Breed Industries-01-01-01.png',
+        '/The Breed Industries-01-01-01.png',
+        'The Breed Industries-01-01-01.png'
+      ];
+      
       headerElement.innerHTML = `
         <div style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">
-          <img src="/assets/images/The Breed Industries-01-01-01.png" alt="Breed Industries Logo" style="max-width: 80px; margin-bottom: 8px;" />
+          <img src="${imagePaths[0]}" alt="Breed Industries Logo" style="max-width: 80px; margin-bottom: 8px;" onerror="this.style.display='none'; console.log('Image failed to load');" onload="console.log('Image loaded successfully');" />
           <div>BREED INDUSTRIES</div>
         </div>
         <div style="font-size: 12px; margin-bottom: 5px;">Be seen, be trusted, be unstoppable</div>
@@ -200,6 +207,11 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       `;
 
       document.body.appendChild(headerElement);
+
+      // Wait a bit for image to load
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      console.log('Header element created, attempting to convert to canvas...');
 
       // Generate header with logo using html2canvas
       const headerCanvas = await html2canvas(headerElement, {
