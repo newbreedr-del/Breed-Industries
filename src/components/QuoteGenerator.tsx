@@ -50,7 +50,18 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
     []
   );
 
-  const [items, setItems] = useState<QuoteItem[]>([defaultItem]);
+  const [items, setItems] = useState<QuoteItem[]>(() => {
+    if (selectedItems && selectedItems.length > 0) {
+      return selectedItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        description: item.description || '',
+        quantity: 1,
+        rate: item.price || 0
+      }));
+    }
+    return [defaultItem];
+  });
 
   useEffect(() => {
     if (selectedItems.length === 0) {
@@ -179,9 +190,10 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         maximumFractionDigits: 0,
       }).format(total).replace('ZAR', 'R');
 
-      // Create HTML content for PDF
+      // Create HTML content for PDF with logo
       quoteElement.innerHTML = `
         <div style="text-align: center; margin-bottom: 40px; border-bottom: 2px solid #1A1A1B; padding-bottom: 20px;">
+          <img src="/assets/images/The Breed Industries-01-01-01-01.png" alt="Breed Industries Logo" style="max-width: 200px; margin-bottom: 20px;" />
           <h1 style="font-size: 28px; font-weight: bold; color: #1A1A1B; margin-bottom: 10px;">BREED INDUSTRIES</h1>
           <div style="font-size: 18px; font-weight: bold; color: #1A1A1B;">Quote #${quoteNumber}</div>
           <div>Date: ${currentDate}</div>
@@ -290,16 +302,14 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         heightLeft -= pageHeight;
       }
 
-      // Get PDF as base64
-      const pdfBase64 = pdf.output('datauristring');
-
       // Download PDF
       pdf.save(`Breed_Industries_Quote_${quoteNumber}.pdf`);
 
       // Clean up
       document.body.removeChild(quoteElement);
 
-      return pdfBase64;
+      // Don't return PDF base64 since we're not sending it as attachment
+      return null;
     } catch (error) {
       console.error('Error generating PDF:', error);
       throw new Error('Failed to generate PDF');
@@ -323,10 +333,10 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       // Generate quote number
       const quoteNumber = `Q-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
       
-      // Generate PDF first
-      const pdfBase64 = await generatePDF(quoteNumber);
+      // Generate PDF first (download only, no attachment)
+      await generatePDF(quoteNumber);
       
-      // Then send email with PDF attachment
+      // Then send email without PDF attachment
       const response = await fetch('/api/generate-quote', {
         method: 'POST',
         headers: {
@@ -349,7 +359,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
             rate: Number(item.rate)
           })),
           notes: notes.trim(),
-          pdfBase64: pdfBase64
+          pdfBase64: '' // No PDF attachment
         }),
       });
       

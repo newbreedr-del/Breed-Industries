@@ -23,8 +23,7 @@ export async function POST(req: NextRequest) {
       contactPerson = '',
       paymentTerms = 'Net 30',
       items = [],
-      notes = '',
-      pdfBase64 = '' // PDF data from client-side generation
+      notes = ''
     } = data ?? {};
 
     const sanitizedItems = Array.isArray(items)
@@ -69,7 +68,7 @@ export async function POST(req: NextRequest) {
     // Calculate total
     const total = sanitizedItems.reduce((sum: number, item: any) => sum + item.quantity * item.rate, 0);
 
-    // Generate HTML email content
+    // Generate HTML email content with thank you message
     const emailHTML = generateQuoteEmail({
       quoteNumber,
       currentDate,
@@ -87,29 +86,13 @@ export async function POST(req: NextRequest) {
       notes: notes.trim()
     });
 
-    // Prepare email attachments
-    const attachments = [];
-    
-    // Add PDF if provided
-    if (pdfBase64) {
-      // Convert base64 to buffer
-      const base64Data = pdfBase64.replace(/^data:application\/pdf;base64,/, '');
-      const pdfBuffer = Buffer.from(base64Data, 'base64');
-      
-      attachments.push({
-        filename: `Breed_Industries_Quote_${quoteNumber}.pdf`,
-        content: pdfBuffer
-      });
-    }
-
-    // Send email to customer
+    // Send email to customer (no PDF attachment)
     try {
       const { data: customerData, error: customerError } = await resend.emails.send({
         from: COMPANY_EMAIL,
         to: [customerEmail.trim()],
         subject: `Quote #${quoteNumber} from Breed Industries`,
         html: emailHTML,
-        attachments: attachments.length > 0 ? attachments : undefined,
         replyTo: COMPANY_EMAIL
       });
 
@@ -148,7 +131,7 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json({ 
         success: true, 
-        message: 'Quote downloaded and sent successfully to your email',
+        message: 'Quote sent successfully to your email',
         quoteNumber
       });
     } catch (sendError) {
@@ -643,9 +626,10 @@ function generateQuoteEmail(data: any) {
             </p>
         </div>
 
-        <div class="footer">
-            <p><strong>Thank you for your business!</strong></p>
-            <p>www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105</p>
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 14px;">
+          <p><strong>Thank you for your business!</strong></p>
+          <p>We appreciate the opportunity to work with you and look forward to bringing your vision to life. Our team is dedicated to delivering exceptional results that exceed your expectations.</p>
+          <p style="margin-top: 15px;">www.thebreed.co.za | info@thebreed.co.za | +27 60 496 4105</p>
         </div>
     </div>
 </body>
