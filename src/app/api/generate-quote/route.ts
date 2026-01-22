@@ -15,37 +15,85 @@ let cachedLogoDataUri: string | null = null;
 
 async function launchBrowser() {
   try {
-    // Simple browser launch for Vercel
-    const { createRequire } = await import('module');
-    const require = createRequire(import.meta.url);
-    
-    // Try to use puppeteer-core with @sparticuz/chromium
-    const chromium = require('@sparticuz/chromium');
-    const puppeteer = require('puppeteer-core');
-    
-    const executablePath = await chromium.executablePath();
-    
-    if (executablePath) {
-      return puppeteer.launch({
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-gpu',
-          '--no-zygote',
-          '--single-process'
-        ],
-        defaultViewport: { width: 1280, height: 720 },
-        executablePath,
+    // For local development, try to find Chrome/Chromium first
+    const localPaths = [
+      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+      'C:\\Users\\' + process.env.USERNAME + '\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe',
+      '/usr/bin/google-chrome',
+      '/usr/bin/chromium-browser',
+      '/usr/bin/chromium'
+    ];
+
+    // Try local Chrome first
+    for (const path of localPaths) {
+      try {
+        const puppeteer = require('puppeteer');
+        const browser = await puppeteer.launch({
+          executablePath: path,
+          headless: true,
+          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+          defaultViewport: { width: 1280, height: 720 },
+          timeout: 30000
+        });
+        console.log('Browser launched successfully with local Chrome:', path);
+        return browser;
+      } catch (error) {
+        console.warn(`Local Chrome not found at ${path}:`, error.message);
+      }
+    }
+
+    // If local Chrome fails, try @sparticuz/chromium for Vercel
+    try {
+      const { createRequire } = await import('module');
+      const require = createRequire(import.meta.url);
+      
+      const chromium = require('@sparticuz/chromium');
+      const puppeteer = require('puppeteer-core');
+      
+      const executablePath = await chromium.executablePath();
+      
+      if (executablePath) {
+        const browser = await puppeteer.launch({
+          args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--no-zygote',
+            '--single-process'
+          ],
+          defaultViewport: { width: 1280, height: 720 },
+          executablePath,
+          headless: true,
+          timeout: 30000
+        });
+        console.log('Browser launched successfully with @sparticuz/chromium');
+        return browser;
+      }
+    } catch (chromiumError) {
+      console.warn('@sparticuz/chromium failed:', chromiumError.message);
+    }
+
+    // Last resort - try puppeteer without executablePath (will download its own Chromium)
+    try {
+      const puppeteer = require('puppeteer');
+      const browser = await puppeteer.launch({
         headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+        defaultViewport: { width: 1280, height: 720 },
         timeout: 30000
       });
-    } else {
-      throw new Error('No executable path found');
+      console.log('Browser launched successfully with default puppeteer');
+      return browser;
+    } catch (fallbackError) {
+      console.warn('Default puppeteer failed:', fallbackError.message);
     }
+
+    throw new Error('All browser launch methods failed. Please ensure Chrome/Chromium is installed.');
   } catch (error) {
     console.error('Browser launch failed:', error);
-    throw new Error('Failed to launch browser for PDF generation');
+    throw new Error('Failed to launch browser for PDF generation: ' + (error instanceof Error ? error.message : 'Unknown error'));
   }
 }
 
