@@ -9,10 +9,10 @@ import { Grid, Filter, ExternalLink } from 'lucide-react';
 
 const portfolioProjects = [
   {
-    id: 'cvs-health',
-    title: 'CVS Health Compliance Portal',
-    category: 'Web Portal',
-    summary: 'Enterprise-grade compliance hub with automated reporting and contract workflows.',
+    id: 'stellar',
+    title: 'Breed Industries Production',
+    category: 'Video & Media',
+    summary: 'Brand video ad emphasising our full production capability — from creative direction to final delivery.',
     image: '/assets/images/portfolio/enterprise-success.jpg',
   },
   {
@@ -44,23 +44,23 @@ const portfolioProjects = [
     image: '/assets/images/portfolio/case-study-grid.jpg',
   },
   {
-    id: 'stellar',
-    title: 'Stellar Manufacturing',
-    category: 'Video & Media',
-    summary: '90-second video feature, media kit, and interactive product configurator.',
+    id: 'cvs-health',
+    title: 'CVS Health Compliance Portal',
+    category: 'Web Portal',
+    summary: 'Enterprise-grade compliance hub with automated reporting and contract workflows.',
     image: '/assets/images/portfolio/enterprise-success.jpg',
   },
 ];
 
 const partnerLogos = [
-  { id: 'partner-1', name: 'Ebodweni', logo: '/assets/images/clients/Ebodweni-01.jpg' },
+  { id: 'partner-1', name: 'Ebodweni', logo: '/assets/images/clients/Ebodweni-01.png' },
   { id: 'partner-2', name: 'I Group', logo: '/assets/images/clients/I Group Logo White-01-01.png' },
-  { id: 'partner-3', name: 'Logo Design', logo: '/assets/images/clients/Logo-01.png' },
+  { id: 'partner-3', name: 'Isambulo', logo: '/assets/images/clients/Isambulo Logo-01.png' },
   { id: 'partner-4', name: 'MC Ways', logo: '/assets/images/clients/MC Ways New-03.png' },
   { id: 'partner-5', name: 'NSPIRAXION', logo: '/assets/images/clients/NSPIRAXION IMPULSE PROJECTS LOGO [Recovered]-01.png' },
   { id: 'partner-6', name: 'GoBizz', logo: '/assets/images/clients/gobizz-logo White-01.png' },
-  { id: 'partner-7', name: 'Breed Ventures', logo: '/assets/images/clients/logo-breed.png' },
-  { id: 'partner-8', name: 'Breed Labs', logo: '/assets/images/clients/logo-breed.png' },
+  { id: 'partner-7', name: 'Ndlunkulu', logo: '/assets/images/clients/Ndlunkulu White text-01.png' },
+  { id: 'partner-8', name: 'Pinetown Incorporated', logo: '/assets/images/clients/Pinetown Incorporated-01.png' },
 ];
 
 export default function PortfolioPage() {
