@@ -688,6 +688,29 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       if (onSuccess) {
         onSuccess({ quoteNumber: data.quoteNumber, customerEmail: customerEmail.trim() });
       }
+      
+      // Send WhatsApp notification about new quote
+      try {
+        const response = await fetch('/api/notifications', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'quote_status_update',
+            data: {
+              quoteId: data.quoteNumber,
+              clientName: customerName.trim(),
+              status: 'pending',
+              amount: calculateTotal().toFixed(2),
+              updatedAt: new Date().toLocaleString()
+            }
+          })
+        });
+        console.log('Quote notification sent:', await response.json());
+      } catch (notifyError) {
+        console.error('Failed to send quote notification:', notifyError);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate quote');
     } finally {
