@@ -34,19 +34,19 @@ type ContactPayload = {
   message: string;
 };
 
-const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-const CONTACT_TO_EMAIL = process.env.COMPANY_EMAIL ?? 'info@thebreed.co.za';
-const CONTACT_FROM_EMAIL = process.env.COMPANY_EMAIL ?? 'info@thebreed.co.za';
-
-const resend = new Resend(RESEND_API_KEY);
-
 export async function POST(request: Request) {
+  const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+  const CONTACT_TO_EMAIL = process.env.COMPANY_EMAIL ?? 'info@thebreed.co.za';
+  const CONTACT_FROM_EMAIL = process.env.COMPANY_EMAIL ?? 'info@thebreed.co.za';
+
   if (!RESEND_API_KEY) {
     return NextResponse.json(
       { error: 'Email service is not configured.' },
       { status: 500 },
     );
   }
+
+  const resend = new Resend(RESEND_API_KEY);
 
   try {
     const payload = (await request.json()) as Partial<ContactPayload>;
