@@ -17,12 +17,12 @@ export async function GET() {
     // Test sending a message
     const messageTest = await sendWhatsAppMessage({
       to: process.env.YOUR_WHATSAPP_NUMBER || '27xxxxxxxxxx',
-      message: '🧪 Twilio WhatsApp Test
+      message: `🧪 Twilio WhatsApp Test
 
 This is a test message from Breed Industries website.
 If you receive this, WhatsApp notifications are working!
 
-Time: ' + new Date().toLocaleString()
+Time: ${new Date().toLocaleString()}`
     });
 
     return NextResponse.json({
