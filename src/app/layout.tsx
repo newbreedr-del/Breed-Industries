@@ -30,8 +30,9 @@ export const metadata: Metadata = {
   description: 'Breed Industries is a premium South African business agency providing business registration, branding, and digital solutions for entrepreneurs.',
   keywords: 'business registration, branding, web development, South Africa, Durban, digital marketing',
   icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
   },
 };
 

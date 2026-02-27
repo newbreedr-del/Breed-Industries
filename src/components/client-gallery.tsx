@@ -129,11 +129,18 @@ const portfolioProjects = [
     category: 'Marketing',
     image: PORTFOLIO_ENTERPRISE,
     description: 'Integrated marketing campaign across digital and traditional channels with performance tracking.'
+  },
+  {
+    id: 'stellar',
+    title: 'Breed Industries Production',
+    category: 'Video & Media',
+    image: PORTFOLIO_ENTERPRISE,
+    description: 'Brand video ad emphasising our full production capability — from creative direction to final delivery.'
   }
 ];
 
 // Filter categories for portfolio
-const categories = ['All', 'Web Development', 'Branding', 'App Development', 'Marketing'];
+const categories = ['All', 'Web Development', 'Branding', 'App Development', 'Marketing', 'Video & Media'];
 
 export const ClientGallery = () => {
   const [activeCategory, setActiveCategory] = useState('All');
