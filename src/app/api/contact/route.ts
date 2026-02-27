@@ -36,7 +36,7 @@ type ContactPayload = {
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 const CONTACT_TO_EMAIL = process.env.COMPANY_EMAIL ?? 'info@thebreed.co.za';
-const CONTACT_FROM_EMAIL = 'onboarding@resend.dev';
+const CONTACT_FROM_EMAIL = process.env.COMPANY_EMAIL ?? 'info@thebreed.co.za';
 
 const resend = new Resend(RESEND_API_KEY);
 
