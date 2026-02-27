@@ -1,5 +1,31 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
+
+async function sendWhatsAppNotification(data: any) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/notifications`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        type: 'new_client_request',
+        data: {
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          service: 'General Enquiry',
+          message: data.message
+        }
+      })
+    });
+    
+    const result = await response.json();
+    console.log('WhatsApp notification sent:', result);
+  } catch (error) {
+    console.error('Failed to send WhatsApp notification:', error);
+  }
+}
 
 type ContactPayload = {
   name: string;
@@ -8,34 +34,14 @@ type ContactPayload = {
   message: string;
 };
 
-const SMTP_HOST = process.env.SENDGRID_SMTP_HOST || 'smtp.sendgrid.net';
-const SMTP_PORT = Number(process.env.SENDGRID_SMTP_PORT ?? 587);
-const SMTP_USER = process.env.SENDGRID_SMTP_USER || 'apikey';
-const SMTP_PASS = process.env.SENDGRID_SMTP_PASS || '';
+const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+const CONTACT_TO_EMAIL = process.env.COMPANY_EMAIL ?? 'info@thebreed.co.za';
+const CONTACT_FROM_EMAIL = process.env.COMPANY_EMAIL ?? 'info@thebreed.co.za';
 
-const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'info@thebreed.co.za';
-const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? 'info@thebreed.co.za';
-
-let transporter: nodemailer.Transporter | null = null;
-
-function getTransporter() {
-  if (transporter) return transporter;
-
-  transporter = nodemailer.createTransport({
-    host: SMTP_HOST,
-    port: SMTP_PORT,
-    secure: SMTP_PORT === 465,
-    auth: {
-      user: SMTP_USER,
-      pass: SMTP_PASS,
-    },
-  });
-
-  return transporter;
-}
+const resend = new Resend(RESEND_API_KEY);
 
 export async function POST(request: Request) {
-  if (!SMTP_PASS) {
+  if (!RESEND_API_KEY) {
     return NextResponse.json(
       { error: 'Email service is not configured.' },
       { status: 500 },
@@ -64,22 +70,21 @@ export async function POST(request: Request) {
       .filter(Boolean)
       .join('\n');
 
-    const emailData = {
-      to: CONTACT_TO_EMAIL,
-      from: CONTACT_FROM_EMAIL,
-      replyTo: email,
-      subject: `New enquiry from ${name}`,
-      text: content,
-    };
-
-    const smtpTransporter = getTransporter();
-
     try {
-      await smtpTransporter.sendMail(emailData);
+      await resend.emails.send({
+        from: CONTACT_FROM_EMAIL,
+        to: CONTACT_TO_EMAIL,
+        reply_to: email,
+        subject: `New enquiry from ${name}`,
+        text: content,
+      });
+      
+      sendWhatsAppNotification({ name, email, phone, message }).catch(console.error);
+      
       return NextResponse.json({ success: true });
     } catch (sendError) {
-      console.error('SMTP send error:', sendError);
-      throw new Error('Failed to send email: ' + (sendError instanceof Error ? sendError.message : 'Unknown SMTP error'));
+      console.error('Resend send error:', sendError);
+      throw new Error('Failed to send email: ' + (sendError instanceof Error ? sendError.message : 'Unknown error'));
     }
   } catch (error) {
     console.error('Failed to send contact enquiry:', error);
