@@ -74,7 +74,7 @@ export async function POST(request: Request) {
       await resend.emails.send({
         from: CONTACT_FROM_EMAIL,
         to: CONTACT_TO_EMAIL,
-        reply_to: email,
+        replyTo: email,
         subject: `New enquiry from ${name}`,
         text: content,
       });
