@@ -14,6 +14,7 @@ const complianceOptions = [
   { id: 'cipc', name: 'CIPC Registration', price: 550, icon: <Shield size={16} />, description: 'Complete company registration with CIPC including name reservation and registration certificate' },
   { id: 'tax', name: 'Tax Compliance', price: 850, icon: <FileText size={16} />, description: 'SARS tax registration, income tax number, and initial tax compliance setup' },
   { id: 'bee', name: 'BEE Certification', price: 250, icon: <FileText size={16} />, description: 'Basic BEE verification certificate and scorecard for procurement opportunities' },
+  { id: 'csd', name: 'CSD Registration', price: 450, icon: <FileText size={16} />, description: 'Central Supplier Database registration for government tender opportunities. Required documents: CIPC registration certificate, tax clearance, BEE certificate, banking details, and director ID copies' },
   { id: 'coid', name: 'COID Registration / Letter of Good Standing', price: 850, icon: <FileText size={16} />, description: 'Workplace Compensation Fund registration and annual letter of good standing' },
   { id: 'uif', name: 'UIF Registration & Compliance Letter', price: 650, icon: <FileText size={16} />, description: 'Unemployment Insurance Fund registration and compliance documentation' },
   { id: 'annual', name: 'CIPC Annual Return', price: 450, icon: <FileText size={16} />, description: 'Annual CIPC return filing to maintain company compliance and good standing' },

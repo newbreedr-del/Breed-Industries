@@ -19,6 +19,7 @@ const serviceCategories = [
       { name: 'CIPC Registration', price: 'From R1,500' },
       { name: 'Tax Clearance', price: 'From R800' },
       { name: 'BEE Certification', price: 'From R1,200' },
+      { name: 'CSD Registration', price: 'R450' },
       { name: 'Business Bank Account', price: 'From R600' }
     ]
   },
