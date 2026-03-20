@@ -174,7 +174,12 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
   // Generate PDF function
   const generatePDF = async (quoteNumber: string) => {
     try {
-      const pdf = new jsPDF();
+      // Create PDF with compression enabled
+      const pdf = new jsPDF({
+        compress: true,
+        unit: 'mm',
+        format: 'a4'
+      });
       const pageWidth = 210;
       const pageHeight = 297;
       const margin = 20;
@@ -212,23 +217,27 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       pdf.setFillColor(...darkBg);
       pdf.rect(0, 0, pageWidth, 52, 'F');
 
-      // Load and add logo
+      // Load and add logo (using SVG for smaller file size)
       try {
         const logoImg = new window.Image();
         logoImg.crossOrigin = 'anonymous';
         await new Promise<void>((resolve, reject) => {
           logoImg.onload = () => resolve();
           logoImg.onerror = () => reject(new Error('Logo failed to load'));
-          logoImg.src = '/assets/images/breed-logo-white.png';
+          logoImg.src = '/assets/images/breed-logo.svg';
         });
         const logoCanvas = document.createElement('canvas');
-        logoCanvas.width = logoImg.naturalWidth;
-        logoCanvas.height = logoImg.naturalHeight;
+        // Use smaller canvas dimensions (40x40mm ≈ 113x113px at 72dpi)
+        const targetSize = 113;
+        logoCanvas.width = targetSize;
+        logoCanvas.height = targetSize;
         const ctx = logoCanvas.getContext('2d');
         if (ctx) {
-          ctx.drawImage(logoImg, 0, 0);
-          const logoData = logoCanvas.toDataURL('image/png');
-          pdf.addImage(logoData, 'PNG', margin, 6, 40, 40);
+          // Draw image at target size
+          ctx.drawImage(logoImg, 0, 0, targetSize, targetSize);
+          // Use JPEG with lower quality for smaller file size
+          const logoData = logoCanvas.toDataURL('image/jpeg', 0.5);
+          pdf.addImage(logoData, 'JPEG', margin, 6, 40, 40);
         }
       } catch {
         // Fallback text if logo fails
@@ -619,7 +628,15 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       // Page 2 footer
       drawFooter(2, 2);
 
-      // Download
+      // Apply final compression and save
+      pdf.setProperties({
+        title: `Breed Industries Quote #${quoteNumber}`,
+        subject: 'Quotation',
+        author: 'Breed Industries',
+        keywords: 'quote, quotation, breed industries',
+        creator: 'Breed Industries Quote Generator'
+      });
+      
       pdf.save(`Breed_Industries_Quote_${quoteNumber}.pdf`);
       return null;
     } catch (error) {
