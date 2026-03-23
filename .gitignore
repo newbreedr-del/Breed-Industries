@@ -40,3 +40,6 @@ sendgrid.env
 
 # large media files
 public/assets/videos/
+
+# invoice data storage
+/data/
