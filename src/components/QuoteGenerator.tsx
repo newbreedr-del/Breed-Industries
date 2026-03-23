@@ -12,6 +12,7 @@ interface QuoteItem {
   description: string;
   quantity: number;
   rate: number;
+  pricingType?: 'one-time' | 'monthly';
 }
 
 interface SelectedItem {
@@ -21,6 +22,7 @@ interface SelectedItem {
   price: number;
   quantity?: number;
   rate?: number;
+  pricingType?: 'one-time' | 'monthly';
 }
 
 interface QuoteGeneratorProps {
@@ -60,7 +62,8 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         name: item.name,
         description: item.description ?? '',
         quantity: 1,
-        rate: item.price ?? 0
+        rate: item.price ?? 0,
+        pricingType: item.pricingType ?? 'one-time'
       }));
       setItems(mappedItems);
       console.log('Set items from selectedItems:', mappedItems);
@@ -193,7 +196,16 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
 
       const currentDate = new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
       const validUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
-      const total = items.reduce((sum: number, item: QuoteItem) => sum + item.quantity * item.rate, 0);
+      
+      // Separate one-time and monthly fees
+      const oneTimeTotal = items.reduce((sum: number, item: QuoteItem) => {
+        return item.pricingType === 'monthly' ? sum : sum + item.quantity * item.rate;
+      }, 0);
+      const monthlyTotal = items.reduce((sum: number, item: QuoteItem) => {
+        return item.pricingType === 'monthly' ? sum + item.quantity * item.rate : sum;
+      }, 0);
+      
+      const total = oneTimeTotal; // Only one-time fees for deposit calculation
       const deposit = total * 0.5;
       const balance = total - deposit;
       const fmt = (n: number) => 'R ' + n.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -334,7 +346,8 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         pdf.setFont('helvetica', 'normal');
         pdf.text(`${index + 1}`, margin + 3, y + 5);
         pdf.setFont('helvetica', 'bold');
-        pdf.text(item.name.substring(0, 55), margin + 12, y + 5);
+        const itemName = item.name.substring(0, 55) + (item.pricingType === 'monthly' ? ' (Monthly)' : '');
+        pdf.text(itemName, margin + 12, y + 5);
         if (item.description) {
           pdf.setFont('helvetica', 'normal');
           pdf.setTextColor(...textMuted);
@@ -346,9 +359,11 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         pdf.setFontSize(8);
         pdf.setFont('helvetica', 'normal');
         pdf.text(item.quantity.toString(), margin + 110, y + 5, { align: 'center' });
-        pdf.text(fmt(item.rate), margin + 135, y + 5, { align: 'right' });
+        const rateText = fmt(item.rate) + (item.pricingType === 'monthly' ? '/mo' : '');
+        pdf.text(rateText, margin + 135, y + 5, { align: 'right' });
         pdf.setFont('helvetica', 'bold');
-        pdf.text(fmt(item.quantity * item.rate), margin + contentWidth - 2, y + 5, { align: 'right' });
+        const amountText = fmt(item.quantity * item.rate) + (item.pricingType === 'monthly' ? '/mo' : '');
+        pdf.text(amountText, margin + contentWidth - 2, y + 5, { align: 'right' });
         y += 12;
       });
 
@@ -358,13 +373,23 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       pdf.line(margin + 90, y, margin + contentWidth, y);
       y += 6;
 
-      // Subtotal
+      // One-Time Fees Subtotal
       pdf.setTextColor(...textMuted);
       pdf.setFontSize(9);
       pdf.setFont('helvetica', 'normal');
-      pdf.text('Subtotal (ex VAT):', margin + 95, y);
-      pdf.text(fmt(total), margin + contentWidth - 2, y, { align: 'right' });
+      pdf.text('One-Time Fees (ex VAT):', margin + 95, y);
+      pdf.text(fmt(oneTimeTotal), margin + contentWidth - 2, y, { align: 'right' });
       y += 6;
+
+      // Monthly Subscription (if applicable)
+      if (monthlyTotal > 0) {
+        pdf.setTextColor(...textMuted);
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text('Monthly Subscription:', margin + 95, y);
+        pdf.text(fmt(monthlyTotal) + '/mo', margin + contentWidth - 2, y, { align: 'right' });
+        y += 6;
+      }
 
       // 50% Deposit
       pdf.setTextColor(...accentColor);
@@ -380,15 +405,29 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       pdf.text(fmt(balance), margin + contentWidth - 2, y, { align: 'right' });
       y += 4;
 
-      // Total bar
+      // Total bar (One-Time Only)
       pdf.setFillColor(...darkBg);
       pdf.rect(margin + 90, y, contentWidth - 90, 12, 'F');
       pdf.setTextColor(...white);
       pdf.setFontSize(11);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('TOTAL (EX VAT):', margin + 95, y + 8);
+      pdf.text('TOTAL ONE-TIME (EX VAT):', margin + 95, y + 8);
       pdf.text(fmt(total), margin + contentWidth - 4, y + 8, { align: 'right' });
       y += 16;
+
+      // Monthly subscription note
+      if (monthlyTotal > 0) {
+        pdf.setFillColor(255, 250, 240);
+        pdf.rect(margin, y, contentWidth, 14, 'F');
+        pdf.setTextColor(...accentColor);
+        pdf.setFontSize(7);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('MONTHLY SUBSCRIPTIONS:', margin + 4, y + 5);
+        pdf.setTextColor(...textDark);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text('Recurring monthly fees will be invoiced separately after initial payment is received.', margin + 4, y + 10);
+        y += 18;
+      }
 
       pdf.setTextColor(...textMuted);
       pdf.setFontSize(7);

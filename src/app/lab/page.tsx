@@ -11,36 +11,37 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 const complianceOptions = [
-  { id: 'cipc', name: 'CIPC Registration', price: 550, icon: <Shield size={16} />, description: 'Complete company registration with CIPC including name reservation and registration certificate' },
-  { id: 'tax', name: 'Tax Compliance', price: 850, icon: <FileText size={16} />, description: 'SARS tax registration, income tax number, and initial tax compliance setup' },
-  { id: 'bee', name: 'BEE Certification', price: 250, icon: <FileText size={16} />, description: 'Basic BEE verification certificate and scorecard for procurement opportunities' },
-  { id: 'csd', name: 'CSD Registration', price: 450, icon: <FileText size={16} />, description: 'Central Supplier Database registration for government tender opportunities. Required documents: CIPC registration certificate, tax clearance, BEE certificate, banking details, and director ID copies' },
-  { id: 'coid', name: 'COID Registration / Letter of Good Standing', price: 850, icon: <FileText size={16} />, description: 'Workplace Compensation Fund registration and annual letter of good standing' },
-  { id: 'uif', name: 'UIF Registration & Compliance Letter', price: 650, icon: <FileText size={16} />, description: 'Unemployment Insurance Fund registration and compliance documentation' },
-  { id: 'annual', name: 'CIPC Annual Return', price: 450, icon: <FileText size={16} />, description: 'Annual CIPC return filing to maintain company compliance and good standing' },
+  { id: 'cipc', name: 'CIPC Registration', price: 550, pricingType: 'one-time', icon: <Shield size={16} />, description: 'Complete company registration with CIPC including name reservation and registration certificate' },
+  { id: 'tax', name: 'Tax Compliance', price: 850, pricingType: 'one-time', icon: <FileText size={16} />, description: 'SARS tax registration, income tax number, and initial tax compliance setup' },
+  { id: 'bee', name: 'BEE Certification', price: 250, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Basic BEE verification certificate and scorecard for procurement opportunities' },
+  { id: 'csd', name: 'CSD Registration', price: 450, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Central Supplier Database registration for government tender opportunities. Required documents: CIPC registration certificate, tax clearance, BEE certificate, banking details, and director ID copies' },
+  { id: 'coid', name: 'COID Registration / Letter of Good Standing', price: 850, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Workplace Compensation Fund registration and annual letter of good standing' },
+  { id: 'uif', name: 'UIF Registration & Compliance Letter', price: 650, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Unemployment Insurance Fund registration and compliance documentation' },
+  { id: 'annual', name: 'CIPC Annual Return', price: 450, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Annual CIPC return filing to maintain company compliance and good standing' },
 ];
 
 const brandingOptions = [
-  { id: 'logo-basic', name: 'Basic Logo Design', price: 1500, icon: <Briefcase size={16} />, description: 'Professional logo design with 2 initial concepts and 2 revisions, delivered in multiple formats' },
-  { id: 'logo-premium', name: 'Premium Logo Design', price: 3500, icon: <Briefcase size={16} />, description: 'Advanced logo design with 5 concepts, unlimited revisions, brand guidelines, and complete brand kit' },
-  { id: 'brand-guide', name: 'Business Branding', price: 2500, icon: <Briefcase size={16} />, description: 'Comprehensive brand identity guide including color palette, typography, and brand usage guidelines' },
-  { id: 'business-cards', name: 'Business Cards (250)', price: 800, icon: <Briefcase size={16} />, description: 'Professional business card design and printing of 250 high-quality cards with premium finish' },
-  { id: 'marketing-materials', name: 'Marketing Materials', price: 1200, icon: <Briefcase size={16} />, description: 'Custom marketing collateral including brochures, flyers, and promotional materials design' },
+  { id: 'logo-basic', name: 'Basic Logo Design', price: 1500, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Professional logo design with 2 initial concepts and 2 revisions, delivered in multiple formats' },
+  { id: 'logo-premium', name: 'Premium Logo Design', price: 3500, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Advanced logo design with 5 concepts, unlimited revisions, brand guidelines, and complete brand kit' },
+  { id: 'brand-guide', name: 'Business Branding', price: 2500, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Comprehensive brand identity guide including color palette, typography, and brand usage guidelines' },
+  { id: 'business-cards', name: 'Business Cards (250)', price: 800, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Professional business card design and printing of 250 high-quality cards with premium finish' },
+  { id: 'marketing-materials', name: 'Marketing Materials', price: 1200, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Custom marketing collateral including brochures, flyers, and promotional materials design' },
 ];
 
 const digitalOptions = [
-  { id: 'website', name: 'Website Development', price: 5000, icon: <Layers size={16} />, description: 'Custom responsive website development with up to 5 pages, CMS integration, and mobile optimization' },
-  { id: 'app', name: 'Mobile App Development', price: 15000, icon: <Layers size={16} />, description: 'Native mobile app development for iOS and Android with backend integration and deployment' },
-  { id: 'ecommerce', name: 'E-commerce Solutions', price: 8000, icon: <Layers size={16} />, description: 'Full e-commerce platform with product catalog, shopping cart, payment gateway, and order management' },
-  { id: 'seo', name: 'SEO & Digital Marketing', price: 2500, icon: <Layers size={16} />, description: 'Search engine optimization, keyword research, and digital marketing strategy setup' },
-  { id: 'social', name: 'Social Media Management', price: 3500, icon: <Layers size={16} />, description: '3-month social media management including content creation, posting, and analytics reporting' },
+  { id: 'website', name: 'Website Development', price: 5000, pricingType: 'one-time', icon: <Layers size={16} />, description: 'Custom responsive website development with up to 5 pages, CMS integration, and mobile optimization' },
+  { id: 'app', name: 'Mobile App Development', price: 15000, pricingType: 'one-time', icon: <Layers size={16} />, description: 'Native mobile app development for iOS and Android with backend integration and deployment' },
+  { id: 'ecommerce', name: 'E-commerce Solutions', price: 8000, pricingType: 'one-time', icon: <Layers size={16} />, description: 'Full e-commerce platform with product catalog, shopping cart, payment gateway, and order management' },
+  { id: 'seo', name: 'SEO & Digital Marketing (Setup)', price: 2500, pricingType: 'one-time', icon: <Layers size={16} />, description: 'One-time SEO setup: keyword research, on-page optimization, and digital marketing strategy' },
+  { id: 'seo-monthly', name: 'SEO & Digital Marketing (Monthly)', price: 2500, pricingType: 'monthly', icon: <Layers size={16} />, description: 'Ongoing monthly SEO and digital marketing management with reporting and optimization' },
+  { id: 'social', name: 'Social Media Management (Monthly)', price: 3500, pricingType: 'monthly', icon: <Layers size={16} />, description: 'Monthly social media management including content creation, posting, and analytics reporting' },
 ];
 
 const businessProfileOptions = [
-  { id: 'profile-starter', name: 'Business Profile - Starter (1–4 Pages)', price: 850, icon: <FileText size={16} />, description: 'Best for startups, small businesses, or basic tender submissions. Simple layout, design-only, 2–3 revision rounds, print-ready PDF.' },
-  { id: 'profile-standard', name: 'Business Profile - Standard (5–10 Pages)', price: 2500, icon: <FileText size={16} />, description: 'Best for small to medium businesses. Professional formatting, digital flipbook formats, higher quality graphics.' },
-  { id: 'plan-basic', name: 'Business Plan - Basic/Entry-Level', price: 1190, icon: <FileText size={16} />, description: 'Template-based solution suitable for internal strategy or simple needs, using generic data.' },
-  { id: 'plan-comprehensive', name: 'Business Plan - Standard/Comprehensive', price: 3000, icon: <FileText size={16} />, description: 'Includes more detail, customized content, and often 3-year financial projections, ideal for funding applications.' },
+  { id: 'profile-starter', name: 'Business Profile - Starter (1–4 Pages)', price: 850, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Best for startups, small businesses, or basic tender submissions. Simple layout, design-only, 2–3 revision rounds, print-ready PDF.' },
+  { id: 'profile-standard', name: 'Business Profile - Standard (5–10 Pages)', price: 2500, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Best for small to medium businesses. Professional formatting, digital flipbook formats, higher quality graphics.' },
+  { id: 'plan-basic', name: 'Business Plan - Basic/Entry-Level', price: 1190, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Template-based solution suitable for internal strategy or simple needs, using generic data.' },
+  { id: 'plan-comprehensive', name: 'Business Plan - Standard/Comprehensive', price: 3000, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Includes more detail, customized content, and often 3-year financial projections, ideal for funding applications.' },
 ];
 
 const builderSteps = [
@@ -133,6 +134,7 @@ export default function LabPage() {
         name: option?.name ?? 'Custom Item',
         description: (option as any)?.description ?? '',
         price: option?.price ?? 0,
+        pricingType: (option as any)?.pricingType ?? 'one-time',
       };
     });
     console.log('Lab selectedQuoteItems:', items);
@@ -160,46 +162,70 @@ export default function LabPage() {
   };
 
   const calculateTotal = () => {
-    let total = 0;
+    let oneTimeTotal = 0;
+    let monthlyTotal = 0;
 
     // Calculate from compliance options
     complianceOptions.forEach(option => {
       if (selectedOptions.includes(option.id)) {
-        total += option.price;
+        if (option.pricingType === 'monthly') {
+          monthlyTotal += option.price;
+        } else {
+          oneTimeTotal += option.price;
+        }
       }
     });
 
     // Calculate from branding options
     brandingOptions.forEach(option => {
       if (selectedOptions.includes(option.id)) {
-        total += option.price;
+        if (option.pricingType === 'monthly') {
+          monthlyTotal += option.price;
+        } else {
+          oneTimeTotal += option.price;
+        }
       }
     });
 
     // Calculate from digital options
     digitalOptions.forEach(option => {
       if (selectedOptions.includes(option.id)) {
-        total += option.price;
+        if (option.pricingType === 'monthly') {
+          monthlyTotal += option.price;
+        } else {
+          oneTimeTotal += option.price;
+        }
       }
     });
 
     // Calculate from business profile options
     businessProfileOptions.forEach(option => {
       if (selectedOptions.includes(option.id)) {
-        total += option.price;
+        if (option.pricingType === 'monthly') {
+          monthlyTotal += option.price;
+        } else {
+          oneTimeTotal += option.price;
+        }
       }
     });
 
-    return total;
+    return { oneTime: oneTimeTotal, monthly: monthlyTotal };
   };
 
-  const estimatedTotal = calculateTotal();
-  const formattedTotal = new Intl.NumberFormat('en-ZA', {
+  const { oneTime: oneTimeTotal, monthly: monthlyTotal } = calculateTotal();
+  const formattedOneTimeTotal = new Intl.NumberFormat('en-ZA', {
     style: 'currency',
     currency: 'ZAR',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(estimatedTotal).replace('ZAR', 'R');
+  }).format(oneTimeTotal).replace('ZAR', 'R');
+  
+  const formattedMonthlyTotal = new Intl.NumberFormat('en-ZA', {
+    style: 'currency',
+    currency: 'ZAR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(monthlyTotal).replace('ZAR', 'R');
 
   const getEstimatedTimeframe = () => {
     // Define realistic timeframes for each service (in business days)
@@ -333,6 +359,7 @@ export default function LabPage() {
                       </div>
                       <div className="text-accent font-heading font-bold">
                         R{option.price.toLocaleString()}
+                        {option.pricingType === 'monthly' && <span className="text-sm text-white/70">/mo</span>}
                       </div>
                     </div>
                   </div>
@@ -346,11 +373,18 @@ export default function LabPage() {
             <h2 className="text-xl font-heading font-semibold text-white mb-6">Your Custom Package</h2>
             
             <div className="rounded-xl border border-white/10 bg-white/5 p-6 mb-6">
-              <div className="grid gap-4 md:grid-cols-2 mb-6">
+              <div className="grid gap-4 mb-6">
                 <div className="rounded-lg bg-white/5 p-4">
-                  <h3 className="text-sm font-medium text-white/70 uppercase tracking-wide mb-2">Estimated Total</h3>
-                  <p className="text-3xl font-heading font-bold text-accent">{formattedTotal}</p>
+                  <h3 className="text-sm font-medium text-white/70 uppercase tracking-wide mb-2">One-Time Fees</h3>
+                  <p className="text-3xl font-heading font-bold text-accent">{formattedOneTimeTotal}</p>
                 </div>
+                {monthlyTotal > 0 && (
+                  <div className="rounded-lg bg-white/5 p-4">
+                    <h3 className="text-sm font-medium text-white/70 uppercase tracking-wide mb-2">Monthly Subscription</h3>
+                    <p className="text-3xl font-heading font-bold text-accent">{formattedMonthlyTotal}<span className="text-lg text-white/70">/mo</span></p>
+                    <p className="text-xs text-white/50 mt-2">Invoiced separately after initial payment</p>
+                  </div>
+                )}
                 <div className="rounded-lg bg-white/5 p-4">
                   <h3 className="text-sm font-medium text-white/70 uppercase tracking-wide mb-2">Timeline</h3>
                   <p className="text-xl font-heading font-bold text-white">{getEstimatedTimeframe()}</p>
@@ -373,7 +407,7 @@ export default function LabPage() {
                           .map(option => (
                             <div key={option.id} className="flex items-center justify-between py-1 pl-6 text-sm">
                               <span className="text-white/70">{option.name}</span>
-                              <span className="text-accent">R{option.price.toLocaleString()}</span>
+                              <span className="text-accent">R{option.price.toLocaleString()}{option.pricingType === 'monthly' && <span className="text-xs">/mo</span>}</span>
                             </div>
                           ))
                         }
@@ -392,7 +426,7 @@ export default function LabPage() {
                           .map(option => (
                             <div key={option.id} className="flex items-center justify-between py-1 pl-6 text-sm">
                               <span className="text-white/70">{option.name}</span>
-                              <span className="text-accent">R{option.price.toLocaleString()}</span>
+                              <span className="text-accent">R{option.price.toLocaleString()}{option.pricingType === 'monthly' && <span className="text-xs">/mo</span>}</span>
                             </div>
                           ))
                         }
@@ -411,7 +445,7 @@ export default function LabPage() {
                           .map(option => (
                             <div key={option.id} className="flex items-center justify-between py-1 pl-6 text-sm">
                               <span className="text-white/70">{option.name}</span>
-                              <span className="text-accent">R{option.price.toLocaleString()}</span>
+                              <span className="text-accent">R{option.price.toLocaleString()}{option.pricingType === 'monthly' && <span className="text-xs">/mo</span>}</span>
                             </div>
                           ))
                         }
