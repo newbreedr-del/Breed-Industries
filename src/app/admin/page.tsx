@@ -12,11 +12,14 @@ import {
   TrendingUp,
   Clock,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  LogOut
 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const [stats, setStats] = useState({
     totalInvoices: 0,
     pendingInvoices: 0,
@@ -27,6 +30,17 @@ export default function AdminDashboard() {
   useEffect(() => {
     fetchDashboardStats();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/admin/logout', { method: 'POST' });
+      router.push('/admin/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Force redirect even if logout fails
+      router.push('/admin/login');
+    }
+  };
 
   const fetchDashboardStats = async () => {
     try {
@@ -142,7 +156,16 @@ export default function AdminDashboard() {
           { label: 'Admin', href: '/admin' }
         ]}
         size="default"
-      />
+        align="left"
+      >
+        <button
+          onClick={handleLogout}
+          className="btn btn-outline flex items-center gap-2"
+        >
+          <LogOut size={16} />
+          Logout
+        </button>
+      </PageHero>
 
       <section className="py-20 bg-color-bg-secondary relative">
         <div className="absolute inset-0 grid-overlay"></div>
