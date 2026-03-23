@@ -9,10 +9,11 @@ import {
 // GET /api/invoices/[id] - Get single invoice
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const invoice = getInvoiceById(params.id);
+    const { id } = await params;
+    const invoice = getInvoiceById(id);
 
     if (!invoice) {
       return NextResponse.json(
@@ -34,12 +35,13 @@ export async function GET(
 // PATCH /api/invoices/[id] - Update invoice
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body: InvoiceUpdateRequest = await request.json();
 
-    const updatedInvoice = updateInvoice(params.id, body);
+    const updatedInvoice = updateInvoice(id, body);
 
     if (!updatedInvoice) {
       return NextResponse.json(
@@ -64,10 +66,11 @@ export async function PATCH(
 // DELETE /api/invoices/[id] - Delete invoice
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const deleted = deleteInvoice(params.id);
+    const { id } = await params;
+    const deleted = deleteInvoice(id);
 
     if (!deleted) {
       return NextResponse.json(

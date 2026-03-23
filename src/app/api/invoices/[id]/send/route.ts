@@ -5,10 +5,11 @@ import jsPDF from 'jspdf';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const invoice = getInvoiceById(params.id);
+    const { id } = await params;
+    const invoice = getInvoiceById(id);
 
     if (!invoice) {
       return NextResponse.json(
@@ -232,7 +233,7 @@ export async function POST(
     );
 
     // Update invoice status to 'sent'
-    updateInvoice(params.id, { status: 'sent' });
+    updateInvoice(id, { status: 'sent' });
 
     return NextResponse.json({
       success: true,

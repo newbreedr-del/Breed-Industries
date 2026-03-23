@@ -24,7 +24,7 @@ const IMAP_CONFIG = {
 
 // Create SMTP transporter
 export function createTransporter() {
-  return nodemailer.createTransporter(SMTP_CONFIG);
+  return nodemailer.createTransport(SMTP_CONFIG);
 }
 
 // Send email via SMTP

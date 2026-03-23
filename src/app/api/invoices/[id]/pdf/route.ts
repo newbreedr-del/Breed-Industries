@@ -4,10 +4,11 @@ import jsPDF from 'jspdf';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const invoice = getInvoiceById(params.id);
+    const { id } = await params;
+    const invoice = getInvoiceById(id);
 
     if (!invoice) {
       return NextResponse.json(
