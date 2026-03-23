@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import { Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 
-export default function AdminLogin() {
+function LoginForm() {
   const [credentials, setCredentials] = useState({
     username: '',
     password: ''
@@ -166,5 +166,17 @@ export default function AdminLogin() {
 
       <Footer />
     </>
+  );
+}
+
+export default function AdminLogin() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-color-bg-secondary">
+        <div className="text-white">Loading...</div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }
