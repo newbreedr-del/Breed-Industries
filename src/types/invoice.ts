@@ -28,6 +28,9 @@ export interface Invoice {
   issueDate: string;
   paidDate?: string;
   paidAmount: number;
+  paymentDate?: string;
+  stitchPaymentId?: string;
+  stitchPaymentUrl?: string;
   notes?: string;
   createdAt: string;
   updatedAt: string;
