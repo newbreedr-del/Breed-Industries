@@ -38,7 +38,7 @@ const navItems = [
       }
     ]
   },
-  { name: 'The Lab', path: '/lab' },
+  { name: 'Get Quote', path: '/lab' },
   { name: 'Portfolio', path: '/portfolio' },
   { name: 'About', path: '/about' },
   { name: 'Contact', path: '/contact' },
