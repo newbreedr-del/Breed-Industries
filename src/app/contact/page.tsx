@@ -81,8 +81,8 @@ export default function ContactPage() {
               <div className="flex items-center gap-3">
                 <MapPin className="w-5 h-5 text-accent" />
                 <div>
-                  <p className="text-white font-semibold">Studio Locations</p>
-                  <p className="text-white/60 text-sm">Durban & Johannesburg · Serving clients across Africa</p>
+                  <p className="text-white font-semibold">Head Office</p>
+                  <p className="text-white/60 text-sm">1 Kings Road, Pinetown, Durban 3610</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">

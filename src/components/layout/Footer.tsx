@@ -114,7 +114,7 @@ export const Footer = () => {
               <li>
                 <Link href="/lab" className="text-white/70 hover:text-accent transition-colors flex items-center">
                   <ChevronRight size={14} className="mr-1" />
-                  <span>The Lab</span>
+                  <span>Get Quote</span>
                 </Link>
               </li>
               <li>
@@ -206,9 +206,9 @@ export const Footer = () => {
               <li className="flex items-start">
                 <MapPin className="w-5 h-5 text-accent mr-3 mt-1" />
                 <div>
-                  <p className="text-white font-medium">Office</p>
+                  <p className="text-white font-medium">Head Office</p>
                   <p className="text-white/70">
-                    Durban & Johannesburg
+                    1 Kings Road, Pinetown, Durban 3610
                   </p>
                 </div>
               </li>
