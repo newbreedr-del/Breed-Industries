@@ -12,7 +12,7 @@ const portfolioProjects = [
     id: 'stellar',
     title: 'Breed Industries Production',
     category: 'Video & Media',
-    summary: 'Brand video ad emphasising our full production capability — from creative direction to final delivery.',
+    summary: 'Brand video ad emphasising our full production capability , from creative direction to final delivery.',
     image: '/assets/images/portfolio/enterprise-success.jpg',
   },
   {
