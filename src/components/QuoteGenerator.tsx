@@ -222,7 +222,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       };
 
       // ═══════════════════════════════════════════
-      // PAGE 1 — QUOTATION
+      // PAGE 1 , QUOTATION
       // ═══════════════════════════════════════════
 
       // Header bar
@@ -511,7 +511,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       drawFooter(1, 2);
 
       // ═══════════════════════════════════════════
-      // PAGE 2 — CLIENT REQUIREMENTS, TIMELINES & DISCLAIMERS
+      // PAGE 2 , CLIENT REQUIREMENTS, TIMELINES & DISCLAIMERS
       // ═══════════════════════════════════════════
       pdf.addPage();
 
@@ -532,7 +532,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       pdf.setTextColor(...accentColor);
       pdf.setFontSize(10);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('1. SCOPE OF WORK — TIMELINES & CLIENT REQUIREMENTS', margin, y);
+      pdf.text('1. SCOPE OF WORK , TIMELINES & CLIENT REQUIREMENTS', margin, y);
       y += 3;
       pdf.setDrawColor(...accentColor);
       pdf.line(margin, y, margin + contentWidth, y);
@@ -550,7 +550,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         const requirements = details?.clientRequirements || ['Content and materials as discussed', 'Timely feedback on deliverables'];
 
         const blockHeight = 10 + requirements.length * 4 + 4;
-        if (y + blockHeight > 265) { pdf.addPage(); pdf.setFillColor(...darkBg); pdf.rect(0, 0, pageWidth, 12, 'F'); pdf.setTextColor(...white); pdf.setFontSize(7); pdf.setFont('helvetica', 'normal'); pdf.text(`Quote #${quoteNumber} — Continued`, margin, 8); drawFooter(2, 2); y = 20; }
+        if (y + blockHeight > 265) { pdf.addPage(); pdf.setFillColor(...darkBg); pdf.rect(0, 0, pageWidth, 12, 'F'); pdf.setTextColor(...white); pdf.setFontSize(7); pdf.setFont('helvetica', 'normal'); pdf.text(`Quote #${quoteNumber} , Continued`, margin, 8); drawFooter(2, 2); y = 20; }
 
         // Service name + timeline
         pdf.setFillColor(250, 248, 245);

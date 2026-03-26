@@ -58,7 +58,7 @@ const caseStudies: Record<string, CaseStudy> = {
       { metric: 'Contract Turnaround', value: '3 Days', description: 'Reduced from an average of 12 business days.' },
     ],
     testimonial: {
-      quote: 'Breed Industries transformed our compliance operations. What used to take our team days now happens automatically. We passed our first audit with zero findings — that alone justified the investment.',
+      quote: 'Breed Industries transformed our compliance operations. What used to take our team days now happens automatically. We passed our first audit with zero findings , that alone justified the investment.',
       author: 'Thabo Mkhize',
       role: 'Operations Director, CVS Health Logistics SA',
     },
@@ -75,7 +75,7 @@ const caseStudies: Record<string, CaseStudy> = {
     industry: 'Telecommunications',
     duration: '6 Weeks',
     year: '2024',
-    challenge: 'The client was launching a new fibre and mobile bundle product across KwaZulu-Natal but had zero digital presence. They needed a complete go-to-market digital strategy — from landing pages to social media funnels — within 6 weeks to coincide with their physical launch event.',
+    challenge: 'The client was launching a new fibre and mobile bundle product across KwaZulu-Natal but had zero digital presence. They needed a complete go-to-market digital strategy , from landing pages to social media funnels , within 6 weeks to coincide with their physical launch event.',
     approach: 'We assembled a cross-functional team covering UX design, copywriting, paid media, and analytics. A rapid sprint methodology was used: Week 1 for strategy and wireframes, Weeks 2-3 for design and development, Weeks 4-5 for content creation and ad setup, and Week 6 for QA, launch, and optimisation.',
     solution: 'A progressive web app (PWA) serving as the primary landing experience, integrated with Meta and Google ad campaigns. The PWA featured a coverage checker, plan comparison tool, and instant callback request system. All touchpoints fed into a unified analytics dashboard for real-time campaign performance monitoring.',
     deliverables: [
@@ -91,7 +91,7 @@ const caseStudies: Record<string, CaseStudy> = {
       { metric: 'Conversion Rate', value: '8.3%', description: 'Landing page conversion rate, 3x industry benchmark.' },
     ],
     testimonial: {
-      quote: 'We went from nothing to 2,400 leads in a month. Breed Industries didn\'t just build us a website — they built us a revenue engine.',
+      quote: 'We went from nothing to 2,400 leads in a month. Breed Industries didn\'t just build us a website , they built us a revenue engine.',
       author: 'Sipho Dlamini',
       role: 'Regional Manager, AT&T Reseller Network KZN',
     },
@@ -110,7 +110,7 @@ const caseStudies: Record<string, CaseStudy> = {
     year: '2025',
     challenge: 'LaunchPad was a new startup accelerator programme targeting township entrepreneurs in eThekwini. They needed a brand that communicated credibility to corporate sponsors while remaining approachable and aspirational for emerging founders. Their existing identity was a basic Canva logo with no brand guidelines.',
     approach: 'We started with a brand strategy workshop to define their positioning, voice, and visual direction. Three distinct creative routes were presented, with the winning direction refined through two rounds of stakeholder feedback. The full brand system was then rolled out across all touchpoints simultaneously.',
-    solution: 'A bold, modern brand identity built around the concept of "Launch Velocity" — using dynamic angular shapes and a vibrant colour palette that bridges corporate professionalism with entrepreneurial energy. The system included everything from business cards to a 40-slide investor deck.',
+    solution: 'A bold, modern brand identity built around the concept of "Launch Velocity" , using dynamic angular shapes and a vibrant colour palette that bridges corporate professionalism with entrepreneurial energy. The system included everything from business cards to a 40-slide investor deck.',
     deliverables: [
       { title: 'Brand Identity System', description: 'Logo suite (primary, secondary, icon), colour palette, typography system, and comprehensive brand guidelines.' },
       { title: 'Investor Pitch Deck', description: '40-slide presentation template with data visualisation components, designed for both screen and print.' },
@@ -142,7 +142,7 @@ const caseStudies: Record<string, CaseStudy> = {
     duration: '12 Weeks',
     year: '2024',
     challenge: 'UrbanBank needed to launch a mobile banking product targeting the unbanked and underbanked population in South Africa. The app had to work reliably on low-end Android devices, support USSD fallback for areas with poor connectivity, and meet all SARB regulatory requirements for a Section 12 licence application.',
-    approach: 'We followed a lean MVP methodology — identifying the 8 core features needed for launch and deferring nice-to-haves to Phase 2. Weekly compliance reviews with their legal team ensured every feature met regulatory standards. Usability testing was conducted with 50 target users in Umlazi and KwaMashu.',
+    approach: 'We followed a lean MVP methodology , identifying the 8 core features needed for launch and deferring nice-to-haves to Phase 2. Weekly compliance reviews with their legal team ensured every feature met regulatory standards. Usability testing was conducted with 50 target users in Umlazi and KwaMashu.',
     solution: 'A React Native mobile app with a Node.js backend, featuring biometric login, instant peer-to-peer transfers, airtime purchases, and a built-in savings goal tracker. The app was optimised for devices with as little as 1GB RAM and included offline transaction queuing for areas with intermittent connectivity.',
     deliverables: [
       { title: 'Mobile App (iOS & Android)', description: 'React Native app with biometric auth, P2P transfers, airtime, and savings goals.' },
@@ -157,7 +157,7 @@ const caseStudies: Record<string, CaseStudy> = {
       { metric: 'Onboarding Time', value: '< 3 min', description: 'Average time from download to first transaction.' },
     ],
     testimonial: {
-      quote: 'Breed Industries understood that we weren\'t just building an app — we were building financial access. They delivered a product that works for real people in real conditions.',
+      quote: 'Breed Industries understood that we weren\'t just building an app , we were building financial access. They delivered a product that works for real people in real conditions.',
       author: 'Andile Ngcobo',
       role: 'CTO, UrbanBank Financial Services',
     },
@@ -175,7 +175,7 @@ const caseStudies: Record<string, CaseStudy> = {
     duration: '5 Weeks',
     year: '2025',
     challenge: 'The Heritage Restoration Guild had decades of archival photographs, oral histories, and restoration project documentation locked in physical filing cabinets. They needed a digital platform to preserve these stories, attract donors, and coordinate volunteer restoration efforts across 15 heritage sites in KwaZulu-Natal.',
-    approach: 'We partnered with local historians and the Guild\'s archival team to digitise and curate content. The design approach prioritised storytelling — using full-bleed imagery, ambient audio, and scroll-triggered animations to create an emotional connection with visitors. The donation system was designed to be frictionless with multiple payment options.',
+    approach: 'We partnered with local historians and the Guild\'s archival team to digitise and curate content. The design approach prioritised storytelling , using full-bleed imagery, ambient audio, and scroll-triggered animations to create an emotional connection with visitors. The donation system was designed to be frictionless with multiple payment options.',
     solution: 'A visually stunning microsite built with Next.js featuring interactive heritage timelines, 360-degree virtual tours of restoration sites, an oral history audio player, and a Stripe-powered donation system with project-specific giving options. The site also includes a volunteer coordination portal.',
     deliverables: [
       { title: 'Heritage Microsite', description: 'Immersive storytelling platform with parallax scrolling, ambient audio, and interactive timelines.' },
@@ -190,7 +190,7 @@ const caseStudies: Record<string, CaseStudy> = {
       { metric: 'Media Features', value: '8', description: 'National media features including SABC and Daily Maverick.' },
     ],
     testimonial: {
-      quote: 'Our stories were disappearing. Breed Industries gave them a permanent digital home. The donations that followed proved that people care — they just needed a way to connect.',
+      quote: 'Our stories were disappearing. Breed Industries gave them a permanent digital home. The donations that followed proved that people care , they just needed a way to connect.',
       author: 'Dr. Zanele Mthembu',
       role: 'Director, Heritage Restoration Guild of KZN',
     },

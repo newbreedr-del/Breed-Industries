@@ -63,7 +63,7 @@ export default function AboutPage() {
           <div className="glass-card p-8 space-y-6">
             <h2 className="text-3xl font-heading font-bold text-white">Our Origin Story</h2>
             <p className="text-white/70 text-lg">
-              Breed Industries was founded in Durban with one mission: eliminate the friction between idea and execution for ambition-fueled founders. Our lobby’s blueprint aesthetic is more than a design cue—it is a promise that every project starts with solid architecture.
+              Breed Industries was founded in Durban with one mission: eliminate the friction between idea and execution for ambition-fueled founders. Our lobby’s blueprint aesthetic is more than a design cue,it is a promise that every project starts with solid architecture.
             </p>
             <p className="text-white/60">
               Today, our team spans Durban and Johannesburg, serving clients across sectors like fintech, telecom, healthcare, and public procurement. We combine compliance expertise, branded storytelling, and digital engineering under one roof so you can launch faster.

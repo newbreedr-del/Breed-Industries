@@ -45,9 +45,9 @@ export default function StellarCaseStudyPage() {
       <Header />
 
       <PageHero
-        title="Breed Industries — What We Do"
+        title="Breed Industries , What We Do"
         subtitle="Case Study"
-        description="An inside look at how Breed Industries empowers businesses through production, branding, digital solutions, and compliance — all under one roof."
+        description="An inside look at how Breed Industries empowers businesses through production, branding, digital solutions, and compliance , all under one roof."
         breadcrumbs={[
           { label: 'Portfolio', href: '/portfolio' },
           { label: 'Breed Industries Production', href: '/portfolio/stellar' },

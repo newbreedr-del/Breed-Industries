@@ -135,7 +135,7 @@ const portfolioProjects = [
     title: 'Breed Industries Production',
     category: 'Video & Media',
     image: PORTFOLIO_ENTERPRISE,
-    description: 'Brand video ad emphasising our full production capability — from creative direction to final delivery.'
+    description: 'Brand video ad emphasising our full production capability , from creative direction to final delivery.'
   }
 ];
 

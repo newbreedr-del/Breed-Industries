@@ -79,7 +79,7 @@ export const About = () => {
               Breed Industries was founded to close the gap between visionary founders and the operational muscle they need to compete. From register-to-market launch programs to premium brand systems and digital products, we deliver outcomes that earn trust, unlock contracts, and accelerate growth.
             </p>
             <p className="mt-4 text-white/70">
-              Every engagement is anchored in strategy, stakeholder empathy, and measurable ROI—because credible companies do more than look the part, they outperform it.
+              Every engagement is anchored in strategy, stakeholder empathy, and measurable ROI,because credible companies do more than look the part, they outperform it.
             </p>
 
             <div className="mt-8 grid gap-6 sm:grid-cols-2">
