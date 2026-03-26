@@ -52,7 +52,7 @@ export async function POST(
     pdf.setFontSize(7);
     pdf.setFont('helvetica', 'normal');
     pdf.text('The Breed Industries (PTY) LTD', pageWidth - margin, 14, { align: 'right' });
-    pdf.text('4 Ivy Road, Pinetown, 3610', pageWidth - margin, 20, { align: 'right' });
+    pdf.text('1 Kings Road, Pinetown, Durban 3610', pageWidth - margin, 20, { align: 'right' });
     pdf.text('Phone: +27 60 496 4105', pageWidth - margin, 26, { align: 'right' });
     pdf.text('Email: info@thebreed.co.za', pageWidth - margin, 32, { align: 'right' });
     pdf.text('Web: www.thebreed.co.za', pageWidth - margin, 38, { align: 'right' });
