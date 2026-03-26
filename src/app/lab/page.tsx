@@ -293,10 +293,14 @@ export default function LabPage() {
       <Header />
 
       <PageHero
-        title="The Lab"
-        subtitle="Build Your Own Package"
-        description="Use our interactive Lab to architect a package that fits your launch or scale sprint. Real-time budget visibility, curated recommendations, and exportable proposals."
-        breadcrumbs={[{ label: 'The Lab', href: '/lab' }]}
+        title="Get Quote"
+        subtitle="Build Your Custom Package"
+        description="Use our interactive quote builder to create a package that fits your business needs. Real-time pricing, instant quotes, and downloadable proposals."
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Get Quote', href: '/lab' }
+        ]}
+        size="large"
         backgroundPattern="blueprint"
         align="left"
       >

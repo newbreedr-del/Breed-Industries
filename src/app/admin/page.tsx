@@ -191,10 +191,17 @@ export default function AdminDashboard() {
             <h2 className="text-2xl font-heading font-bold text-white mb-6">Quick Access</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {quickLinks.map((link, index) => (
-                <Link
+                <div
                   key={index}
-                  href={link.href}
-                  className="glass-card p-6 hover:border-accent/50 transition-all duration-300 group"
+                  onClick={() => router.push(link.href)}
+                  className="glass-card p-6 hover:border-accent/50 transition-all duration-300 group cursor-pointer"
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      router.push(link.href);
+                    }
+                  }}
                 >
                   <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${link.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                     <link.icon className="text-white" size={24} />
@@ -204,7 +211,7 @@ export default function AdminDashboard() {
                   </h3>
                   <p className="text-white/70 text-sm mb-3">{link.description}</p>
                   <p className="text-accent text-sm font-medium">{link.stats}</p>
-                </Link>
+                </div>
               ))}
             </div>
           </div>

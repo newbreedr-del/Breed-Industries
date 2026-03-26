@@ -264,7 +264,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       pdf.setFontSize(7);
       pdf.setFont('helvetica', 'normal');
       pdf.text('The Breed Industries (PTY) LTD', pageWidth - margin, 14, { align: 'right' });
-      pdf.text('4 Ivy Road, Pinetown, 3610', pageWidth - margin, 20, { align: 'right' });
+      pdf.text('1 Kings Road, Pinetown, Durban 3610', pageWidth - margin, 20, { align: 'right' });
       pdf.text('Phone: +27 60 496 4105', pageWidth - margin, 26, { align: 'right' });
       pdf.text('Email: info@thebreed.co.za', pageWidth - margin, 32, { align: 'right' });
       pdf.text('Web: www.thebreed.co.za', pageWidth - margin, 38, { align: 'right' });
@@ -628,7 +628,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         ['Warranty:', 'All deliverables are guaranteed for 30 days from final delivery. This covers defects in workmanship only, not changes to requirements, content updates, or third-party service failures.'],
         ['Liability:', 'Breed Industries\u2019 total liability under this agreement shall not exceed the total value of this quote. We are not liable for indirect, consequential, or incidental damages including lost profits, data loss, or business interruption.'],
         ['Force Majeure:', 'Neither party shall be liable for failure to perform obligations due to circumstances beyond reasonable control, including but not limited to natural disasters, power outages, internet failures, government actions, or pandemics.'],
-        ['Governing Law:', 'This agreement is governed by the laws of the Republic of South Africa. Any disputes shall be resolved through mediation before escalation to the Magistrate\u2019s Court of Pinetown, KwaZulu-Natal.'],
+        ['Governing Law:', 'This agreement is governed by the laws of the Republic of South Africa. Any disputes shall be resolved through mediation before escalation to the Magistrate\u2019s Court of Durban, KwaZulu-Natal.'],
         ['Acceptance:', 'Payment of the 50% deposit constitutes acceptance of this quote and all terms and conditions contained herein.'],
       ];
 
