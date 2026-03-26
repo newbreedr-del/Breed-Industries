@@ -1,18 +1,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import { FileText, Download, Eye, Search, Filter, Calendar } from 'lucide-react';
 
 interface Quote {
-  quoteNumber: string;
-  customerName: string;
-  customerEmail: string;
+  id: string;
+  quote_number: string;
+  customer_name: string;
+  customer_email: string;
+  project_name: string;
+  contact_person: string;
   items: any[];
   total: number;
-  createdAt: string;
+  created_at: string;
+  updated_at: string;
   status: string;
 }
 
@@ -22,10 +27,32 @@ export default function QuotesPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    // This will be populated when quotes are stored
-    // For now, showing empty state
-    setLoading(false);
+    fetchQuotes();
   }, []);
+
+  const fetchQuotes = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/quotes');
+      const data = await response.json();
+      
+      if (data.quotes) {
+        setQuotes(data.quotes);
+      }
+    } catch (error) {
+      console.error('Error fetching quotes:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Filter quotes based on search query
+  const filteredQuotes = quotes.filter(quote => 
+    quote.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    quote.customer_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    quote.project_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    quote.quote_number.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-ZA', {
@@ -49,7 +76,11 @@ export default function QuotesPage() {
           { label: 'Quotes', href: '/admin/quotes' }
         ]}
         size="default"
-      />
+      >
+        <Link href="/admin/quotes/import" className="btn btn-primary">
+          Import Old Quotes
+        </Link>
+      </PageHero>
 
       <section className="py-20 bg-color-bg-secondary relative">
         <div className="absolute inset-0 grid-overlay"></div>
@@ -102,11 +133,15 @@ export default function QuotesPage() {
               <div className="p-12 text-center text-white/60">
                 Loading quotes...
               </div>
-            ) : quotes.length === 0 ? (
+            ) : filteredQuotes.length === 0 ? (
               <div className="p-12 text-center text-white/60">
                 <FileText size={48} className="mx-auto mb-4 opacity-50" />
-                <p className="text-lg mb-2">No quotes yet</p>
-                <p className="text-sm">Quotes generated from the Lab page will appear here.</p>
+                <p className="text-lg mb-2">
+                  {searchQuery ? 'No quotes found matching your search' : 'No quotes yet'}
+                </p>
+                <p className="text-sm">
+                  {searchQuery ? 'Try adjusting your search terms' : 'Import your old quotes or generate new ones from the website'}
+                </p>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -120,10 +155,16 @@ export default function QuotesPage() {
                         Customer
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-medium text-white/70 uppercase tracking-wider">
+                        Project
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-medium text-white/70 uppercase tracking-wider">
                         Total
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-medium text-white/70 uppercase tracking-wider">
                         Date
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-medium text-white/70 uppercase tracking-wider">
+                        Status
                       </th>
                       <th className="px-6 py-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider">
                         Actions
@@ -131,20 +172,33 @@ export default function QuotesPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/10">
-                    {quotes.map((quote) => (
-                      <tr key={quote.quoteNumber} className="hover:bg-white/5 transition-colors">
+                    {filteredQuotes.map((quote) => (
+                      <tr key={quote.id} className="hover:bg-white/5 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-white font-medium">{quote.quoteNumber}</span>
+                          <span className="text-white font-medium">{quote.quote_number}</span>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="text-white font-medium">{quote.customerName}</div>
-                          <div className="text-white/60 text-sm">{quote.customerEmail}</div>
+                          <div className="text-white font-medium">{quote.customer_name}</div>
+                          <div className="text-white/60 text-sm">{quote.customer_email}</div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="text-white">{quote.project_name}</div>
+                          <div className="text-white/60 text-sm">{quote.contact_person}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className="text-white font-bold">{formatCurrency(quote.total)}</span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-white/70">
-                          {new Date(quote.createdAt).toLocaleDateString('en-ZA')}
+                          {new Date(quote.created_at).toLocaleDateString('en-ZA')}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 py-1 text-xs rounded-full ${
+                            quote.status === 'sent' ? 'bg-green-500/20 text-green-400' :
+                            quote.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' :
+                            'bg-gray-500/20 text-gray-400'
+                          }`}>
+                            {quote.status}
+                          </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right">
                           <div className="flex items-center justify-end gap-2">
