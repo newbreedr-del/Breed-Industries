@@ -13,7 +13,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const invoice = getInvoiceById(id);
+    const invoice = await getInvoiceById(id);
 
     if (!invoice) {
       return NextResponse.json(
@@ -41,7 +41,7 @@ export async function PATCH(
     const { id } = await params;
     const body: InvoiceUpdateRequest = await request.json();
 
-    const updatedInvoice = updateInvoice(id, body);
+    const updatedInvoice = await updateInvoice(id, body);
 
     if (!updatedInvoice) {
       return NextResponse.json(
@@ -70,7 +70,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const deleted = deleteInvoice(id);
+    const deleted = await deleteInvoice(id);
 
     if (!deleted) {
       return NextResponse.json(

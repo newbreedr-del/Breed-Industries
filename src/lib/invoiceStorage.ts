@@ -1,127 +1,242 @@
 import { Invoice } from '@/types/invoice';
+import { supabase } from './supabase';
 
-// In-memory storage for invoices (temporary solution for Vercel)
-// TODO: Replace with proper database (PostgreSQL, MongoDB, etc.)
-let invoicesStore: Invoice[] = [];
-
-// Read all invoices
-export function readInvoices(): Invoice[] {
-  return invoicesStore;
+// Convert database row to Invoice type
+function dbToInvoice(row: any): Invoice {
+  return {
+    id: row.id,
+    invoiceNumber: row.invoice_number,
+    quoteNumber: row.quote_number,
+    customerName: row.customer_name,
+    customerEmail: row.customer_email,
+    customerPhone: row.customer_phone,
+    customerAddress: row.customer_address,
+    items: row.items,
+    oneTimeTotal: parseFloat(row.one_time_total),
+    monthlyTotal: parseFloat(row.monthly_total),
+    deposit: parseFloat(row.deposit),
+    balance: parseFloat(row.balance),
+    totalAmount: parseFloat(row.total_amount),
+    status: row.status,
+    paymentStatus: row.payment_status,
+    dueDate: row.due_date,
+    issueDate: row.issue_date,
+    paidDate: row.paid_date,
+    paidAmount: parseFloat(row.paid_amount || 0),
+    paymentDate: row.payment_date,
+    stitchPaymentId: row.stitch_payment_id,
+    stitchPaymentUrl: row.stitch_payment_url,
+    notes: row.notes,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
 }
 
-// Write all invoices
-export function writeInvoices(invoices: Invoice[]): void {
-  invoicesStore = invoices;
+// Convert Invoice to database row
+function invoiceToDb(invoice: Invoice) {
+  return {
+    id: invoice.id,
+    invoice_number: invoice.invoiceNumber,
+    quote_number: invoice.quoteNumber,
+    customer_name: invoice.customerName,
+    customer_email: invoice.customerEmail,
+    customer_phone: invoice.customerPhone,
+    customer_address: invoice.customerAddress,
+    items: invoice.items,
+    one_time_total: invoice.oneTimeTotal,
+    monthly_total: invoice.monthlyTotal,
+    deposit: invoice.deposit,
+    balance: invoice.balance,
+    total_amount: invoice.totalAmount,
+    status: invoice.status,
+    payment_status: invoice.paymentStatus,
+    due_date: invoice.dueDate,
+    issue_date: invoice.issueDate,
+    paid_date: invoice.paidDate,
+    paid_amount: invoice.paidAmount,
+    payment_date: invoice.paymentDate,
+    stitch_payment_id: invoice.stitchPaymentId,
+    stitch_payment_url: invoice.stitchPaymentUrl,
+    notes: invoice.notes
+  };
+}
+
+// Read all invoices
+export async function readInvoices(): Promise<Invoice[]> {
+  const { data, error } = await supabase
+    .from('invoices')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error reading invoices:', error);
+    return [];
+  }
+
+  return (data || []).map(dbToInvoice);
+}
+
+// Write all invoices (not used with Supabase, kept for compatibility)
+export async function writeInvoices(invoices: Invoice[]): Promise<void> {
+  // Not needed with Supabase - use createInvoice/updateInvoice instead
+  console.warn('writeInvoices is deprecated with Supabase');
 }
 
 // Get invoice by ID
-export function getInvoiceById(id: string): Invoice | null {
-  const invoices = readInvoices();
-  return invoices.find(inv => inv.id === id) || null;
+export async function getInvoiceById(id: string): Promise<Invoice | null> {
+  const { data, error } = await supabase
+    .from('invoices')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    console.error('Error getting invoice:', error);
+    return null;
+  }
+
+  return data ? dbToInvoice(data) : null;
 }
 
 // Get invoice by invoice number
-export function getInvoiceByNumber(invoiceNumber: string): Invoice | null {
-  const invoices = readInvoices();
-  return invoices.find(inv => inv.invoiceNumber === invoiceNumber) || null;
+export async function getInvoiceByNumber(invoiceNumber: string): Promise<Invoice | null> {
+  const { data, error } = await supabase
+    .from('invoices')
+    .select('*')
+    .eq('invoice_number', invoiceNumber)
+    .single();
+
+  if (error) {
+    console.error('Error getting invoice by number:', error);
+    return null;
+  }
+
+  return data ? dbToInvoice(data) : null;
 }
 
 // Create new invoice
-export function createInvoice(invoice: Invoice): Invoice {
-  const invoices = readInvoices();
-  invoices.push(invoice);
-  writeInvoices(invoices);
-  return invoice;
+export async function createInvoice(invoice: Invoice): Promise<Invoice> {
+  const dbInvoice = invoiceToDb(invoice);
+  
+  const { data, error } = await supabase
+    .from('invoices')
+    .insert(dbInvoice)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error creating invoice:', error);
+    throw new Error('Failed to create invoice');
+  }
+
+  return dbToInvoice(data);
 }
 
 // Update invoice
-export function updateInvoice(id: string, updates: Partial<Invoice>): Invoice | null {
-  const invoices = readInvoices();
-  const index = invoices.findIndex(inv => inv.id === id);
-  
-  if (index === -1) {
+export async function updateInvoice(id: string, updates: Partial<Invoice>): Promise<Invoice | null> {
+  const dbUpdates = {
+    ...invoiceToDb(updates as Invoice),
+    updated_at: new Date().toISOString()
+  };
+
+  const { data, error } = await supabase
+    .from('invoices')
+    .update(dbUpdates)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error updating invoice:', error);
     return null;
   }
-  
-  invoices[index] = {
-    ...invoices[index],
-    ...updates,
-    updatedAt: new Date().toISOString()
-  };
-  
-  writeInvoices(invoices);
-  return invoices[index];
+
+  return data ? dbToInvoice(data) : null;
 }
 
 // Delete invoice
-export function deleteInvoice(id: string): boolean {
-  const invoices = readInvoices();
-  const filteredInvoices = invoices.filter(inv => inv.id !== id);
-  
-  if (filteredInvoices.length === invoices.length) {
+export async function deleteInvoice(id: string): Promise<boolean> {
+  const { error } = await supabase
+    .from('invoices')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error deleting invoice:', error);
     return false;
   }
-  
-  writeInvoices(filteredInvoices);
+
   return true;
 }
 
 // Generate next invoice number
-export function generateInvoiceNumber(): string {
-  const invoices = readInvoices();
+export async function generateInvoiceNumber(): Promise<string> {
   const year = new Date().getFullYear();
   const month = String(new Date().getMonth() + 1).padStart(2, '0');
-  
-  // Find highest invoice number for current month
   const prefix = `INV-${year}${month}`;
-  const monthInvoices = invoices.filter(inv => inv.invoiceNumber.startsWith(prefix));
-  
-  let nextNumber = 1;
-  if (monthInvoices.length > 0) {
-    const numbers = monthInvoices.map(inv => {
-      const parts = inv.invoiceNumber.split('-');
-      return parseInt(parts[parts.length - 1], 10);
-    });
-    nextNumber = Math.max(...numbers) + 1;
+
+  const { data, error } = await supabase
+    .from('invoices')
+    .select('invoice_number')
+    .like('invoice_number', `${prefix}%`)
+    .order('invoice_number', { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error('Error generating invoice number:', error);
+    return `${prefix}-0001`;
   }
-  
+
+  let nextNumber = 1;
+  if (data && data.length > 0) {
+    const lastNumber = data[0].invoice_number;
+    const parts = lastNumber.split('-');
+    nextNumber = parseInt(parts[parts.length - 1], 10) + 1;
+  }
+
   return `${prefix}-${String(nextNumber).padStart(4, '0')}`;
 }
 
 // Get invoices with filters
-export function getInvoices(filters?: {
+export async function getInvoices(filters?: {
   status?: Invoice['status'];
   paymentStatus?: Invoice['paymentStatus'];
   customerEmail?: string;
   page?: number;
   pageSize?: number;
-}): { invoices: Invoice[]; total: number } {
-  let invoices = readInvoices();
-  
+}): Promise<{ invoices: Invoice[]; total: number }> {
+  let query = supabase.from('invoices').select('*', { count: 'exact' });
+
   // Apply filters
   if (filters?.status) {
-    invoices = invoices.filter(inv => inv.status === filters.status);
+    query = query.eq('status', filters.status);
   }
   if (filters?.paymentStatus) {
-    invoices = invoices.filter(inv => inv.paymentStatus === filters.paymentStatus);
+    query = query.eq('payment_status', filters.paymentStatus);
   }
   if (filters?.customerEmail) {
-    invoices = invoices.filter(inv => 
-      inv.customerEmail.toLowerCase().includes(filters.customerEmail!.toLowerCase())
-    );
+    query = query.ilike('customer_email', `%${filters.customerEmail}%`);
   }
-  
+
   // Sort by creation date (newest first)
-  invoices.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  
-  const total = invoices.length;
-  
+  query = query.order('created_at', { ascending: false });
+
   // Apply pagination
   if (filters?.page && filters?.pageSize) {
     const start = (filters.page - 1) * filters.pageSize;
-    const end = start + filters.pageSize;
-    invoices = invoices.slice(start, end);
+    const end = start + filters.pageSize - 1;
+    query = query.range(start, end);
   }
-  
-  return { invoices, total };
+
+  const { data, error, count } = await query;
+
+  if (error) {
+    console.error('Error getting invoices:', error);
+    return { invoices: [], total: 0 };
+  }
+
+  return {
+    invoices: (data || []).map(dbToInvoice),
+    total: count || 0
+  };
 }

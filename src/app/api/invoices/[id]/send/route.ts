@@ -9,7 +9,7 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    const invoice = getInvoiceById(id);
+    const invoice = await getInvoiceById(id);
 
     if (!invoice) {
       return NextResponse.json(
@@ -233,7 +233,7 @@ export async function POST(
     );
 
     // Update invoice status to 'sent'
-    updateInvoice(id, { status: 'sent' });
+    await updateInvoice(id, { status: 'sent' });
 
     return NextResponse.json({
       success: true,

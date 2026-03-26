@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     if (paymentStatus) filters.paymentStatus = paymentStatus;
     if (customerEmail) filters.customerEmail = customerEmail;
 
-    const { invoices, total } = getInvoices(filters);
+    const { invoices, total } = await getInvoices(filters);
 
     return NextResponse.json({
       invoices,
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
     const balance = totalAmount - deposit;
 
     // Generate invoice number
-    const invoiceNumber = generateInvoiceNumber();
+    const invoiceNumber = await generateInvoiceNumber();
 
     // Create invoice object
     const now = new Date().toISOString();
