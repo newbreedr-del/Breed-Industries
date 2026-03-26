@@ -1,41 +1,17 @@
-import fs from 'fs';
-import path from 'path';
 import { Invoice } from '@/types/invoice';
 
-const INVOICES_DIR = path.join(process.cwd(), 'data', 'invoices');
-const INVOICES_FILE = path.join(INVOICES_DIR, 'invoices.json');
-
-// Ensure data directory exists
-function ensureDataDir() {
-  if (!fs.existsSync(INVOICES_DIR)) {
-    fs.mkdirSync(INVOICES_DIR, { recursive: true });
-  }
-  if (!fs.existsSync(INVOICES_FILE)) {
-    fs.writeFileSync(INVOICES_FILE, JSON.stringify([], null, 2));
-  }
-}
+// In-memory storage for invoices (temporary solution for Vercel)
+// TODO: Replace with proper database (PostgreSQL, MongoDB, etc.)
+let invoicesStore: Invoice[] = [];
 
 // Read all invoices
 export function readInvoices(): Invoice[] {
-  ensureDataDir();
-  try {
-    const data = fs.readFileSync(INVOICES_FILE, 'utf-8');
-    return JSON.parse(data);
-  } catch (error) {
-    console.error('Error reading invoices:', error);
-    return [];
-  }
+  return invoicesStore;
 }
 
 // Write all invoices
 export function writeInvoices(invoices: Invoice[]): void {
-  ensureDataDir();
-  try {
-    fs.writeFileSync(INVOICES_FILE, JSON.stringify(invoices, null, 2));
-  } catch (error) {
-    console.error('Error writing invoices:', error);
-    throw new Error('Failed to save invoices');
-  }
+  invoicesStore = invoices;
 }
 
 // Get invoice by ID
