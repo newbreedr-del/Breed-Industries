@@ -23,7 +23,7 @@ export interface Invoice {
   balance: number;
   totalAmount: number;
   status: 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled';
-  paymentStatus: 'unpaid' | 'partial' | 'paid';
+  paymentStatus: 'unpaid' | 'partial' | 'paid' | 'pending';
   dueDate: string;
   issueDate: string;
   paidDate?: string;
