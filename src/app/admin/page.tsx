@@ -45,23 +45,45 @@ export default function AdminDashboard() {
   const fetchDashboardStats = async () => {
     try {
       // Fetch invoices stats
-      const invoicesRes = await fetch('/api/invoices');
-      const invoicesData = await invoicesRes.json();
+      let totalInvoices = 0;
+      let pendingInvoices = 0;
+      let totalRevenue = 0;
       
-      const totalInvoices = invoicesData.total || 0;
-      const pendingInvoices = invoicesData.invoices?.filter(
-        (inv: any) => inv.paymentStatus === 'unpaid' || inv.paymentStatus === 'partial'
-      ).length || 0;
-      
-      const totalRevenue = invoicesData.invoices?.reduce(
-        (sum: number, inv: any) => sum + (inv.paidAmount || 0), 0
-      ) || 0;
+      try {
+        const invoicesRes = await fetch('/api/invoices');
+        if (invoicesRes.ok) {
+          const invoicesData = await invoicesRes.json();
+          totalInvoices = invoicesData.total || 0;
+          pendingInvoices = invoicesData.invoices?.filter(
+            (inv: any) => inv.paymentStatus === 'unpaid' || inv.paymentStatus === 'partial'
+          ).length || 0;
+          totalRevenue = invoicesData.invoices?.reduce(
+            (sum: number, inv: any) => sum + (inv.paidAmount || 0), 0
+          ) || 0;
+        }
+      } catch (error) {
+        console.error('Error fetching invoices:', error);
+      }
+
+      // Fetch quotes stats
+      let recentQuotes = 0;
+      try {
+        const quotesRes = await fetch('/api/quotes');
+        if (quotesRes.ok) {
+          const quotesData = await quotesRes.json();
+          recentQuotes = quotesData.quotes?.length || 0;
+        } else {
+          console.error('Quotes API error:', await quotesRes.text());
+        }
+      } catch (error) {
+        console.error('Error fetching quotes:', error);
+      }
 
       setStats({
         totalInvoices,
         pendingInvoices,
         totalRevenue,
-        recentQuotes: 0 // Will be implemented when quotes API is ready
+        recentQuotes
       });
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
