@@ -46,6 +46,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
   const [contactPerson, setContactPerson] = useState('');
   const [paymentTerms, setPaymentTerms] = useState('50% Upfront');
   const [notes, setNotes] = useState('');
+  const [requireDeposit, setRequireDeposit] = useState(true);
   
   // Items state
   const defaultItem: QuoteItem = useMemo(
@@ -206,8 +207,8 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       }, 0);
       
       const total = oneTimeTotal; // Only one-time fees for deposit calculation
-      const deposit = total * 0.5;
-      const balance = total - deposit;
+      const deposit = requireDeposit ? total * 0.5 : 0;
+      const balance = requireDeposit ? total - deposit : total;
       const fmt = (n: number) => 'R ' + n.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
       // ─── HELPER: draw page footer ───
@@ -391,19 +392,21 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         y += 6;
       }
 
-      // 50% Deposit
-      pdf.setTextColor(...accentColor);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('50% Deposit Required:', margin + 95, y);
-      pdf.text(fmt(deposit), margin + contentWidth - 2, y, { align: 'right' });
-      y += 6;
+      // Deposit section (conditional)
+      if (requireDeposit) {
+        pdf.setTextColor(...accentColor);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('50% Deposit Required:', margin + 95, y);
+        pdf.text(fmt(deposit), margin + contentWidth - 2, y, { align: 'right' });
+        y += 6;
 
-      // Balance
-      pdf.setTextColor(...textMuted);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('Balance on Completion:', margin + 95, y);
-      pdf.text(fmt(balance), margin + contentWidth - 2, y, { align: 'right' });
-      y += 4;
+        // Balance
+        pdf.setTextColor(...textMuted);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text('Balance on Completion:', margin + 95, y);
+        pdf.text(fmt(balance), margin + contentWidth - 2, y, { align: 'right' });
+        y += 4;
+      }
 
       // Total bar (One-Time Only)
       pdf.setFillColor(...darkBg);
@@ -435,21 +438,37 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       pdf.text('Breed Industries is not VAT registered. All pricing is exclusive of VAT.', margin, y);
       y += 8;
 
-      // ─── IMPORTANT NOTICE ───
-      pdf.setFillColor(255, 248, 235);
-      pdf.rect(margin, y, contentWidth, 22, 'F');
-      pdf.setDrawColor(...accentColor);
-      pdf.rect(margin, y, contentWidth, 22, 'S');
-      pdf.setTextColor(...accentColor);
-      pdf.setFontSize(9);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('IMPORTANT: 50% DEPOSIT REQUIRED BEFORE WORK COMMENCES', margin + 4, y + 7);
-      pdf.setTextColor(...textDark);
-      pdf.setFontSize(7);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(`A non-refundable deposit of ${fmt(deposit)} is required before any work will begin. The remaining`, margin + 4, y + 13);
-      pdf.text(`balance of ${fmt(balance)} is due upon project completion and final delivery of all deliverables.`, margin + 4, y + 18);
-      y += 28;
+      // ─── IMPORTANT NOTICE (conditional) ───
+      if (requireDeposit) {
+        pdf.setFillColor(255, 248, 235);
+        pdf.rect(margin, y, contentWidth, 22, 'F');
+        pdf.setDrawColor(...accentColor);
+        pdf.rect(margin, y, contentWidth, 22, 'S');
+        pdf.setTextColor(...accentColor);
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('IMPORTANT: 50% DEPOSIT REQUIRED BEFORE WORK COMMENCES', margin + 4, y + 7);
+        pdf.setTextColor(...textDark);
+        pdf.setFontSize(7);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`A non-refundable deposit of ${fmt(deposit)} is required before any work will begin. The remaining`, margin + 4, y + 13);
+        pdf.text(`balance of ${fmt(balance)} is due upon project completion and final delivery of all deliverables.`, margin + 4, y + 18);
+        y += 28;
+      } else {
+        pdf.setFillColor(255, 248, 235);
+        pdf.rect(margin, y, contentWidth, 16, 'F');
+        pdf.setDrawColor(...accentColor);
+        pdf.rect(margin, y, contentWidth, 16, 'S');
+        pdf.setTextColor(...accentColor);
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('PAYMENT TERMS', margin + 4, y + 7);
+        pdf.setTextColor(...textDark);
+        pdf.setFontSize(7);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`Full payment of ${fmt(total)} is due upon project completion and final delivery of all deliverables.`, margin + 4, y + 12);
+        y += 22;
+      }
 
       // ─── BANKING DETAILS ───
       if (y > 240) { pdf.addPage(); y = 20; }
@@ -587,7 +606,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       pdf.line(margin, y, margin + contentWidth, y);
       y += 7;
 
-      const paymentTermsList = [
+      const paymentTermsList = requireDeposit ? [
         `A 50% non-refundable deposit of ${fmt(deposit)} is required before any work commences.`,
         `The remaining balance of ${fmt(balance)} is due upon project completion and final delivery.`,
         'Payment must be made via EFT to the banking details provided on Page 1.',
@@ -595,6 +614,12 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         'Proof of payment must be emailed to info@thebreed.co.za before work begins.',
         'Late payments (beyond 7 days of invoice) will incur interest at 2% per month on the outstanding amount.',
         'Work will be paused on any account with payments overdue by more than 14 days.',
+      ] : [
+        `Full payment of ${fmt(total)} is due upon project completion and final delivery.`,
+        'Payment must be made via EFT to the banking details provided on Page 1.',
+        `Use quote reference "${quoteNumber}" as your payment reference.`,
+        'Proof of payment must be emailed to info@thebreed.co.za.',
+        'Late payments (beyond 7 days of invoice) will incur interest at 2% per month on the outstanding amount.',
       ];
       pdf.setTextColor(...textDark);
       pdf.setFontSize(7);
@@ -629,7 +654,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         ['Liability:', 'Breed Industries\u2019 total liability under this agreement shall not exceed the total value of this quote. We are not liable for indirect, consequential, or incidental damages including lost profits, data loss, or business interruption.'],
         ['Force Majeure:', 'Neither party shall be liable for failure to perform obligations due to circumstances beyond reasonable control, including but not limited to natural disasters, power outages, internet failures, government actions, or pandemics.'],
         ['Governing Law:', 'This agreement is governed by the laws of the Republic of South Africa. Any disputes shall be resolved through mediation before escalation to the Magistrate\u2019s Court of Durban, KwaZulu-Natal.'],
-        ['Acceptance:', 'Payment of the 50% deposit constitutes acceptance of this quote and all terms and conditions contained herein.'],
+        ['Acceptance:', requireDeposit ? 'Payment of the 50% deposit constitutes acceptance of this quote and all terms and conditions contained herein.' : 'Acceptance of this quote and commencement of work constitutes agreement to all terms and conditions contained herein.'],
       ];
 
       pdf.setFontSize(7);
@@ -662,7 +687,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       pdf.setTextColor(...textDark);
       pdf.setFontSize(7);
       pdf.setFont('helvetica', 'normal');
-      pdf.text('Payment of the 50% deposit constitutes acceptance of this quote and all terms and conditions contained herein.', margin + 4, y + 13);
+      pdf.text(requireDeposit ? 'Payment of the 50% deposit constitutes acceptance of this quote and all terms and conditions contained herein.' : 'Acceptance of this quote constitutes agreement to all terms and conditions contained herein.', margin + 4, y + 13);
 
       // Page 2 footer
       drawFooter(2, 2);
@@ -887,6 +912,25 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
                   <option value="50% Upfront">50% Upfront</option>
                 </select>
               </div>
+            </div>
+            
+            {/* Deposit Toggle */}
+            <div className="mt-4 p-4 border border-white/10 rounded-lg bg-white/5">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={requireDeposit}
+                  onChange={(e) => setRequireDeposit(e.target.checked)}
+                  className="w-5 h-5 rounded border-white/20 bg-white/5 text-accent focus:ring-accent focus:ring-offset-0"
+                />
+                <div>
+                  <span className="text-white font-medium">Require 50% Deposit</span>
+                  <p className="text-white/60 text-sm mt-1">
+                    When enabled, the quote will require a 50% deposit before work commences. 
+                    Uncheck if the client has already paid a deposit or if full payment is required upfront.
+                  </p>
+                </div>
+              </label>
             </div>
           </div>
           

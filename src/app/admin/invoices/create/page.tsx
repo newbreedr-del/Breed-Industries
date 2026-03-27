@@ -26,6 +26,7 @@ export default function CreateInvoicePage() {
   const [quoteNumber, setQuoteNumber] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [notes, setNotes] = useState('');
+  const [requireDeposit, setRequireDeposit] = useState(true);
   const [items, setItems] = useState<InvoiceItem[]>([
     {
       id: `item_${Date.now()}`,
@@ -80,8 +81,8 @@ export default function CreateInvoicePage() {
       return item.pricingType === 'monthly' ? sum + item.amount : sum;
     }, 0);
 
-    const deposit = oneTimeTotal * 0.5;
-    const balance = oneTimeTotal - deposit;
+    const deposit = requireDeposit ? oneTimeTotal * 0.5 : 0;
+    const balance = requireDeposit ? oneTimeTotal - deposit : oneTimeTotal;
 
     return { oneTimeTotal, monthlyTotal, deposit, balance, totalAmount: oneTimeTotal };
   };
@@ -342,19 +343,23 @@ export default function CreateInvoicePage() {
                     <span className="font-medium">{formatCurrency(totals.monthlyTotal)}/mo</span>
                   </div>
                 )}
-                <div className="border-t border-white/10 pt-3">
-                  <div className="flex justify-between text-accent font-bold text-lg">
-                    <span>50% Deposit Required:</span>
-                    <span>{formatCurrency(totals.deposit)}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between text-white/70">
-                  <span>Balance on Completion:</span>
-                  <span className="font-medium">{formatCurrency(totals.balance)}</span>
-                </div>
+                {requireDeposit && (
+                  <>
+                    <div className="border-t border-white/10 pt-3">
+                      <div className="flex justify-between text-accent font-bold text-lg">
+                        <span>50% Deposit Required:</span>
+                        <span>{formatCurrency(totals.deposit)}</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between text-white/70">
+                      <span>Balance on Completion:</span>
+                      <span className="font-medium">{formatCurrency(totals.balance)}</span>
+                    </div>
+                  </>
+                )}
                 <div className="border-t border-white/10 pt-3">
                   <div className="flex justify-between text-white font-bold text-xl">
-                    <span>Total Due:</span>
+                    <span>{requireDeposit ? 'Total Due:' : 'Full Payment Due:'}</span>
                     <span>{formatCurrency(totals.totalAmount)}</span>
                   </div>
                 </div>
@@ -388,6 +393,25 @@ export default function CreateInvoicePage() {
                     className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
                     placeholder="Additional notes or terms..."
                   />
+                </div>
+                <div className="md:col-span-2">
+                  <div className="p-4 border border-white/10 rounded-lg bg-white/5">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={requireDeposit}
+                        onChange={(e) => setRequireDeposit(e.target.checked)}
+                        className="w-5 h-5 rounded border-white/20 bg-white/5 text-accent focus:ring-accent focus:ring-offset-0"
+                      />
+                      <div>
+                        <span className="text-white font-medium">Require 50% Deposit</span>
+                        <p className="text-white/60 text-sm mt-1">
+                          When enabled, the invoice will require a 50% deposit before work commences. 
+                          Uncheck if the client has already paid a deposit or if full payment is required upfront.
+                        </p>
+                      </div>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>

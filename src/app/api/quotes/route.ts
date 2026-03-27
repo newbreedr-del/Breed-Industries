@@ -4,24 +4,55 @@ import { supabase } from '@/lib/supabase';
 // GET /api/quotes - List all quotes
 export async function GET(request: NextRequest) {
   try {
+    console.log('🔍 API: Fetching quotes...');
+    console.log('🔍 Environment check:', {
+      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ? 'SET' : 'MISSING',
+      supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'SET' : 'MISSING',
+      urlPreview: process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 30) + '...',
+      keyPreview: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.substring(0, 20) + '...'
+    });
+
     const { data, error } = await supabase
       .from('quotes')
       .select('*')
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Error fetching quotes:', error);
+      console.error('❌ API: Supabase error:', error);
+      console.error('❌ API: Error details:', {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint
+      });
       return NextResponse.json(
-        { error: 'Failed to fetch quotes' },
+        { 
+          error: 'Failed to fetch quotes',
+          details: error.message,
+          code: error.code,
+          environment: {
+            supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ? 'SET' : 'MISSING',
+            supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'SET' : 'MISSING'
+          }
+        },
         { status: 500 }
       );
     }
 
+    console.log('✅ API: Successfully fetched quotes:', data?.length || 0);
     return NextResponse.json({ quotes: data || [] });
   } catch (error) {
-    console.error('Error fetching quotes:', error);
+    console.error('❌ API: Unexpected error:', error);
+    console.error('❌ API: Error stack:', error instanceof Error ? error.stack : 'No stack available');
     return NextResponse.json(
-      { error: 'Failed to fetch quotes' },
+      { 
+        error: 'Failed to fetch quotes',
+        details: error instanceof Error ? error.message : 'Unknown error',
+        environment: {
+          supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ? 'SET' : 'MISSING',
+          supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'SET' : 'MISSING'
+        }
+      },
       { status: 500 }
     );
   }

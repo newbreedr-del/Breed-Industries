@@ -15,8 +15,7 @@ const serviceCategories = [
     icon: <Shield className="w-8 h-8" />,
     description: 'Complete registration and compliance services to establish your business on solid legal ground.',
     services: [
-      { name: 'Company Registration', price: 'From R1,200' },
-      { name: 'CIPC Registration', price: 'From R1,500' },
+      { name: 'Company Registration (CIPC)', price: 'From R3,500' },
       { name: 'Tax Clearance', price: 'From R800' },
       { name: 'BEE Certification', price: 'From R1,200' },
       { name: 'CSD Registration', price: 'R450' },
@@ -29,11 +28,11 @@ const serviceCategories = [
     icon: <Briefcase className="w-8 h-8" />,
     description: 'Strategic brand development that positions your business for recognition and trust in your market.',
     services: [
-      { name: 'Logo Design', price: 'From R1,500' },
-      { name: 'Brand Identity', price: 'From R3,500' },
-      { name: 'Brand Guidelines', price: 'From R2,500' },
-      { name: 'Business Cards', price: 'From R800' },
-      { name: 'Marketing Materials', price: 'From R1,200' }
+      { name: 'Logo Design', price: 'From R2,500' },
+      { name: 'Brand Identity', price: 'From R5,000' },
+      { name: 'Brand Guidelines', price: 'From R3,000' },
+      { name: 'Business Cards', price: 'From R1,200' },
+      { name: 'Marketing Materials', price: 'From R2,000' }
     ]
   },
   {
@@ -52,11 +51,11 @@ const serviceCategories = [
     icon: <Layers className="w-8 h-8" />,
     description: 'Custom websites, apps, and digital marketing strategies that drive growth and engagement.',
     services: [
-      { name: 'Website Development', price: 'From R5,000' },
-      { name: 'Mobile App Development', price: 'From R15,000' },
-      { name: 'E-commerce Solutions', price: 'From R8,000' },
-      { name: 'SEO & Digital Marketing', price: 'From R2,500/mo' },
-      { name: 'Social Media Management', price: 'From R3,500/mo' }
+      { name: 'Website Development', price: 'From R10,000' },
+      { name: 'Mobile App Development', price: 'From R25,000' },
+      { name: 'E-commerce Solutions', price: 'From R15,000' },
+      { name: 'SEO & Digital Marketing', price: 'From R4,000/mo' },
+      { name: 'Social Media Management', price: 'From R5,000/mo' }
     ]
   }
 ];
@@ -66,12 +65,12 @@ const servicePackages = [
   {
     id: 'launch-starter',
     name: 'Launch Starter',
-    price: 'R2,500–R4,500',
+    price: 'R4,500–R7,000',
     description: 'Perfect for new businesses looking to establish a professional foundation.',
     features: [
-      'Business Registration (Gold level)',
-      'Basic branding essentials',
-      'Marketing materials (cards or posters)'
+      'Company Registration (CIPC)',
+      'Basic branding essentials (Logo + Business Cards)',
+      'Marketing materials (digital or print)'
     ],
     popular: false,
     ctaLink: '/contact'
@@ -79,15 +78,14 @@ const servicePackages = [
   {
     id: 'growth-professional',
     name: 'Growth Professional',
-    price: 'R6,000–R10,000',
+    price: 'R15,000–R25,000',
     description: 'For businesses ready to expand their market presence and digital footprint.',
     features: [
       'All Launch Starter inclusions',
-      'Enhanced branding (Standard/Premium logo)',
+      'Enhanced branding (Full Brand Identity)',
       'Web presence (5-10 page website)',
-      'App development: Custom build',
-      'Digital marketing: Social setup',
-      'Strategic documents (business plan or portfolio)'
+      'Digital marketing setup (SEO + Social)',
+      'Strategic documents (business plan)'
     ],
     popular: true,
     ctaLink: '/contact'
@@ -95,15 +93,15 @@ const servicePackages = [
   {
     id: 'empire-premium',
     name: 'Empire Premium',
-    price: 'R12,000–R25,000+',
+    price: 'R30,000–R50,000+',
     description: 'The complete solution for established businesses aiming for market dominance.',
     features: [
       'All Growth Professional inclusions',
-      'Advanced tech (web portal or app)',
+      'Mobile App Development',
       'Video marketing (1-minute ad)',
       'Comprehensive branding (full media kit)',
-      'Ongoing support (3 months social)',
-      'Compliance add-ons included'
+      'Ongoing support (6 months marketing)',
+      'All compliance services included'
     ],
     popular: false,
     ctaLink: '/contact'
