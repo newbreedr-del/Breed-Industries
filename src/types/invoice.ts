@@ -45,6 +45,7 @@ export interface InvoiceCreateRequest {
   items: InvoiceItem[];
   dueDate: string;
   notes?: string;
+  requireDeposit?: boolean;
 }
 
 export interface InvoiceUpdateRequest {
