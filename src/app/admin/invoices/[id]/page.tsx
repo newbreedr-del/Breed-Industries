@@ -155,10 +155,10 @@ export default function InvoiceDetailPage() {
       pdf.setFillColor(...darkBg); pdf.rect(0, 0, pageWidth, 52, 'F');
       try {
         const logoImg = new window.Image(); logoImg.crossOrigin = 'anonymous';
-        await new Promise<void>((res, rej) => { logoImg.onload = () => res(); logoImg.onerror = () => rej(); logoImg.src = '/assets/images/breed-logo.svg'; });
+        await new Promise<void>((res, rej) => { logoImg.onload = () => res(); logoImg.onerror = () => rej(); logoImg.src = '/assets/images/The Breed Industries Just Logo-01 igkjh-01.png'; });
         const c = document.createElement('canvas'); c.width = 113; c.height = 113;
         const ctx = c.getContext('2d');
-        if (ctx) { ctx.drawImage(logoImg, 0, 0, 113, 113); pdf.addImage(c.toDataURL('image/jpeg', 0.5), 'JPEG', margin, 6, 40, 40); }
+        if (ctx) { ctx.fillStyle = 'white'; ctx.fillRect(0, 0, 113, 113); ctx.drawImage(logoImg, 0, 0, 113, 113); pdf.addImage(c.toDataURL('image/png', 1.0), 'PNG', margin, 6, 40, 40); }
       } catch { pdf.setTextColor(...white); pdf.setFontSize(18); pdf.setFont('helvetica','bold'); pdf.text('BREED INDUSTRIES', margin, 30); }
       pdf.setTextColor(200,200,200); pdf.setFontSize(7); pdf.setFont('helvetica','normal');
       pdf.text('The Breed Industries (PTY) LTD', pageWidth-margin, 14, {align:'right'});

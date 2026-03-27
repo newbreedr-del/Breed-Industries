@@ -83,8 +83,9 @@ export default function CreateInvoicePage() {
 
     const deposit = requireDeposit ? oneTimeTotal * 0.5 : 0;
     const balance = requireDeposit ? oneTimeTotal - deposit : oneTimeTotal;
+    const totalAmount = (requireDeposit ? deposit : oneTimeTotal) + monthlyTotal;
 
-    return { oneTimeTotal, monthlyTotal, deposit, balance, totalAmount: oneTimeTotal };
+    return { oneTimeTotal, monthlyTotal, deposit, balance, totalAmount };
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
