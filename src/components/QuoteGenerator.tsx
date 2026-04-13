@@ -230,27 +230,28 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       pdf.setFillColor(...darkBg);
       pdf.rect(0, 0, pageWidth, 52, 'F');
 
-      // Load and add logo (using SVG for smaller file size)
+      // Load and add logo
       try {
         const logoImg = new window.Image();
         logoImg.crossOrigin = 'anonymous';
         await new Promise<void>((resolve, reject) => {
           logoImg.onload = () => resolve();
           logoImg.onerror = () => reject(new Error('Logo failed to load'));
-          logoImg.src = '/assets/images/breed-logo.svg';
+          logoImg.src = '/assets/images/The Breed Industries Just Logo-01 igkjh-01.png';
         });
         const logoCanvas = document.createElement('canvas');
-        // Use smaller canvas dimensions (40x40mm ≈ 113x113px at 72dpi)
         const targetSize = 113;
         logoCanvas.width = targetSize;
         logoCanvas.height = targetSize;
         const ctx = logoCanvas.getContext('2d');
         if (ctx) {
-          // Draw image at target size
+          // Add white background for logo
+          ctx.fillStyle = 'white';
+          ctx.fillRect(0, 0, targetSize, targetSize);
+          // Draw logo
           ctx.drawImage(logoImg, 0, 0, targetSize, targetSize);
-          // Use JPEG with lower quality for smaller file size
-          const logoData = logoCanvas.toDataURL('image/jpeg', 0.5);
-          pdf.addImage(logoData, 'JPEG', margin, 6, 40, 40);
+          const logoData = logoCanvas.toDataURL('image/png', 1.0);
+          pdf.addImage(logoData, 'PNG', margin, 6, 40, 40);
         }
       } catch {
         // Fallback text if logo fails
