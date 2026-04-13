@@ -24,7 +24,8 @@ export default function AdminDashboard() {
     totalInvoices: 0,
     pendingInvoices: 0,
     totalRevenue: 0,
-    recentQuotes: 0
+    recentQuotes: 0,
+    pendingServiceRequests: 0
   });
 
   useEffect(() => {
@@ -79,11 +80,24 @@ export default function AdminDashboard() {
         console.error('Error fetching quotes:', error);
       }
 
+      // Fetch service requests stats
+      let pendingServiceRequests = 0;
+      try {
+        const requestsRes = await fetch('/api/service-requests?status=pending');
+        if (requestsRes.ok) {
+          const requestsData = await requestsRes.json();
+          pendingServiceRequests = requestsData.total || 0;
+        }
+      } catch (error) {
+        console.error('Error fetching service requests:', error);
+      }
+
       setStats({
         totalInvoices,
         pendingInvoices,
         totalRevenue,
-        recentQuotes
+        recentQuotes,
+        pendingServiceRequests
       });
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
@@ -131,6 +145,14 @@ export default function AdminDashboard() {
       href: '/admin/messages',
       color: 'from-orange-500 to-orange-600',
       stats: 'Check inbox'
+    },
+    {
+      title: 'Service Requests',
+      description: 'Manage customer service requests',
+      icon: FileText,
+      href: '/admin/service-requests',
+      color: 'from-amber-500 to-amber-600',
+      stats: `${stats.pendingServiceRequests} pending`
     }
   ];
 
@@ -162,6 +184,13 @@ export default function AdminDashboard() {
       icon: CheckCircle,
       color: 'text-purple-400',
       bgColor: 'bg-purple-500/10'
+    },
+    {
+      title: 'Pending Requests',
+      value: stats.pendingServiceRequests.toString(),
+      icon: AlertCircle,
+      color: 'text-amber-400',
+      bgColor: 'bg-amber-500/10'
     }
   ];
 
