@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { PlusCircle, MinusCircle, Loader2, CheckCircle, Send, Download } from 'lucide-react';
+import { PlusCircle, MinusCircle, Loader2, CheckCircle, Send, Download, ChevronDown } from 'lucide-react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import html2canvas from 'html2canvas';
+import { serviceDefinitions } from '@/data/serviceDefinitions';
 
 interface QuoteItem {
   id: string;
@@ -102,6 +103,23 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         item.id === id ? { ...item, [field]: value } : item
       )
     );
+  };
+
+  // Handle service selection
+  const handleServiceSelect = (itemId: string, serviceId: string) => {
+    const service = serviceDefinitions.find(s => s.id === serviceId);
+    if (service) {
+      updateItem(itemId, 'name', service.name);
+      updateItem(itemId, 'description', service.description);
+      // Parse base price to extract numeric value
+      if (service.basePrice) {
+        const priceMatch = service.basePrice.match(/R[\s]*([\d,]+)/);
+        if (priceMatch) {
+          const price = parseFloat(priceMatch[1].replace(',', ''));
+          updateItem(itemId, 'rate', price);
+        }
+      }
+    }
   };
   
   // Calculate total
@@ -953,12 +971,31 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                   <div>
+                    <label className="block text-white/70 text-sm mb-1">Select Service (Optional)</label>
+                    <div className="relative">
+                      <select
+                        onChange={(e) => e.target.value && handleServiceSelect(item.id, e.target.value)}
+                        className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white appearance-none cursor-pointer"
+                        defaultValue=""
+                      >
+                        <option value="">Or select from services...</option>
+                        {serviceDefinitions.map(service => (
+                          <option key={service.id} value={service.id}>
+                            {service.category} - {service.name} {service.basePrice && `(${service.basePrice})`}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none" />
+                    </div>
+                  </div>
+                  <div>
                     <label className="block text-white/70 text-sm mb-1">Item Name *</label>
                     <input
                       type="text"
                       value={item.name}
                       onChange={(e) => updateItem(item.id, 'name', e.target.value)}
                       className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
+                      placeholder="Enter item name or select service above"
                       required
                     />
                   </div>
