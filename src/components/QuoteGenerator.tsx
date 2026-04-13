@@ -245,10 +245,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         logoCanvas.height = targetSize;
         const ctx = logoCanvas.getContext('2d');
         if (ctx) {
-          // Add white background for logo
-          ctx.fillStyle = 'white';
-          ctx.fillRect(0, 0, targetSize, targetSize);
-          // Draw logo
+          // Draw logo without background
           ctx.drawImage(logoImg, 0, 0, targetSize, targetSize);
           const logoData = logoCanvas.toDataURL('image/png', 1.0);
           pdf.addImage(logoData, 'PNG', margin, 6, 40, 40);
