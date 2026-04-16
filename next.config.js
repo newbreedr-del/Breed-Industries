@@ -8,6 +8,15 @@ const nextConfig = {
   },
   serverExternalPackages: ['@sparticuz/chrome-aws-lambda', 'puppeteer-core', 'puppeteer'],
   turbopack: {},
+  async redirects() {
+    return [
+      {
+        source: '/lab',
+        destination: '/build-package',
+        permanent: true,
+      },
+    ];
+  },
   webpack: (config, { isServer }) => {
     if (isServer) {
       const originalExternals = Array.isArray(config.externals)

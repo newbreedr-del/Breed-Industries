@@ -388,6 +388,126 @@ export const serviceDefinitions: ServiceDefinition[] = [
     additionalInfo: 'Includes design and printing of 250 cards'
   },
   {
+    id: 'flyer-simple',
+    category: 'Branding & Identity',
+    name: 'Simple Social Media Flyer',
+    description: 'Single size, single concept digital flyer for social media',
+    basePrice: 'R300 - R500',
+    requiredDocuments: [
+      {
+        name: 'Content/Copy',
+        description: 'Text content for the flyer (headline, body text, call-to-action)',
+        required: true,
+        acceptedFormats: ['.pdf', '.doc', '.docx', '.txt']
+      },
+      {
+        name: 'Brand Assets',
+        description: 'Logo and brand colors (if available)',
+        required: true,
+        acceptedFormats: ['.ai', '.eps', '.svg', '.pdf', '.png', '.jpg']
+      },
+      {
+        name: 'Images/Photos',
+        description: 'High-resolution images to be used in the design',
+        required: false,
+        acceptedFormats: ['.jpg', '.png', '.tiff']
+      },
+      {
+        name: 'Design Preferences',
+        description: 'Style references or examples of designs you like',
+        required: false,
+        acceptedFormats: ['.pdf', '.jpg', '.png', '.doc', '.docx']
+      }
+    ],
+    additionalInfo: '1 concept, 1 size (optimized for Instagram/Facebook), delivered in JPG/PNG format'
+  },
+  {
+    id: 'flyer-standard',
+    category: 'Branding & Identity',
+    name: 'Standard Digital Flyer',
+    description: 'Professional digital flyer with multiple concepts and revisions',
+    basePrice: 'R500 - R800',
+    requiredDocuments: [
+      {
+        name: 'Content/Copy',
+        description: 'Complete text content including headline, body, call-to-action, contact details',
+        required: true,
+        acceptedFormats: ['.pdf', '.doc', '.docx', '.txt']
+      },
+      {
+        name: 'Brand Assets',
+        description: 'Logo, brand colors, fonts, and brand guidelines',
+        required: true,
+        acceptedFormats: ['.ai', '.eps', '.svg', '.pdf', '.png', '.jpg']
+      },
+      {
+        name: 'Images/Photos',
+        description: 'High-resolution images to be used in the design',
+        required: true,
+        acceptedFormats: ['.jpg', '.png', '.tiff']
+      },
+      {
+        name: 'Design Brief',
+        description: 'Target audience, design style, tone, and any specific requirements',
+        required: true,
+        acceptedFormats: ['.pdf', '.doc', '.docx', '.txt']
+      },
+      {
+        name: 'Design Preferences',
+        description: 'Examples or inspiration of designs you like',
+        required: false,
+        acceptedFormats: ['.pdf', '.jpg', '.png', '.doc', '.docx']
+      }
+    ],
+    additionalInfo: '2 initial concepts, 2 revision rounds, delivered in multiple formats (JPG, PNG, PDF)'
+  },
+  {
+    id: 'flyer-premium',
+    category: 'Branding & Identity',
+    name: 'Premium Event/Brand Flyer',
+    description: 'High-end flyer design with multiple sizes and comprehensive brand work',
+    basePrice: 'R800 - R1,200+',
+    requiredDocuments: [
+      {
+        name: 'Content/Copy',
+        description: 'Complete text content for all flyer variations',
+        required: true,
+        acceptedFormats: ['.pdf', '.doc', '.docx', '.txt']
+      },
+      {
+        name: 'Brand Assets',
+        description: 'Complete brand package: logo, colors, fonts, brand guidelines',
+        required: true,
+        acceptedFormats: ['.ai', '.eps', '.svg', '.pdf', '.png', '.jpg']
+      },
+      {
+        name: 'Images/Photos',
+        description: 'High-resolution images and graphics to be used',
+        required: true,
+        acceptedFormats: ['.jpg', '.png', '.tiff', '.psd']
+      },
+      {
+        name: 'Design Brief',
+        description: 'Detailed brief including target audience, event details, design requirements',
+        required: true,
+        acceptedFormats: ['.pdf', '.doc', '.docx']
+      },
+      {
+        name: 'Size Requirements',
+        description: 'List of all required sizes (social media, print, web banners, etc.)',
+        required: true,
+        acceptedFormats: ['.pdf', '.doc', '.docx', '.txt']
+      },
+      {
+        name: 'Design Preferences',
+        description: 'Examples, mood boards, or inspiration references',
+        required: false,
+        acceptedFormats: ['.pdf', '.jpg', '.png', '.doc', '.docx']
+      }
+    ],
+    additionalInfo: 'Multiple concepts, unlimited revisions, multiple sizes (social media, print, web), delivered in all formats including source files'
+  },
+  {
     id: 'marketing-materials',
     category: 'Branding & Identity',
     name: 'Marketing Materials',

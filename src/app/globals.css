@@ -114,7 +114,56 @@ h1, h2, h3, h4, h5, h6 {
   }
   
   .glass-card {
-    @apply bg-white/10 backdrop-blur-md border border-white/10 rounded-xl shadow-lg;
+    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-xl shadow-lg transition-all duration-300;
+  }
+  
+  .glass-card:hover {
+    @apply bg-white/10 border-white/20;
+  }
+  
+  .glass-card-accent {
+    @apply bg-accent/10 backdrop-blur-md border border-accent/20 rounded-xl shadow-lg transition-all duration-300;
+  }
+  
+  .glass-card-accent:hover {
+    @apply bg-accent/15 border-accent/30;
+  }
+  
+  /* Grid overlay for backgrounds */
+  .grid-overlay {
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  
+  .grid-overlay-half {
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  
+  .grid-overlay-animated {
+    background-image: 
+      linear-gradient(rgba(202, 129, 20, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(202, 129, 20, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 20s linear infinite;
+  }
+  
+  @keyframes gridMove {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 50px 50px;
+    }
+  }
+  
+  /* Text gradient for gold effect */
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-accent via-accent-light to-accent bg-clip-text text-transparent;
   }
   
   .section {

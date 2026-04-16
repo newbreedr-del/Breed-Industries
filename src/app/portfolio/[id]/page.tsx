@@ -417,7 +417,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ id: string
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/contact" className="btn btn-primary">Talk to Our Team</Link>
-            <Link href="/lab" className="btn btn-outline">Build Custom Package</Link>
+            <Link href="/build-package" className="btn btn-outline">Build Custom Package</Link>
           </div>
         </div>
       </section>

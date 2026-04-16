@@ -112,9 +112,9 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/lab" className="text-white/70 hover:text-accent transition-colors flex items-center">
+                <Link href="/build-package" className="text-white/70 hover:text-accent transition-colors flex items-center">
                   <ChevronRight size={14} className="mr-1" />
-                  <span>Get Quote</span>
+                  <span>Build Package</span>
                 </Link>
               </li>
               <li>
