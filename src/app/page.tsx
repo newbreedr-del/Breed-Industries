@@ -52,9 +52,9 @@ export default function Home() {
             priority
             className="object-cover opacity-40"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-color-bg-deep via-color-bg-deep/80 to-color-bg-deep" />
         </div>
         <div className="absolute inset-0 grid-overlay grid-overlay-animated"></div>
+        <div className="absolute inset-0 bg-color-bg-deep/50"></div>
         
         {/* Accent Glows */}
         <div className="absolute inset-0 pointer-events-none">
