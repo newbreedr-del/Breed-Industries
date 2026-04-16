@@ -25,6 +25,9 @@ const brandingOptions = [
   { id: 'logo-premium', name: 'Premium Logo Design', price: 3500, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Advanced logo design with 5 concepts, unlimited revisions, brand guidelines, and complete brand kit' },
   { id: 'brand-guide', name: 'Business Branding', price: 2500, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Comprehensive brand identity guide including color palette, typography, and brand usage guidelines' },
   { id: 'business-cards', name: 'Business Cards (250)', price: 800, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Professional business card design and printing of 250 high-quality cards with premium finish' },
+  { id: 'flyer-simple', name: 'Simple Social Media Flyer', price: 400, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Single size, single concept digital flyer for social media (1 concept, optimized for Instagram/Facebook)' },
+  { id: 'flyer-standard', name: 'Standard Digital Flyer', price: 650, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Professional digital flyer with 2 concepts and 2 revisions, delivered in multiple formats' },
+  { id: 'flyer-premium', name: 'Premium Event/Brand Flyer', price: 1000, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'High-end flyer design with multiple sizes, unlimited revisions, and comprehensive brand work' },
   { id: 'marketing-materials', name: 'Marketing Materials', price: 1200, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Custom marketing collateral including brochures, flyers, and promotional materials design' },
 ];
 
@@ -293,12 +296,12 @@ export default function LabPage() {
       <Header />
 
       <PageHero
-        title="Get Quote"
-        subtitle="Build Your Custom Package"
-        description="Use our interactive quote builder to create a package that fits your business needs. Real-time pricing, instant quotes, and downloadable proposals."
+        title="Build Your Package"
+        subtitle="Custom Quote Builder"
+        description="Use our interactive builder to create a package that fits your business needs. Real-time pricing, instant quotes, and downloadable proposals."
         breadcrumbs={[
           { label: 'Home', href: '/' },
-          { label: 'Get Quote', href: '/lab' }
+          { label: 'Build Package', href: '/build-package' }
         ]}
         size="large"
         backgroundPattern="blueprint"

@@ -78,7 +78,7 @@ export default function PortfolioPage() {
           <button className="btn btn-outline inline-flex items-center gap-2">
             <Filter className="w-4 h-4" /> Filter Categories
           </button>
-          <Link href="/lab" className="btn btn-primary">
+          <Link href="/build-package" className="btn btn-primary">
             Start Your Project
           </Link>
         </div>
@@ -162,7 +162,7 @@ export default function PortfolioPage() {
             <Link href="/contact" className="btn btn-primary">
               Talk to Our Team
             </Link>
-            <Link href="/lab" className="btn btn-outline">
+            <Link href="/build-package" className="btn btn-outline">
               Build Custom Package
             </Link>
           </div>

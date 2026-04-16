@@ -196,7 +196,7 @@ export default function StellarCaseStudyPage() {
             <Link href="/contact" className="btn btn-primary">
               Get in Touch
             </Link>
-            <Link href="/lab" className="btn btn-outline">
+            <Link href="/build-package" className="btn btn-outline">
               Build Custom Package
             </Link>
           </div>

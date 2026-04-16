@@ -21,6 +21,12 @@ module.exports = {
         techBlue: '#0070F3',
         charcoal: '#333333',
         offWhite: '#F8F5F0',
+        // Brand colors for new design system
+        'color-bg-deep': '#1A1A1B',
+        'color-bg-secondary': '#242426',
+        'accent': '#CA8114',
+        'accent-light': '#E5A835',
+        'accent-dark': '#9B6310',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

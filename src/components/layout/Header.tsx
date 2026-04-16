@@ -38,7 +38,7 @@ const navItems = [
       }
     ]
   },
-  { name: 'Get Quote', path: '/lab' },
+  { name: 'Build Package', path: '/build-package' },
   { name: 'Portfolio', path: '/portfolio' },
   { name: 'About', path: '/about' },
   { name: 'Contact', path: '/contact' },

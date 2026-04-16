@@ -168,7 +168,7 @@ export default function ServicesPage() {
                         {category.description}
                       </p>
                       <Link 
-                        href="/lab"
+                        href="/build-package"
                         className="btn btn-primary"
                       >
                         Build Custom Package
@@ -283,7 +283,7 @@ export default function ServicesPage() {
           
           <div className="mt-16 text-center">
             <Link 
-              href="/lab"
+              href="/build-package"
               className="btn btn-primary"
             >
               Build Your Custom Package

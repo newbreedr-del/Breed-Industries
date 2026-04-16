@@ -161,7 +161,7 @@ export default function Home() {
                 </Link>
                 
                 <Link 
-                  href="/lab"
+                  href="/build-package"
                   className="btn btn-outline"
                 >
                   Build Your Package

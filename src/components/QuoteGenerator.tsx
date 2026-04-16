@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { PlusCircle, MinusCircle, Loader2, CheckCircle, Send, Download } from 'lucide-react';
+import { PlusCircle, MinusCircle, Loader2, CheckCircle, Send, Download, ChevronDown } from 'lucide-react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import html2canvas from 'html2canvas';
+import { serviceDefinitions } from '@/data/serviceDefinitions';
 
 interface QuoteItem {
   id: string;
@@ -103,6 +104,23 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       )
     );
   };
+
+  // Handle service selection
+  const handleServiceSelect = (itemId: string, serviceId: string) => {
+    const service = serviceDefinitions.find(s => s.id === serviceId);
+    if (service) {
+      updateItem(itemId, 'name', service.name);
+      updateItem(itemId, 'description', service.description);
+      // Parse base price to extract numeric value
+      if (service.basePrice) {
+        const priceMatch = service.basePrice.match(/R[\s]*([\d,]+)/);
+        if (priceMatch) {
+          const price = parseFloat(priceMatch[1].replace(',', ''));
+          updateItem(itemId, 'rate', price);
+        }
+      }
+    }
+  };
   
   // Calculate total
   const calculateTotal = () => {
@@ -163,6 +181,9 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
     'Premium Logo Design': { timeline: '7 – 10 Business Days', clientRequirements: ['Detailed brand brief (provided by Breed Industries)', 'Competitor references and positioning notes', 'Vision, mission, and values statement', 'Stakeholder availability for feedback sessions'] },
     'Business Branding': { timeline: '5 – 8 Business Days', clientRequirements: ['Approved logo files', 'Brand story and company background', 'Target market demographics', 'Preferred tone of voice and messaging'] },
     'Business Cards (250)': { timeline: '5 – 7 Business Days (incl. print)', clientRequirements: ['Approved logo and brand colours', 'Contact details for each cardholder', 'Preferred card stock and finish', 'Delivery address for printed cards'] },
+    'Simple Social Media Flyer': { timeline: '2 – 3 Business Days', clientRequirements: ['Text content for the flyer (headline, body text, call-to-action)', 'Logo and brand colors (if available)', 'High-resolution images to be used in the design (optional)', 'Style references or examples of designs you like (optional)'] },
+    'Standard Digital Flyer': { timeline: '3 – 5 Business Days', clientRequirements: ['Complete text content including headline, body, call-to-action, contact details', 'Logo, brand colors, fonts, and brand guidelines', 'High-resolution images to be used in the design', 'Design brief: target audience, design style, tone, and any specific requirements', 'Examples or inspiration of designs you like (optional)'] },
+    'Premium Event/Brand Flyer': { timeline: '5 – 7 Business Days', clientRequirements: ['Complete text content for all flyer variations', 'Complete brand package: logo, colors, fonts, brand guidelines', 'High-resolution images and graphics to be used', 'Detailed brief including target audience, event details, design requirements', 'List of all required sizes (social media, print, web banners, etc.)', 'Examples, mood boards, or inspiration references (optional)'] },
     'Marketing Materials': { timeline: '5 – 10 Business Days', clientRequirements: ['Approved brand guidelines', 'Content and copy for each material', 'High-resolution images (if available)', 'Distribution format preferences (print/digital)'] },
     'Website Development': { timeline: '10 – 15 Business Days', clientRequirements: ['Sitemap and page structure preferences', 'All text content for each page', 'High-resolution images and media', 'Domain name and hosting credentials (or purchase authorisation)', 'Logo and brand guidelines'] },
     'Mobile App Development': { timeline: '8 – 12 Weeks', clientRequirements: ['Detailed feature requirements document', 'User flow diagrams or wireframes (if available)', 'API documentation for third-party integrations', 'App Store / Play Store developer account credentials', 'Test device availability'] },
@@ -245,10 +266,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         logoCanvas.height = targetSize;
         const ctx = logoCanvas.getContext('2d');
         if (ctx) {
-          // Add white background for logo
-          ctx.fillStyle = 'white';
-          ctx.fillRect(0, 0, targetSize, targetSize);
-          // Draw logo
+          // Draw logo without background
           ctx.drawImage(logoImg, 0, 0, targetSize, targetSize);
           const logoData = logoCanvas.toDataURL('image/png', 1.0);
           pdf.addImage(logoData, 'PNG', margin, 6, 40, 40);
@@ -956,12 +974,31 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                   <div>
+                    <label className="block text-white/70 text-sm mb-1">Select Service (Optional)</label>
+                    <div className="relative">
+                      <select
+                        onChange={(e) => e.target.value && handleServiceSelect(item.id, e.target.value)}
+                        className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white appearance-none cursor-pointer"
+                        defaultValue=""
+                      >
+                        <option value="">Or select from services...</option>
+                        {serviceDefinitions.map(service => (
+                          <option key={service.id} value={service.id}>
+                            {service.category} - {service.name} {service.basePrice && `(${service.basePrice})`}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none" />
+                    </div>
+                  </div>
+                  <div>
                     <label className="block text-white/70 text-sm mb-1">Item Name *</label>
                     <input
                       type="text"
                       value={item.name}
                       onChange={(e) => updateItem(item.id, 'name', e.target.value)}
                       className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
+                      placeholder="Enter item name or select service above"
                       required
                     />
                   </div>
