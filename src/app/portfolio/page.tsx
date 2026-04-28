@@ -18,18 +18,14 @@ const digitalProjects = [
     summary:
       'A production-grade AI-powered customer engagement platform built for African businesses. Features AI agents, WhatsApp Business integration, visual flow builder, knowledge base management, and real-time analytics — all in one dashboard.',
     highlights: ['AI chat agents with custom knowledge bases', 'WhatsApp Business API integration', 'Visual no-code workflow builder', 'Multi-channel analytics dashboard'],
-    image: '/assets/images/portfolio/digital-experience.jpg',
-  },
-  {
-    id: 'gobizz-learning',
-    title: 'GoBizz Business Learning App',
-    client: 'GoBizz',
-    category: 'Business Training Platform',
-    tags: ['Mobile App', 'UI/UX Design', 'Figma', 'Learning Platform'],
-    summary:
-      'A structured business learning and training platform designed for South African entrepreneurs. Covers compliance checklists, portfolio building, chat-based lesson delivery, and progress tracking — helping business owners grow with confidence.',
-    highlights: ['Structured learning modules', 'Compliance checklist feature', 'Chat-based lesson delivery', 'Portfolio tracking dashboard'],
-    image: '/assets/images/portfolio/enterprise-success.jpg',
+    image: '/assets/images/portfolio/engage-africa-dashboard.png',
+    screenshots: [
+      '/assets/images/portfolio/engage-africa-dashboard.png',
+      '/assets/images/portfolio/engage-africa-agents.png',
+      '/assets/images/portfolio/engage-africa-identity.png',
+      '/assets/images/portfolio/engage-africa-chat.png',
+    ],
+    link: null,
   },
   {
     id: 'mlk-apparel',
@@ -38,9 +34,61 @@ const digitalProjects = [
     category: 'E-Commerce Platform',
     tags: ['React', 'Stripe', 'Paystack', 'PayPal', 'Tailwind CSS'],
     summary:
-      'A full-featured fashion e-commerce platform with multi-payment support (Stripe, Paystack, PayPal), product filtering, wishlist functionality, and full analytics integration including Facebook Pixel, TikTok Pixel, and Pinterest Tag.',
-    highlights: ['Stripe, Paystack & PayPal checkout', 'Facebook, TikTok & Pinterest pixel tracking', 'Product wishlist & cart system', 'Full admin dashboard'],
-    image: '/assets/images/portfolio/client-showcase.jpg',
+      'A full-featured faith-driven fashion e-commerce store — "Rooted in Faith, Growing in Purpose." Built with multi-payment support (Stripe, Paystack, PayPal), product filtering, wishlist functionality, and analytics including Facebook Pixel, TikTok Pixel, and Pinterest Tag.',
+    highlights: ['Stripe, Paystack & PayPal checkout', 'Facebook, TikTok & Pinterest pixel tracking', 'Flash sale & countdown timer system', 'Full admin dashboard'],
+    image: '/assets/images/portfolio/mlk-apparel-hero.png',
+    screenshots: [
+      '/assets/images/portfolio/mlk-apparel-hero.png',
+      '/assets/images/portfolio/mlk-apparel-products.png',
+    ],
+    link: null,
+  },
+  {
+    id: 'hogi-church',
+    title: 'HOGI Church Management App',
+    client: 'House of Grace International',
+    category: 'Church & Community Platform',
+    tags: ['React', 'Supabase', 'Recharts', 'Real-time', 'Video'],
+    summary:
+      'A purpose-built church management platform for House of Grace International. Features member management, event planning, task management, live video meetings with prayer requests, analytics & reports, and enterprise-grade security.',
+    highlights: ['Live video meetings with chat & prayer requests', 'Member & attendance tracking', 'Event planning & volunteer management', 'Analytics, reports & task management'],
+    image: '/assets/images/portfolio/hogi-church-home.png',
+    screenshots: ['/assets/images/portfolio/hogi-church-home.png'],
+    link: null,
+  },
+  {
+    id: 'igroup-website',
+    title: 'I-Group Corporate Website',
+    client: 'Ihlelibanzi Trading Enterprises (I-Group)',
+    category: 'Corporate Website',
+    tags: ['React', 'Tailwind CSS', 'Responsive', 'SEO'],
+    summary:
+      'A professional corporate website for I-Group (Ihlelibanzi Trading Enterprises) — a social facilitation, research, and asset tracing firm. Built with a strong "Impact Driven" identity, service showcases, and lead capture — live at igroupsa.com.',
+    highlights: ['Full responsive corporate site', 'Service & project showcases', 'Contact & lead capture forms', 'Live at igroupsa.com'],
+    image: '/assets/images/portfolio/igroup-hero.png',
+    screenshots: [
+      '/assets/images/portfolio/igroup-hero.png',
+      '/assets/images/portfolio/igroup-services.png',
+      '/assets/images/portfolio/igroup-about.png',
+    ],
+    link: 'https://igroupsa.com',
+  },
+  {
+    id: 'pinetown-inc',
+    title: 'Pinetown Incorporated Website',
+    client: 'Pinetown Incorporated (PINC)',
+    category: 'NPO Community Website',
+    tags: ['React', 'Tailwind CSS', 'Donations', 'Membership'],
+    summary:
+      'A vibrant NPO website for Pinetown Incorporated — "Empowering Growth, Building Tomorrow Together." Includes membership sign-up, donation integration, project showcases, and a full about/services section. Live at pinc.org.za.',
+    highlights: ['Donation & membership integration', 'Project & services showcase', 'Community-first UI with bold brand identity', 'Live at pinc.org.za'],
+    image: '/assets/images/portfolio/pinetown-hero.png',
+    screenshots: [
+      '/assets/images/portfolio/pinetown-hero.png',
+      '/assets/images/portfolio/pinetown-about.png',
+      '/assets/images/portfolio/pinetown-services.png',
+    ],
+    link: 'https://pinc.org.za',
   },
   {
     id: 'ntandokazi-herbal',
@@ -51,31 +99,36 @@ const digitalProjects = [
     summary:
       'A complete business management system built for a herbal product company. Manages inventory, clients, bookkeeping, and communications in one place — with PDF report generation, QR code support, and Google Sheets integration.',
     highlights: ['Inventory & product catalogue management', 'Client CRM & communications', 'Bookkeeping & financial reports', 'QR code & PDF export tools'],
-    image: '/assets/images/portfolio/branding-suite.jpg',
+    image: '/assets/images/portfolio/engage-africa-agents.png',
+    screenshots: [],
+    link: null,
   },
   {
-    id: 'hohi-church',
-    title: 'HOHI Church Management App',
-    client: 'House of Grace International',
-    category: 'Church & Community App',
-    tags: ['React', 'Supabase', 'Recharts', 'Real-time'],
+    id: 'gobizz-learning',
+    title: 'GoBizz Business Learning App',
+    client: 'GoBizz',
+    category: 'Business Training Platform',
+    tags: ['Mobile App', 'UI/UX Design', 'Figma', 'Learning Platform'],
     summary:
-      'A purpose-built church management platform that functions like Zoom Meetings for congregations. Features member management, service scheduling, attendance tracking, giving/donations management, and live analytics — all built for House of Grace International.',
-    highlights: ['Live virtual service management', 'Member & attendance tracking', 'Giving & donations dashboard', 'Real-time analytics & reports'],
-    image: '/assets/images/portfolio/case-study-grid.jpg',
+      'A structured business learning and training platform designed for South African entrepreneurs. Covers compliance checklists, portfolio building, chat-based lesson delivery, and progress tracking — helping business owners grow with confidence.',
+    highlights: ['Structured learning modules', 'Compliance checklist feature', 'Chat-based lesson delivery', 'Portfolio tracking dashboard'],
+    image: '/assets/images/portfolio/engage-africa-chat.png',
+    screenshots: [],
+    link: null,
   },
 ];
 
 // ─── Branding & Logo Work ──────────────────────────────────────────────────────
 const brandingClients = [
-  { name: 'GoBizz', logo: '/assets/images/clients/gobizz-logo White-01.png', work: 'Logo Design, Brand Identity' },
-  { name: 'Pinetown Incorporated', logo: '/assets/images/clients/Pinetown Incorporated-01.png', work: 'Logo Design, Letterhead, Business Cards' },
-  { name: 'MC Ways', logo: '/assets/images/clients/MC Ways New-03.png', work: 'Logo Design, Brand Identity, Letterhead' },
-  { name: 'I-Group', logo: '/assets/images/clients/I Group Logo White-01-01.png', work: 'Logo Design, Business Cards, Letterhead' },
-  { name: 'NSPIRAXION', logo: '/assets/images/clients/NSPIRAXION IMPULSE PROJECTS LOGO [Recovered]-01.png', work: 'Logo Design, Brand Identity' },
-  { name: 'Ndlunkulu', logo: '/assets/images/clients/Ndlunkulu White text-01.png', work: 'Logo Design, Marketing Materials' },
-  { name: 'Isambulo', logo: '/assets/images/clients/Isambulo Logo-01.png', work: 'Logo Design, Brand Identity' },
-  { name: 'Ebodweni', logo: '/assets/images/clients/Ebodweni-01.png', work: 'Logo Design, Brand Materials' },
+  { name: 'GoBizz', logo: '/assets/images/clients/gobizz-logo.png', work: 'Logo Design, Brand Identity' },
+  { name: 'I-Group', logo: '/assets/images/clients/igroup-logo.png', work: 'Logo Design, Business Cards, Letterhead' },
+  { name: 'MC Ways Construction', logo: '/assets/images/clients/mcways-logo.jpg', work: 'Logo Design, Brand Identity, Letterhead' },
+  { name: 'NSPIRAXION', logo: '/assets/images/clients/nspiraxion-logo.jpg', work: 'Logo Design, Brand Identity' },
+  { name: 'Isambulo Sezulu', logo: '/assets/images/clients/isambulo-logo.jpg', work: 'Logo Design, Brand Identity' },
+  { name: 'Ebodweni', logo: '/assets/images/clients/ebodweni-logo.jpg', work: 'Logo Design, Brand Materials' },
+  { name: 'Lance Renovations', logo: '/assets/images/clients/lance-logo.jpg', work: 'Logo Design, Business Cards' },
+  { name: 'Gadali Security', logo: '/assets/images/clients/gadali-logo.jpg', work: 'Logo Design, Brand Identity' },
+  { name: 'Spephelo', logo: '/assets/images/clients/spephelo-logo.jpg', work: 'Logo Design, Brand Materials' },
 ];
 
 // ─── Business Services Delivered ─────────────────────────────────────────────
@@ -157,22 +210,46 @@ export default function PortfolioPage() {
                   index === 0 ? 'xl:col-span-2' : ''
                 }`}
               >
-                <div className="relative h-52 bg-white/5 flex-shrink-0">
+                {/* Main screenshot */}
+                <div className="relative h-56 bg-white/5 flex-shrink-0 overflow-hidden">
                   <Image
                     src={project.image}
                     alt={project.title}
                     fill
-                    className="object-cover mix-blend-screen opacity-60"
+                    className="object-cover object-top transition-transform duration-700 hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  {project.link && (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute top-3 right-3 flex items-center gap-1.5 text-xs bg-accent text-black font-semibold rounded px-2.5 py-1 hover:bg-accent/90 transition-colors"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      Live Site
+                    </a>
+                  )}
                   <div className="absolute bottom-3 left-4 flex flex-wrap gap-2">
                     {project.tags.map((tag) => (
-                      <span key={tag} className="text-xs bg-accent/20 text-accent border border-accent/30 rounded px-2 py-0.5">
+                      <span key={tag} className="text-xs bg-black/60 text-accent border border-accent/30 rounded px-2 py-0.5 backdrop-blur-sm">
                         {tag}
                       </span>
                     ))}
                   </div>
                 </div>
+
+                {/* Thumbnail strip for multi-screenshot projects */}
+                {project.screenshots.length > 1 && (
+                  <div className="flex gap-1.5 px-3 py-2 bg-white/5 border-b border-white/10 overflow-x-auto">
+                    {project.screenshots.slice(0, 4).map((src, i) => (
+                      <div key={i} className="relative flex-shrink-0 w-16 h-10 rounded overflow-hidden border border-white/10">
+                        <Image src={src} alt={`${project.title} screen ${i + 1}`} fill className="object-cover object-top" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 <div className="p-6 flex flex-col gap-3 flex-1">
                   <div>
                     <span className="text-xs uppercase tracking-[0.3em] text-accent/70">{project.category}</span>
@@ -188,6 +265,17 @@ export default function PortfolioPage() {
                       </li>
                     ))}
                   </ul>
+                  {project.link && (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-auto flex items-center gap-2 text-accent text-sm font-medium pt-3 hover:underline"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      Visit {project.link.replace('https://', '')}
+                    </a>
+                  )}
                 </div>
               </div>
             ))}
@@ -210,21 +298,21 @@ export default function PortfolioPage() {
             Every logo here was designed from scratch for a South African business — giving them a professional face to show the world.
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
             {brandingClients.map((client) => (
-              <div key={client.name} className="glass-card p-6 flex flex-col items-center gap-3 group hover:-translate-y-1 transition-transform">
-                <div className="h-16 flex items-center justify-center">
+              <div key={client.name} className="glass-card p-6 flex flex-col items-center gap-3 group hover:-translate-y-1 transition-transform bg-white/5">
+                <div className="h-20 w-full flex items-center justify-center bg-white/10 rounded-lg overflow-hidden px-3">
                   <Image
                     src={client.logo}
                     alt={`${client.name} logo`}
-                    width={160}
-                    height={64}
-                    className="object-contain opacity-80 group-hover:opacity-100 transition-opacity max-h-16"
+                    width={180}
+                    height={80}
+                    className="object-contain group-hover:scale-105 transition-transform max-h-16 w-auto"
                   />
                 </div>
                 <div className="text-center">
-                  <p className="text-white/80 text-xs font-medium">{client.name}</p>
-                  <p className="text-white/40 text-xs mt-0.5">{client.work}</p>
+                  <p className="text-white/90 text-sm font-semibold">{client.name}</p>
+                  <p className="text-accent/70 text-xs mt-0.5">{client.work}</p>
                 </div>
               </div>
             ))}
