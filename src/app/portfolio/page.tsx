@@ -364,14 +364,14 @@ export default function PortfolioPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-color-bg-secondary relative">
+      <section className="py-12 bg-color-bg-secondary relative">
         <div className="absolute inset-0 grid-overlay"></div>
         <div className="container mx-auto px-4 relative z-10 text-center">
-          <h2 className="text-3xl font-heading font-bold text-white mb-6">Ready to become our next success story?</h2>
-          <p className="text-white/70 max-w-3xl mx-auto mb-8">
+          <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-4">Ready to become our next success story?</h2>
+          <p className="text-white/70 max-w-3xl mx-auto mb-5 text-sm md:text-base">
             Tell us what you need. Whether it's a custom app, a brand identity, a business plan, or full company registration. We'll come back to you within one business day.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/contact" className="btn btn-primary">
               Talk to Our Team
             </Link>
