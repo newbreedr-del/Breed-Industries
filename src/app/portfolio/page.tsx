@@ -108,12 +108,16 @@ const digitalProjects = [
     title: 'GoBizz Business Learning App',
     client: 'GoBizz',
     category: 'Business Training Platform',
-    tags: ['Mobile App', 'UI/UX Design', 'Figma', 'Learning Platform'],
+    tags: ['Mobile App', 'UI/UX Design', 'Learning Platform', 'Compliance'],
     summary:
       'A structured business learning and training platform designed for South African entrepreneurs. Covers compliance checklists, portfolio building, chat-based lesson delivery, and progress tracking — helping business owners grow with confidence.',
     highlights: ['Structured learning modules', 'Compliance checklist feature', 'Chat-based lesson delivery', 'Portfolio tracking dashboard'],
-    image: '/assets/images/portfolio/engage-africa-chat.png',
-    screenshots: [],
+    image: '/assets/images/portfolio/gobizz-1.png',
+    screenshots: [
+      '/assets/images/portfolio/gobizz-1.png',
+      '/assets/images/portfolio/gobizz-2.png',
+      '/assets/images/portfolio/gobizz-3.png',
+    ],
     link: null,
   },
 ];
