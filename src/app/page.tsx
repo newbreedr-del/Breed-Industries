@@ -173,17 +173,17 @@ export default function Home() {
         </div>
       </section>
       
-      {/* What We Do — Clarity Section */}
+      {/* What We Do: Clarity Section */}
       <section className="py-20 relative">
         <div className="absolute inset-0 grid-overlay"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-14">
             <p className="text-accent text-sm uppercase tracking-widest font-medium mb-3">What We Do</p>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-              We Build Businesses — <span className="text-accent">From Idea to Empire</span>
+              We Build Businesses: <span className="text-accent">From Idea to Empire</span>
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto">
-              Whether you need to register your company, create your brand, write your business plan, or build a custom digital product — we do it all under one roof. Here&apos;s exactly how we help:
+              Whether you need to register your company, create your brand, write your business plan, or build a custom digital product, we do it all under one roof. Here's exactly how we help:
             </p>
           </div>
 
@@ -252,10 +252,10 @@ export default function Home() {
           <div className="text-center mb-16">
             <p className="text-accent text-sm uppercase tracking-widest font-medium mb-3">Our Work</p>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-              Real Products We&apos;ve Built for <span className="text-accent">Real Clients</span>
+              Real Products We've Built for <span className="text-accent">Real Clients</span>
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto">
-              We don&apos;t just consult — we build. From AI platforms to fashion stores, here are some of the digital products we&apos;ve shipped.
+              We don't just consult, we build. From AI platforms to fashion stores, here are some of the digital products we've shipped.
             </p>
           </div>
 
@@ -323,7 +323,7 @@ export default function Home() {
               <Users className="w-4 h-4 text-accent" />
               <p className="text-accent text-sm uppercase tracking-widest font-medium">Trusted By</p>
             </div>
-            <p className="text-white/50 text-sm">South African businesses we&apos;ve worked with</p>
+            <p className="text-white/50 text-sm">South African businesses we've worked with</p>
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-3">
             {[
@@ -357,7 +357,7 @@ export default function Home() {
                 Ready to Build Your Empire?
               </h2>
               <p className="text-white/70 text-lg mb-8">
-                Whether you&apos;re starting from scratch or scaling up — book a strategy call and we&apos;ll map out exactly what you need and how much it&apos;ll cost.
+                Whether you're starting from scratch or scaling up, book a strategy call and we'll map out exactly what you need and how much it'll cost.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link href="/contact" className="btn btn-primary">

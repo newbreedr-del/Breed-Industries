@@ -16,7 +16,7 @@ const digitalProjects = [
     category: 'AI Customer Engagement Platform',
     tags: ['Next.js', 'AI Agents', 'WhatsApp API', 'Supabase'],
     summary:
-      'A production-grade AI-powered customer engagement platform built for African businesses. Features AI agents, WhatsApp Business integration, visual flow builder, knowledge base management, and real-time analytics — all in one dashboard.',
+      'A production-grade AI-powered customer engagement platform built for African businesses. Features AI agents, WhatsApp Business integration, visual flow builder, knowledge base management, and real-time analytics. All in one dashboard.',
     highlights: ['AI chat agents with custom knowledge bases', 'WhatsApp Business API integration', 'Visual no-code workflow builder', 'Multi-channel analytics dashboard'],
     image: '/assets/images/portfolio/engage-africa-dashboard.png',
     screenshots: [
@@ -34,7 +34,7 @@ const digitalProjects = [
     category: 'E-Commerce Platform',
     tags: ['React', 'Stripe', 'Paystack', 'PayPal', 'Tailwind CSS'],
     summary:
-      'A full-featured faith-driven fashion e-commerce store — "Rooted in Faith, Growing in Purpose." Built with multi-payment support (Stripe, Paystack, PayPal), product filtering, wishlist functionality, and analytics including Facebook Pixel, TikTok Pixel, and Pinterest Tag.',
+      'A full-featured faith-driven fashion e-commerce store. "Rooted in Faith, Growing in Purpose." Built with multi-payment support (Stripe, Paystack, PayPal), product filtering, wishlist functionality, and analytics including Facebook Pixel, TikTok Pixel, and Pinterest Tag.',
     highlights: ['Stripe, Paystack & PayPal checkout', 'Facebook, TikTok & Pinterest pixel tracking', 'Flash sale & countdown timer system', 'Full admin dashboard'],
     image: '/assets/images/portfolio/mlk-apparel-hero.png',
     screenshots: [
@@ -63,7 +63,7 @@ const digitalProjects = [
     category: 'Corporate Website',
     tags: ['React', 'Tailwind CSS', 'Responsive', 'SEO'],
     summary:
-      'A professional corporate website for I-Group (Ihlelibanzi Trading Enterprises) — a social facilitation, research, and asset tracing firm. Built with a strong "Impact Driven" identity, service showcases, and lead capture — live at igroupsa.com.',
+      'A professional corporate website for I-Group (Ihlelibanzi Trading Enterprises), a social facilitation, research, and asset tracing firm. Built with a strong "Impact Driven" identity, service showcases, and lead capture. Live at igroupsa.com.',
     highlights: ['Full responsive corporate site', 'Service & project showcases', 'Contact & lead capture forms', 'Live at igroupsa.com'],
     image: '/assets/images/portfolio/igroup-hero.png',
     screenshots: [
@@ -80,7 +80,7 @@ const digitalProjects = [
     category: 'NPO Community Website',
     tags: ['React', 'Tailwind CSS', 'Donations', 'Membership'],
     summary:
-      'A vibrant NPO website for Pinetown Incorporated — "Empowering Growth, Building Tomorrow Together." Includes membership sign-up, donation integration, project showcases, and a full about/services section. Live at pinc.org.za.',
+      'A vibrant NPO website for Pinetown Incorporated. "Empowering Growth, Building Tomorrow Together." Includes membership sign-up, donation integration, project showcases, and a full about/services section. Live at pinc.org.za.',
     highlights: ['Donation & membership integration', 'Project & services showcase', 'Community-first UI with bold brand identity', 'Live at pinc.org.za'],
     image: '/assets/images/portfolio/pinetown-hero.png',
     screenshots: [
@@ -97,7 +97,7 @@ const digitalProjects = [
     category: 'Business Management System',
     tags: ['Next.js', 'Supabase', 'PDF Export', 'Inventory Management'],
     summary:
-      'A complete business management system built for a herbal product company. Manages inventory, clients, bookkeeping, and communications in one place — with PDF report generation, QR code support, and Google Sheets integration.',
+      'A complete business management system built for a herbal product company. Manages inventory, clients, bookkeeping, and communications in one place. Features PDF report generation, QR code support, and Google Sheets integration.',
     highlights: ['Inventory & product catalogue management', 'Client CRM & communications', 'Bookkeeping & financial reports', 'QR code & PDF export tools'],
     image: '/assets/images/portfolio/engage-africa-agents.png',
     screenshots: [],
@@ -110,7 +110,7 @@ const digitalProjects = [
     category: 'Business Training Platform',
     tags: ['Mobile App', 'UI/UX Design', 'Learning Platform', 'Compliance'],
     summary:
-      'A structured business learning and training platform designed for South African entrepreneurs. Covers compliance checklists, portfolio building, chat-based lesson delivery, and progress tracking — helping business owners grow with confidence.',
+      'A structured business learning and training platform designed for South African entrepreneurs. Covers compliance checklists, portfolio building, chat-based lesson delivery, and progress tracking to help business owners grow with confidence.',
     highlights: ['Structured learning modules', 'Compliance checklist feature', 'Chat-based lesson delivery', 'Portfolio tracking dashboard'],
     image: '/assets/images/portfolio/gobizz-1.png',
     screenshots: [
@@ -159,7 +159,7 @@ export default function PortfolioPage() {
       <PageHero
         title="Real Work. Real Clients. Real Impact."
         subtitle="Portfolio"
-        description="From AI platforms and e-commerce stores to company registrations and brand identities — here's what we've built for businesses across South Africa."
+        description="From AI platforms and e-commerce stores to company registrations and brand identities. Here's what we've built for businesses across South Africa."
         breadcrumbs={[{ label: 'Portfolio', href: '/portfolio' }]}
       >
         <div className="flex flex-wrap justify-center gap-4">
@@ -203,7 +203,7 @@ export default function PortfolioPage() {
             Software & Apps We&apos;ve Built
           </h2>
           <p className="text-white/60 max-w-2xl mb-12">
-            Custom platforms, e-commerce stores, business management systems, and AI-powered tools — built from scratch for real clients with real needs.
+            Custom platforms, e-commerce stores, business management systems, and AI-powered tools. Built from scratch for real clients with real needs.
           </p>
 
           <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
@@ -299,7 +299,7 @@ export default function PortfolioPage() {
             Logos & Brand Identities We&apos;ve Created
           </h2>
           <p className="text-white/60 max-w-2xl mb-12">
-            Every logo here was designed from scratch for a South African business — giving them a professional face to show the world.
+            Every logo here was designed from scratch for a South African business, giving them a professional face to show the world.
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -336,7 +336,7 @@ export default function PortfolioPage() {
             Business Plans, Registrations & Compliance
           </h2>
           <p className="text-white/60 max-w-2xl mb-12">
-            We&apos;ve helped 23 clients get registered, compliant, funded, and ready to operate — from writing business plans to handling SARS, CIPC, CSD, and B-BBEE.
+            We've helped 23 clients get registered, compliant, funded, and ready to operate. From writing business plans to handling SARS, CIPC, CSD, and B-BBEE.
           </p>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -363,13 +363,13 @@ export default function PortfolioPage() {
         </div>
       </section>
 
-      {/* ─── CTA ─────────────────────────────────────────────────────────── */}
+      {/* CTA */}
       <section className="py-20 bg-color-bg-secondary relative">
         <div className="absolute inset-0 grid-overlay"></div>
         <div className="container mx-auto px-4 relative z-10 text-center">
           <h2 className="text-3xl font-heading font-bold text-white mb-6">Ready to become our next success story?</h2>
           <p className="text-white/70 max-w-3xl mx-auto mb-8">
-            Tell us what you need — whether it&apos;s a custom app, a brand identity, a business plan, or full company registration. We&apos;ll come back to you within one business day.
+            Tell us what you need. Whether it's a custom app, a brand identity, a business plan, or full company registration. We'll come back to you within one business day.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/contact" className="btn btn-primary">
