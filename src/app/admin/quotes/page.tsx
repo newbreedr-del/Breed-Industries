@@ -13,10 +13,13 @@ interface Quote {
   quote_number: string;
   customer_name: string;
   customer_email: string;
+  customer_phone?: string;
+  customer_company?: string;
   project_name: string;
   contact_person: string;
   items: any[];
   total: number;
+  notes?: string;
   created_at: string;
   updated_at: string;
   status: string;
@@ -244,6 +247,8 @@ export default function QuotesPage() {
                         <td className="px-6 py-4">
                           <div className="text-white font-medium">{quote.customer_name}</div>
                           <div className="text-white/60 text-sm">{quote.customer_email}</div>
+                          {quote.customer_phone && <div className="text-white/40 text-xs">{quote.customer_phone}</div>}
+                          {quote.customer_company && <div className="text-white/40 text-xs italic">{quote.customer_company}</div>}
                         </td>
                         <td className="px-6 py-4">
                           <div className="text-white">{quote.project_name}</div>
@@ -309,6 +314,11 @@ export default function QuotesPage() {
                       {expandedQuote === quote.id && (
                         <tr className="bg-black/30">
                           <td colSpan={7} className="px-6 py-4">
+                            {quote.notes && (
+                              <div className="mb-3 px-3 py-2 rounded-lg bg-accent/10 border border-accent/20 text-white/70 text-sm">
+                                <span className="text-accent text-xs font-medium uppercase tracking-wide">Notes: </span>{quote.notes}
+                              </div>
+                            )}
                             <div className="rounded-lg overflow-hidden border border-white/10">
                               <table className="w-full text-sm">
                                 <thead className="bg-white/5">

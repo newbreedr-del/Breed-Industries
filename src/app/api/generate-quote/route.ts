@@ -51,10 +51,13 @@ export async function POST(req: NextRequest) {
       quote_number: quoteNumber,
       customer_name: customerName,
       customer_email: customerEmail,
+      customer_phone: customerPhone || null,
+      customer_company: customerCompany || null,
       project_name: projectName,
       contact_person: contactPerson,
       items: items,
       total: total,
+      notes: notes || null,
       status: 'pending'
     });
 
