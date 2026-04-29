@@ -82,7 +82,7 @@ export default function ContactPage() {
                 <MapPin className="w-5 h-5 text-accent" />
                 <div>
                   <p className="text-white font-semibold">Head Office</p>
-                  <p className="text-white/60 text-sm">1 Kings Road, Pinetown, Durban 3610</p>
+                  <p className="text-white/60 text-sm">12 Kings Road, Pinetown, Durban 3610</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">

@@ -46,23 +46,23 @@ const navItems = [
 
 const tiers = [
   {
-    name: 'Launch Starter',
-    price: 'R2,500–R4,500',
-    description: 'Business setup, basic logo, and cards',
-    link: '/services#launch-starter'
+    name: 'Launch Essentials',
+    price: 'From R3,950',
+    description: 'CIPC registration, basic logo, and business cards',
+    link: '/build-package'
   },
   {
-    name: 'Growth Professional',
-    price: 'R6,000–R10,000',
-    description: 'Premium branding, web, and business plan',
-    link: '/services#growth-professional',
+    name: 'Growth Momentum',
+    price: 'From R9,800',
+    description: 'Full branding, 5-page website, and business plan',
+    link: '/build-package',
     featured: true
   },
   {
-    name: 'Empire Premium',
-    price: 'R12,000–R25,000+',
-    description: 'Full-service agency partnership',
-    link: '/services#empire-premium'
+    name: 'Empire Ascend',
+    price: 'From R18,500',
+    description: 'E-commerce portal, premium branding & social media',
+    link: '/build-package'
   }
 ];
 

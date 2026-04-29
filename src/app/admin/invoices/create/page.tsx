@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
@@ -10,13 +10,16 @@ import {
   Plus,
   Trash2,
   ArrowLeft,
-  Save
+  Save,
+  Receipt
 } from 'lucide-react';
 import Link from 'next/link';
 
-export default function CreateInvoicePage() {
+function CreateInvoiceContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
+  const [fromQuoteBanner, setFromQuoteBanner] = useState<string | null>(null);
   
   // Form state
   const [customerName, setCustomerName] = useState('');
@@ -38,6 +41,37 @@ export default function CreateInvoicePage() {
       amount: 0
     }
   ]);
+
+  useEffect(() => {
+    const fromQuote = searchParams.get('fromQuote');
+    if (!fromQuote) return;
+    setFromQuoteBanner(fromQuote);
+    setQuoteNumber(fromQuote);
+    const name = searchParams.get('customerName');
+    const email = searchParams.get('customerEmail');
+    const project = searchParams.get('projectName');
+    const rawItems = searchParams.get('items');
+    if (name) setCustomerName(name);
+    if (email) setCustomerEmail(email);
+    if (rawItems) {
+      try {
+        const parsed = JSON.parse(rawItems);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const mapped: InvoiceItem[] = parsed.map((it: any, i: number) => ({
+            id: `item_${Date.now()}_${i}`,
+            name: it.name ?? '',
+            description: it.description ?? '',
+            quantity: Number(it.quantity) || 1,
+            rate: Number(it.rate ?? it.price) || 0,
+            pricingType: it.pricingType ?? 'one-time',
+            amount: (Number(it.quantity) || 1) * (Number(it.rate ?? it.price) || 0),
+          }));
+          setItems(mapped);
+        }
+      } catch {}
+    }
+    if (project) setNotes(`Project: ${project}`);
+  }, [searchParams]);
 
   const addItem = () => {
     setItems([
@@ -148,6 +182,15 @@ export default function CreateInvoicePage() {
     <>
       <Header />
       
+      {fromQuoteBanner && (
+        <div className="bg-accent/10 border-b border-accent/30 px-4 py-3">
+          <div className="container mx-auto flex items-center gap-2 text-sm">
+            <Receipt size={16} className="text-accent" />
+            <span className="text-white/80">Converted from quote <span className="text-accent font-semibold">{fromQuoteBanner}</span>. Review and adjust before saving.</span>
+          </div>
+        </div>
+      )}
+
       <PageHero
         title="Create Invoice"
         subtitle="Admin Dashboard"
@@ -438,5 +481,17 @@ export default function CreateInvoicePage() {
 
       <Footer />
     </>
+  );
+}
+
+export default function CreateInvoicePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-white/60 text-sm">Loading...</div>
+      </div>
+    }>
+      <CreateInvoiceContent />
+    </Suspense>
   );
 }

@@ -15,11 +15,11 @@ const serviceCategories = [
     icon: <Shield className="w-8 h-8" />,
     description: 'Complete registration and compliance services to establish your business on solid legal ground.',
     services: [
-      { name: 'Company Registration (CIPC)', price: 'From R3,500' },
-      { name: 'Tax Clearance', price: 'From R800' },
-      { name: 'BEE Certification', price: 'From R1,200' },
+      { name: 'Company Registration (CIPC)', price: 'From R550' },
+      { name: 'Tax Compliance (SARS)', price: 'From R850' },
+      { name: 'BEE Certification', price: 'From R250' },
       { name: 'CSD Registration', price: 'R450' },
-      { name: 'Business Bank Account', price: 'From R600' }
+      { name: 'COID / Letter of Good Standing', price: 'From R850' }
     ]
   },
   {
@@ -28,21 +28,23 @@ const serviceCategories = [
     icon: <Briefcase className="w-8 h-8" />,
     description: 'Strategic brand development that positions your business for recognition and trust in your market.',
     services: [
-      { name: 'Logo Design', price: 'From R2,500' },
-      { name: 'Brand Identity', price: 'From R5,000' },
-      { name: 'Brand Guidelines', price: 'From R3,000' },
-      { name: 'Business Cards', price: 'From R1,200' },
-      { name: 'Marketing Materials', price: 'From R2,000' }
+      { name: 'Logo Design', price: 'From R1,500' },
+      { name: 'Business Branding Package', price: 'From R2,500' },
+      { name: 'Business Cards (250)', price: 'From R800' },
+      { name: 'Social Media Flyer', price: 'From R400' },
+      { name: 'Marketing Materials', price: 'From R1,200' }
     ]
   },
   {
     id: 'business-profile',
-    title: 'Business Profile',
+    title: 'Business Profile & Plans',
     icon: <Shield className="w-8 h-8" />,
     description: 'Professional business profiles and company documents designed to impress stakeholders and support tender submissions.',
     services: [
-      { name: 'Starter (1–4 Pages)', price: 'R850 – R2,160' },
-      { name: 'Standard (5–10 Pages)', price: 'R2,500 – R4,320' }
+      { name: 'Business Profile – Starter (1–4 Pages)', price: 'From R850' },
+      { name: 'Business Profile – Standard (5–10 Pages)', price: 'From R2,500' },
+      { name: 'Business Plan – Basic', price: 'From R1,190' },
+      { name: 'Business Plan – Comprehensive', price: 'From R3,000' }
     ]
   },
   {
@@ -51,11 +53,11 @@ const serviceCategories = [
     icon: <Layers className="w-8 h-8" />,
     description: 'Custom websites, apps, and digital marketing strategies that drive growth and engagement.',
     services: [
-      { name: 'Website Development', price: 'From R10,000' },
-      { name: 'Mobile App Development', price: 'From R25,000' },
-      { name: 'E-commerce Solutions', price: 'From R15,000' },
-      { name: 'SEO & Digital Marketing', price: 'From R4,000/mo' },
-      { name: 'Social Media Management', price: 'From R5,000/mo' }
+      { name: 'Website Development', price: 'From R5,000' },
+      { name: 'Mobile App Development', price: 'From R15,000' },
+      { name: 'E-commerce Solutions', price: 'From R8,000' },
+      { name: 'SEO & Digital Marketing', price: 'From R2,500/mo' },
+      { name: 'Social Media Management', price: 'From R3,500/mo' }
     ]
   }
 ];
@@ -64,47 +66,44 @@ const serviceCategories = [
 const servicePackages = [
   {
     id: 'launch-starter',
-    name: 'Launch Starter',
-    price: 'R4,500–R7,000',
-    description: 'Perfect for new businesses looking to establish a professional foundation.',
+    name: 'Launch Essentials',
+    price: 'From R3,950',
+    description: 'Perfect for new businesses looking to establish a professional foundation fast.',
     features: [
-      'Company Registration (CIPC)',
-      'Basic branding essentials (Logo + Business Cards)',
-      'Marketing materials (digital or print)'
+      'CIPC Company Registration',
+      'Basic Logo Design',
+      'Business Cards (250 printed)'
     ],
     popular: false,
-    ctaLink: '/contact'
+    ctaLink: '/build-package'
   },
   {
     id: 'growth-professional',
-    name: 'Growth Professional',
-    price: 'R15,000–R25,000',
+    name: 'Growth Momentum',
+    price: 'From R9,800',
     description: 'For businesses ready to expand their market presence and digital footprint.',
     features: [
-      'All Launch Starter inclusions',
-      'Enhanced branding (Full Brand Identity)',
-      'Web presence (5-10 page website)',
-      'Digital marketing setup (SEO + Social)',
-      'Strategic documents (business plan)'
+      'Business Branding Package',
+      '5-Page Website',
+      'Marketing Materials',
+      'Business Plan'
     ],
     popular: true,
-    ctaLink: '/contact'
+    ctaLink: '/build-package'
   },
   {
     id: 'empire-premium',
-    name: 'Empire Premium',
-    price: 'R30,000–R50,000+',
-    description: 'The complete solution for established businesses aiming for market dominance.',
+    name: 'Empire Ascend',
+    price: 'From R18,500',
+    description: 'The complete digital presence package for serious growth and market dominance.',
     features: [
-      'All Growth Professional inclusions',
-      'Mobile App Development',
-      'Video marketing (1-minute ad)',
-      'Comprehensive branding (full media kit)',
-      'Ongoing support (6 months marketing)',
-      'All compliance services included'
+      'Premium Logo + Full Branding',
+      'E-commerce Web Portal',
+      'Media Kit',
+      '3 Months Social Media Management'
     ],
     popular: false,
-    ctaLink: '/contact'
+    ctaLink: '/build-package'
   }
 ];
 

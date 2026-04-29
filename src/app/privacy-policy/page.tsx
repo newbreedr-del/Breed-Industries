@@ -115,7 +115,7 @@ export default function PrivacyPolicyPage() {
                   <h3 className="text-xl font-semibold text-white mb-3">12. Contact Us</h3>
                   <p>If you have questions about this privacy policy or your personal information, please contact us at:<br />
                   Email: info@thebreed.co.za<br />
-                  Phone: +27 12 345 6789</p>
+                  Phone: +27 60 496 4105</p>
                 </div>
               </div>
 

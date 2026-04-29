@@ -177,14 +177,14 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
     'COID Registration / Letter of Good Standing': { timeline: '3 – 7 Business Days', clientRequirements: ['CIPC registration documents', 'Estimated annual payroll amount', 'Nature of business activities', 'Number of employees'] },
     'UIF Registration & Compliance Letter': { timeline: '3 – 7 Business Days', clientRequirements: ['CIPC registration documents', 'Employee details (ID numbers, start dates)', 'Monthly payroll figures', 'Employer banking details'] },
     'CIPC Annual Return': { timeline: '1 – 3 Business Days', clientRequirements: ['CIPC customer code and password', 'Current registered office address confirmation', 'Director changes (if any)', 'Annual return fee (paid to CIPC)'] },
-    'Basic Logo Design': { timeline: '3 – 5 Business Days', clientRequirements: ['Brand name and tagline (if applicable)', 'Preferred colours and style references', 'Industry and target audience description', 'Any existing brand assets'] },
-    'Premium Logo Design': { timeline: '7 – 10 Business Days', clientRequirements: ['Detailed brand brief (provided by Breed Industries)', 'Competitor references and positioning notes', 'Vision, mission, and values statement', 'Stakeholder availability for feedback sessions'] },
-    'Business Branding': { timeline: '5 – 8 Business Days', clientRequirements: ['Approved logo files', 'Brand story and company background', 'Target market demographics', 'Preferred tone of voice and messaging'] },
-    'Business Cards (250)': { timeline: '5 – 7 Business Days (incl. print)', clientRequirements: ['Approved logo and brand colours', 'Contact details for each cardholder', 'Preferred card stock and finish', 'Delivery address for printed cards'] },
-    'Simple Social Media Flyer': { timeline: '2 – 3 Business Days', clientRequirements: ['Text content for the flyer (headline, body text, call-to-action)', 'Logo and brand colors (if available)', 'High-resolution images to be used in the design (optional)', 'Style references or examples of designs you like (optional)'] },
-    'Standard Digital Flyer': { timeline: '3 – 5 Business Days', clientRequirements: ['Complete text content including headline, body, call-to-action, contact details', 'Logo, brand colors, fonts, and brand guidelines', 'High-resolution images to be used in the design', 'Design brief: target audience, design style, tone, and any specific requirements', 'Examples or inspiration of designs you like (optional)'] },
-    'Premium Event/Brand Flyer': { timeline: '5 – 7 Business Days', clientRequirements: ['Complete text content for all flyer variations', 'Complete brand package: logo, colors, fonts, brand guidelines', 'High-resolution images and graphics to be used', 'Detailed brief including target audience, event details, design requirements', 'List of all required sizes (social media, print, web banners, etc.)', 'Examples, mood boards, or inspiration references (optional)'] },
-    'Marketing Materials': { timeline: '5 – 10 Business Days', clientRequirements: ['Approved brand guidelines', 'Content and copy for each material', 'High-resolution images (if available)', 'Distribution format preferences (print/digital)'] },
+    'Basic Logo Design': { timeline: '3 – 5 Business Days', clientRequirements: ['Brand name and tagline (if applicable)', 'Preferred colours and style references', 'Industry and target audience description', 'Any existing brand assets', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
+    'Premium Logo Design': { timeline: '7 – 10 Business Days', clientRequirements: ['Detailed brand brief (provided by Breed Industries)', 'Competitor references and positioning notes', 'Vision, mission, and values statement', 'Stakeholder availability for feedback sessions', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
+    'Business Branding': { timeline: '5 – 8 Business Days', clientRequirements: ['Approved logo files', 'Brand story and company background', 'Target market demographics', 'Preferred tone of voice and messaging', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
+    'Business Cards (250)': { timeline: '5 – 7 Business Days (incl. print)', clientRequirements: ['Approved logo and brand colours', 'Contact details for each cardholder', 'Preferred card stock and finish', 'Delivery address for printed cards', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
+    'Simple Social Media Flyer': { timeline: '2 – 3 Business Days', clientRequirements: ['Text content for the flyer (headline, body text, call-to-action)', 'Logo and brand colors (if available)', 'High-resolution images to be used in the design (optional)', 'Style references or examples of designs you like (optional)', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
+    'Standard Digital Flyer': { timeline: '3 – 5 Business Days', clientRequirements: ['Complete text content including headline, body, call-to-action, contact details', 'Logo, brand colors, fonts, and brand guidelines', 'High-resolution images to be used in the design', 'Design brief: target audience, design style, tone, and any specific requirements', 'Examples or inspiration of designs you like (optional)', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
+    'Premium Event/Brand Flyer': { timeline: '5 – 7 Business Days', clientRequirements: ['Complete text content for all flyer variations', 'Complete brand package: logo, colors, fonts, brand guidelines', 'High-resolution images and graphics to be used', 'Detailed brief including target audience, event details, design requirements', 'List of all required sizes (social media, print, web banners, etc.)', 'Examples, mood boards, or inspiration references (optional)', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
+    'Marketing Materials': { timeline: '5 – 10 Business Days', clientRequirements: ['Approved brand guidelines', 'Content and copy for each material', 'High-resolution images (if available)', 'Distribution format preferences (print/digital)', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
     'Website Development': { timeline: '10 – 15 Business Days', clientRequirements: ['Sitemap and page structure preferences', 'All text content for each page', 'High-resolution images and media', 'Domain name and hosting credentials (or purchase authorisation)', 'Logo and brand guidelines'] },
     'Mobile App Development': { timeline: '8 – 12 Weeks', clientRequirements: ['Detailed feature requirements document', 'User flow diagrams or wireframes (if available)', 'API documentation for third-party integrations', 'App Store / Play Store developer account credentials', 'Test device availability'] },
     'E-commerce Solutions': { timeline: '15 – 25 Business Days', clientRequirements: ['Product catalogue with descriptions, images, and pricing', 'Payment gateway preferences (PayFast, Stripe, etc.)', 'Shipping and delivery policies', 'Domain and hosting details', 'Business registration for payment gateway setup'] },
@@ -284,7 +284,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       pdf.setFontSize(7);
       pdf.setFont('helvetica', 'normal');
       pdf.text('The Breed Industries (PTY) LTD', pageWidth - margin, 14, { align: 'right' });
-      pdf.text('1 Kings Road, Pinetown, Durban 3610', pageWidth - margin, 20, { align: 'right' });
+      pdf.text('12 Kings Road, Pinetown, Durban 3610', pageWidth - margin, 20, { align: 'right' });
       pdf.text('Phone: +27 60 496 4105', pageWidth - margin, 26, { align: 'right' });
       pdf.text('Email: info@thebreed.co.za', pageWidth - margin, 32, { align: 'right' });
       pdf.text('Web: www.thebreed.co.za', pageWidth - margin, 38, { align: 'right' });
@@ -603,11 +603,18 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
         y += 8;
 
         // Requirements
-        pdf.setTextColor(...textMuted);
         pdf.setFontSize(7);
-        pdf.setFont('helvetica', 'normal');
         requirements.forEach((req) => {
-          pdf.text(`\u2022  ${req}`, margin + 6, y);
+          if (req.startsWith('NOTE:')) {
+            pdf.setTextColor(...accentColor);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(`\u26A0  ${req}`, margin + 6, y);
+            pdf.setFont('helvetica', 'normal');
+          } else {
+            pdf.setTextColor(...textMuted);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(`\u2022  ${req}`, margin + 6, y);
+          }
           y += 4;
         });
         y += 3;
@@ -664,7 +671,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       const disclaimers = [
         ['Scope of Work:', 'This quote covers only the services explicitly listed above. Any additional work, revisions beyond the agreed scope, or new requirements will be quoted separately and require written approval before commencement.'],
         ['Timelines:', 'Estimated timelines begin from the date the 50% deposit clears AND all required client materials have been received. Delays in providing materials or feedback will extend delivery dates accordingly. Breed Industries is not liable for delays caused by the client.'],
-        ['Revisions:', 'Each deliverable includes up to 2 rounds of revisions unless otherwise stated. Additional revision rounds will be billed at R350/hour.'],
+        ['Revisions:', 'Design and artwork deliverables include a maximum of 3 revision rounds. All other deliverables include up to 2 revision rounds. Additional revision rounds beyond the included allowance will be billed at R350/hour. Revision requests must be submitted in writing within 5 business days of receiving each draft.'],
         ['Intellectual Property:', 'All intellectual property and deliverables remain the property of Breed Industries until full payment has been received. Upon full payment, ownership of final deliverables transfers to the client. Source files and working files remain the property of Breed Industries unless explicitly included in the scope.'],
         ['Confidentiality:', 'Both parties agree to keep all project-related information confidential. Breed Industries will not share client data with third parties without written consent.'],
         ['Portfolio Rights:', 'Breed Industries reserves the right to feature completed work in our portfolio, website, and marketing materials unless a written non-disclosure agreement is in place.'],

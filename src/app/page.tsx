@@ -50,11 +50,11 @@ export default function Home() {
             alt="Breed Industries lobby"
             fill
             priority
-            className="object-cover opacity-40"
+            className="object-cover opacity-65"
           />
         </div>
         <div className="absolute inset-0 grid-overlay grid-overlay-animated"></div>
-        <div className="absolute inset-0 bg-color-bg-deep/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-color-bg-deep/60"></div>
         
         {/* Accent Glows */}
         <div className="absolute inset-0 pointer-events-none">
@@ -173,17 +173,17 @@ export default function Home() {
         </div>
       </section>
       
-      {/* What We Do — Clarity Section */}
+      {/* What We Do: Clarity Section */}
       <section className="py-20 relative">
         <div className="absolute inset-0 grid-overlay"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-14">
             <p className="text-accent text-sm uppercase tracking-widest font-medium mb-3">What We Do</p>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-              We Build Businesses — <span className="text-accent">From Idea to Empire</span>
+              We Build Businesses: <span className="text-accent">From Idea to Empire</span>
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto">
-              Whether you need to register your company, create your brand, write your business plan, or build a custom digital product — we do it all under one roof. Here&apos;s exactly how we help:
+              Whether you need to register your company, create your brand, write your business plan, or build a custom digital product, we do it all under one roof. Here's exactly how we help:
             </p>
           </div>
 
@@ -252,10 +252,10 @@ export default function Home() {
           <div className="text-center mb-16">
             <p className="text-accent text-sm uppercase tracking-widest font-medium mb-3">Our Work</p>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-              Real Products We&apos;ve Built for <span className="text-accent">Real Clients</span>
+              Real Products We've Built for <span className="text-accent">Real Clients</span>
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto">
-              We don&apos;t just consult — we build. From AI platforms to fashion stores, here are some of the digital products we&apos;ve shipped.
+              We don't just consult, we build. From AI platforms to fashion stores, here are some of the digital products we've shipped.
             </p>
           </div>
 
@@ -265,22 +265,22 @@ export default function Home() {
                 title: 'Engage Africa IO',
                 tag: 'AI Platform',
                 description: 'AI-powered customer engagement platform with WhatsApp integration, visual flow builder, and real-time analytics.',
-                image: '/assets/images/portfolio/digital-experience.jpg',
+                image: '/assets/images/portfolio/engage-africa-dashboard.png',
                 href: '/portfolio#engage-africa',
               },
               {
                 title: 'MLK Apparel Store',
                 tag: 'E-Commerce',
-                description: 'Full fashion e-commerce store with Stripe, Paystack & PayPal checkout, wishlist, and social media pixel tracking.',
-                image: '/assets/images/portfolio/client-showcase.jpg',
+                description: 'Full faith-driven fashion e-commerce store with Stripe, Paystack & PayPal checkout, wishlist, and social media pixel tracking.',
+                image: '/assets/images/portfolio/mlk-apparel-hero.png',
                 href: '/portfolio#mlk-apparel',
               },
               {
-                title: 'HOHI Church App',
+                title: 'HOGI Church App',
                 tag: 'Custom Platform',
-                description: 'Church management app with live service streaming, member management, giving tracking, and attendance.',
-                image: '/assets/images/portfolio/case-study-grid.jpg',
-                href: '/portfolio#hohi-church',
+                description: 'Church management app with live video meetings, member management, event planning, and analytics for House of Grace International.',
+                image: '/assets/images/portfolio/hogi-church-home.png',
+                href: '/portfolio#hogi-church',
               },
             ].map((project) => (
               <Link key={project.title} href={project.href} className="group">
@@ -290,7 +290,7 @@ export default function Home() {
                     alt={project.title}
                     width={640}
                     height={480}
-                    className="absolute inset-0 h-full w-full object-cover opacity-20 transition-opacity group-hover:opacity-30"
+                    className="absolute inset-0 h-full w-full object-cover object-top opacity-25 transition-opacity group-hover:opacity-40"
                   />
                   <div className="relative p-8">
                     <span className="text-xs bg-accent/20 text-accent border border-accent/30 rounded px-2 py-0.5 mb-4 inline-block">{project.tag}</span>
@@ -323,21 +323,23 @@ export default function Home() {
               <Users className="w-4 h-4 text-accent" />
               <p className="text-accent text-sm uppercase tracking-widest font-medium">Trusted By</p>
             </div>
-            <p className="text-white/50 text-sm">South African businesses we&apos;ve worked with</p>
+            <p className="text-white/50 text-sm">South African businesses we've worked with</p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-4">
+          <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-3">
             {[
-              { name: 'GoBizz', logo: '/assets/images/clients/gobizz-logo White-01.png' },
-              { name: 'Pinetown Inc', logo: '/assets/images/clients/Pinetown Incorporated-01.png' },
-              { name: 'MC Ways', logo: '/assets/images/clients/MC Ways New-03.png' },
-              { name: 'I-Group', logo: '/assets/images/clients/I Group Logo White-01-01.png' },
-              { name: 'NSPIRAXION', logo: '/assets/images/clients/NSPIRAXION IMPULSE PROJECTS LOGO [Recovered]-01.png' },
-              { name: 'Ndlunkulu', logo: '/assets/images/clients/Ndlunkulu White text-01.png' },
-              { name: 'Isambulo', logo: '/assets/images/clients/Isambulo Logo-01.png' },
-              { name: 'Ebodweni', logo: '/assets/images/clients/Ebodweni-01.png' },
+              { name: 'GoBizz', logo: '/assets/images/clients/gobizz-logo.png' },
+              { name: 'I-Group', logo: '/assets/images/clients/igroup-logo.png' },
+              { name: 'MC Ways', logo: '/assets/images/clients/mcways-logo.jpg' },
+              { name: 'NSPIRAXION', logo: '/assets/images/clients/nspiraxion-logo.jpg' },
+              { name: 'Isambulo', logo: '/assets/images/clients/isambulo-logo.jpg' },
+              { name: 'Ebodweni', logo: '/assets/images/clients/ebodweni-logo.jpg' },
+              { name: 'Lance', logo: '/assets/images/clients/lance-logo.jpg' },
+              { name: 'Gadali Security', logo: '/assets/images/clients/gadali-logo.jpg' },
+              { name: 'Spephelo', logo: '/assets/images/clients/spephelo-logo.jpg' },
             ].map((c) => (
-              <div key={c.name} className="glass-card p-4 flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
-                <Image src={c.logo} alt={c.name} width={100} height={44} className="object-contain max-h-10" />
+              <div key={c.name} className="glass-card p-3 flex flex-col items-center justify-center gap-1.5 opacity-70 hover:opacity-100 transition-opacity bg-white/10">
+                <Image src={c.logo} alt={c.name} width={80} height={36} className="object-contain max-h-9 w-auto" />
+                <span className="text-white/40 text-[10px] text-center leading-tight">{c.name}</span>
               </div>
             ))}
           </div>
@@ -355,7 +357,7 @@ export default function Home() {
                 Ready to Build Your Empire?
               </h2>
               <p className="text-white/70 text-lg mb-8">
-                Whether you&apos;re starting from scratch or scaling up — book a strategy call and we&apos;ll map out exactly what you need and how much it&apos;ll cost.
+                Whether you're starting from scratch or scaling up, book a strategy call and we'll map out exactly what you need and how much it'll cost.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link href="/contact" className="btn btn-primary">
