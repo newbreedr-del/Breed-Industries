@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
-import { FileText, Download, Eye, Search, Filter, Calendar, Receipt, ArrowRight, PlusCircle } from 'lucide-react';
+import { FileText, Download, Eye, EyeOff, Search, Filter, Calendar, Receipt, ArrowRight, PlusCircle, Mail, ChevronDown, CheckCircle, Clock, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface Quote {
@@ -28,6 +28,9 @@ export default function QuotesPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [converting, setConverting] = useState<string | null>(null);
+  const [sending, setSending] = useState<string | null>(null);
+  const [expandedQuote, setExpandedQuote] = useState<string | null>(null);
+  const [statusMsg, setStatusMsg] = useState<{ id: string; msg: string; ok: boolean } | null>(null);
 
   useEffect(() => {
     fetchQuotes();
@@ -47,6 +50,42 @@ export default function QuotesPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const sendQuoteEmail = async (quote: Quote) => {
+    setSending(quote.id);
+    setStatusMsg(null);
+    try {
+      const res = await fetch('/api/admin/send-quote-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ quote }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setStatusMsg({ id: quote.id, msg: `Sent to ${quote.customer_email}`, ok: true });
+        setQuotes(prev => prev.map(q => q.id === quote.id ? { ...q, status: 'sent' } : q));
+      } else {
+        setStatusMsg({ id: quote.id, msg: data.error || 'Failed to send', ok: false });
+      }
+    } catch {
+      setStatusMsg({ id: quote.id, msg: 'Network error', ok: false });
+    } finally {
+      setSending(null);
+    }
+  };
+
+  const updateStatus = async (quote: Quote, newStatus: string) => {
+    try {
+      const res = await fetch('/api/quotes', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: quote.id, status: newStatus }),
+      });
+      if (res.ok) {
+        setQuotes(prev => prev.map(q => q.id === quote.id ? { ...q, status: newStatus } : q));
+      }
+    } catch { /* silent */ }
   };
 
   const convertToInvoice = (quote: Quote) => {
@@ -215,16 +254,34 @@ export default function QuotesPage() {
                           {new Date(quote.created_at).toLocaleDateString('en-ZA')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 py-1 text-xs rounded-full ${
-                            quote.status === 'sent' ? 'bg-green-500/20 text-green-400' :
-                            quote.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' :
-                            'bg-gray-500/20 text-gray-400'
-                          }`}>
-                            {quote.status}
-                          </span>
+                          <select
+                            value={quote.status}
+                            onChange={(e) => updateStatus(quote, e.target.value)}
+                            className={`px-2 py-1 text-xs rounded-full border-0 cursor-pointer bg-transparent ${
+                              quote.status === 'sent' ? 'text-green-400' :
+                              quote.status === 'accepted' ? 'text-blue-400' :
+                              quote.status === 'declined' ? 'text-red-400' :
+                              'text-yellow-400'
+                            }`}
+                            style={{ background: 'transparent' }}
+                          >
+                            <option value="pending" className="bg-[#1a1a1a] text-yellow-400">pending</option>
+                            <option value="sent" className="bg-[#1a1a1a] text-green-400">sent</option>
+                            <option value="accepted" className="bg-[#1a1a1a] text-blue-400">accepted</option>
+                            <option value="declined" className="bg-[#1a1a1a] text-red-400">declined</option>
+                          </select>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right">
                           <div className="flex items-center justify-end gap-2">
+                            <button
+                              onClick={() => sendQuoteEmail(quote)}
+                              disabled={sending === quote.id}
+                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 text-xs font-medium transition-colors disabled:opacity-50"
+                              title={`Email quote to ${quote.customer_email}`}
+                            >
+                              <Mail size={14} />
+                              {sending === quote.id ? 'Sending…' : 'Email Client'}
+                            </button>
                             <button
                               onClick={() => convertToInvoice(quote)}
                               disabled={converting === quote.id}
@@ -234,12 +291,47 @@ export default function QuotesPage() {
                               <Receipt size={14} />
                               {converting === quote.id ? 'Loading…' : 'Invoice'}
                             </button>
-                            <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors" title="View Quote">
-                              <Eye size={16} />
+                            <button
+                              onClick={() => setExpandedQuote(expandedQuote === quote.id ? null : quote.id)}
+                              className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+                              title="View Items"
+                            >
+                              {expandedQuote === quote.id ? <EyeOff size={16} /> : <Eye size={16} />}
                             </button>
                           </div>
+                          {statusMsg?.id === quote.id && (
+                            <p className={`text-xs mt-1 ${statusMsg.ok ? 'text-green-400' : 'text-red-400'}`}>{statusMsg.msg}</p>
+                          )}
                         </td>
                       </tr>
+                      {expandedQuote === quote.id && (
+                        <tr className="bg-white/3">
+                          <td colSpan={7} className="px-6 py-4">
+                            <div className="rounded-lg overflow-hidden border border-white/10">
+                              <table className="w-full text-sm">
+                                <thead className="bg-white/5">
+                                  <tr>
+                                    <th className="px-4 py-2 text-left text-white/60 font-medium">Service</th>
+                                    <th className="px-4 py-2 text-center text-white/60 font-medium">Qty</th>
+                                    <th className="px-4 py-2 text-right text-white/60 font-medium">Rate</th>
+                                    <th className="px-4 py-2 text-right text-white/60 font-medium">Subtotal</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {(quote.items || []).map((item: any, i: number) => (
+                                    <tr key={i} className="border-t border-white/5">
+                                      <td className="px-4 py-2 text-white">{item.name || item.description || '—'}</td>
+                                      <td className="px-4 py-2 text-center text-white/70">{item.quantity || 1}</td>
+                                      <td className="px-4 py-2 text-right text-white/70">R{(Number(item.rate) || 0).toLocaleString('en-ZA')}</td>
+                                      <td className="px-4 py-2 text-right text-accent font-medium">R{((Number(item.quantity) || 1) * (Number(item.rate) || 0)).toLocaleString('en-ZA')}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
                     ))}
                   </tbody>
                 </table>

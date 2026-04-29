@@ -58,6 +58,33 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// PATCH /api/quotes - Update quote status
+export async function PATCH(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { id, status } = body;
+
+    if (!id || !status) {
+      return NextResponse.json({ error: 'id and status are required' }, { status: 400 });
+    }
+
+    const { data, error } = await supabase
+      .from('quotes')
+      .update({ status, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      return NextResponse.json({ error: 'Failed to update quote' }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true, quote: data });
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to update quote' }, { status: 500 });
+  }
+}
+
 // POST /api/quotes - Create new quote
 export async function POST(request: NextRequest) {
   try {

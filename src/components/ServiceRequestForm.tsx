@@ -167,12 +167,12 @@ export default function ServiceRequestForm({ preselectedServiceId, onSuccess }: 
           <select
             value={selectedService?.id || ''}
             onChange={(e) => handleServiceSelect(e.target.value)}
-            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-accent"
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-accent [&>option]:bg-[#1a1a1a] [&>option]:text-white"
             required
           >
-            <option value="">Choose a service...</option>
+            <option value="" className="bg-[#1a1a1a] text-white">Choose a service...</option>
             {serviceDefinitions.map(service => (
-              <option key={service.id} value={service.id}>
+              <option key={service.id} value={service.id} className="bg-[#1a1a1a] text-white">
                 {service.category} - {service.name} {service.basePrice && `(${service.basePrice})`}
               </option>
             ))}
