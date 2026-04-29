@@ -279,6 +279,47 @@ export const serviceDefinitions: ServiceDefinition[] = [
     ],
     additionalInfo: 'We assist with application preparation and booking'
   },
+  {
+    id: 'coid-registration',
+    category: 'Business Setup & Compliance',
+    name: 'COID Registration / Letter of Good Standing',
+    description: 'Workplace Compensation Fund registration and annual letter of good standing for compliance',
+    basePrice: 'From R850',
+    requiredDocuments: [
+      { name: 'CIPC Registration Documents', description: 'Company registration certificate (COR 14.3 or COR 15.3)', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Payroll Estimate', description: 'Estimated annual payroll amount or current payroll records', required: true, acceptedFormats: ['.pdf', '.xlsx', '.xls', '.doc', '.docx'] },
+      { name: 'Business Activities Description', description: 'Nature of business activities and job descriptions of employees', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+      { name: 'Employee Count', description: 'Number of employees and their roles', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] }
+    ],
+    additionalInfo: 'Letter of Good Standing must be renewed annually'
+  },
+  {
+    id: 'uif-registration',
+    category: 'Business Setup & Compliance',
+    name: 'UIF Registration & Compliance Letter',
+    description: 'Unemployment Insurance Fund registration and compliance documentation for employers',
+    basePrice: 'From R650',
+    requiredDocuments: [
+      { name: 'CIPC Registration Documents', description: 'Company registration certificate', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Employee Details', description: 'Full names, ID numbers, and start dates of all employees', required: true, acceptedFormats: ['.pdf', '.xlsx', '.xls', '.doc', '.docx'] },
+      { name: 'Monthly Payroll Figures', description: 'Monthly salary breakdown per employee', required: true, acceptedFormats: ['.pdf', '.xlsx', '.xls'] },
+      { name: 'Employer Banking Details', description: 'Business bank account details for UIF contributions', required: true, acceptedFormats: ['.pdf', '.jpg', '.png'] }
+    ],
+    additionalInfo: 'UIF contributions are 2% of gross remuneration (1% employer + 1% employee)'
+  },
+  {
+    id: 'cipc-annual-return',
+    category: 'Business Setup & Compliance',
+    name: 'CIPC Annual Return',
+    description: 'Annual CIPC return filing to maintain company compliance and good standing',
+    basePrice: 'From R450',
+    requiredDocuments: [
+      { name: 'CIPC Customer Code & Password', description: 'Login credentials for CIPC online portal', required: true, acceptedFormats: ['.pdf', '.txt', '.doc', '.docx'] },
+      { name: 'Registered Office Address', description: 'Confirmation of current registered business address', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+      { name: 'Director Changes (if any)', description: 'Details of any director appointments or resignations since last return', required: false, acceptedFormats: ['.pdf', '.doc', '.docx'] }
+    ],
+    additionalInfo: 'Annual return fee paid directly to CIPC. Late submissions incur penalties.'
+  },
 
   // Branding & Identity
   {
@@ -358,6 +399,63 @@ export const serviceDefinitions: ServiceDefinition[] = [
       }
     ],
     additionalInfo: 'Detailed usage guidelines for consistent brand application'
+  },
+  {
+    id: 'basic-logo-design',
+    category: 'Branding & Identity',
+    name: 'Basic Logo Design',
+    description: 'Professional logo design with 2 initial concepts and up to 3 revision rounds, delivered in all standard formats',
+    basePrice: 'From R1,500',
+    requiredDocuments: [
+      { name: 'Brand Brief', description: 'Brand name, tagline (if any), industry, and target audience description', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+      { name: 'Colour Preferences', description: 'Preferred colours or colour palette references', required: false, acceptedFormats: ['.pdf', '.jpg', '.png', '.txt'] },
+      { name: 'Style References', description: 'Examples of logos or styles you like for inspiration', required: false, acceptedFormats: ['.pdf', '.jpg', '.png'] },
+      { name: 'Existing Brand Assets', description: 'Any existing logo or brand materials (if rebranding)', required: false, acceptedFormats: ['.ai', '.eps', '.svg', '.pdf', '.png', '.jpg'] }
+    ],
+    additionalInfo: 'Includes 2 initial concepts and up to 3 revision rounds. Additional revisions billed at R350/hour.'
+  },
+  {
+    id: 'premium-logo-design',
+    category: 'Branding & Identity',
+    name: 'Premium Logo Design',
+    description: 'Advanced logo design with 5 concepts, unlimited revisions, full brand kit including colour palette, typography, and usage guidelines',
+    basePrice: 'From R3,500',
+    requiredDocuments: [
+      { name: 'Brand Brief', description: 'Detailed brand brief covering business overview, mission, vision, values, and target market', required: true, acceptedFormats: ['.pdf', '.doc', '.docx'] },
+      { name: 'Competitor References', description: 'Competitor logos and brand positioning notes', required: false, acceptedFormats: ['.pdf', '.doc', '.docx', '.jpg', '.png'] },
+      { name: 'Vision & Values Statement', description: 'Company vision, mission, and core values', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+      { name: 'Style Preferences', description: 'Mood board, inspiration references, or style guide preferences', required: false, acceptedFormats: ['.pdf', '.jpg', '.png'] }
+    ],
+    additionalInfo: 'Includes 5 concepts, unlimited revisions, and complete brand kit delivery.'
+  },
+  {
+    id: 'business-branding',
+    category: 'Branding & Identity',
+    name: 'Business Branding',
+    description: 'Comprehensive brand identity package including visual identity, colour palette, typography, and brand usage guidelines',
+    basePrice: 'From R2,500',
+    requiredDocuments: [
+      { name: 'Approved Logo Files', description: 'Final approved logo in vector format (AI, EPS, or SVG)', required: true, acceptedFormats: ['.ai', '.eps', '.svg', '.pdf'] },
+      { name: 'Brand Story', description: 'Company background, brand story, and core messaging', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+      { name: 'Target Market Profile', description: 'Target market demographics and customer persona details', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+      { name: 'Tone of Voice Guidelines', description: 'Preferred tone, language style, and messaging direction', required: false, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] }
+    ],
+    additionalInfo: 'Deliverables include colour palette, typography guide, brand usage rules, and social media templates.'
+  },
+  {
+    id: 'album-art-design',
+    category: 'Branding & Identity',
+    name: 'Album Art Design',
+    description: 'Custom album cover and artwork design for musicians, DJs, and content creators — including single covers, EP artwork, and full album packaging',
+    basePrice: 'From R750',
+    requiredDocuments: [
+      { name: 'Project Brief', description: 'Album/single title, artist name, genre, mood, and theme of the music', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+      { name: 'Artist Photo or Images', description: 'High-resolution artist photo(s) or images to be incorporated (optional)', required: false, acceptedFormats: ['.jpg', '.jpeg', '.png', '.tiff', '.raw'] },
+      { name: 'Brand Assets', description: 'Artist logo, existing brand colours, or fonts (if applicable)', required: false, acceptedFormats: ['.ai', '.eps', '.svg', '.pdf', '.png', '.jpg'] },
+      { name: 'Style References', description: 'Examples of album artwork or visual styles you like for inspiration', required: false, acceptedFormats: ['.pdf', '.jpg', '.png'] },
+      { name: 'Track Listing', description: 'Track listing and credits text to appear on artwork (for full album packaging)', required: false, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] }
+    ],
+    additionalInfo: 'Delivered in high-res print-ready format (3000x3000px) and digital formats. Includes up to 3 revision rounds.'
   },
   {
     id: 'business-cards',
