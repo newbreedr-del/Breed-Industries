@@ -20,6 +20,7 @@ export default function ServiceRequestsPage() {
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchRequests();
@@ -27,18 +28,23 @@ export default function ServiceRequestsPage() {
 
   const fetchRequests = async () => {
     setLoading(true);
+    setFetchError(null);
     try {
-      const url = statusFilter === 'all' 
-        ? '/api/service-requests' 
+      const url = statusFilter === 'all'
+        ? '/api/service-requests'
         : `/api/service-requests?status=${statusFilter}`;
-      
+
       const response = await fetch(url);
+      const data = await response.json();
+
       if (response.ok) {
-        const data = await response.json();
         setRequests(data.requests || []);
+      } else {
+        setFetchError(data.error || `Server error ${response.status}`);
       }
     } catch (error) {
       console.error('Error fetching service requests:', error);
+      setFetchError('Could not reach the server. Check your network or Supabase connection.');
     } finally {
       setLoading(false);
     }
@@ -132,6 +138,13 @@ export default function ServiceRequestsPage() {
           {loading ? (
             <div className="glass-card p-12 text-center">
               <div className="text-white/60">Loading service requests...</div>
+            </div>
+          ) : fetchError ? (
+            <div className="glass-card p-12 text-center">
+              <XCircle size={48} className="text-red-400 mx-auto mb-4" />
+              <p className="text-red-400 font-semibold mb-2">Failed to load service requests</p>
+              <p className="text-white/50 text-sm mb-4">{fetchError}</p>
+              <button onClick={fetchRequests} className="btn btn-outline btn-sm">Retry</button>
             </div>
           ) : requests.length === 0 ? (
             <div className="glass-card p-12 text-center">

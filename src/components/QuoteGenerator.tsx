@@ -195,6 +195,10 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
     'Business Profile - Standard (5\u201310 Pages)': { timeline: '5 – 8 Business Days', clientRequirements: ['Detailed company background and milestones', 'Full service/product catalogue', 'Team profiles with photographs', 'Client references or testimonials', 'Certifications and compliance documents'] },
     'Business Plan - Basic/Entry-Level': { timeline: '4 – 7 Business Days', clientRequirements: ['Business concept and model description', 'Target market information', 'Revenue model and pricing strategy', 'Startup costs estimate'] },
     'Business Plan - Standard/Comprehensive': { timeline: '8 – 15 Business Days', clientRequirements: ['Detailed business model and value proposition', 'Market research data and competitor analysis', 'Financial records (existing business) or projections', '3-year revenue and expense forecasts', 'Funding requirements and use of funds breakdown'] },
+    'Training Workbook / Study Guide': { timeline: '7 – 10 Business Days', clientRequirements: ['Training content outline or existing material', 'Target learners and qualification level', 'Number of modules or units', 'Logo and brand guidelines', 'Preferred page count or layout style', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
+    "Facilitator's / Lecturer's Guide": { timeline: '5 – 8 Business Days', clientRequirements: ['Aligned study guide or content outline', 'Session time allocations per module', 'Assessment activities and questions per module', 'Learning outcomes per module', 'Any specific facilitation notes or instructions', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
+    'Training PowerPoint Presentation': { timeline: '4 – 6 Business Days', clientRequirements: ['Training content or speaker notes/script', 'Logo and brand colors/fonts', 'Number of slides required (approximate)', 'Preferred design style or theme', 'Any existing slides to incorporate (optional)', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
+    'Full Training Package (All Three)': { timeline: '10 – 15 Business Days', clientRequirements: ['Complete training content outline', 'Target audience and qualification level', 'Number of modules', 'Logo and brand guidelines', 'Session time allocations per module', 'Learning outcomes per module', 'NOTE: Maximum 3 revision rounds included per deliverable. Additional revisions billed at R350/hour.'] },
   };
 
   // Generate PDF function
@@ -986,12 +990,12 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
                     <div className="relative">
                       <select
                         onChange={(e) => e.target.value && handleServiceSelect(item.id, e.target.value)}
-                        className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white appearance-none cursor-pointer"
+                        className="w-full rounded-lg bg-[#1a1a1a] border border-white/10 p-3 text-white appearance-none cursor-pointer [&>option]:bg-[#1a1a1a] [&>option]:text-white"
                         defaultValue=""
                       >
-                        <option value="">Or select from services...</option>
+                        <option value="" className="bg-[#1a1a1a] text-white">Or select from services...</option>
                         {serviceDefinitions.map(service => (
-                          <option key={service.id} value={service.id}>
+                          <option key={service.id} value={service.id} className="bg-[#1a1a1a] text-white">
                             {service.category} - {service.name} {service.basePrice && `(${service.basePrice})`}
                           </option>
                         ))}

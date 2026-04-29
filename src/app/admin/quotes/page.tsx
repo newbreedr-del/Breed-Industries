@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
-import { FileText, Download, Eye, Search, Filter, Calendar, Receipt, ArrowRight } from 'lucide-react';
+import { FileText, Download, Eye, Search, Filter, Calendar, Receipt, ArrowRight, PlusCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface Quote {
@@ -94,9 +94,15 @@ export default function QuotesPage() {
         ]}
         size="default"
       >
-        <Link href="/admin/quotes/import" className="btn btn-primary">
-          Import Old Quotes
-        </Link>
+        <div className="flex gap-3">
+          <Link href="/admin/quotes/new" className="btn btn-primary flex items-center gap-2">
+            <PlusCircle size={16} />
+            New Quote
+          </Link>
+          <Link href="/admin/quotes/import" className="btn btn-outline">
+            Import Old Quotes
+          </Link>
+        </div>
       </PageHero>
 
       <section className="py-20 bg-color-bg-secondary relative">
