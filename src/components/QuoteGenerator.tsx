@@ -990,12 +990,12 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
                     <div className="relative">
                       <select
                         onChange={(e) => e.target.value && handleServiceSelect(item.id, e.target.value)}
-                        className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white appearance-none cursor-pointer"
+                        className="w-full rounded-lg bg-[#1a1a1a] border border-white/10 p-3 text-white appearance-none cursor-pointer [&>option]:bg-[#1a1a1a] [&>option]:text-white"
                         defaultValue=""
                       >
-                        <option value="">Or select from services...</option>
+                        <option value="" className="bg-[#1a1a1a] text-white">Or select from services...</option>
                         {serviceDefinitions.map(service => (
-                          <option key={service.id} value={service.id}>
+                          <option key={service.id} value={service.id} className="bg-[#1a1a1a] text-white">
                             {service.category} - {service.name} {service.basePrice && `(${service.basePrice})`}
                           </option>
                         ))}
