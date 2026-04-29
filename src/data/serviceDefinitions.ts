@@ -392,7 +392,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Branding & Identity',
     name: 'Simple Social Media Flyer',
     description: 'Single size, single concept digital flyer for social media',
-    basePrice: 'From R400',
+    basePrice: 'From R650',
     requiredDocuments: [
       {
         name: 'Content/Copy',
@@ -426,7 +426,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Branding & Identity',
     name: 'Standard Digital Flyer',
     description: 'Professional digital flyer with multiple concepts and revisions',
-    basePrice: 'From R750',
+    basePrice: 'From R950',
     requiredDocuments: [
       {
         name: 'Content/Copy',
@@ -466,7 +466,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Branding & Identity',
     name: 'Premium Event/Brand Flyer',
     description: 'High-end flyer design with multiple sizes and comprehensive brand work',
-    basePrice: 'From R1,200',
+    basePrice: 'From R1,250',
     requiredDocuments: [
       {
         name: 'Content/Copy',
@@ -508,21 +508,67 @@ export const serviceDefinitions: ServiceDefinition[] = [
     additionalInfo: 'Multiple concepts, unlimited revisions, multiple sizes (social media, print, web), delivered in all formats including source files'
   },
   {
-    id: 'marketing-materials',
+    id: 'digital-artwork',
     category: 'Branding & Identity',
-    name: 'Marketing Materials',
-    description: 'Brochures, flyers, posters, and other marketing collateral',
-    basePrice: 'From R1,200',
+    name: 'Digital Artwork / Graphic Design',
+    description: 'Custom digital artwork and graphic design for social media, banners, thumbnails, event graphics, or branded visuals',
+    basePrice: 'From R750',
     requiredDocuments: [
       {
-        name: 'Content/Copy',
-        description: 'Text content for the materials',
+        name: 'Design Brief',
+        description: 'Description of the artwork or design required and its intended use',
         required: true,
         acceptedFormats: ['.pdf', '.doc', '.docx', '.txt']
       },
       {
         name: 'Brand Assets',
-        description: 'Logo, images, and brand guidelines',
+        description: 'Logo and brand guidelines (colors, fonts) if applicable',
+        required: false,
+        acceptedFormats: ['.ai', '.eps', '.svg', '.pdf', '.png', '.jpg']
+      },
+      {
+        name: 'Reference Images / Elements',
+        description: 'Any images, icons, or graphic elements to be incorporated into the design',
+        required: false,
+        acceptedFormats: ['.jpg', '.png', '.svg', '.pdf']
+      },
+      {
+        name: 'Size Specifications',
+        description: 'Preferred dimensions or platform specifications (e.g. 1080x1080 for Instagram)',
+        required: false,
+        acceptedFormats: ['.pdf', '.txt', '.doc', '.docx']
+      },
+      {
+        name: 'Style References',
+        description: 'Examples or references of similar work you like (optional)',
+        required: false,
+        acceptedFormats: ['.jpg', '.png', '.pdf', '.url']
+      }
+    ],
+    additionalInfo: 'Price varies based on complexity. Includes up to 3 revision rounds. Delivered in JPG, PNG, and PDF formats. Source files available on request.'
+  },
+  {
+    id: 'marketing-materials',
+    category: 'Branding & Identity',
+    name: 'Marketing Materials',
+    description: 'Brochures, flyers, posters, and other marketing collateral',
+    basePrice: 'From R1,500',
+    requiredDocuments: [
+      {
+        name: 'Materials List',
+        description: 'List of all materials required (e.g. brochure, pull-up banner, poster, product sheet)',
+        required: true,
+        acceptedFormats: ['.pdf', '.doc', '.docx', '.txt']
+      },
+      {
+        name: 'Content/Copy',
+        description: 'All text content and copy for each material',
+        required: true,
+        acceptedFormats: ['.pdf', '.doc', '.docx', '.txt']
+      },
+      {
+        name: 'Brand Assets',
+        description: 'Approved brand guidelines: logo, colors, fonts',
         required: true,
         acceptedFormats: ['.ai', '.eps', '.svg', '.pdf', '.png', '.jpg']
       },

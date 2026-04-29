@@ -31,8 +31,11 @@ const serviceCategories = [
       { name: 'Logo Design', price: 'From R1,500' },
       { name: 'Business Branding Package', price: 'From R2,500' },
       { name: 'Business Cards (250)', price: 'From R800' },
-      { name: 'Social Media Flyer', price: 'From R400' },
-      { name: 'Marketing Materials', price: 'From R1,200' }
+      { name: 'Simple Social Media Flyer', price: 'From R650' },
+      { name: 'Standard Digital Flyer', price: 'From R950' },
+      { name: 'Premium Event/Brand Flyer', price: 'From R1,250' },
+      { name: 'Digital Artwork / Graphic Design', price: 'From R750' },
+      { name: 'Marketing Materials', price: 'From R1,500' }
     ]
   },
   {
