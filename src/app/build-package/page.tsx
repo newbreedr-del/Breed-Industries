@@ -1,14 +1,11 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
-import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, X, CheckCircle2, Download } from 'lucide-react';
-import QuoteGenerator from '@/components/QuoteGenerator';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, CheckCircle2, Download, ArrowRight } from 'lucide-react';
 
 const complianceOptions = [
   { id: 'cipc', name: 'CIPC Registration', price: 550, pricingType: 'one-time', icon: <Shield size={16} />, description: 'Complete company registration with CIPC including name reservation and registration certificate' },
@@ -46,6 +43,10 @@ const businessProfileOptions = [
   { id: 'profile-standard', name: 'Business Profile - Standard (5–10 Pages)', price: 2500, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Best for small to medium businesses. Professional formatting, digital flipbook formats, higher quality graphics.' },
   { id: 'plan-basic', name: 'Business Plan - Basic/Entry-Level', price: 1190, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Template-based solution suitable for internal strategy or simple needs, using generic data.' },
   { id: 'plan-comprehensive', name: 'Business Plan - Standard/Comprehensive', price: 3000, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Includes more detail, customized content, and often 3-year financial projections, ideal for funding applications.' },
+  { id: 'training-workbook', name: 'Training Workbook / Study Guide', price: 2800, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Professionally designed learner workbook or study guide (15–30 pages). Content layout, branded design, and print-ready PDF.' },
+  { id: 'training-facilitator', name: "Facilitator's / Lecturer's Guide", price: 2500, pricingType: 'one-time', icon: <FileText size={16} />, description: "Matching facilitator guide with session notes, instructions, assessment tools, and facilitation tips aligned with the study guide." },
+  { id: 'training-ppt', name: 'Training PowerPoint Presentation', price: 1800, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Branded, professional PowerPoint presentation (20–30 slides) aligned to your training programme with custom graphics and layouts.' },
+  { id: 'training-full', name: 'Full Training Package (All Three)', price: 6500, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Best value: Study Guide + Facilitator Guide + PowerPoint Presentation. Complete package for full training programme delivery.' },
 ];
 
 const builderSteps = [
@@ -67,19 +68,19 @@ const builderSteps = [
   },
   {
     id: 'digital',
-    title: 'Activate digital channels',
-    description: 'Add web, app, and marketing touchpoints to unlock visibility and sales momentum.',
+    title: 'Build your digital presence',
+    description: 'Add websites, apps, and digital marketing to grow your online visibility and drive sales.',
     options: digitalOptions,
     icon: <Layers className="w-5 h-5" />,
-    shortLabel: 'Activate',
+    shortLabel: 'Digital',
   },
   {
     id: 'business-profile',
-    title: 'Build your business profile',
-    description: 'Create professional business profiles and documents for tenders, stakeholders, and growth opportunities.',
+    title: 'Business documents & training',
+    description: 'Craft professional documents and training materials for tenders, stakeholders, and learning programmes.',
     options: businessProfileOptions,
     icon: <FileText className="w-5 h-5" />,
-    shortLabel: 'Profile',
+    shortLabel: 'Documents',
   },
 ];
 
@@ -139,15 +140,16 @@ const clientRequirementsMap: Record<string, string[]> = {
   'Business Profile - Standard (5–10 Pages)': ['Detailed company background and milestones', 'Full service/product catalogue', 'Team profiles with photographs', 'Client references or testimonials', 'Certifications and compliance documents'],
   'Business Plan - Basic/Entry-Level': ['Business concept and model description', 'Target market information', 'Revenue model and pricing strategy', 'Startup costs estimate'],
   'Business Plan - Standard/Comprehensive': ['Detailed business model and value proposition', 'Market research data and competitor analysis', 'Financial records (existing business) or projections', '3-year revenue and expense forecasts', 'Funding requirements and use of funds breakdown'],
+  'Training Workbook / Study Guide': ['Training content outline or existing material', 'Target learners and qualification level', 'Number of modules or units', 'Logo and brand guidelines', 'Preferred page count or layout style'],
+  "Facilitator's / Lecturer's Guide": ['Aligned study guide or content outline', 'Session time allocations per module', 'Assessment activities and questions per module', 'Learning outcomes per module', 'Any specific facilitation notes or instructions'],
+  'Training PowerPoint Presentation': ['Training content or speaker notes/script', 'Logo and brand colors/fonts', 'Number of slides required (approximate)', 'Preferred design style or theme', 'Any existing slides to incorporate (optional)'],
+  'Full Training Package (All Three)': ['Complete training content outline', 'Target audience and qualification level', 'Number of modules', 'Logo and brand guidelines', 'Session time allocations per module', 'Learning outcomes per module'],
 };
 
 export default function LabPage() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [activeStep, setActiveStep] = useState('compliance');
   const [selectedBundle, setSelectedBundle] = useState<string | null>(null);
-  const [showQuoteModal, setShowQuoteModal] = useState(false);
-  const [quoteSuccess, setQuoteSuccess] = useState<{ quoteNumber: string; customerEmail: string } | null>(null);
-
   const handleOptionToggle = (optionId: string) => {
     setSelectedBundle(null);
     setSelectedOptions(prev => {
@@ -158,33 +160,6 @@ export default function LabPage() {
       }
     });
   };
-
-  const selectedQuoteItems = useMemo(() => {
-    const items = selectedOptions.map((optionId, index) => {
-      const option = allOptions.find((item) => item.id === optionId);
-      return {
-        id: `${index + 1}-${optionId}`,
-        name: option?.name ?? 'Custom Item',
-        description: (option as any)?.description ?? '',
-        price: option?.price ?? 0,
-        pricingType: (option as any)?.pricingType ?? 'one-time',
-      };
-    });
-    console.log('Lab selectedQuoteItems:', items);
-    return items;
-  }, [selectedOptions]);
-
-  useEffect(() => {
-    if (!quoteSuccess) {
-      return;
-    }
-
-    const timer = window.setTimeout(() => {
-      setQuoteSuccess(null);
-    }, 6000);
-
-    return () => window.clearTimeout(timer);
-  }, [quoteSuccess]);
 
   const handleBundleSelect = (bundleId: string) => {
     const bundle = quickBundles.find(b => b.id === bundleId);
@@ -288,7 +263,11 @@ export default function LabPage() {
       'profile-starter': 3,   // Business Profile Starter
       'profile-standard': 5,  // Business Profile Standard
       'plan-basic': 4,        // Business Plan Basic
-      'plan-comprehensive': 8 // Business Plan Comprehensive
+      'plan-comprehensive': 8, // Business Plan Comprehensive
+      'training-workbook': 7,
+      'training-facilitator': 5,
+      'training-ppt': 4,
+      'training-full': 12,
     };
 
     // Calculate total days based on selected services
@@ -328,7 +307,7 @@ export default function LabPage() {
       <PageHero
         title="Build Your Package"
         subtitle="Custom Quote Builder"
-        description="Use our interactive builder to create a package that fits your business needs. Real-time pricing, instant quotes, and downloadable proposals."
+        description="Use our interactive builder to explore pricing for the services you need. Select components, see your estimate in real-time, then contact us for a formal quote."
         breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'Build Package', href: '/build-package' }
@@ -489,6 +468,24 @@ export default function LabPage() {
                         }
                       </div>
                     )}
+                    {/* Documents & Training Items */}
+                    {businessProfileOptions.filter(option => selectedOptions.includes(option.id)).length > 0 && (
+                      <div className="mb-2">
+                        <div className="flex items-center gap-2 mb-2">
+                          <FileText size={14} className="text-accent" />
+                          <span className="text-sm font-medium text-white">Documents</span>
+                        </div>
+                        {businessProfileOptions
+                          .filter(option => selectedOptions.includes(option.id))
+                          .map(option => (
+                            <div key={option.id} className="flex items-center justify-between py-1 pl-6 text-sm">
+                              <span className="text-white/70">{option.name}</span>
+                              <span className="text-accent">R{option.price.toLocaleString()}</span>
+                            </div>
+                          ))
+                        }
+                      </div>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -527,14 +524,22 @@ export default function LabPage() {
               </div>
             )}
 
-            <div className="flex justify-center">
-              <button 
-                className="btn btn-primary flex items-center gap-2"
-                onClick={() => setShowQuoteModal(true)}
-                disabled={selectedOptions.length === 0}
-              >
-                <ClipboardList className="w-4 h-4" /> Complete Quote
-              </button>
+            <div className="space-y-3">
+              {selectedOptions.length > 0 ? (
+                <>
+                  <p className="text-white/55 text-xs text-center leading-relaxed">
+                    Ready to proceed? We'll prepare a formal proposal for this package within 24 hours.
+                  </p>
+                  <Link href="/contact" className="btn btn-primary w-full flex items-center justify-center gap-2">
+                    <ClipboardList className="w-4 h-4" /> Request a Formal Quote
+                  </Link>
+                  <Link href="/request-service" className="btn btn-outline w-full flex items-center justify-center gap-2">
+                    <ArrowRight className="w-4 h-4" /> Request Service Directly
+                  </Link>
+                </>
+              ) : (
+                <p className="text-white/40 text-xs text-center">Select services above to build your estimate</p>
+              )}
             </div>
           </div>
 
@@ -605,41 +610,6 @@ export default function LabPage() {
 
       <Footer />
       
-      {/* Quote Generator Modal */}
-      {showQuoteModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-          <div className="relative w-full max-w-4xl">
-            <button 
-              onClick={() => setShowQuoteModal(false)}
-              className="absolute top-4 right-4 text-white hover:text-accent z-10"
-            >
-              <X size={24} />
-            </button>
-            
-            <div className="max-h-[90vh] overflow-y-auto">
-              <QuoteGenerator
-                selectedItems={selectedQuoteItems}
-                onSuccess={(details) => {
-                  setShowQuoteModal(false);
-                  setQuoteSuccess(details);
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {quoteSuccess && (
-        <div className="fixed bottom-6 right-6 z-50">
-          <div className="flex items-start gap-3 rounded-xl border border-emerald-400/40 bg-emerald-500/10 px-5 py-4 text-emerald-100 shadow-xl backdrop-blur">
-            <CheckCircle2 className="h-6 w-6 text-emerald-300" />
-            <div className="space-y-1">
-              <p className="font-heading text-sm font-semibold uppercase tracking-wide text-emerald-200">Quote Sent</p>
-              <p className="text-sm text-emerald-100/80">Quote #{quoteSuccess.quoteNumber} has been emailed to {quoteSuccess.customerEmail}.</p>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

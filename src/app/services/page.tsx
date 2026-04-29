@@ -39,15 +39,19 @@ const serviceCategories = [
     ]
   },
   {
-    id: 'business-profile',
-    title: 'Business Profile & Plans',
+    id: 'business-documents',
+    title: 'Business Documents & Training',
     icon: <Shield className="w-8 h-8" />,
-    description: 'Professional business profiles and company documents designed to impress stakeholders and support tender submissions.',
+    description: 'Professional business documents, training materials, and resources designed for tenders, stakeholders, and learning programmes.',
     services: [
       { name: 'Business Profile – Starter (1–4 Pages)', price: 'From R850' },
       { name: 'Business Profile – Standard (5–10 Pages)', price: 'From R2,500' },
       { name: 'Business Plan – Basic', price: 'From R1,190' },
-      { name: 'Business Plan – Comprehensive', price: 'From R3,000' }
+      { name: 'Business Plan – Comprehensive', price: 'From R3,000' },
+      { name: 'Training Workbook / Study Guide', price: 'From R2,800' },
+      { name: "Facilitator's / Lecturer's Guide", price: 'From R2,500' },
+      { name: 'Training PowerPoint Presentation', price: 'From R1,800' },
+      { name: 'Full Training Package (All Three)', price: 'From R6,500' }
     ]
   },
   {

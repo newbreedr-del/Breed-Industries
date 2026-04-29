@@ -840,6 +840,61 @@ export const serviceDefinitions: ServiceDefinition[] = [
       }
     ],
     additionalInfo: 'Includes content creation, posting, engagement, and monthly reporting'
+  },
+
+  // Training & Learning Materials
+  {
+    id: 'training-workbook',
+    category: 'Business Documents & Training',
+    name: 'Training Workbook / Study Guide',
+    description: 'Professionally designed learner workbook or study guide (15–30 pages) with content layout, branded design, and print-ready PDF',
+    basePrice: 'From R2,800',
+    requiredDocuments: [
+      { name: 'Content Outline', description: 'Training content outline or existing raw material', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+      { name: 'Brand Assets', description: 'Logo and brand guidelines (colors, fonts)', required: false, acceptedFormats: ['.ai', '.eps', '.svg', '.pdf', '.png'] },
+      { name: 'Learner Profile', description: 'Target learners, qualification level, and number of modules', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] }
+    ],
+    additionalInfo: 'Includes up to 3 revision rounds. Delivered as print-ready PDF and editable source file.'
+  },
+  {
+    id: 'training-facilitator',
+    category: 'Business Documents & Training',
+    name: "Facilitator's / Lecturer's Guide",
+    description: "Matching facilitator guide with session notes, instructions, assessment tools, and facilitation tips aligned with the study guide",
+    basePrice: 'From R2,500',
+    requiredDocuments: [
+      { name: 'Study Guide / Content Outline', description: 'Aligned study guide or detailed content outline', required: true, acceptedFormats: ['.pdf', '.doc', '.docx'] },
+      { name: 'Session Plan', description: 'Session time allocations and learning outcomes per module', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+      { name: 'Assessment Activities', description: 'Questions, activities, and assessment criteria', required: false, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] }
+    ],
+    additionalInfo: 'Includes up to 3 revision rounds. Best paired with the Training Workbook.'
+  },
+  {
+    id: 'training-ppt',
+    category: 'Business Documents & Training',
+    name: 'Training PowerPoint Presentation',
+    description: 'Branded, professional PowerPoint presentation (20–30 slides) aligned to your training programme with custom graphics and layouts',
+    basePrice: 'From R1,800',
+    requiredDocuments: [
+      { name: 'Content / Script', description: 'Training content, speaker notes, or script per slide', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt', '.pptx'] },
+      { name: 'Brand Assets', description: 'Logo, brand colors, and fonts', required: true, acceptedFormats: ['.ai', '.eps', '.svg', '.pdf', '.png'] },
+      { name: 'Existing Slides', description: 'Any existing slides to incorporate or use as reference', required: false, acceptedFormats: ['.pptx', '.ppt', '.pdf'] }
+    ],
+    additionalInfo: 'Includes up to 3 revision rounds. Delivered as editable .pptx and PDF export.'
+  },
+  {
+    id: 'training-full',
+    category: 'Business Documents & Training',
+    name: 'Full Training Package (All Three)',
+    description: 'Complete training package: Study Guide + Facilitator Guide + PowerPoint Presentation. Best value for full programme delivery.',
+    basePrice: 'From R6,500',
+    requiredDocuments: [
+      { name: 'Training Content Outline', description: 'Complete training content outline for all modules', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+      { name: 'Brand Assets', description: 'Logo and brand guidelines', required: true, acceptedFormats: ['.ai', '.eps', '.svg', '.pdf', '.png'] },
+      { name: 'Session Plan', description: 'Session time allocations and learning outcomes per module', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+      { name: 'Assessment Materials', description: 'Assessment questions, activities, and criteria', required: false, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] }
+    ],
+    additionalInfo: 'Saves R600 vs purchasing separately. Up to 3 revision rounds per deliverable. All files delivered print-ready and editable.'
   }
 ];
 
