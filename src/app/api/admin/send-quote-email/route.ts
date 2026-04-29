@@ -83,13 +83,22 @@ export async function POST(req: NextRequest) {
 </body>
 </html>`;
 
-    await resend.emails.send({
-      from: COMPANY_EMAIL,
+    const emailResult = await resend.emails.send({
+      from: `Breed Industries <${COMPANY_EMAIL}>`,
       to: quote.customer_email,
       replyTo: COMPANY_EMAIL,
       subject: `Your Quote ${quote.quote_number} from Breed Industries — R${(Number(quote.total) || 0).toLocaleString('en-ZA')}`,
       html: emailHtml,
     });
+
+    if (emailResult.error) {
+      console.error('Resend error sending client quote email:', JSON.stringify(emailResult.error));
+      return NextResponse.json(
+        { error: `Email delivery failed: ${emailResult.error.message || 'Domain not verified in Resend. Go to resend.com → Domains and verify thebreed.co.za'}` },
+        { status: 422 }
+      );
+    }
+    console.log('✅ Client quote email sent, id:', emailResult.data?.id);
 
     // Mark quote as sent in Supabase
     await supabase

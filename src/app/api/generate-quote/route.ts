@@ -116,15 +116,20 @@ export async function POST(req: NextRequest) {
   </div>
 </div>`;
 
-        await resend.emails.send({
-          from: COMPANY_EMAIL,
+        const emailResult = await resend.emails.send({
+          from: `Breed Industries <${COMPANY_EMAIL}>`,
           to: COMPANY_EMAIL,
           replyTo: customerEmail,
           subject: `📋 New Quote ${quoteNumber} — ${customerName} (R${total.toLocaleString('en-ZA')})`,
           html: emailHtml,
         });
+        if (emailResult.error) {
+          console.error('Resend rejected quote notification email:', JSON.stringify(emailResult.error));
+        } else {
+          console.log('✅ Quote notification email sent, id:', emailResult.data?.id);
+        }
       } catch (emailError) {
-        console.error('Failed to send quote email:', emailError);
+        console.error('Failed to send quote notification email:', emailError instanceof Error ? emailError.message : emailError);
       }
     }
 

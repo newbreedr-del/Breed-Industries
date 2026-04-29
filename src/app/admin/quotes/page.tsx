@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -234,8 +234,10 @@ export default function QuotesPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/10">
-                    {filteredQuotes.map((quote) => (
-                      <tr key={quote.id} className="hover:bg-white/5 transition-colors">
+                    {filteredQuotes.map((quote) => {
+                      return (
+                      <Fragment key={quote.id}>
+                      <tr className="hover:bg-white/5 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className="text-white font-medium">{quote.quote_number}</span>
                         </td>
@@ -305,7 +307,7 @@ export default function QuotesPage() {
                         </td>
                       </tr>
                       {expandedQuote === quote.id && (
-                        <tr className="bg-white/3">
+                        <tr className="bg-black/30">
                           <td colSpan={7} className="px-6 py-4">
                             <div className="rounded-lg overflow-hidden border border-white/10">
                               <table className="w-full text-sm">
@@ -332,7 +334,9 @@ export default function QuotesPage() {
                           </td>
                         </tr>
                       )}
-                    ))}
+                      </Fragment>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

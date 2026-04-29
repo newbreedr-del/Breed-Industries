@@ -96,20 +96,25 @@ export async function POST(request: NextRequest) {
     ${docsHtml}
     <div style="margin-top:24px;padding:12px 16px;background:#1a1a1a;border-radius:6px;">
       <p style="margin:0;color:#999;font-size:12px;">Submitted: ${new Date().toLocaleString('en-ZA')}</p>
-      <p style="margin:6px 0 0;font-size:13px;"><a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/admin/service-requests" style="color:#c8a96e;">View in Admin Dashboard →</a></p>
+      <p style="margin:6px 0 0;font-size:13px;"><a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://www.thebreed.co.za'}/admin/service-requests" style="color:#c8a96e;">View in Admin Dashboard →</a></p>
     </div>
   </div>
 </div>`;
 
-        await resend.emails.send({
-          from: COMPANY_EMAIL,
+        const emailResult = await resend.emails.send({
+          from: `Breed Industries <${COMPANY_EMAIL}>`,
           to: COMPANY_EMAIL,
           replyTo: body.customerEmail,
           subject: `🔔 New Service Request — ${service.name} from ${body.customerName}`,
           html: emailHtml,
         });
+        if (emailResult.error) {
+          console.error('Resend error on service request email:', JSON.stringify(emailResult.error));
+        } else {
+          console.log('✅ Service request notification sent, id:', emailResult.data?.id);
+        }
       } catch (emailError) {
-        console.error('Failed to send service request email:', emailError);
+        console.error('Failed to send service request email:', emailError instanceof Error ? emailError.message : emailError);
         // Don't fail the request if email fails
       }
     }
