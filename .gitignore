@@ -41,5 +41,8 @@ sendgrid.env
 # large media files
 public/assets/videos/
 
+# client project files (contain large media, keep local only)
+/Projects/
+
 # invoice data storage
 /data/

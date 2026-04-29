@@ -18,7 +18,6 @@ export default function RequestServicePage() {
         title="Request a Service"
         subtitle="Tell us what you need and upload the required documents. We'll review your request and get back to you with a quote within 24 hours."
         breadcrumbs={[
-          { label: 'Home', href: '/' },
           { label: 'Services', href: '/services' },
           { label: 'Request Service', href: '/request-service' }
         ]}

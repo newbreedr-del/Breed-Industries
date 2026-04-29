@@ -163,19 +163,19 @@ export const Footer = () => {
               <li>
                 <Link href="/services#launch-starter" className="text-white/70 hover:text-accent transition-colors flex items-center">
                   <ChevronRight size={14} className="mr-1" />
-                  <span>Launch Starter</span>
+                  <span>Launch Essentials</span>
                 </Link>
               </li>
               <li>
                 <Link href="/services#growth-professional" className="text-white/70 hover:text-accent transition-colors flex items-center">
                   <ChevronRight size={14} className="mr-1" />
-                  <span>Growth Professional</span>
+                  <span>Growth Momentum</span>
                 </Link>
               </li>
               <li>
                 <Link href="/services#empire-premium" className="text-white/70 hover:text-accent transition-colors flex items-center">
                   <ChevronRight size={14} className="mr-1" />
-                  <span>Empire Premium</span>
+                  <span>Empire Ascend</span>
                 </Link>
               </li>
             </ul>
@@ -208,7 +208,7 @@ export const Footer = () => {
                 <div>
                   <p className="text-white font-medium">Head Office</p>
                   <p className="text-white/70">
-                    1 Kings Road, Pinetown, Durban 3610
+                    12 Kings Road, Pinetown, Durban 3610
                   </p>
                 </div>
               </li>

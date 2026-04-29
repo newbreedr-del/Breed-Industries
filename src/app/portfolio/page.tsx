@@ -302,24 +302,27 @@ export default function PortfolioPage() {
             Every logo here was designed from scratch for a South African business, giving them a professional face to show the world.
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-            {brandingClients.map((client) => (
-              <div key={client.name} className="glass-card p-6 flex flex-col items-center gap-3 group hover:-translate-y-1 transition-transform bg-white/5">
-                <div className="h-20 w-full flex items-center justify-center bg-white/10 rounded-lg overflow-hidden px-3">
-                  <Image
-                    src={client.logo}
-                    alt={`${client.name} logo`}
-                    width={180}
-                    height={80}
-                    className="object-contain group-hover:scale-105 transition-transform max-h-16 w-auto"
-                  />
+          {/* Infinite auto-scroll carousel */}
+          <div className="relative overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)' }}>
+            <div className="flex gap-6 logo-marquee">
+              {[...brandingClients, ...brandingClients].map((client, i) => (
+                <div key={`${client.name}-${i}`} className="flex-shrink-0 w-48 flex flex-col items-center gap-3 group py-2">
+                  <div className="h-24 w-full flex items-center justify-center px-4">
+                    <Image
+                      src={client.logo}
+                      alt={`${client.name} logo`}
+                      width={180}
+                      height={96}
+                      className="object-contain max-h-20 w-auto transition-all duration-300 opacity-70 group-hover:opacity-100 group-hover:scale-105 filter brightness-110"
+                    />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-white/80 text-sm font-semibold">{client.name}</p>
+                    <p className="text-accent/60 text-xs mt-0.5">{client.work}</p>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <p className="text-white/90 text-sm font-semibold">{client.name}</p>
-                  <p className="text-accent/70 text-xs mt-0.5">{client.work}</p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -339,26 +342,39 @@ export default function PortfolioPage() {
             We've helped 23 clients get registered, compliant, funded, and ready to operate. From writing business plans to handling SARS, CIPC, CSD, and B-BBEE.
           </p>
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {businessServicesClients.map((client, i) => (
-              <div key={client.name} className={`glass-card p-6 hover:-translate-y-1 transition-transform ${i === 0 ? 'border border-accent/30' : ''}`}>
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h3 className="text-white font-semibold font-heading">{client.name}</h3>
-                    <p className="text-white/40 text-xs mt-0.5">{client.industry}</p>
+          <div
+            className="relative overflow-hidden"
+            style={{
+              maskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
+            }}
+          >
+            <div className="flex gap-5 service-marquee">
+              {[...businessServicesClients, ...businessServicesClients].map((client, i) => (
+                <div
+                  key={`${client.name}-${i}`}
+                  className={`flex-shrink-0 w-64 glass-card p-5 ${i === 0 || i === businessServicesClients.length ? 'border border-accent/30' : ''}`}
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <h3 className="text-white font-semibold font-heading text-sm leading-tight">{client.name}</h3>
+                      <p className="text-white/40 text-xs mt-0.5">{client.industry}</p>
+                    </div>
+                    {(i === 0 || i === businessServicesClients.length) && (
+                      <span className="text-xs bg-accent/20 text-accent border border-accent/30 rounded px-1.5 py-0.5 flex-shrink-0 ml-2">Us</span>
+                    )}
                   </div>
-                  {i === 0 && <span className="text-xs bg-accent/20 text-accent border border-accent/30 rounded px-2 py-0.5">Our Own Co.</span>}
+                  <ul className="space-y-1.5">
+                    {client.services.map((s) => (
+                      <li key={s} className="flex items-center gap-2 text-xs text-white/60">
+                        <CheckCircle2 className="w-3 h-3 text-accent flex-shrink-0" />
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="space-y-1.5">
-                  {client.services.map((s) => (
-                    <li key={s} className="flex items-center gap-2 text-xs text-white/60">
-                      <CheckCircle2 className="w-3 h-3 text-accent flex-shrink-0" />
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>

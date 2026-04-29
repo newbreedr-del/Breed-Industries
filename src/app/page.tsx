@@ -50,11 +50,11 @@ export default function Home() {
             alt="Breed Industries lobby"
             fill
             priority
-            className="object-cover opacity-40"
+            className="object-cover opacity-65"
           />
         </div>
         <div className="absolute inset-0 grid-overlay grid-overlay-animated"></div>
-        <div className="absolute inset-0 bg-color-bg-deep/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-color-bg-deep/60"></div>
         
         {/* Accent Glows */}
         <div className="absolute inset-0 pointer-events-none">

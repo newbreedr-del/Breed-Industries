@@ -111,6 +111,34 @@ const quickBundles = [
 
 const allOptions = [...complianceOptions, ...brandingOptions, ...digitalOptions, ...businessProfileOptions];
 
+const clientRequirementsMap: Record<string, string[]> = {
+  'CIPC Registration': ['Certified copy of ID document (all directors)', 'Proof of residential address (not older than 3 months)', 'Three proposed company name options', 'Signed CIPC forms (provided by Breed Industries)'],
+  'Tax Compliance': ['CIPC registration certificate', 'Certified ID copies of all directors', 'Proof of business address', 'Banking details confirmation letter'],
+  'BEE Certification': ['Latest financial statements or management accounts', 'Signed BEE declaration (EME/QSE affidavit)', 'Payroll records (if applicable)', 'Skills development records'],
+  'CSD Registration': ['CIPC registration certificate', 'Tax clearance certificate', 'BEE certificate or affidavit', 'Banking details and bank letter', 'Certified ID copies of all directors', 'Proof of business address'],
+  'COID Registration / Letter of Good Standing': ['CIPC registration documents', 'Estimated annual payroll amount', 'Nature of business activities', 'Number of employees'],
+  'UIF Registration & Compliance Letter': ['CIPC registration documents', 'Employee details (ID numbers, start dates)', 'Monthly payroll figures', 'Employer banking details'],
+  'CIPC Annual Return': ['CIPC customer code and password', 'Current registered office address confirmation', 'Director changes (if any)', 'Annual return fee (paid to CIPC)'],
+  'Basic Logo Design': ['Brand name and tagline (if applicable)', 'Preferred colours and style references', 'Industry and target audience description', 'Any existing brand assets'],
+  'Premium Logo Design': ['Detailed brand brief (provided by Breed Industries)', 'Competitor references and positioning notes', 'Vision, mission, and values statement', 'Stakeholder availability for feedback sessions'],
+  'Business Branding': ['Approved logo files', 'Brand story and company background', 'Target market demographics', 'Preferred tone of voice and messaging'],
+  'Business Cards (250)': ['Approved logo and brand colours', 'Contact details for each cardholder', 'Preferred card stock and finish', 'Delivery address for printed cards'],
+  'Simple Social Media Flyer': ['Text content (headline, body, call-to-action)', 'Logo and brand colors (if available)', 'High-resolution images (optional)', 'Style references or examples (optional)'],
+  'Standard Digital Flyer': ['Complete text content including headline, body, call-to-action, contact details', 'Logo, brand colors, fonts, and brand guidelines', 'High-resolution images to be used', 'Design brief: target audience, design style, tone'],
+  'Premium Event/Brand Flyer': ['Complete text content for all flyer variations', 'Complete brand package: logo, colors, fonts, brand guidelines', 'High-resolution images and graphics', 'Detailed brief including target audience and event details', 'List of all required sizes (social media, print, web)'],
+  'Marketing Materials': ['Approved brand guidelines', 'Content and copy for each material', 'High-resolution images (if available)', 'Distribution format preferences (print/digital)'],
+  'Website Development': ['Sitemap and page structure preferences', 'All text content for each page', 'High-resolution images and media', 'Domain name and hosting credentials', 'Logo and brand guidelines'],
+  'Mobile App Development': ['Detailed feature requirements document', 'User flow diagrams or wireframes (if available)', 'API documentation for third-party integrations', 'App Store / Play Store developer account credentials'],
+  'E-commerce Solutions': ['Product catalogue with descriptions, images, and pricing', 'Payment gateway preferences (PayFast, Stripe, etc.)', 'Shipping and delivery policies', 'Domain and hosting details', 'Business registration for payment gateway setup'],
+  'SEO & Digital Marketing (Setup)': ['Website access (CMS admin credentials)', 'Google Analytics and Search Console access', 'Target keywords and competitor list', 'Business goals and KPIs'],
+  'SEO & Digital Marketing (Monthly)': ['Website access (CMS admin credentials)', 'Google Analytics and Search Console access', 'Target keywords and competitor list', 'Monthly budget for paid campaigns (if applicable)'],
+  'Social Media Management (Monthly)': ['Social media account credentials', 'Brand guidelines and tone of voice', 'Product/service images and descriptions', 'Monthly promotional calendar or events', 'Approval workflow and turnaround expectations'],
+  'Business Profile - Starter (1–4 Pages)': ['Company overview and history', 'Services or products offered', 'Director/owner profiles', 'Contact details and logo'],
+  'Business Profile - Standard (5–10 Pages)': ['Detailed company background and milestones', 'Full service/product catalogue', 'Team profiles with photographs', 'Client references or testimonials', 'Certifications and compliance documents'],
+  'Business Plan - Basic/Entry-Level': ['Business concept and model description', 'Target market information', 'Revenue model and pricing strategy', 'Startup costs estimate'],
+  'Business Plan - Standard/Comprehensive': ['Detailed business model and value proposition', 'Market research data and competitor analysis', 'Financial records (existing business) or projections', '3-year revenue and expense forecasts', 'Funding requirements and use of funds breakdown'],
+};
+
 export default function LabPage() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [activeStep, setActiveStep] = useState('compliance');
@@ -348,23 +376,24 @@ export default function LabPage() {
               </div>
               
               {/* Active Step Options */}
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {builderSteps.find(step => step.id === activeStep)?.options.map((option) => (
                   <div 
                     key={option.id}
-                    className={`p-4 rounded-lg border cursor-pointer transition-all ${selectedOptions.includes(option.id) ? 'border-accent bg-accent/10' : 'border-white/10 bg-white/5 hover:bg-white/10'}`}
+                    className={`rounded-lg border cursor-pointer transition-all ${selectedOptions.includes(option.id) ? 'border-accent bg-accent/10' : 'border-white/10 bg-white/5 hover:bg-white/10'}`}
                     onClick={() => handleOptionToggle(option.id)}
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between p-4">
                       <div className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${selectedOptions.includes(option.id) ? 'bg-accent text-color-bg-deep' : 'bg-white/10 text-white'}`}>
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${selectedOptions.includes(option.id) ? 'bg-accent text-color-bg-deep' : 'bg-white/10 text-white'}`}>
                           {selectedOptions.includes(option.id) ? <Check size={16} /> : option.icon}
                         </div>
                         <div>
-                          <h3 className="text-white font-medium">{option.name}</h3>
+                          <h3 className="text-white font-medium leading-tight">{option.name}</h3>
+                          <p className="text-white/50 text-xs mt-0.5 leading-snug max-w-xs">{option.description}</p>
                         </div>
                       </div>
-                      <div className="text-accent font-heading font-bold">
+                      <div className="text-accent font-heading font-bold text-right flex-shrink-0 ml-4">
                         R{option.price.toLocaleString()}
                         {option.pricingType === 'monthly' && <span className="text-sm text-white/70">/mo</span>}
                       </div>
@@ -467,6 +496,35 @@ export default function LabPage() {
               )}
             </div>
             
+            {selectedOptions.length > 0 && (
+              <div className="rounded-xl border border-accent/20 bg-accent/5 p-4 mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <ClipboardList size={16} className="text-accent" />
+                  <h3 className="text-sm font-semibold text-accent uppercase tracking-wide">What you'll need to provide</h3>
+                </div>
+                <div className="space-y-3 max-h-48 overflow-y-auto pr-1">
+                  {selectedOptions.map(optionId => {
+                    const option = allOptions.find(o => o.id === optionId);
+                    const details = clientRequirementsMap[option?.name ?? ''];
+                    if (!details) return null;
+                    return (
+                      <div key={optionId}>
+                        <p className="text-xs font-semibold text-white/80 mb-1">{option?.name}</p>
+                        <ul className="space-y-0.5">
+                          {details.map((req, i) => (
+                            <li key={i} className="flex items-start gap-1.5 text-xs text-white/55">
+                              <CheckCircle2 size={10} className="text-accent mt-0.5 flex-shrink-0" />
+                              {req}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             <div className="flex justify-center">
               <button 
                 className="btn btn-primary flex items-center gap-2"

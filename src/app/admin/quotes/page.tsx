@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
-import { FileText, Download, Eye, Search, Filter, Calendar } from 'lucide-react';
+import { FileText, Download, Eye, Search, Filter, Calendar, Receipt, ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface Quote {
   id: string;
@@ -22,9 +23,11 @@ interface Quote {
 }
 
 export default function QuotesPage() {
+  const router = useRouter();
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [converting, setConverting] = useState<string | null>(null);
 
   useEffect(() => {
     fetchQuotes();
@@ -44,6 +47,20 @@ export default function QuotesPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const convertToInvoice = (quote: Quote) => {
+    setConverting(quote.id);
+    const params = new URLSearchParams({
+      fromQuote: quote.quote_number,
+      customerName: quote.customer_name,
+      customerEmail: quote.customer_email,
+      projectName: quote.project_name,
+      contactPerson: quote.contact_person,
+      items: JSON.stringify(quote.items),
+      total: String(quote.total),
+    });
+    router.push(`/admin/invoices/create?${params.toString()}`);
   };
 
   // Filter quotes based on search query
@@ -202,11 +219,17 @@ export default function QuotesPage() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right">
                           <div className="flex items-center justify-end gap-2">
-                            <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors">
-                              <Eye size={16} />
+                            <button
+                              onClick={() => convertToInvoice(quote)}
+                              disabled={converting === quote.id}
+                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-accent/20 hover:bg-accent/30 text-accent text-xs font-medium transition-colors disabled:opacity-50"
+                              title="Convert to Invoice"
+                            >
+                              <Receipt size={14} />
+                              {converting === quote.id ? 'Loading…' : 'Invoice'}
                             </button>
-                            <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors">
-                              <Download size={16} />
+                            <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors" title="View Quote">
+                              <Eye size={16} />
                             </button>
                           </div>
                         </td>

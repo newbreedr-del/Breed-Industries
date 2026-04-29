@@ -22,7 +22,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Business Setup & Compliance',
     name: 'Company Registration (CIPC)',
     description: 'Complete company registration with CIPC including all required documentation',
-    basePrice: 'From R3,500',
+    basePrice: 'From R550',
     requiredDocuments: [
       {
         name: 'ID Copies',
@@ -96,7 +96,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Business Setup & Compliance',
     name: 'SARS Tax Returns',
     description: 'Individual and company tax return preparation and submission',
-    basePrice: 'From R1,200',
+    basePrice: 'From R850',
     requiredDocuments: [
       {
         name: 'IRP5/IT3(a)',
@@ -176,7 +176,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Business Setup & Compliance',
     name: 'BEE Certification',
     description: 'B-BBEE verification and certification',
-    basePrice: 'From R1,200',
+    basePrice: 'From R250',
     requiredDocuments: [
       {
         name: 'Company Registration',
@@ -286,7 +286,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Branding & Identity',
     name: 'Logo Design',
     description: 'Professional logo design with multiple concepts',
-    basePrice: 'From R2,500',
+    basePrice: 'From R1,500',
     requiredDocuments: [
       {
         name: 'Brand Brief',
@@ -314,7 +314,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Branding & Identity',
     name: 'Full Brand Identity',
     description: 'Complete brand identity package including logo, colors, typography',
-    basePrice: 'From R5,000',
+    basePrice: 'From R2,500',
     requiredDocuments: [
       {
         name: 'Brand Strategy Document',
@@ -364,7 +364,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Branding & Identity',
     name: 'Business Cards',
     description: 'Professional business card design and printing',
-    basePrice: 'From R1,200',
+    basePrice: 'From R800',
     requiredDocuments: [
       {
         name: 'Logo Files',
@@ -392,7 +392,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Branding & Identity',
     name: 'Simple Social Media Flyer',
     description: 'Single size, single concept digital flyer for social media',
-    basePrice: 'R300 - R500',
+    basePrice: 'From R400',
     requiredDocuments: [
       {
         name: 'Content/Copy',
@@ -426,7 +426,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Branding & Identity',
     name: 'Standard Digital Flyer',
     description: 'Professional digital flyer with multiple concepts and revisions',
-    basePrice: 'R500 - R800',
+    basePrice: 'From R750',
     requiredDocuments: [
       {
         name: 'Content/Copy',
@@ -466,7 +466,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Branding & Identity',
     name: 'Premium Event/Brand Flyer',
     description: 'High-end flyer design with multiple sizes and comprehensive brand work',
-    basePrice: 'R800 - R1,200+',
+    basePrice: 'From R1,200',
     requiredDocuments: [
       {
         name: 'Content/Copy',
@@ -512,7 +512,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Branding & Identity',
     name: 'Marketing Materials',
     description: 'Brochures, flyers, posters, and other marketing collateral',
-    basePrice: 'From R2,000',
+    basePrice: 'From R1,200',
     requiredDocuments: [
       {
         name: 'Content/Copy',
@@ -542,7 +542,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Business Profile',
     name: 'Business Profile - Starter (1-4 Pages)',
     description: 'Professional business profile for tenders and presentations',
-    basePrice: 'R850 - R2,160',
+    basePrice: 'From R850',
     requiredDocuments: [
       {
         name: 'Company Information',
@@ -576,7 +576,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Business Profile',
     name: 'Business Profile - Standard (5-10 Pages)',
     description: 'Comprehensive business profile with detailed information',
-    basePrice: 'R2,500 - R4,320',
+    basePrice: 'From R2,500',
     requiredDocuments: [
       {
         name: 'Company Information',
@@ -618,7 +618,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Digital Solutions',
     name: 'Website Development',
     description: 'Custom website design and development',
-    basePrice: 'From R10,000',
+    basePrice: 'From R5,000',
     requiredDocuments: [
       {
         name: 'Website Brief',
@@ -658,7 +658,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Digital Solutions',
     name: 'Mobile App Development',
     description: 'iOS and Android mobile application development',
-    basePrice: 'From R25,000',
+    basePrice: 'From R15,000',
     requiredDocuments: [
       {
         name: 'App Specification',
@@ -692,7 +692,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Digital Solutions',
     name: 'E-commerce Solutions',
     description: 'Online store setup and development',
-    basePrice: 'From R15,000',
+    basePrice: 'From R8,000',
     requiredDocuments: [
       {
         name: 'Product Information',
@@ -732,7 +732,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Digital Solutions',
     name: 'SEO & Digital Marketing',
     description: 'Search engine optimization and digital marketing services',
-    basePrice: 'From R4,000/mo',
+    basePrice: 'From R2,500/mo',
     requiredDocuments: [
       {
         name: 'Website Access',
@@ -766,7 +766,7 @@ export const serviceDefinitions: ServiceDefinition[] = [
     category: 'Digital Solutions',
     name: 'Social Media Management',
     description: 'Professional social media management and content creation',
-    basePrice: 'From R5,000/mo',
+    basePrice: 'From R3,500/mo',
     requiredDocuments: [
       {
         name: 'Social Media Access',
