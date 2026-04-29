@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { supabase } from '@/lib/supabase';
 
 async function sendWhatsAppNotification(data: any) {
   try {
@@ -80,7 +81,19 @@ export async function POST(request: Request) {
       });
       
       sendWhatsAppNotification({ name, email, phone, message }).catch(console.error);
-      
+
+      // Save to Supabase (non-blocking — fails gracefully if table doesn't exist yet)
+      supabase.from('contact_messages').insert({
+        id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        name,
+        email,
+        phone: phone || null,
+        message,
+        status: 'unread'
+      }).then(({ error }) => {
+        if (error) console.error('Failed to log contact message to DB:', error.message);
+      });
+
       return NextResponse.json({ success: true });
     } catch (sendError) {
       console.error('Resend send error:', sendError);
@@ -92,5 +105,31 @@ export async function POST(request: Request) {
       { error: 'Unable to send your message right now. Please try again later.' },
       { status: 500 },
     );
+  }
+}
+
+export async function GET() {
+  try {
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) {
+      console.error('Error fetching contact messages:', error.message);
+      return NextResponse.json({ messages: [], total: 0 });
+    }
+    return NextResponse.json({ messages: data || [], total: data?.length || 0 });
+  } catch (error) {
+    return NextResponse.json({ messages: [], total: 0 });
+  }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const { id, status } = await request.json();
+    await supabase.from('contact_messages').update({ status, updated_at: new Date().toISOString() }).eq('id', id);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ success: false });
   }
 }
