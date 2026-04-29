@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
-import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, CheckCircle2, Download, ArrowRight } from 'lucide-react';
+import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, CheckCircle2, Download, ArrowRight, Loader2, Send } from 'lucide-react';
 
 const complianceOptions = [
   { id: 'cipc', name: 'CIPC Registration', price: 550, pricingType: 'one-time', icon: <Shield size={16} />, description: 'Complete company registration with CIPC including name reservation and registration certificate' },
@@ -150,6 +150,16 @@ export default function LabPage() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [activeStep, setActiveStep] = useState('compliance');
   const [selectedBundle, setSelectedBundle] = useState<string | null>(null);
+  const [showQuoteForm, setShowQuoteForm] = useState(false);
+  const [quoteSuccess, setQuoteSuccess] = useState(false);
+  const [quoteRef, setQuoteRef] = useState('');
+  const [formName, setFormName] = useState('');
+  const [formEmail, setFormEmail] = useState('');
+  const [formPhone, setFormPhone] = useState('');
+  const [formCompany, setFormCompany] = useState('');
+  const [formNotes, setFormNotes] = useState('');
+  const [formSubmitting, setFormSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const handleOptionToggle = (optionId: string) => {
     setSelectedBundle(null);
     setSelectedOptions(prev => {
@@ -297,6 +307,47 @@ export default function LabPage() {
       return '6 – 8 Weeks';
     } else {
       return '8 – 12 Weeks';
+    }
+  };
+
+  const handleQuoteSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormSubmitting(true);
+    setFormError(null);
+    try {
+      const selectedServiceItems = selectedOptions
+        .map(optionId => {
+          const option = allOptions.find(o => o.id === optionId);
+          return { name: option?.name || '', description: option?.description || '', quantity: 1, rate: option?.price || 0, pricingType: option?.pricingType || 'one-time' };
+        })
+        .filter(item => item.name);
+      if (!selectedServiceItems.length) throw new Error('No services selected.');
+      const projectTitle = selectedServiceItems.slice(0, 2).map(i => i.name).join(', ')
+        + (selectedServiceItems.length > 2 ? ` +${selectedServiceItems.length - 2} more` : '');
+      const res = await fetch('/api/generate-quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerName: formName.trim(),
+          customerEmail: formEmail.trim(),
+          customerPhone: formPhone.trim(),
+          customerCompany: formCompany.trim(),
+          projectName: `Package: ${projectTitle}`,
+          contactPerson: formName.trim(),
+          items: selectedServiceItems,
+          notes: formNotes.trim(),
+          estimatedTimeline: getEstimatedTimeframe()
+        })
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to submit. Please try again.');
+      setQuoteRef(result.quoteNumber);
+      setQuoteSuccess(true);
+      setShowQuoteForm(false);
+    } catch (err) {
+      setFormError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+    } finally {
+      setFormSubmitting(false);
     }
   };
 
@@ -526,17 +577,77 @@ export default function LabPage() {
 
             <div className="space-y-3">
               {selectedOptions.length > 0 ? (
-                <>
-                  <p className="text-white/55 text-xs text-center leading-relaxed">
-                    Ready to proceed? We'll prepare a formal proposal for this package within 24 hours.
-                  </p>
-                  <Link href="/contact" className="btn btn-primary w-full flex items-center justify-center gap-2">
-                    <ClipboardList className="w-4 h-4" /> Request a Formal Quote
-                  </Link>
-                  <Link href="/request-service" className="btn btn-outline w-full flex items-center justify-center gap-2">
-                    <ArrowRight className="w-4 h-4" /> Request Service Directly
-                  </Link>
-                </>
+                quoteSuccess ? (
+                  <div className="rounded-xl border border-green-500/30 bg-green-500/10 p-5 text-center">
+                    <CheckCircle2 className="w-10 h-10 text-green-400 mx-auto mb-3" />
+                    <h3 className="text-white font-bold text-base mb-1">Quote Request Sent!</h3>
+                    <p className="text-white/70 text-sm mb-1">Ref: <span className="text-accent font-mono font-bold">{quoteRef}</span></p>
+                    <p className="text-white/55 text-xs mb-4">Check your email for a confirmation. We'll be in touch within 24 hours.</p>
+                    <button
+                      onClick={() => { setQuoteSuccess(false); setShowQuoteForm(false); setSelectedOptions([]); setSelectedBundle(null); setFormName(''); setFormEmail(''); setFormPhone(''); setFormCompany(''); setFormNotes(''); }}
+                      className="text-accent text-sm hover:underline"
+                    >
+                      Build another package →
+                    </button>
+                  </div>
+                ) : showQuoteForm ? (
+                  <form onSubmit={handleQuoteSubmit} className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-white font-semibold text-sm">Your Details</h3>
+                      <button type="button" onClick={() => setShowQuoteForm(false)} className="text-white/40 hover:text-white/70 text-xs">← Back</button>
+                    </div>
+                    <input
+                      required type="text" placeholder="Full Name *"
+                      value={formName} onChange={e => setFormName(e.target.value)}
+                      className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white text-sm placeholder-white/40 focus:outline-none focus:border-accent/50"
+                    />
+                    <input
+                      required type="email" placeholder="Email Address *"
+                      value={formEmail} onChange={e => setFormEmail(e.target.value)}
+                      className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white text-sm placeholder-white/40 focus:outline-none focus:border-accent/50"
+                    />
+                    <input
+                      required type="tel" placeholder="Phone Number *"
+                      value={formPhone} onChange={e => setFormPhone(e.target.value)}
+                      className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white text-sm placeholder-white/40 focus:outline-none focus:border-accent/50"
+                    />
+                    <input
+                      type="text" placeholder="Company Name (optional)"
+                      value={formCompany} onChange={e => setFormCompany(e.target.value)}
+                      className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white text-sm placeholder-white/40 focus:outline-none focus:border-accent/50"
+                    />
+                    <textarea
+                      placeholder="Additional notes or requirements..."
+                      value={formNotes} onChange={e => setFormNotes(e.target.value)}
+                      rows={2}
+                      className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white text-sm placeholder-white/40 focus:outline-none focus:border-accent/50 resize-none"
+                    />
+                    {formError && <p className="text-red-400 text-xs">{formError}</p>}
+                    <button
+                      type="submit" disabled={formSubmitting}
+                      className="btn btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-60"
+                    >
+                      {formSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                      {formSubmitting ? 'Sending Request…' : 'Submit Quote Request'}
+                    </button>
+                    <p className="text-white/40 text-xs text-center">We'll respond within 24 hours</p>
+                  </form>
+                ) : (
+                  <>
+                    <p className="text-white/55 text-xs text-center leading-relaxed">
+                      Ready to proceed? We'll prepare a formal proposal for this package within 24 hours.
+                    </p>
+                    <button
+                      onClick={() => setShowQuoteForm(true)}
+                      className="btn btn-primary w-full flex items-center justify-center gap-2"
+                    >
+                      <ClipboardList className="w-4 h-4" /> Request a Formal Quote
+                    </button>
+                    <Link href="/request-service" className="btn btn-outline w-full flex items-center justify-center gap-2">
+                      <ArrowRight className="w-4 h-4" /> Request Service Directly
+                    </Link>
+                  </>
+                )
               ) : (
                 <p className="text-white/40 text-xs text-center">Select services above to build your estimate</p>
               )}
