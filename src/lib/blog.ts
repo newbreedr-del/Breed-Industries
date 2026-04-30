@@ -169,39 +169,43 @@ export async function createBlogPost(post: BlogPost): Promise<{ success: boolean
 
 // Admin: Update a blog post
 export async function updateBlogPost(slug: string, updates: Partial<BlogPost>): Promise<{ success: boolean; error?: string }> {
-  const supabase = createServerClient();
-  
-  console.log('Raw updates received:', JSON.stringify(updates, null, 2));
-  console.log('featuredImage in updates:', updates.featuredImage);
-  
-  const row = transformToRow(updates);
-  
-  console.log('Transformed row:', JSON.stringify(row, null, 2));
-  console.log('Row keys:', Object.keys(row));
-  console.log('featured_image in row:', row.featured_image);
-  console.log('Updating blog post with slug:', slug);
-  
-  // Check if row is empty
-  if (Object.keys(row).length === 0) {
-    console.error('ERROR: No fields to update - row is empty!');
-    return { success: false, error: 'No fields provided for update' };
+  try {
+    const supabase = createServerClient();
+    
+    // Transform CamelCase (Frontend) to snake_case (Database)
+    const row: any = {
+      updated_at: new Date().toISOString()
+    };
+    
+    if (updates.title !== undefined) row.title = updates.title;
+    if (updates.excerpt !== undefined) row.excerpt = updates.excerpt;
+    if (updates.content !== undefined) row.content = updates.content;
+    if (updates.author !== undefined) row.author = updates.author;
+    if (updates.date !== undefined) row.date = updates.date;
+    if (updates.readTime !== undefined) row.read_time = updates.readTime;
+    if (updates.category !== undefined) row.category = updates.category;
+    if (updates.tags !== undefined) row.tags = updates.tags;
+    if (updates.featuredImage !== undefined) row.featured_image = updates.featuredImage;
+    if (updates.ogImage !== undefined) row.og_image = updates.ogImage;
+    if (updates.status !== undefined) row.status = updates.status;
+
+    console.log('Sending update to Supabase for slug:', slug, row);
+
+    const { error } = await supabase
+      .from('blog_posts')
+      .update(row)
+      .eq('slug', slug);
+
+    if (error) {
+      console.error('Supabase update error:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true };
+  } catch (err: any) {
+    console.error('Exception in updateBlogPost:', err);
+    return { success: false, error: err.message || 'An unknown error occurred' };
   }
-  
-  const { data, error, count } = await supabase
-    .from('blog_posts')
-    .update(row)
-    .eq('slug', slug)
-    .select();
-
-  if (error) {
-    console.error('Error updating blog post:', error);
-    return { success: false, error: error.message };
-  }
-
-  console.log('Update result - count:', count, 'data length:', data?.length);
-  console.log('Updated row data:', data);
-
-  return { success: true };
 }
 
 // Admin: Delete a blog post

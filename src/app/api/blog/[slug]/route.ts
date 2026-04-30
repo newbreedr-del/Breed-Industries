@@ -46,26 +46,21 @@ export async function PUT(
     const { slug } = await params;
     const body = await request.json();
     
-    console.log('API PUT - Received request to update slug:', slug);
-    console.log('API PUT - Request body:', JSON.stringify(body, null, 2));
-    console.log('API PUT - featuredImage in body:', body.featuredImage);
-    console.log('API PUT - content in body:', body.content?.substring(0, 100));
+    console.log('API PUT - Updating post:', slug);
     
+    // Explicitly pass the body to updateBlogPost
     const result = await updateBlogPost(slug, body);
     
-    console.log('API PUT - Update result:', result);
-    
     if (!result.success) {
-      console.error('API PUT - Update failed:', result.error);
       return NextResponse.json(
         { error: result.error },
         { status: 400 }
       );
     }
     
-    return NextResponse.json({ success: true, message: 'Post updated successfully' });
+    return NextResponse.json({ success: true, message: 'Updated successfully' });
   } catch (error) {
-    console.error('API PUT - Error updating blog post:', error);
+    console.error('Error in PUT /api/blog/[slug]:', error);
     return NextResponse.json(
       { error: 'Failed to update blog post' },
       { status: 500 }
