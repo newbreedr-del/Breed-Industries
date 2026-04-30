@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Calendar, Clock, User, ArrowLeft, Share2, ArrowRight } from 'lucide-react';
 import { NewsletterSignup } from '@/components/ui/NewsletterSignup';
-import { getAllSlugs, getBlogPostBySlug } from '@/lib/blog';
+import { getAllSlugs, getBlogPostBySlug, getAllBlogPosts } from '@/lib/blog';
 
 export async function generateStaticParams() {
   const slugs = await getAllSlugs();
@@ -38,7 +38,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug);
+  const [post, allPosts] = await Promise.all([
+    getBlogPostBySlug(slug),
+    getAllBlogPosts()
+  ]);
 
   if (!post) {
     return (
@@ -221,26 +224,22 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="mt-16">
             <h3 className="text-xl font-bold text-white mb-6">Related Articles</h3>
             <div className="grid md:grid-cols-2 gap-6">
-              {getAllSlugs()
-                .filter((s) => s !== slug)
+              {allPosts
+                .filter((p) => p.slug !== slug)
                 .slice(0, 2)
-                .map((relatedSlug) => {
-                  const relatedPost = getBlogPostBySlug(relatedSlug);
-                  if (!relatedPost) return null;
-                  return (
-                    <Link
-                      key={relatedSlug}
-                      href={`/blog/${relatedSlug}`}
-                      className="glass-card p-6 hover:border-accent/30 transition-colors"
-                    >
-                      <span className="text-accent text-sm font-medium">{relatedPost.category}</span>
-                      <h4 className="text-lg font-semibold text-white mt-2 mb-3">{relatedPost.title}</h4>
-                      <span className="text-white/50 text-sm flex items-center gap-2">
-                        Read Article <ArrowRight className="w-4 h-4" />
-                      </span>
-                    </Link>
-                  );
-                })}
+                .map((relatedPost) => (
+                  <Link
+                    key={relatedPost.slug}
+                    href={`/blog/${relatedPost.slug}`}
+                    className="glass-card p-6 hover:border-accent/30 transition-colors"
+                  >
+                    <span className="text-accent text-sm font-medium">{relatedPost.category}</span>
+                    <h4 className="text-lg font-semibold text-white mt-2 mb-3">{relatedPost.title}</h4>
+                    <span className="text-white/50 text-sm flex items-center gap-2">
+                      Read Article <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </Link>
+                ))}
             </div>
           </div>
         </div>
