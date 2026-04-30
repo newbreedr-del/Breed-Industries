@@ -172,14 +172,25 @@ export async function updateBlogPost(slug: string, updates: Partial<BlogPost>): 
   const supabase = createServerClient();
   const row = transformToRow(updates);
   
-  const { error } = await supabase
+  console.log('Updating blog post:', slug);
+  console.log('Update data:', row);
+  
+  const { data, error, count } = await supabase
     .from('blog_posts')
     .update(row)
-    .eq('slug', slug);
+    .eq('slug', slug)
+    .select();
 
   if (error) {
     console.error('Error updating blog post:', error);
     return { success: false, error: error.message };
+  }
+
+  console.log('Update result - rows affected:', data?.length || 0);
+  console.log('Updated data:', data);
+
+  if (!data || data.length === 0) {
+    return { success: false, error: `No blog post found with slug: ${slug}` };
   }
 
   return { success: true };
