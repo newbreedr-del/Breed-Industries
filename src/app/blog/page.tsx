@@ -5,6 +5,7 @@ import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Calendar, Clock, ArrowRight, User } from 'lucide-react';
+import { getAllBlogPosts } from '@/lib/blog';
 
 export const metadata: Metadata = {
   title: 'Blog | Business Tips & Guides | Breed Industries',
@@ -19,46 +20,10 @@ export const metadata: Metadata = {
   },
 };
 
-// Blog posts data - in production this would come from a CMS or file system
-const blogPosts = [
-  {
-    slug: 'how-to-register-company-south-africa',
-    title: 'How to Register a Company in South Africa: Complete 2026 Guide',
-    excerpt: 'Step-by-step guide to registering your company with CIPC in South Africa. Learn about costs, requirements, timelines, and common mistakes to avoid.',
-    author: 'Breed Industries',
-    date: '30 April 2026',
-    readTime: '8 min read',
-    category: 'Business Registration',
-    image: '/assets/images/blog/company-registration.jpg',
-    tags: ['CIPC', 'company registration', 'South Africa', 'business startup'],
-  },
-  {
-    slug: 'startup-costs-south-africa-2026',
-    title: 'Startup Costs in South Africa 2026: Real Budget Breakdown',
-    excerpt: 'Real costs to start a business in South Africa in 2026. Budget breakdown for registration, branding, website, and first-year operations. Plan your startup finances.',
-    author: 'Breed Industries',
-    date: '28 April 2026',
-    readTime: '10 min read',
-    category: 'Startup Guide',
-    image: '/assets/images/blog/startup-costs.jpg',
-    tags: ['startup costs', 'business budget', 'South Africa', 'entrepreneurship'],
-  },
-  {
-    slug: 'why-your-business-needs-professional-logo',
-    title: 'Why Your Business Needs a Professional Logo: 10 Reasons',
-    excerpt: 'Discover why a professional logo is crucial for business success. Learn how quality branding impacts credibility, customer trust, and revenue in the South African market.',
-    author: 'Breed Industries',
-    date: '25 April 2026',
-    readTime: '6 min read',
-    category: 'Branding',
-    image: '/assets/images/blog/professional-logo.jpg',
-    tags: ['logo design', 'branding', 'business identity', 'South Africa'],
-  },
-];
-
 const categories = ['All', 'Business Registration', 'Startup Guide', 'Branding', 'Digital Marketing', 'Compliance'];
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const blogPosts = await getAllBlogPosts();
   return (
     <>
       <Header />
@@ -98,9 +63,9 @@ export default function BlogPage() {
               >
                 {/* Image */}
                 <Link href={`/blog/${post.slug}`} className="block relative h-48 overflow-hidden">
-                  {post.image ? (
+                  {post.featuredImage ? (
                     <Image
-                      src={post.image}
+                      src={post.featuredImage}
                       alt={post.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"

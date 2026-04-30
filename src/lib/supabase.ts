@@ -57,6 +57,40 @@ export interface Database {
         Insert: Omit<Database['public']['Tables']['quotes']['Row'], 'created_at' | 'updated_at'>;
         Update: Partial<Database['public']['Tables']['quotes']['Row']>;
       };
+      blog_posts: {
+        Row: {
+          id: string;
+          slug: string;
+          title: string;
+          excerpt: string;
+          content: string;
+          author: string;
+          date: string;
+          read_time: string;
+          category: string;
+          tags: string[];
+          featured_image: string | null;
+          og_image: string | null;
+          status: 'published' | 'draft';
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['blog_posts']['Row'], 'id' | 'created_at' | 'updated_at'>;
+        Update: Partial<Database['public']['Tables']['blog_posts']['Row']>;
+      };
+      faqs: {
+        Row: {
+          id: string;
+          question: string;
+          answer: string;
+          category: string;
+          order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['faqs']['Row'], 'id' | 'created_at' | 'updated_at'>;
+        Update: Partial<Database['public']['Tables']['faqs']['Row']>;
+      };
     };
   };
 }
