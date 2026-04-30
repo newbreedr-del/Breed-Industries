@@ -1,32 +1,44 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
   <defs>
-    <linearGradient id="hbg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#001F3F"/>
-      <stop offset="100%" stop-color="#000814"/>
+    <linearGradient id="bg10" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1A1A1B"/>
+      <stop offset="100%" stop-color="#0A0A0B"/>
     </linearGradient>
-    <linearGradient id="hg" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#F4D77A"/>
-      <stop offset="100%" stop-color="#A6841F"/>
+    <linearGradient id="amber10" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E5A835"/>
+      <stop offset="100%" stop-color="#9B6310"/>
     </linearGradient>
+    <symbol id="bm10" viewBox="-110 -110 220 220">
+      <polygon points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" fill="#F8F5F0"/>
+      <g fill="#1A1A1B">
+        <rect x="-55" y="-50" width="110" height="22"/>
+        <rect x="33" y="-28" width="22" height="20"/>
+        <rect x="-55" y="-8" width="110" height="16"/>
+        <rect x="-55" y="8" width="22" height="20"/>
+        <rect x="-55" y="28" width="110" height="22"/>
+      </g>
+    </symbol>
   </defs>
-  <rect width="1080" height="1920" fill="url(#hbg)"/>
+  <rect width="1080" height="1920" fill="url(#bg10)"/>
 
-  <!-- Top -->
-  <g transform="translate(540, 280)" text-anchor="middle">
-    <text font-family="Montserrat, Arial, sans-serif" font-size="22" letter-spacing="6" fill="#D4AF37" font-weight="700">DURBAN ENTREPRENEURS:</text>
+  <!-- Top brand -->
+  <g transform="translate(540, 180)">
+    <use href="#bm10" width="60" height="60" x="-30" y="-30"/>
   </g>
+
+  <text x="540" y="320" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="22" letter-spacing="6" fill="#CA8114" font-weight="700">DURBAN ENTREPRENEURS:</text>
 
   <!-- Hook headline -->
   <g font-family="Montserrat, Arial, sans-serif" text-anchor="middle">
-    <text x="540" y="500" font-size="74" font-weight="800" fill="#FFFFFF" letter-spacing="-2">Stop juggling</text>
-    <text x="540" y="600" font-size="74" font-weight="800" fill="#FFFFFF" letter-spacing="-2">5 freelancers,</text>
-    <text x="540" y="700" font-size="74" font-weight="800" fill="#FFFFFF" letter-spacing="-2">3 logo files</text>
-    <text x="540" y="800" font-size="74" font-weight="800" fill="#FFFFFF" letter-spacing="-2">and 0 results.</text>
+    <text x="540" y="510" font-size="74" font-weight="800" fill="#FFFFFF" letter-spacing="-2">Stop juggling</text>
+    <text x="540" y="610" font-size="74" font-weight="800" fill="#FFFFFF" letter-spacing="-2">5 freelancers,</text>
+    <text x="540" y="710" font-size="74" font-weight="800" fill="#FFFFFF" letter-spacing="-2">3 logo files</text>
+    <text x="540" y="810" font-size="74" font-weight="800" fill="#FFFFFF" letter-spacing="-2">and 0 results.</text>
   </g>
 
   <!-- Solution -->
-  <g transform="translate(540, 980)" text-anchor="middle">
-    <line x1="-180" y1="0" x2="180" y2="0" stroke="#D4AF37" stroke-width="2"/>
+  <g transform="translate(540, 990)" text-anchor="middle">
+    <line x1="-180" y1="0" x2="180" y2="0" stroke="#CA8114" stroke-width="2"/>
     <text y="80" font-family="Montserrat, Arial, sans-serif" font-size="36" font-weight="600" fill="#FFFFFF" opacity="0.85">One agency.</text>
     <text y="140" font-family="Montserrat, Arial, sans-serif" font-size="36" font-weight="600" fill="#FFFFFF" opacity="0.85">One quote.</text>
     <text y="200" font-family="Montserrat, Arial, sans-serif" font-size="36" font-weight="600" fill="#FFFFFF" opacity="0.85">One result.</text>
@@ -34,17 +46,17 @@
 
   <!-- Big mark -->
   <g transform="translate(540, 1340)" text-anchor="middle">
-    <text font-family="Montserrat, Arial, sans-serif" font-size="160" font-weight="800" fill="url(#hg)" letter-spacing="-6">THE BREED.</text>
+    <text font-family="Montserrat, Arial, sans-serif" font-size="160" font-weight="800" fill="url(#amber10)" letter-spacing="-6">THE BREED.</text>
   </g>
 
   <!-- CTA -->
   <g transform="translate(540, 1620)">
-    <rect x="-300" y="-50" width="600" height="100" rx="50" fill="url(#hg)"/>
-    <text text-anchor="middle" y="14" font-family="Montserrat, Arial, sans-serif" font-size="28" font-weight="800" fill="#001F3F" letter-spacing="3">SEE THE PACKAGES →</text>
+    <rect x="-300" y="-50" width="600" height="100" rx="50" fill="url(#amber10)"/>
+    <text text-anchor="middle" y="14" font-family="Montserrat, Arial, sans-serif" font-size="26" font-weight="800" fill="#1A1A1B" letter-spacing="3">SEE THE PACKAGES  →</text>
   </g>
 
   <g font-family="Inter, Arial, sans-serif" text-anchor="middle" fill="#FFFFFF">
-    <text x="540" y="1800" font-size="26" font-weight="700" fill="#D4AF37">thebreed.co.za</text>
+    <text x="540" y="1800" font-size="26" font-weight="700" fill="#CA8114">thebreed.co.za</text>
     <text x="540" y="1850" font-size="20" opacity="0.6">@breedindustries  ·  +27 60 496 4105</text>
   </g>
 </svg>

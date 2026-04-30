@@ -1,36 +1,49 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 312" width="820" height="312">
   <defs>
-    <linearGradient id="fbg" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#001F3F"/>
-      <stop offset="60%" stop-color="#001A36"/>
-      <stop offset="100%" stop-color="#000814"/>
+    <linearGradient id="bg5" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#242426"/>
+      <stop offset="60%" stop-color="#1A1A1B"/>
+      <stop offset="100%" stop-color="#0A0A0B"/>
     </linearGradient>
-    <linearGradient id="fg" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#F4D77A"/>
-      <stop offset="100%" stop-color="#A6841F"/>
+    <linearGradient id="amber5" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E5A835"/>
+      <stop offset="100%" stop-color="#9B6310"/>
     </linearGradient>
-    <pattern id="fgrid" width="32" height="32" patternUnits="userSpaceOnUse">
-      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#D4AF37" stroke-width="0.4" opacity="0.1"/>
+    <pattern id="hg5" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#CA8114" stroke-width="0.4" opacity="0.1"/>
     </pattern>
+    <symbol id="bm5" viewBox="-110 -110 220 220">
+      <polygon points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" fill="#F8F5F0"/>
+      <g fill="#1A1A1B">
+        <rect x="-55" y="-50" width="110" height="22"/>
+        <rect x="33" y="-28" width="22" height="20"/>
+        <rect x="-55" y="-8" width="110" height="16"/>
+        <rect x="-55" y="8" width="22" height="20"/>
+        <rect x="-55" y="28" width="110" height="22"/>
+      </g>
+    </symbol>
   </defs>
-  <rect width="820" height="312" fill="url(#fbg)"/>
-  <rect width="820" height="312" fill="url(#fgrid)"/>
-  <circle cx="700" cy="156" r="180" fill="#D4AF37" opacity="0.06"/>
+  <rect width="820" height="312" fill="url(#bg5)"/>
+  <rect width="820" height="312" fill="url(#hg5)"/>
+  <circle cx="700" cy="156" r="180" fill="#CA8114" opacity="0.08"/>
 
-  <g transform="translate(50, 80)" font-family="Montserrat, Arial, sans-serif">
-    <text font-size="13" letter-spacing="6" fill="#D4AF37" font-weight="700">PREMIUM GROWTH AGENCY · DURBAN</text>
-    <text y="55" font-size="44" font-weight="800" fill="#FFFFFF" letter-spacing="-1">From Idea to Empire.</text>
-    <text y="100" font-size="18" font-weight="500" fill="#FFFFFF" opacity="0.7">We register, brand, and build for ambitious South African entrepreneurs.</text>
-    <g transform="translate(0, 130)">
-      <rect width="200" height="44" rx="22" fill="url(#fg)"/>
-      <text x="100" y="29" text-anchor="middle" font-size="14" font-weight="800" fill="#001F3F" letter-spacing="2">START YOUR EMPIRE →</text>
+  <g transform="translate(50, 70)" font-family="Montserrat, Arial, sans-serif">
+    <use href="#bm5" width="40" height="40" x="0" y="-8"/>
+    <text x="50" y="12" font-size="18" font-weight="800" fill="#FFFFFF" letter-spacing="5">BREED</text>
+    <text x="50" y="30" font-size="9" font-weight="600" fill="#CA8114" letter-spacing="5">INDUSTRIES</text>
+    <text y="78" font-size="13" letter-spacing="6" fill="#CA8114" font-weight="700">PREMIUM GROWTH AGENCY · DURBAN</text>
+    <text y="118" font-size="38" font-weight="800" fill="#FFFFFF" letter-spacing="-1">Real Work. Real Clients.</text>
+    <text y="156" font-size="38" font-weight="800" fill="url(#amber5)" letter-spacing="-1">Real Impact.</text>
+    <text y="190" font-size="15" font-weight="500" fill="#FFFFFF" opacity="0.7">Empowering Growth, Building Tomorrow Together.</text>
+    <g transform="translate(0, 210)">
+      <rect width="220" height="40" rx="20" fill="url(#amber5)"/>
+      <text x="110" y="26" text-anchor="middle" font-size="13" font-weight="800" fill="#1A1A1B" letter-spacing="2">START YOUR PROJECT  →</text>
     </g>
   </g>
 
-  <g transform="translate(620, 156)">
-    <circle r="100" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.3"/>
-    <circle r="70" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.5"/>
-    <circle r="40" fill="url(#fg)"/>
-    <text y="6" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="16" font-weight="800" fill="#001F3F">BREED</text>
+  <g transform="translate(680, 156)">
+    <circle r="100" fill="none" stroke="#CA8114" stroke-width="1" opacity="0.3"/>
+    <circle r="70" fill="none" stroke="#CA8114" stroke-width="1" opacity="0.5"/>
+    <use href="#bm5" width="100" height="100" x="-50" y="-50"/>
   </g>
 </svg>

@@ -1,49 +1,60 @@
 # THE BREED INDUSTRIES
 ## MASTER MARKETING & LAUNCH PLAN
-### "From Idea to Empire" — 90-Day Go-To-Market
+### "Real Work. Real Clients. Real Impact." — 90-Day Go-To-Market
 
 **Prepared by:** The Breed Marketing Cell — 8-agent team (Strategy, Copy, Social, Graphic, Art Direction, Video, Scriptwriting, PR)
 **Brand:** The Breed Industries — Premium Growth Agency, Durban, South Africa
+**Tagline:** *Empowering Growth, Building Tomorrow Together.*
 **Web:** [www.thebreed.co.za](https://www.thebreed.co.za)
-**Document version:** 1.0 — Launch-ready
+**Document version:** 2.0 — rebuilt against real product data
 
 ---
 
 ## 0. EXECUTIVE SUMMARY (THE BIG IDEA)
 
-The Breed Industries is no longer just an agency — with the new platform live at thebreed.co.za, it is now a **single command center** where ambitious South African entrepreneurs can register, brand, plan, and digitize their business in one flow. The marketing job is to make that one sentence inescapable across every screen in KwaZulu-Natal and beyond.
+The Breed Industries is no longer just an agency — with the new platform live at thebreed.co.za, it is now a **single command center** where ambitious South African entrepreneurs can register, brand, plan, and digitize their business in one flow.
 
-**Core campaign idea:** **"From Idea to Empire."**
-A repeatable phrase, hashtag, and visual lockup that will run across every poster, reel, billboard, email, and pitch deck for the next 12 months.
+**Track record (real numbers from the platform):**
+- **23+** clients served
+- **5** digital products built
+- **8+** brand identities created
+- **45+** businesses launched
 
-**90-day objective:** convert the new platform launch into 50+ qualified strategy calls, 10+ paying packages, and a permanent following on IG/TikTok.
+**Core campaign idea:** **"Real Work. Real Clients. Real Impact."**
+A factual, evidence-led headline backed by the real numbers above and the real portfolio (MLK Apparel, Engage Africa IO, HOGI Church, I-Group, MC Ways, NSPIRAXION, Pinetown, Lance, Gadali).
+
+**Supporting line:** *Empowering Growth, Building Tomorrow Together.*
+**Battle-cry headline (for stories, ads, video end-cards):** *From Idea to Empire.*
+
+**90-day objective:** convert the new platform launch into 60+ qualified strategy calls, 12+ paying packages, and a permanent following on IG/TikTok. Push the Clients Served stat from 23+ to 35+.
 
 ---
 
 ## 1. POSITIONING
 
 ### 1.1 Who we are (one paragraph)
-The Breed Industries is the premium growth agency built for ambitious South African founders who don't want to juggle five freelancers. We register your company, design your brand, write your business plan, and build the website, app, or AI platform that makes it real — under one roof, with one quote, and one team that actually answers the phone.
+The Breed Industries is the premium growth agency built for ambitious South African founders who don't want to juggle five freelancers. We register your company, design your brand, write your business plan, and build the website, app, or AI platform that makes it real — under one roof, with one quote, one team, and a track record of 45+ businesses launched.
 
 ### 1.2 Tagline architecture
 
 | Layer | Line |
 |---|---|
-| **Master tagline** | From Idea to Empire. |
+| **Master tagline (hero)** | Real Work. Real Clients. Real Impact. |
+| **Brand promise** | Empowering Growth, Building Tomorrow Together. |
+| **Battle-cry / story-hook** | From Idea to Empire. |
 | **Service line** | Register. Brand. Build. |
-| **Promise line** | Get seen. Get trusted. Get profitable. |
 | **Stinger** | Everything. One Place. |
 | **Geo-anchor** | Premium Growth Agency · Durban |
 
 ### 1.3 Unique value pillars (use in this order, always)
 
-1. **Setup** — CIPC, SARS, B-BBEE, CSD, banking
-2. **Brand** — logos, identity systems, print collateral
-3. **Profile** — investor-ready plans, profiles, funding decks
-4. **Digital** — websites, apps, e-commerce, AI platforms
+1. **Setup** — CIPC, SARS, BEE, COID, Tax Clearance — *from R550*
+2. **Brand** — logos, identity, cards, flyers, media kits — *from R1,500*
+3. **Profile** — plans, profiles, funding proposals, training — *from R850*
+4. **Digital** — websites, apps, e-commerce, AI platforms — *from R5,000*
 
 ### 1.4 What we're NOT
-We are not a freelancer marketplace. We are not a CIPC reseller. We are not "just another agency." Every piece of communication should reinforce: full-stack, premium, accountable, ambitious.
+We are not a freelancer marketplace. We are not a CIPC reseller. We are not "just another agency." Every piece of communication should reinforce: full-stack, premium, accountable, evidence-led.
 
 ---
 
@@ -55,14 +66,14 @@ We are not a freelancer marketplace. We are not a CIPC reseller. We are not "jus
 - Has tried two cheap freelancers and a Wix template
 - Earns or wants to earn six figures
 - Active on Instagram and TikTok; LinkedIn for credibility
-- Pain: fragmented suppliers, no compliance certainty, no funding-ready paperwork
-- Trigger to buy: a tender deadline, a funding application, a launch event
+- **Pain:** fragmented suppliers, no compliance certainty, no funding-ready paperwork
+- **Trigger to buy:** a tender deadline, a funding application, a launch event
 
 ### 2.2 Secondary persona — "The Established SMME Modernising"
 - 1–10 staff, 5+ years trading, suddenly needs digital
 - Has a logo from 2014 and a website nobody updates
 - Wants e-commerce, an app, or AI integration
-- Pain: doesn't know who to trust with proper tech
+- **Pain:** doesn't know who to trust with proper tech
 
 ### 2.3 Tertiary — "The Funder / Corporate Partner"
 - Banks, ESD/SD programs, accelerators
@@ -78,8 +89,8 @@ We are not a freelancer marketplace. We are not a CIPC reseller. We are not "jus
 | **Instagram (@breedindustries)** | Hero channel — brand, portfolio, reels | 5 posts + 4 stories/wk | Reach, profile visits, DM inquiries |
 | **TikTok (@breedindustries)** | Top-of-funnel awareness, founder edutainment | 3 videos/wk | Views, follows, link clicks |
 | **Facebook (BREEDinc)** | Local trust, longer-form posts, events | 3 posts/wk | Page likes, group joins, lead form fills |
-| **LinkedIn** | Authority, B2B/funders, founder thought leadership | 4 posts/wk | Connection requests, inbound leads |
-| **WhatsApp Business** | Conversion + support | Daily | Quote-to-close ratio |
+| **LinkedIn (Breed Industries)** | Authority, B2B/funders, founder thought leadership | 4 posts/wk | Connection requests, inbound leads |
+| **WhatsApp Business (+27 60 496 4105)** | Conversion + support | Daily | Quote-to-close ratio |
 | **Email (info@thebreed.co.za)** | Nurture sequence + monthly digest | 1 newsletter/wk | Open %, CTR |
 | **Website (thebreed.co.za)** | Conversion engine — Package Builder | Always-on | Quote requests, form fills |
 | **Print/Outdoor** | Durban CBD, taxi ranks, expo stands | Burst | QR scans |
@@ -88,9 +99,9 @@ We are not a freelancer marketplace. We are not a CIPC reseller. We are not "jus
 ### 3.1 Hashtag system
 Always pin 3 core + 5 rotating.
 
-**Core (always):** `#TheBreed #FromIdeaToEmpire #PremiumGrowthAgency`
+**Core (always):** `#TheBreed #RealWorkRealImpact #PremiumGrowthAgency`
 **Geo:** `#DurbanBusiness #DurbanEntrepreneurs #KZNBusiness #SouthAfricanBusiness`
-**Topical:** `#CIPC #BusinessRegistration #LogoDesign #WebDesignSA #SmallBusinessSA #StartupSA #SAEntrepreneurs #SmmeSA`
+**Topical:** `#CIPC #BusinessRegistration #LogoDesign #WebDesignSA #SmallBusinessSA #StartupSA #SAEntrepreneurs #SmmeSA #FromIdeaToEmpire`
 
 ---
 
@@ -98,10 +109,10 @@ Always pin 3 core + 5 rotating.
 
 ### Phase 1 — IGNITE (Weeks 1–2)
 **Goal:** announce the new platform with maximum theatre.
-- Day 1: Coordinated launch post + reel + LinkedIn article + email + WhatsApp broadcast
+- Day 1: Coordinated launch post + reel + LinkedIn article + email + WhatsApp broadcast (carrying the *Real Work. Real Clients. Real Impact.* hero)
 - Day 2–7: Founder voice video, behind-the-scenes, Package Builder demo reel
 - Day 8: Paid ads switch on (R3,000 test budget across IG/Meta + TikTok)
-- Day 14: First "case study" reel — feature one existing client (e.g., Engage Africa IO or MLK Apparel)
+- Day 14: First "case study" reel — feature one existing client (recommended: Engage Africa IO or MLK Apparel)
 
 ### Phase 2 — EDUCATE (Weeks 3–6)
 **Goal:** be the go-to source on "how to actually start a business in SA."
@@ -113,14 +124,14 @@ Always pin 3 core + 5 rotating.
 ### Phase 3 — CONVERT (Weeks 7–10)
 **Goal:** turn watchers into bookers.
 - Launch a flagship offer: "Founder Friday" — free 30-min strategy call, capped at 5 slots
-- Run "Pick Your Lane" carousel pushing Launch / Growth / Empire packages
+- Run "Pick Your Lane" carousel pushing Launch Essentials / Growth Momentum / Empire Ascend
 - Retargeting ad set: Package Builder visitors who didn't request a quote
 - Direct-mail flyers to 5 co-working spaces in Durban + Umhlanga
 
 ### Phase 4 — AMPLIFY (Weeks 11–13)
 **Goal:** bank wins, recycle proof, scale spend.
 - Compile the "Empire Reel" — montage of all client work
-- LinkedIn long-form: "What we learned shipping 12 brands in 90 days"
+- LinkedIn long-form: "How we shipped the next 12 brands in 90 days"
 - Boost top 3 organic performers with extended budget
 - Plan Phase 5 (Q3): event activation + corporate partnerships
 
@@ -130,8 +141,8 @@ Always pin 3 core + 5 rotating.
 
 | Pillar | % of feed | Examples |
 |---|---|---|
-| **Empire Stories** (case studies, before/after) | 30% | "How we took I-Group from idea to operating in 21 days" |
-| **Founder Education** (how-to, cost breakdowns) | 25% | "What does CIPC registration actually cost in 2026?" |
+| **Empire Stories** (case studies, before/after) | 30% | "How we took I-Group from idea to operating in 21 days" · "Inside MLK Apparel's checkout build" |
+| **Founder Education** (how-to, cost breakdowns) | 25% | "What CIPC registration actually costs in 2026" · "Wix vs custom: the honest answer" |
 | **Behind The Breed** (team, process, BTS) | 15% | Studio shots, design timelapses, founder Lance on camera |
 | **Promo / Offers** (pricing, packages, limited-time) | 15% | Pick-your-lane, Founder Friday, Package Builder demos |
 | **Cultural / Local** (Durban moments, SA business news) | 10% | Reactions to budget speech, KZN founder shoutouts |
@@ -139,40 +150,68 @@ Always pin 3 core + 5 rotating.
 
 ---
 
-## 6. THE OFFER STACK
+## 6. THE OFFER STACK (real prices, real names)
 
-Use this exact pricing in posters, reels, and ads:
+Use these EXACT prices and names in posters, reels, and ads.
 
-| Tier | Price band | Hook line |
-|---|---|---|
-| **Launch Starter** | R2,500 – R4,500 | "Get legal. Get a logo. Get going." |
-| **Growth Professional** | R6,000 – R10,000 | "Brand it, build it, take it online." |
-| **Empire Premium** | R12,000 – R25,000+ | "The full machine — registration to AI platform." |
-| **Build Your Own** | from R650 / line item | thebreed.co.za/build-package |
+| Tier | Real name | Price band | Hook line | Inclusions |
+|---|---|---|---|---|
+| **Tier 1** | **Launch Essentials** | From **R3,950** | "Get legal. Get a logo. Get going." | CIPC Registration · Basic Logo · 250 Business Cards |
+| **Tier 2** | **Growth Momentum** ★ POPULAR | From **R9,800** | "Brand it, build it, take it online." | Full Branding Pack · 5-page Website · Marketing Material · Business Plan |
+| **Tier 3** | **Empire Ascend** | From **R18,500** | "The full machine — registration to e-commerce." | Premium Logo + Full Identity · E-commerce Web Portal · Media Kit · 3 months social management |
+| **Custom** | **Build Your Own** | from R550/line | thebreed.co.za/build-package | Pay-for-what-you-pick |
+
+### Single-service price reference (most-cited in copy)
+
+| Service | Starting price |
+|---|---:|
+| CIPC Company Registration | R550 |
+| Tax Compliance (SARS) | R850 |
+| BEE Certification | R250 |
+| Logo Design | R1,500 |
+| Business Branding Package | R2,500 |
+| Business Cards (250) | R800 |
+| Simple Social Media Flyer | R650 |
+| Premium Event/Brand Flyer | R1,250 |
+| Business Profile (1–4 pages) | R850 |
+| Business Plan – Comprehensive | R3,000 |
+| Website Development | R5,000 |
+| Mobile App Development | R15,000 |
+| E-commerce Solutions | R8,000 |
+| SEO & Digital Marketing | R2,500/mo |
+| Social Media Management | R3,500/mo |
 
 ---
 
 ## 7. CREATIVE / BRAND STANDARDS
 
-### 7.1 Palette (use exact values)
-- **Deep Navy** `#001F3F` — primary background
-- **Gold** `#D4AF37` — accent, never on body copy
-- **Tech Blue** `#0070F3` — secondary digital accent only
-- **Warm Off-White** `#F8F5F0` — light layouts
-- **Charcoal** `#333333` — body text on light
+### 7.1 Palette (real values, taken from `tailwind.config.js`)
+- **Warm Black** `#1A1A1B` — primary background
+- **Secondary Background** `#242426` — cards, panels
+- **Accent (Burnt Amber)** `#CA8114` — primary accent, never on body copy
+- **Accent Light** `#E5A835` — gradient highlights
+- **Accent Dark** `#9B6310` — gradient shadows
+- **Off-White** `#F8F5F0` — light layouts, logo color
 - **White** `#FFFFFF` — body text on dark
+- **Charcoal** `#333333` — body text on light
 
 ### 7.2 Type
 - Headings: **Montserrat** 700 / 800
 - Body: **Inter** 400 / 500 / 600
 - Never use a third typeface
 
-### 7.3 Photography rules
-- Hero shots: shallow depth, gold key-light, navy environment
-- Founder shots: shoulders up, eye contact, no smile
-- Product/UI shots: dark mode dashboard with gold accents
+### 7.3 Logo
+The hexagonal **S-mark** is sacred. Always use either:
+- the white version on dark backgrounds, or
+- the black version on light backgrounds.
+Never recolour. Pair the mark with the wordmark *BREED INDUSTRIES* in Montserrat 800 with 5-6 letterspacing.
 
-### 7.4 Voice
+### 7.4 Photography rules
+- Hero shots: shallow depth, amber key-light, near-black environment
+- Founder shots: shoulders up, eye contact, no smile
+- Product/UI shots: dark mode dashboard with amber accents
+
+### 7.5 Voice
 **Confident. Plain. South African.** Not corporate. Not memey. Read every caption out loud — if it sounds like an Mzansi agency that respects your time, it ships.
 
 **Banned phrases:** "leverage," "synergy," "in today's fast-paced world," "we are passionate about," any emoji-stacking.
@@ -197,6 +236,7 @@ Use this exact pricing in posters, reels, and ads:
 | Strategy calls booked | 12 | 35 | 60 |
 | Paying packages closed | 2 | 6 | 12 |
 | Email list | 200 | 500 | 1,200 |
+| Stat-card update on website | 28+ clients | 32+ clients | 35+ clients · 50+ launches |
 
 ---
 
@@ -254,4 +294,4 @@ Weekly stand-up: Mondays 09:00. Asana board lives in the admin panel of the webs
 
 *This plan is the source of truth. Update version number at the top whenever the brand evolves.*
 
-**The Breed Industries** · From Idea to Empire. · www.thebreed.co.za
+**The Breed Industries** · Real Work. Real Clients. Real Impact. · www.thebreed.co.za

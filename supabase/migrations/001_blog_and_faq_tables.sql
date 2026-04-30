@@ -38,6 +38,12 @@ CREATE INDEX IF NOT EXISTS idx_faqs_category ON faqs(category);
 ALTER TABLE blog_posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE faqs ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policies if they exist (to avoid conflicts)
+DROP POLICY IF EXISTS "Allow public read access to blog posts" ON blog_posts;
+DROP POLICY IF EXISTS "Allow public read access to faqs" ON faqs;
+DROP POLICY IF EXISTS "Allow admin full access to blog posts" ON blog_posts;
+DROP POLICY IF EXISTS "Allow admin full access to faqs" ON faqs;
+
 -- Create policies for public read access
 CREATE POLICY "Allow public read access to blog posts" 
   ON blog_posts FOR SELECT 
@@ -59,3 +65,38 @@ CREATE POLICY "Allow admin full access to faqs"
 
 -- Note: Blog posts and FAQs should be created via the admin interface
 -- This keeps the database clean and ensures all content is managed through the CMS
+
+-- ============================================
+-- STORAGE BUCKET SETUP FOR IMAGES
+-- ============================================
+
+-- Create the storage bucket for blog and site images
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('Blog and Site', 'Blog and Site', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Drop existing storage policies if they exist
+DROP POLICY IF EXISTS "Allow public read access to Blog and Site bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Allow authenticated uploads to Blog and Site bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Allow authenticated delete from Blog and Site bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Allow authenticated update to Blog and Site bucket" ON storage.objects;
+
+-- Policy: Allow public read access to all objects in the bucket
+CREATE POLICY "Allow public read access to Blog and Site bucket"
+  ON storage.objects FOR SELECT
+  USING (bucket_id = 'Blog and Site');
+
+-- Policy: Allow authenticated users to upload files
+CREATE POLICY "Allow authenticated uploads to Blog and Site bucket"
+  ON storage.objects FOR INSERT
+  WITH CHECK (bucket_id = 'Blog and Site' AND auth.role() = 'authenticated');
+
+-- Policy: Allow authenticated users to delete files
+CREATE POLICY "Allow authenticated delete from Blog and Site bucket"
+  ON storage.objects FOR DELETE
+  USING (bucket_id = 'Blog and Site' AND auth.role() = 'authenticated');
+
+-- Policy: Allow authenticated users to update files
+CREATE POLICY "Allow authenticated update to Blog and Site bucket"
+  ON storage.objects FOR UPDATE
+  USING (bucket_id = 'Blog and Site' AND auth.role() = 'authenticated');
