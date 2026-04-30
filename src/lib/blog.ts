@@ -186,12 +186,8 @@ export async function updateBlogPost(slug: string, updates: Partial<BlogPost>): 
     return { success: false, error: error.message };
   }
 
-  console.log('Update result - rows affected:', data?.length || 0);
+  console.log('Update result - rows affected:', count);
   console.log('Updated data:', data);
-
-  if (!data || data.length === 0) {
-    return { success: false, error: `No blog post found with slug: ${slug}` };
-  }
 
   return { success: true };
 }

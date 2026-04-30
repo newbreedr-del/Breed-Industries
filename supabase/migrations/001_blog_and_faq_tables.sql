@@ -44,6 +44,13 @@ DROP POLICY IF EXISTS "Allow public read access to faqs" ON faqs;
 DROP POLICY IF EXISTS "Allow admin full access to blog posts" ON blog_posts;
 DROP POLICY IF EXISTS "Allow admin full access to faqs" ON faqs;
 
+-- Drop existing policies first
+DROP POLICY IF EXISTS "Allow admin full access to blog posts" ON blog_posts;
+DROP POLICY IF EXISTS "Allow public read access to blog posts" ON blog_posts;
+DROP POLICY IF EXISTS "Allow public updates to blog posts" ON blog_posts;
+DROP POLICY IF EXISTS "Allow public insert to blog posts" ON blog_posts;
+DROP POLICY IF EXISTS "Allow public delete to blog posts" ON blog_posts;
+
 -- Create policies for public read access
 CREATE POLICY "Allow public read access to blog posts" 
   ON blog_posts FOR SELECT 
