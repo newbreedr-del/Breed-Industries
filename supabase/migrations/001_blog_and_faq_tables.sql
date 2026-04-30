@@ -80,23 +80,26 @@ DROP POLICY IF EXISTS "Allow public read access to Blog and Site bucket" ON stor
 DROP POLICY IF EXISTS "Allow authenticated uploads to Blog and Site bucket" ON storage.objects;
 DROP POLICY IF EXISTS "Allow authenticated delete from Blog and Site bucket" ON storage.objects;
 DROP POLICY IF EXISTS "Allow authenticated update to Blog and Site bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Allow public uploads to Blog and Site bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Allow public delete from Blog and Site bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Allow public update to Blog and Site bucket" ON storage.objects;
 
 -- Policy: Allow public read access to all objects in the bucket
 CREATE POLICY "Allow public read access to Blog and Site bucket"
   ON storage.objects FOR SELECT
   USING (bucket_id = 'Blog and Site');
 
--- Policy: Allow authenticated users to upload files
-CREATE POLICY "Allow authenticated uploads to Blog and Site bucket"
+-- Policy: Allow public uploads (for admin interface - images are public anyway)
+CREATE POLICY "Allow public uploads to Blog and Site bucket"
   ON storage.objects FOR INSERT
-  WITH CHECK (bucket_id = 'Blog and Site' AND auth.role() = 'authenticated');
+  WITH CHECK (bucket_id = 'Blog and Site');
 
--- Policy: Allow authenticated users to delete files
-CREATE POLICY "Allow authenticated delete from Blog and Site bucket"
+-- Policy: Allow public delete (for admin interface)
+CREATE POLICY "Allow public delete from Blog and Site bucket"
   ON storage.objects FOR DELETE
-  USING (bucket_id = 'Blog and Site' AND auth.role() = 'authenticated');
+  USING (bucket_id = 'Blog and Site');
 
--- Policy: Allow authenticated users to update files
-CREATE POLICY "Allow authenticated update to Blog and Site bucket"
+-- Policy: Allow public update (for admin interface)
+CREATE POLICY "Allow public update to Blog and Site bucket"
   ON storage.objects FOR UPDATE
-  USING (bucket_id = 'Blog and Site' AND auth.role() = 'authenticated');
+  USING (bucket_id = 'Blog and Site');
