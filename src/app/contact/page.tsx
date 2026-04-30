@@ -33,6 +33,7 @@ export default function ContactPage() {
         description="Tell us about your launch timeline, compliance needs, and growth ambitions. We’ll respond within one business day."
         breadcrumbs={[{ label: 'Contact', href: '/contact' }]}
         align="left"
+        backgroundImage="/assets/images/contact-hero.jpg"
       >
         <div className="flex flex-wrap gap-4">
           <Link href="tel:+27604964105" className="btn btn-primary inline-flex items-center gap-2">

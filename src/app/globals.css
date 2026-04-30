@@ -246,6 +246,16 @@ h1, h2, h3, h4, h5, h6 {
   animation-play-state: paused;
 }
 
+/* Poster Marquee Carousel */
+.poster-marquee {
+  animation: marquee 40s linear infinite;
+  width: max-content;
+}
+
+.poster-marquee:hover {
+  animation-play-state: paused;
+}
+
 /* Floating WhatsApp Button */
 .floating-whatsapp {
   @apply fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center text-2xl shadow-lg z-50 transition-all hover:scale-110;

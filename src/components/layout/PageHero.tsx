@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 
 interface Breadcrumb {
@@ -17,6 +18,7 @@ interface PageHeroProps {
   align?: 'left' | 'center';
   size?: 'default' | 'large' | 'small';
   backgroundPattern?: 'grid' | 'blueprint' | 'none';
+  backgroundImage?: string;
   children?: React.ReactNode;
 }
 
@@ -28,13 +30,14 @@ export const PageHero = ({
   align = 'center',
   size = 'default',
   backgroundPattern = 'grid',
+  backgroundImage,
   children
 }: PageHeroProps) => {
   // Determine padding based on size
   const paddingClasses = {
     small: 'py-16 md:py-20',
     default: 'py-20 md:py-28',
-    large: 'py-24 md:py-36'
+    large: 'py-22 md:py-30'
   };
 
   // Determine text alignment
@@ -53,12 +56,26 @@ export const PageHero = ({
     <section 
       className={`relative ${paddingClasses[size]} overflow-hidden bg-color-bg-deep`}
     >
+      {/* Background Image */}
+      {backgroundImage && (
+        <div className="absolute inset-0">
+          <Image
+            src={backgroundImage}
+            alt=""
+            fill
+            priority
+            className="object-cover object-center opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
+        </div>
+      )}
+
       {/* Background Pattern */}
-      {backgroundPattern === 'grid' && (
+      {!backgroundImage && backgroundPattern === 'grid' && (
         <div className="absolute inset-0 grid-overlay"></div>
       )}
-      
-      {backgroundPattern === 'blueprint' && (
+
+      {!backgroundImage && backgroundPattern === 'blueprint' && (
         <div className="absolute inset-0 blueprint-bg"></div>
       )}
       

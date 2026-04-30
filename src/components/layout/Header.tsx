@@ -167,8 +167,8 @@ export const Header = () => {
                     {item.megaMenu && item.children && (
                       <AnimatePresence>
                         {activeMegaMenu === item.name && (
-                          <motion.div 
-                            className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-screen max-w-6xl glass-card-strong p-6"
+                          <motion.div
+                            className="absolute top-full left-0 mt-2 w-[700px] glass-card-strong p-5 rounded-xl"
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
@@ -176,23 +176,23 @@ export const Header = () => {
                             onMouseEnter={() => setActiveMegaMenu(item.name)}
                             onMouseLeave={() => setActiveMegaMenu(null)}
                           >
-                            <div className="grid grid-cols-12 gap-6">
+                            <div className="grid grid-cols-[180px_1fr] gap-5">
                               {/* Service Categories */}
-                              <div className="col-span-4">
-                                <h3 className="text-sm uppercase tracking-wider text-accent mb-4">Categories</h3>
-                                <div className="space-y-4">
+                              <div>
+                                <h3 className="text-xs uppercase tracking-wider text-accent mb-3">Categories</h3>
+                                <div className="space-y-2">
                                   {item.children.map((child) => (
-                                    <Link 
-                                      key={child.title} 
+                                    <Link
+                                      key={child.title}
                                       href={child.link}
-                                      className="flex items-start gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors group"
+                                      className="flex items-start gap-2 p-2 rounded-lg hover:bg-white/5 transition-colors group"
                                     >
-                                      <div className="mt-1 text-accent">{child.icon}</div>
+                                      <div className="mt-0.5 text-accent">{child.icon}</div>
                                       <div>
-                                        <h4 className="font-medium text-white group-hover:text-accent transition-colors">
+                                        <h4 className="text-sm font-medium text-white group-hover:text-accent transition-colors">
                                           {child.title}
                                         </h4>
-                                        <p className="text-sm text-white/60">{child.description}</p>
+                                        <p className="text-xs text-white/60 leading-tight">{child.description}</p>
                                       </div>
                                     </Link>
                                   ))}
@@ -200,24 +200,24 @@ export const Header = () => {
                               </div>
 
                               {/* Package Tiers */}
-                              <div className="col-span-8">
-                                <h3 className="text-sm uppercase tracking-wider text-accent mb-4">Service Packages</h3>
-                                <div className="grid grid-cols-3 gap-4">
+                              <div>
+                                <h3 className="text-xs uppercase tracking-wider text-accent mb-3">Service Packages</h3>
+                                <div className="grid grid-cols-3 gap-3">
                                   {tiers.map((tier) => (
-                                    <Link 
-                                      key={tier.name} 
+                                    <Link
+                                      key={tier.name}
                                       href={tier.link}
-                                      className={`p-4 rounded-lg transition-all ${
-                                        tier.featured 
-                                          ? 'glass-card-accent' 
+                                      className={`p-3 rounded-lg transition-all ${
+                                        tier.featured
+                                          ? 'glass-card-accent'
                                           : 'hover:bg-white/5'
                                       }`}
                                     >
-                                      <h4 className={`font-medium ${tier.featured ? 'text-accent' : 'text-white'}`}>
+                                      <h4 className={`text-sm font-medium ${tier.featured ? 'text-accent' : 'text-white'}`}>
                                         {tier.name}
                                       </h4>
-                                      <p className="text-lg font-heading font-bold mt-1">{tier.price}</p>
-                                      <p className="text-sm text-white/60 mt-2">{tier.description}</p>
+                                      <p className="text-base font-heading font-bold mt-1">{tier.price}</p>
+                                      <p className="text-xs text-white/60 mt-1 leading-tight">{tier.description}</p>
                                     </Link>
                                   ))}
                                 </div>

@@ -1,11 +1,12 @@
 "use client";
 
+import { useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ExternalLink, Code2, Palette, FileText, CheckCircle2 } from 'lucide-react';
+import { ExternalLink, Code2, Palette, FileText, CheckCircle2, ChevronLeft, ChevronRight, ImageIcon } from 'lucide-react';
 
 // ─── Digital Products Built for Clients ──────────────────────────────────────
 const digitalProjects = [
@@ -124,15 +125,18 @@ const digitalProjects = [
 
 // ─── Branding & Logo Work ──────────────────────────────────────────────────────
 const brandingClients = [
-  { name: 'GoBizz', logo: '/assets/images/clients/gobizz-logo.png', work: 'Logo Design, Brand Identity' },
-  { name: 'I-Group', logo: '/assets/images/clients/igroup-logo.png', work: 'Logo Design, Business Cards, Letterhead' },
-  { name: 'MC Ways Construction', logo: '/assets/images/clients/mcways-logo.jpg', work: 'Logo Design, Brand Identity, Letterhead' },
-  { name: 'NSPIRAXION', logo: '/assets/images/clients/nspiraxion-logo.jpg', work: 'Logo Design, Brand Identity' },
-  { name: 'Isambulo Sezulu', logo: '/assets/images/clients/isambulo-logo.jpg', work: 'Logo Design, Brand Identity' },
-  { name: 'Ebodweni', logo: '/assets/images/clients/ebodweni-logo.jpg', work: 'Logo Design, Brand Materials' },
-  { name: 'Lance Renovations', logo: '/assets/images/clients/lance-logo.jpg', work: 'Logo Design, Business Cards' },
-  { name: 'Gadali Security', logo: '/assets/images/clients/gadali-logo.jpg', work: 'Logo Design, Brand Identity' },
-  { name: 'Spephelo', logo: '/assets/images/clients/spephelo-logo.jpg', work: 'Logo Design, Brand Materials' },
+  { name: 'GoBizz', logo: '/assets/images/clients/gobizz-logo White-01.png', work: 'Logo Design, Brand Identity' },
+  { name: 'I-Group', logo: '/assets/images/clients/I Group Logo White-01-01.png', work: 'Logo Design, Business Cards, Letterhead' },
+  { name: 'MC Ways Construction', logo: '/assets/images/clients/MC Ways New-03.png', work: 'Logo Design, Brand Identity, Letterhead' },
+  { name: 'NSPIRAXION', logo: '/assets/images/clients/NSPIRAXION IMPULSE PROJECTS LOGO [Recovered]-01.png', work: 'Logo Design, Brand Identity' },
+  { name: 'Isambulo Sezulu', logo: '/assets/images/clients/Isambulo Logo-01.png', work: 'Logo Design, Brand Identity' },
+  { name: 'Ebodweni', logo: '/assets/images/clients/Ebodweni-01.png', work: 'Logo Design, Brand Materials' },
+  { name: 'Ndlunkulu', logo: '/assets/images/clients/Ndlunkulu White text-01.png', work: 'Logo Design, Brand Identity' },
+  { name: 'OKuhle', logo: '/assets/images/clients/New OKuhle Logo-01.png', work: 'Logo Design, Brand Materials' },
+  { name: 'Pinetown Incorporated', logo: '/assets/images/clients/Pinetown Incorporated-01.png', work: 'Logo Design, NPO Branding' },
+  { name: 'Lance Renovations', logo: '/assets/images/clients/lance-logo.png', work: 'Logo Design, Business Cards' },
+  { name: 'Gadali Security', logo: '/assets/images/clients/gadali-logo.png', work: 'Logo Design, Brand Identity' },
+  { name: 'Spephelo', logo: '/assets/images/clients/spephelo-logo.png', work: 'Logo Design, Brand Materials' },
 ];
 
 // ─── Business Services Delivered ─────────────────────────────────────────────
@@ -152,6 +156,19 @@ const businessServicesClients = [
 ];
 
 export default function PortfolioPage() {
+  const [projectsPage, setProjectsPage] = useState(0);
+  const [bsPage, setBsPage] = useState(0);
+
+  const engageProject = digitalProjects[0];
+  const otherProjects = digitalProjects.slice(1);
+  const projectsPerPage = 4;
+  const totalProjectPages = Math.ceil(otherProjects.length / projectsPerPage);
+  const visibleProjects = otherProjects.slice(projectsPage * projectsPerPage, (projectsPage + 1) * projectsPerPage);
+
+  const bsPerPage = 4;
+  const totalBsPages = Math.ceil(businessServicesClients.length / bsPerPage);
+  const visibleBsClients = businessServicesClients.slice(bsPage * bsPerPage, (bsPage + 1) * bsPerPage);
+
   return (
     <>
       <Header />
@@ -161,6 +178,7 @@ export default function PortfolioPage() {
         subtitle="Portfolio"
         description="From AI platforms and e-commerce stores to company registrations and brand identities. Here's what we've built for businesses across South Africa."
         breadcrumbs={[{ label: 'Portfolio', href: '/portfolio' }]}
+        backgroundImage="/assets/images/portfolio-hero.png"
       >
         <div className="flex flex-wrap justify-center gap-4">
           <Link href="/build-package" className="btn btn-primary">
@@ -206,78 +224,88 @@ export default function PortfolioPage() {
             Custom platforms, e-commerce stores, business management systems, and AI-powered tools. Built from scratch for real clients with real needs.
           </p>
 
-          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-            {digitalProjects.map((project, index) => (
-              <div
-                key={project.id}
-                className={`glass-card overflow-hidden transition-transform duration-300 hover:-translate-y-2 flex flex-col ${
-                  index === 0 ? 'xl:col-span-2' : ''
-                }`}
-              >
-                {/* Main screenshot */}
-                <div className="relative h-56 bg-white/5 flex-shrink-0 overflow-hidden">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover object-top transition-transform duration-700 hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  {project.link && (
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="absolute top-3 right-3 flex items-center gap-1.5 text-xs bg-accent text-black font-semibold rounded px-2.5 py-1 hover:bg-accent/90 transition-colors"
-                    >
-                      <ExternalLink className="w-3 h-3" />
-                      Live Site
-                    </a>
-                  )}
-                  <div className="absolute bottom-3 left-4 flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="text-xs bg-black/60 text-accent border border-accent/30 rounded px-2 py-0.5 backdrop-blur-sm">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+          {/* ── Engage Africa: Full-Width Hero ── */}
+          <div className="glass-card overflow-hidden mb-10 border border-accent/20">
+            <div className="grid md:grid-cols-2">
+              <div className="relative h-64 md:h-auto min-h-[340px] bg-white/5 overflow-hidden">
+                <Image src={engageProject.image} alt={engageProject.title} fill className="object-cover object-top" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent" />
+                <div className="absolute top-4 left-4">
+                  <span className="inline-block bg-accent text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Featured Build</span>
                 </div>
-
-                {/* Thumbnail strip for multi-screenshot projects */}
-                {project.screenshots.length > 1 && (
-                  <div className="flex gap-1.5 px-3 py-2 bg-white/5 border-b border-white/10 overflow-x-auto">
-                    {project.screenshots.slice(0, 4).map((src, i) => (
+                <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">
+                  {engageProject.tags.map(tag => (
+                    <span key={tag} className="text-xs bg-black/70 text-accent border border-accent/30 rounded px-2 py-0.5 backdrop-blur-sm">{tag}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="p-8 flex flex-col gap-4">
+                <div>
+                  <span className="text-xs uppercase tracking-[0.3em] text-accent/70">{engageProject.category}</span>
+                  <p className="text-white/40 text-xs mt-0.5">Client: {engageProject.client}</p>
+                </div>
+                <h3 className="text-2xl md:text-3xl font-heading font-bold text-white">{engageProject.title}</h3>
+                <p className="text-white/70 leading-relaxed text-sm">{engageProject.summary}</p>
+                <ul className="grid grid-cols-1 gap-2">
+                  {engageProject.highlights.map(h => (
+                    <li key={h} className="flex items-start gap-2 text-sm text-white/60">
+                      <CheckCircle2 className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+                {engageProject.screenshots.length > 1 && (
+                  <div className="flex gap-2 mt-2">
+                    {engageProject.screenshots.slice(0, 4).map((src, i) => (
                       <div key={i} className="relative flex-shrink-0 w-16 h-10 rounded overflow-hidden border border-white/10">
-                        <Image src={src} alt={`${project.title} screen ${i + 1}`} fill className="object-cover object-top" />
+                        <Image src={src} alt={`Screen ${i + 1}`} fill className="object-cover object-top" />
                       </div>
                     ))}
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
 
-                <div className="p-6 flex flex-col gap-3 flex-1">
-                  <div>
-                    <span className="text-xs uppercase tracking-[0.3em] text-accent/70">{project.category}</span>
-                    <p className="text-white/40 text-xs mt-0.5">Client: {project.client}</p>
-                  </div>
-                  <h3 className="text-xl font-heading font-semibold text-white">{project.title}</h3>
-                  <p className="text-white/60 text-sm leading-relaxed">{project.summary}</p>
-                  <ul className="mt-2 space-y-1">
-                    {project.highlights.map((h) => (
-                      <li key={h} className="flex items-start gap-2 text-xs text-white/50">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-accent mt-0.5 flex-shrink-0" />
-                        {h}
-                      </li>
-                    ))}
-                  </ul>
+          {/* ── Other Projects: 4-at-a-time Carousel ── */}
+          <div className="flex items-center justify-between mb-5">
+            <p className="text-white/50 text-sm uppercase tracking-wider">More Projects</p>
+            <div className="flex items-center gap-2">
+              <button onClick={() => setProjectsPage(p => Math.max(0, p - 1))} disabled={projectsPage === 0}
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white disabled:opacity-30 transition-colors">
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <span className="text-white/40 text-xs tabular-nums">{projectsPage + 1} / {totalProjectPages}</span>
+              <button onClick={() => setProjectsPage(p => Math.min(totalProjectPages - 1, p + 1))} disabled={projectsPage === totalProjectPages - 1}
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white disabled:opacity-30 transition-colors">
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-5">
+            {visibleProjects.map(project => (
+              <div key={project.id} className="glass-card overflow-hidden hover:-translate-y-1 transition-transform flex flex-col">
+                <div className="relative h-44 bg-white/5 overflow-hidden flex-shrink-0">
+                  <Image src={project.image} alt={project.title} fill className="object-cover object-top" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                   {project.link && (
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-auto flex items-center gap-2 text-accent text-sm font-medium pt-3 hover:underline"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      Visit {project.link.replace('https://', '')}
+                    <a href={project.link} target="_blank" rel="noopener noreferrer"
+                      className="absolute top-2 right-2 text-xs bg-accent text-black font-bold rounded px-2 py-0.5">Live ↗</a>
+                  )}
+                  <div className="absolute bottom-2 left-2 flex flex-wrap gap-1">
+                    {project.tags.slice(0, 2).map(tag => (
+                      <span key={tag} className="text-xs bg-black/70 text-accent border border-accent/30 rounded px-1.5 py-0.5">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="p-4 flex flex-col gap-2 flex-1">
+                  <span className="text-xs uppercase tracking-[0.2em] text-accent/70">{project.category}</span>
+                  <h3 className="text-white font-semibold font-heading leading-tight">{project.title}</h3>
+                  <p className="text-white/50 text-xs leading-relaxed line-clamp-3">{project.summary}</p>
+                  {project.link && (
+                    <a href={project.link} target="_blank" rel="noopener noreferrer"
+                      className="mt-auto flex items-center gap-1 text-accent text-xs pt-2 hover:underline">
+                      <ExternalLink className="w-3 h-3" />{project.link.replace('https://', '')}
                     </a>
                   )}
                 </div>
@@ -302,23 +330,23 @@ export default function PortfolioPage() {
             Every logo here was designed from scratch for a South African business, giving them a professional face to show the world.
           </p>
 
-          {/* Infinite auto-scroll carousel */}
-          <div className="relative overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)' }}>
-            <div className="flex gap-6 logo-marquee">
-              {[...brandingClients, ...brandingClients].map((client, i) => (
-                <div key={`${client.name}-${i}`} className="flex-shrink-0 w-48 flex flex-col items-center gap-3 group py-2">
-                  <div className="h-24 w-full flex items-center justify-center px-4">
+          {/* Infinite auto-scroll carousel — 4 visible at once on desktop */}
+          <div className="relative overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)' }}>
+            <div className="flex gap-5 logo-marquee">
+              {[...brandingClients, ...brandingClients, ...brandingClients, ...brandingClients].map((client, i) => (
+                <div key={`${client.name}-${i}`} className="flex-shrink-0 w-56 md:w-64 flex flex-col items-center justify-center gap-3 group py-3">
+                  <div className="h-32 w-full flex items-center justify-center px-4 rounded-2xl bg-zinc-800 hover:bg-zinc-700 transition-colors">
                     <Image
                       src={client.logo}
                       alt={`${client.name} logo`}
-                      width={180}
-                      height={96}
-                      className="object-contain max-h-20 w-auto transition-all duration-300 opacity-70 group-hover:opacity-100 group-hover:scale-105 filter brightness-110"
+                      width={220}
+                      height={112}
+                      className="object-contain max-h-24 w-auto transition-all duration-300 group-hover:scale-105"
                     />
                   </div>
-                  <div className="text-center">
-                    <p className="text-white/80 text-sm font-semibold">{client.name}</p>
-                    <p className="text-accent/60 text-xs mt-0.5">{client.work}</p>
+                  <div className="text-center px-2">
+                    <p className="text-white/80 text-sm font-semibold truncate max-w-full">{client.name}</p>
+                    <p className="text-accent/60 text-xs mt-0.5 truncate max-w-full">{client.work}</p>
                   </div>
                 </div>
               ))}
@@ -342,36 +370,98 @@ export default function PortfolioPage() {
             We've helped 23 clients get registered, compliant, funded, and ready to operate. From writing business plans to handling SARS, CIPC, CSD, and B-BBEE.
           </p>
 
-          <div
-            className="relative overflow-hidden"
-            style={{
-              maskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
-              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
-            }}
-          >
-            <div className="flex gap-5 service-marquee">
-              {[...businessServicesClients, ...businessServicesClients].map((client, i) => (
-                <div
-                  key={`${client.name}-${i}`}
-                  className={`flex-shrink-0 w-64 glass-card p-5 ${i === 0 || i === businessServicesClients.length ? 'border border-accent/30' : ''}`}
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h3 className="text-white font-semibold font-heading text-sm leading-tight">{client.name}</h3>
-                      <p className="text-white/40 text-xs mt-0.5">{client.industry}</p>
-                    </div>
-                    {(i === 0 || i === businessServicesClients.length) && (
-                      <span className="text-xs bg-accent/20 text-accent border border-accent/30 rounded px-1.5 py-0.5 flex-shrink-0 ml-2">Us</span>
-                    )}
+          <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
+            {visibleBsClients.map((client, i) => (
+              <div key={client.name} className={`glass-card p-6 ${
+                i === 0 && bsPage === 0 ? 'border border-accent/30' : ''
+              }`}>
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-white font-semibold font-heading">{client.name}</h3>
+                    <p className="text-white/40 text-xs mt-1">{client.industry}</p>
                   </div>
-                  <ul className="space-y-1.5">
-                    {client.services.map((s) => (
-                      <li key={s} className="flex items-center gap-2 text-xs text-white/60">
-                        <CheckCircle2 className="w-3 h-3 text-accent flex-shrink-0" />
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
+                  {i === 0 && bsPage === 0 && (
+                    <span className="text-xs bg-accent/20 text-accent border border-accent/30 rounded px-1.5 py-0.5 flex-shrink-0 ml-2">Us</span>
+                  )}
+                </div>
+                <ul className="space-y-2">
+                  {client.services.map(s => (
+                    <li key={s} className="flex items-center gap-2 text-sm text-white/60">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" />
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          {totalBsPages > 1 && (
+            <div className="flex items-center justify-center gap-4">
+              <button onClick={() => setBsPage(p => Math.max(0, p - 1))} disabled={bsPage === 0}
+                className="flex items-center gap-2 px-5 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm disabled:opacity-30 transition-colors">
+                <ChevronLeft className="w-4 h-4" /> Prev
+              </button>
+              <span className="text-white/40 text-sm">{bsPage + 1} / {totalBsPages}</span>
+              <button onClick={() => setBsPage(p => Math.min(totalBsPages - 1, p + 1))} disabled={bsPage === totalBsPages - 1}
+                className="flex items-center gap-2 px-5 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm disabled:opacity-30 transition-colors">
+                Next <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ─── SECTION 4: Posters & Flyers ───────────────────────────────── */}
+      <section className="py-20 bg-color-bg-secondary relative">
+        <div className="absolute inset-0 grid-overlay grid-overlay-half"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="flex items-center gap-3 mb-3">
+            <ImageIcon className="w-6 h-6 text-accent" />
+            <span className="text-accent text-sm uppercase tracking-widest font-medium">Print & Digital Design</span>
+          </div>
+          <h2 className="text-3xl font-heading font-bold text-white mb-3">
+            Posters & Flyers We&apos;ve Created
+          </h2>
+          <p className="text-white/60 max-w-2xl mb-12">
+            Eye-catching promotional materials designed for businesses, events, and community initiatives across South Africa.
+          </p>
+
+          {/* Auto-scroll carousel — 4 visible at once on desktop */}
+          <div className="relative overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)' }}>
+            <div className="flex gap-5 poster-marquee">
+              {[...[
+                { title: 'Ebodweni Campaign', image: '/assets/images/portfolio/ebodweni-poster.jpg', client: 'Ebodweni' },
+                { title: 'I-Group Corporate Flyer', image: '/assets/images/portfolio/igroup-flyer.png', client: 'I-Group' },
+                { title: 'Pinetown NPO Poster', image: '/assets/images/portfolio/pinetown-poster.jpg', client: 'Pinetown Incorporated' },
+                { title: 'Brand Campaign 1', image: '/assets/images/portfolio/flyer-1.jpg', client: 'Various Clients' },
+                { title: 'Promotional Material 1', image: '/assets/images/portfolio/flyer-2.jpg', client: 'Various Clients' },
+                { title: 'Business Promotion', image: '/assets/images/portfolio/flyer-7.jpg', client: 'Various Clients' },
+                { title: 'Marketing Campaign', image: '/assets/images/portfolio/flyer-11.jpg', client: 'Various Clients' },
+                { title: 'Community Outreach', image: '/assets/images/portfolio/flyer-12.jpg', client: 'Various Clients' },
+              ], ...[
+                { title: 'Ebodweni Campaign', image: '/assets/images/portfolio/ebodweni-poster.jpg', client: 'Ebodweni' },
+                { title: 'I-Group Corporate Flyer', image: '/assets/images/portfolio/igroup-flyer.png', client: 'I-Group' },
+                { title: 'Pinetown NPO Poster', image: '/assets/images/portfolio/pinetown-poster.jpg', client: 'Pinetown Incorporated' },
+                { title: 'Brand Campaign 1', image: '/assets/images/portfolio/flyer-1.jpg', client: 'Various Clients' },
+                { title: 'Promotional Material 1', image: '/assets/images/portfolio/flyer-2.jpg', client: 'Various Clients' },
+                { title: 'Business Promotion', image: '/assets/images/portfolio/flyer-7.jpg', client: 'Various Clients' },
+                { title: 'Marketing Campaign', image: '/assets/images/portfolio/flyer-11.jpg', client: 'Various Clients' },
+                { title: 'Community Outreach', image: '/assets/images/portfolio/flyer-12.jpg', client: 'Various Clients' },
+              ]].map((poster, i) => (
+                <div key={`${poster.title}-${i}`} className="group flex-shrink-0 w-72 md:w-80">
+                  <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-zinc-800 border border-white/10 hover:border-accent/30 transition-colors">
+                    <Image
+                      src={poster.image}
+                      alt={poster.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                      <p className="text-white font-semibold text-sm">{poster.title}</p>
+                      <p className="text-accent/80 text-xs">{poster.client}</p>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>

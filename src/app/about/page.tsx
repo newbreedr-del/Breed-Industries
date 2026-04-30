@@ -50,6 +50,7 @@ export default function AboutPage() {
         subtitle="About Breed Industries"
         description="We translate visionary ideas into compliant, investment-ready brands built for the African market and beyond."
         breadcrumbs={[{ label: 'About', href: '/about' }]}
+        backgroundImage="/assets/images/about-hero.jpg"
         align="left"
       >
         <Link href="/contact" className="btn btn-primary">
