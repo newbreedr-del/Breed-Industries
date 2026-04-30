@@ -135,6 +135,18 @@ export const Footer = () => {
                   <span>Contact</span>
                 </Link>
               </li>
+              <li>
+                <Link href="/blog" className="text-white/70 hover:text-accent transition-colors flex items-center">
+                  <ChevronRight size={14} className="mr-1" />
+                  <span>Blog</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/faq" className="text-white/70 hover:text-accent transition-colors flex items-center">
+                  <ChevronRight size={14} className="mr-1" />
+                  <span>FAQ</span>
+                </Link>
+              </li>
             </ul>
           </div>
           
@@ -223,6 +235,12 @@ export const Footer = () => {
           </p>
           
           <div className="flex gap-6">
+            <Link href="/blog" className="text-white/50 text-sm hover:text-accent transition-colors">
+              Blog
+            </Link>
+            <Link href="/faq" className="text-white/50 text-sm hover:text-accent transition-colors">
+              FAQ
+            </Link>
             <Link href="/privacy-policy" className="text-white/50 text-sm hover:text-accent transition-colors">
               Privacy Policy
             </Link>

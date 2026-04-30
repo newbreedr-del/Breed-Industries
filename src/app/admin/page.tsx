@@ -13,7 +13,9 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
-  LogOut
+  LogOut,
+  BookOpen,
+  HelpCircle
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -153,6 +155,22 @@ export default function AdminDashboard() {
       href: '/admin/service-requests',
       color: 'from-amber-500 to-amber-600',
       stats: `${stats.pendingServiceRequests} pending`
+    },
+    {
+      title: 'Blog Posts',
+      description: 'Create and manage blog articles',
+      icon: BookOpen,
+      href: '/admin/blog',
+      color: 'from-pink-500 to-pink-600',
+      stats: 'Manage content'
+    },
+    {
+      title: 'FAQ Manager',
+      description: 'Edit frequently asked questions',
+      icon: HelpCircle,
+      href: '/admin/faq',
+      color: 'from-teal-500 to-teal-600',
+      stats: 'Edit FAQs'
     }
   ];
 
