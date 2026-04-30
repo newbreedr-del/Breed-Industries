@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Calendar, Clock, User, ArrowLeft, Share2, ArrowRight } from 'lucide-react';
 import { NewsletterSignup } from '@/components/ui/NewsletterSignup';
 import { getAllSlugs, getBlogPostBySlug } from '@/lib/blog';
@@ -88,6 +89,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <p className="text-xl text-white/70 mb-8">
               {post.excerpt}
             </p>
+
+            {/* Featured Image */}
+            {post.featuredImage && (
+              <div className="relative w-full h-64 md:h-96 rounded-2xl overflow-hidden mb-8">
+                <Image
+                  src={post.featuredImage}
+                  alt={post.title}
+                  fill
+                  priority
+                  className="object-cover"
+                />
+              </div>
+            )}
 
             {/* Meta */}
             <div className="flex flex-wrap items-center gap-6 text-white/50 text-sm pb-8 border-b border-white/10">

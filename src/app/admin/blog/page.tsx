@@ -26,6 +26,7 @@ interface BlogPost {
   category: string;
   status: 'published' | 'draft';
   tags: string[];
+  featuredImage?: string;
 }
 
 export default function BlogManagement() {
@@ -54,6 +55,7 @@ export default function BlogManagement() {
           category: 'Business Registration',
           status: 'published',
           tags: ['CIPC', 'company registration', 'South Africa', 'business startup'],
+          featuredImage: '/assets/images/blog/company-registration.jpg',
         },
         {
           slug: 'startup-costs-south-africa-2026',
@@ -65,6 +67,7 @@ export default function BlogManagement() {
           category: 'Startup Guide',
           status: 'published',
           tags: ['startup costs', 'business budget', 'South Africa', 'entrepreneurship'],
+          featuredImage: '/assets/images/blog/startup-costs.jpg',
         },
         {
           slug: 'why-your-business-needs-professional-logo',
@@ -76,6 +79,7 @@ export default function BlogManagement() {
           category: 'Branding',
           status: 'published',
           tags: ['logo design', 'branding', 'business identity', 'South Africa'],
+          featuredImage: '/assets/images/blog/professional-logo.jpg',
         },
       ];
       setPosts(defaultPosts);
@@ -214,6 +218,16 @@ export default function BlogManagement() {
                 key={post.slug} 
                 className="glass-card p-6 flex flex-col md:flex-row md:items-center gap-4 hover:border-accent/30 transition-colors"
               >
+                {/* Thumbnail */}
+                {post.featuredImage && (
+                  <div className="relative w-full md:w-32 h-32 md:h-24 rounded-lg overflow-hidden flex-shrink-0">
+                    <img 
+                      src={post.featuredImage} 
+                      alt={post.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold text-white truncate">

@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Calendar, Clock, ArrowRight, User } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -97,10 +98,17 @@ export default function BlogPage() {
               >
                 {/* Image */}
                 <Link href={`/blog/${post.slug}`} className="block relative h-48 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-color-bg-deep/50 group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 flex items-center justify-center text-white/30">
-                    <span className="text-6xl font-bold uppercase tracking-wider">{post.category}</span>
-                  </div>
+                  {post.image ? (
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-color-bg-deep/50 group-hover:scale-105 transition-transform duration-500" />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-color-bg-deep/80 via-transparent to-transparent" />
                 </Link>
 
                 {/* Content */}

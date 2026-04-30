@@ -16,6 +16,8 @@ interface BlogPost {
   category: string;
   status: 'published' | 'draft';
   tags: string[];
+  featuredImage?: string;
+  ogImage?: string;
 }
 
 export default function EditBlogPost() {
@@ -38,6 +40,8 @@ export default function EditBlogPost() {
     status: 'draft',
     tags: [],
     tagsString: '',
+    featuredImage: '',
+    ogImage: '',
   });
 
   const categories = [
@@ -91,6 +95,8 @@ Company registration is your foundation for business success in South Africa.`,
           category: 'Business Registration',
           status: 'published',
           tags: ['CIPC', 'company registration', 'South Africa', 'business startup'],
+          featuredImage: '/assets/images/blog/company-registration.jpg',
+          ogImage: '/assets/images/blog/company-registration-og.jpg',
         },
         'startup-costs-south-africa-2026': {
           slug: 'startup-costs-south-africa-2026',
@@ -103,6 +109,8 @@ Company registration is your foundation for business success in South Africa.`,
           category: 'Startup Guide',
           status: 'published',
           tags: ['startup costs', 'business budget', 'South Africa', 'entrepreneurship'],
+          featuredImage: '/assets/images/blog/startup-costs.jpg',
+          ogImage: '/assets/images/blog/startup-costs-og.jpg',
         },
         'why-your-business-needs-professional-logo': {
           slug: 'why-your-business-needs-professional-logo',
@@ -115,6 +123,8 @@ Company registration is your foundation for business success in South Africa.`,
           category: 'Branding',
           status: 'published',
           tags: ['logo design', 'branding', 'business identity', 'South Africa'],
+          featuredImage: '/assets/images/blog/professional-logo.jpg',
+          ogImage: '/assets/images/blog/professional-logo-og.jpg',
         },
       };
 
@@ -123,6 +133,8 @@ Company registration is your foundation for business success in South Africa.`,
         setFormData({
           ...post,
           tagsString: post.tags.join(', '),
+          featuredImage: post.featuredImage || '',
+          ogImage: post.ogImage || '',
         });
       } else {
         alert('Post not found');
@@ -245,6 +257,11 @@ Company registration is your foundation for business success in South Africa.`,
               </span>
               <h1 className="text-3xl font-bold text-white mb-4">{formData.title}</h1>
               <p className="text-xl text-white/70 mb-6">{formData.excerpt}</p>
+              {formData.featuredImage && (
+                <div className="relative w-full h-64 rounded-xl overflow-hidden mb-6">
+                  <img src={formData.featuredImage} alt="Featured" className="w-full h-full object-cover" />
+                </div>
+              )}
               <div className="flex items-center gap-4 text-white/50 text-sm mb-8 pb-8 border-b border-white/10">
                 <span>{formData.author}</span>
                 <span>{formData.date}</span>
@@ -356,6 +373,58 @@ Company registration is your foundation for business success in South Africa.`,
                 onChange={(e) => setFormData({ ...formData, tagsString: e.target.value })}
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent"
               />
+            </div>
+
+            {/* Images */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-white/70 text-sm mb-2">Featured Image URL</label>
+                <input
+                  type="text"
+                  value={formData.featuredImage}
+                  onChange={(e) => setFormData({ ...formData, featuredImage: e.target.value })}
+                  placeholder="e.g., /assets/images/blog/my-image.jpg"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-accent"
+                />
+                <p className="text-white/40 text-xs mt-1">Main image shown on blog post and listing</p>
+                {formData.featuredImage && (
+                  <div className="mt-2 relative w-full h-32 rounded-lg overflow-hidden border border-white/10">
+                    <img 
+                      src={formData.featuredImage} 
+                      alt="Featured preview" 
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '';
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="block text-white/70 text-sm mb-2">OG Image URL (Social Share)</label>
+                <input
+                  type="text"
+                  value={formData.ogImage}
+                  onChange={(e) => setFormData({ ...formData, ogImage: e.target.value })}
+                  placeholder="e.g., /assets/images/blog/my-image-og.jpg"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-accent"
+                />
+                <p className="text-white/40 text-xs mt-1">Image for Facebook/Twitter sharing (1200x630px)</p>
+                {formData.ogImage && (
+                  <div className="mt-2 relative w-full h-32 rounded-lg overflow-hidden border border-white/10">
+                    <img 
+                      src={formData.ogImage} 
+                      alt="OG preview" 
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '';
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Content */}

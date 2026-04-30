@@ -11,6 +11,8 @@ export interface BlogPost {
   readTime: string;
   category: string;
   tags: string[];
+  featuredImage?: string;
+  ogImage?: string;
 }
 
 // Hardcoded posts for now - in production these would be in a database
@@ -24,6 +26,8 @@ const blogPostsData: Record<string, BlogPost> = {
     readTime: '8 min read',
     category: 'Business Registration',
     tags: ['CIPC', 'company registration', 'South Africa', 'business startup'],
+    featuredImage: '/assets/images/blog/company-registration.jpg',
+    ogImage: '/assets/images/blog/company-registration-og.jpg',
     content: `Starting a business in South Africa begins with proper company registration. This comprehensive guide walks you through the entire process, from choosing your business structure to receiving your registration certificate.
 
 ## Why Register Your Company?
@@ -175,6 +179,8 @@ Ready to register your company? [Build your custom package](/build-package) or [
     readTime: '10 min read',
     category: 'Startup Guide',
     tags: ['startup costs', 'business budget', 'South Africa', 'entrepreneurship'],
+    featuredImage: '/assets/images/blog/startup-costs.jpg',
+    ogImage: '/assets/images/blog/startup-costs-og.jpg',
     content: `Starting a business requires capital, but how much do you really need? This guide breaks down actual startup costs for South African businesses in 2026, from lean startups to established operations.
 
 ## Startup Budget Categories
@@ -330,6 +336,8 @@ Remember: Under-capitalization is a leading cause of business failure. Plan cons
     readTime: '6 min read',
     category: 'Branding',
     tags: ['logo design', 'branding', 'business identity', 'South Africa'],
+    featuredImage: '/assets/images/blog/professional-logo.jpg',
+    ogImage: '/assets/images/blog/professional-logo-og.jpg',
     content: `In a market as competitive as South Africa, first impressions matter. Your logo is often the first interaction potential customers have with your brand. Here's why investing in professional logo design is one of the smartest business decisions you can make.
 
 ## 1. First Impressions Last 50 Milliseconds

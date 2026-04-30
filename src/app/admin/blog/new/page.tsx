@@ -19,6 +19,8 @@ export default function NewBlogPost() {
     readTime: '5 min read',
     tags: '',
     status: 'draft' as 'draft' | 'published',
+    featuredImage: '',
+    ogImage: '',
   });
 
   const categories = [
@@ -54,6 +56,8 @@ export default function NewBlogPost() {
         status: publish ? 'published' : 'draft',
         date: new Date().toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' }),
         tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
+        featuredImage: formData.featuredImage || undefined,
+        ogImage: formData.ogImage || undefined,
       };
 
       // In production, this would save to a database via API
@@ -126,6 +130,15 @@ export default function NewBlogPost() {
               </span>
               <h1 className="text-3xl font-bold text-white mb-4">{formData.title || 'Untitled Post'}</h1>
               <p className="text-xl text-white/70 mb-6">{formData.excerpt}</p>
+              {formData.featuredImage && (
+                <div className="relative w-full h-64 rounded-xl overflow-hidden mb-6">
+                  <img 
+                    src={formData.featuredImage} 
+                    alt="Featured" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
               <div className="flex items-center gap-4 text-white/50 text-sm mb-8 pb-8 border-b border-white/10">
                 <span>{formData.author}</span>
                 <span>{new Date().toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
@@ -223,6 +236,58 @@ export default function NewBlogPost() {
                 placeholder="e.g., CIPC, company registration, South Africa"
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-accent"
               />
+            </div>
+
+            {/* Images */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-white/70 text-sm mb-2">Featured Image URL</label>
+                <input
+                  type="text"
+                  value={formData.featuredImage}
+                  onChange={(e) => setFormData({ ...formData, featuredImage: e.target.value })}
+                  placeholder="e.g., /assets/images/blog/my-image.jpg"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-accent"
+                />
+                <p className="text-white/40 text-xs mt-1">Main image shown on blog post and listing</p>
+                {formData.featuredImage && (
+                  <div className="mt-2 relative w-full h-32 rounded-lg overflow-hidden border border-white/10">
+                    <img 
+                      src={formData.featuredImage} 
+                      alt="Featured preview" 
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '';
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="block text-white/70 text-sm mb-2">OG Image URL (Social Share)</label>
+                <input
+                  type="text"
+                  value={formData.ogImage}
+                  onChange={(e) => setFormData({ ...formData, ogImage: e.target.value })}
+                  placeholder="e.g., /assets/images/blog/my-image-og.jpg"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-accent"
+                />
+                <p className="text-white/40 text-xs mt-1">Image for Facebook/Twitter sharing (1200x630px)</p>
+                {formData.ogImage && (
+                  <div className="mt-2 relative w-full h-32 rounded-lg overflow-hidden border border-white/10">
+                    <img 
+                      src={formData.ogImage} 
+                      alt="OG preview" 
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '';
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Content */}
