@@ -37,7 +37,7 @@ export const PageHero = ({
   const paddingClasses = {
     small: 'py-16 md:py-20',
     default: 'py-20 md:py-28',
-    large: 'py-22 md:py-30'
+    large: 'py-24 md:py-32'
   };
 
   // Determine text alignment
