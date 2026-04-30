@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Save, Eye, Trash2 } from 'lucide-react';
+import { ImageUpload } from '@/components/ui/ImageUpload';
 
 interface BlogPost {
   slug: string;
@@ -377,54 +378,20 @@ Company registration is your foundation for business success in South Africa.`,
 
             {/* Images */}
             <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-white/70 text-sm mb-2">Featured Image URL</label>
-                <input
-                  type="text"
-                  value={formData.featuredImage}
-                  onChange={(e) => setFormData({ ...formData, featuredImage: e.target.value })}
-                  placeholder="e.g., /assets/images/blog/my-image.jpg"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-accent"
-                />
-                <p className="text-white/40 text-xs mt-1">Main image shown on blog post and listing</p>
-                {formData.featuredImage && (
-                  <div className="mt-2 relative w-full h-32 rounded-lg overflow-hidden border border-white/10">
-                    <img 
-                      src={formData.featuredImage} 
-                      alt="Featured preview" 
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '';
-                        (e.target as HTMLImageElement).style.display = 'none';
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-              <div>
-                <label className="block text-white/70 text-sm mb-2">OG Image URL (Social Share)</label>
-                <input
-                  type="text"
-                  value={formData.ogImage}
-                  onChange={(e) => setFormData({ ...formData, ogImage: e.target.value })}
-                  placeholder="e.g., /assets/images/blog/my-image-og.jpg"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-accent"
-                />
-                <p className="text-white/40 text-xs mt-1">Image for Facebook/Twitter sharing (1200x630px)</p>
-                {formData.ogImage && (
-                  <div className="mt-2 relative w-full h-32 rounded-lg overflow-hidden border border-white/10">
-                    <img 
-                      src={formData.ogImage} 
-                      alt="OG preview" 
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '';
-                        (e.target as HTMLImageElement).style.display = 'none';
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
+              <ImageUpload
+                label="Featured Image"
+                description="Main image shown on blog post and listing (recommended: 1200x800px)"
+                value={formData.featuredImage || ''}
+                onChange={(url) => setFormData({ ...formData, featuredImage: url })}
+                folder="blog"
+              />
+              <ImageUpload
+                label="Social Share Image (OG Image)"
+                description="Image for Facebook/Twitter sharing (recommended: 1200x630px)"
+                value={formData.ogImage || ''}
+                onChange={(url) => setFormData({ ...formData, ogImage: url })}
+                folder="blog"
+              />
             </div>
 
             {/* Content */}
