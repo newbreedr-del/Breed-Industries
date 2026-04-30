@@ -364,14 +364,20 @@ export default function EditBlogPost() {
                 label="Featured Image"
                 description="Main image shown on blog post and listing (recommended: 1200x800px)"
                 value={formData.featuredImage || ''}
-                onChange={(url) => setFormData({ ...formData, featuredImage: url })}
+                onChange={(url) => {
+                  console.log('ImageUpload onChange - new URL:', url);
+                  setFormData(prev => {
+                    console.log('Setting formData.featuredImage from', prev.featuredImage, 'to', url);
+                    return { ...prev, featuredImage: url };
+                  });
+                }}
                 folder="blog"
               />
               <ImageUpload
                 label="Social Share Image (OG Image)"
                 description="Image for Facebook/Twitter sharing (recommended: 1200x630px)"
                 value={formData.ogImage || ''}
-                onChange={(url) => setFormData({ ...formData, ogImage: url })}
+                onChange={(url) => setFormData(prev => ({ ...prev, ogImage: url }))}
                 folder="blog"
               />
             </div>
