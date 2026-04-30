@@ -5,6 +5,7 @@ import '../styles/mixins.css';
 import { Inter, Montserrat, JetBrains_Mono } from 'next/font/google';
 import type { Metadata } from 'next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { ClientComponents } from '@/components/layout/ClientComponents';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -100,6 +101,7 @@ export default function RootLayout({
         <div className="blueprint-bg min-h-screen flex flex-col">
           {children}
         </div>
+        <ClientComponents />
         <SpeedInsights />
       </body>
     </html>
