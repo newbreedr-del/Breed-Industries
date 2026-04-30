@@ -3,9 +3,9 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Calendar, Clock, ArrowRight, User } from 'lucide-react';
 import { getAllBlogPosts, BlogPost } from '@/lib/blog';
+import { BlogImage } from '@/components/blog/BlogImage';
 
 export const metadata: Metadata = {
   title: 'Blog | Business Tips & Guides | Breed Industries',
@@ -84,22 +84,12 @@ export default async function BlogPage() {
               >
                 {/* Image */}
                 <Link href={`/blog/${post.slug}`} className="block relative h-48 overflow-hidden">
-                  {post.featuredImage ? (
-                    <Image
-                      src={post.featuredImage}
-                      alt={post.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      onError={(e) => {
-                        // Fallback to gradient if image fails to load
-                        const target = e.currentTarget;
-                        target.style.display = 'none';
-                        target.parentElement?.classList.add('bg-gradient-to-br', 'from-accent/20', 'to-color-bg-deep/50');
-                      }}
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-color-bg-deep/50 group-hover:scale-105 transition-transform duration-500" />
-                  )}
+                  <BlogImage
+                    src={post.featuredImage || ''}
+                    alt={post.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-color-bg-deep/80 via-transparent to-transparent" />
                 </Link>
 

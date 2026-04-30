@@ -3,10 +3,10 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Calendar, Clock, User, ArrowLeft, Share2, ArrowRight } from 'lucide-react';
 import { NewsletterSignup } from '@/components/ui/NewsletterSignup';
 import { getAllSlugs, getBlogPostBySlug, getAllBlogPosts } from '@/lib/blog';
+import { BlogImage } from '@/components/blog/BlogImage';
 
 // Force dynamic rendering - fetch fresh data from Supabase on every request
 export const dynamic = 'force-dynamic';
@@ -95,16 +95,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {/* Featured Image */}
             {post.featuredImage && (
               <div className="relative w-full h-64 md:h-96 rounded-2xl overflow-hidden mb-8">
-                <Image
+                <BlogImage
                   src={post.featuredImage}
                   alt={post.title}
                   fill
                   priority
                   className="object-cover"
-                  onError={(e) => {
-                    // Hide broken image
-                    e.currentTarget.style.display = 'none';
-                  }}
                 />
               </div>
             )}
