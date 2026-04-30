@@ -36,7 +36,11 @@ export async function PUT(
     const { slug } = await params;
     const body = await request.json();
     
+    console.log('API PUT - Updating post:', slug, 'with data:', body);
+    
     const result = await updateBlogPost(slug, body);
+    
+    console.log('API PUT - Update result:', result);
     
     if (!result.success) {
       return NextResponse.json(

@@ -99,6 +99,7 @@ export default function EditBlogPost() {
     setIsSaving(true);
     try {
       const postData = {
+        slug: formData.slug,
         title: formData.title,
         excerpt: formData.excerpt,
         content: formData.content,
@@ -113,14 +114,17 @@ export default function EditBlogPost() {
       };
 
       // Save to Supabase via API
+      console.log('Saving post data:', postData);
       const response = await fetch(`/api/blog/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(postData),
       });
 
+      console.log('Save response status:', response.status);
       if (!response.ok) {
         const error = await response.json();
+        console.error('Save error:', error);
         throw new Error(error.error || 'Failed to save');
       }
       
