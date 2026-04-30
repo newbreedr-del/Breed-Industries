@@ -1,9 +1,23 @@
+import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
 import { Phone, Mail, MapPin, Clock, MessageSquare } from 'lucide-react';
 import { ContactForm } from '@/components/forms/ContactForm';
+
+export const metadata: Metadata = {
+  title: 'Contact Us | Breed Industries - Durban Business Agency',
+  description: 'Get in touch with Breed Industries. Call +27 60 496 4105 or email info@thebreed.co.za for business registration, branding, and website services in South Africa.',
+  keywords: ['contact Breed Industries', 'business agency Durban contact', 'company registration help', 'business consultant Durban', 'call Breed Industries'],
+  alternates: { canonical: 'https://thebreed.co.za/contact' },
+  openGraph: {
+    title: 'Contact Breed Industries',
+    description: 'Ready to launch? Call us at +27 60 496 4105. We respond within one business day.',
+    url: 'https://thebreed.co.za/contact',
+    images: [{ url: '/assets/images/contact-og.jpg', width: 1200, height: 630 }],
+  },
+};
 
 const contactChannels = [
   {

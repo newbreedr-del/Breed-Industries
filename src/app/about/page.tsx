@@ -1,8 +1,22 @@
+import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
 import { Award, Users2, Target, Lightbulb, Briefcase } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'About Us | Breed Industries - Business Agency Durban & Johannesburg',
+  description: 'Meet the team behind Breed Industries. Founded in Durban, we help entrepreneurs launch investment-ready businesses across South Africa with registration, branding, and digital solutions.',
+  keywords: ['about Breed Industries', 'business agency Durban', 'startup launch South Africa', 'business consultancy Durban', 'entrepreneur support South Africa'],
+  alternates: { canonical: 'https://thebreed.co.za/about' },
+  openGraph: {
+    title: 'About Breed Industries - The Empire Behind the Blueprint',
+    description: 'Founded in Durban with a mission: eliminate the friction between idea and execution for ambition-fueled founders.',
+    url: 'https://thebreed.co.za/about',
+    images: [{ url: '/assets/images/about-og.jpg', width: 1200, height: 630 }],
+  },
+};
 
 const values = [
   {

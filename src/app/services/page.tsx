@@ -1,11 +1,25 @@
+import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
-import { 
-  Shield, Briefcase, Layers, 
-  Check, ChevronRight, ArrowRight 
+import {
+  Shield, Briefcase, Layers,
+  Check, ChevronRight, ArrowRight
 } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'Business Services | CIPC Registration, Branding, Websites | Breed Industries',
+  description: 'Professional business services in South Africa: CIPC registration from R550, logo design from R1500, website development from R5000, business plans, and compliance. Serving Durban and nationwide.',
+  keywords: ['CIPC registration', 'company registration South Africa', 'business branding', 'logo design Durban', 'website development', 'business plan writing', 'SARS tax registration', 'B-BBEE certificate'],
+  alternates: { canonical: 'https://thebreed.co.za/services' },
+  openGraph: {
+    title: 'Business Services - Breed Industries',
+    description: 'Complete business launch packages from R3,950. Registration, branding, websites, and compliance.',
+    url: 'https://thebreed.co.za/services',
+    images: [{ url: '/assets/images/services-og.jpg', width: 1200, height: 630 }],
+  },
+};
 
 // Service categories data
 const serviceCategories = [
