@@ -1,13 +1,15 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Get Quote | Interactive Pricing Calculator | Breed Industries',
-  description: 'Build your custom business package with our interactive quote builder. Real-time pricing for company registration, branding, web development, and digital services. Instant quotes and downloadable proposals.',
-  keywords: ['business quote', 'company registration price', 'branding cost', 'website development quote', 'business services pricing', 'instant quote'],
+  title: 'Build Your Package | Custom Quote Builder | Breed Industries',
+  description: 'Build your custom business package with our interactive quote builder. Select CIPC registration, branding, websites, and more. Get an instant estimate and request a formal quote.',
+  keywords: ['custom business package', 'build your package', 'business quote builder', 'CIPC registration quote', 'website quote South Africa', 'branding package price', 'business services calculator'],
+  alternates: { canonical: 'https://thebreed.co.za/build-package' },
   openGraph: {
-    title: 'Get Instant Quote - Breed Industries',
-    description: 'Build your custom business package with real-time pricing. Interactive quote builder for all business services.',
-    type: 'website',
+    title: 'Build Your Custom Package - Breed Industries',
+    description: 'Interactive quote builder. Select services, see pricing in real-time, get a formal quote.',
+    url: 'https://thebreed.co.za/build-package',
+    images: [{ url: '/assets/images/build-package-og.jpg', width: 1200, height: 630 }],
   },
 };
 
