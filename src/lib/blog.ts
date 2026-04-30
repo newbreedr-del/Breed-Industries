@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { createServerClient } from './supabase-server';
 
 export interface BlogPost {
   id?: string;
@@ -59,6 +59,7 @@ function transformToRow(post: Partial<BlogPost>): any {
 
 // Get all published blog posts
 export async function getAllBlogPosts(): Promise<BlogPost[]> {
+  const supabase = createServerClient();
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
@@ -75,6 +76,7 @@ export async function getAllBlogPosts(): Promise<BlogPost[]> {
 
 // Get all blog posts including drafts (for admin)
 export async function getAllBlogPostsAdmin(): Promise<BlogPost[]> {
+  const supabase = createServerClient();
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
@@ -90,6 +92,7 @@ export async function getAllBlogPostsAdmin(): Promise<BlogPost[]> {
 
 // Get a single blog post by slug
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  const supabase = createServerClient();
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
@@ -107,6 +110,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
 
 // Get blog post by slug for admin (includes drafts)
 export async function getBlogPostBySlugAdmin(slug: string): Promise<BlogPost | null> {
+  const supabase = createServerClient();
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
@@ -123,6 +127,7 @@ export async function getBlogPostBySlugAdmin(slug: string): Promise<BlogPost | n
 
 // Get all slugs for static generation
 export async function getAllSlugs(): Promise<string[]> {
+  const supabase = createServerClient();
   const { data, error } = await supabase
     .from('blog_posts')
     .select('slug')
@@ -138,6 +143,7 @@ export async function getAllSlugs(): Promise<string[]> {
 
 // Admin: Create a new blog post
 export async function createBlogPost(post: BlogPost): Promise<{ success: boolean; error?: string }> {
+  const supabase = createServerClient();
   const row = transformToRow(post);
   
   const { error } = await supabase
@@ -154,6 +160,7 @@ export async function createBlogPost(post: BlogPost): Promise<{ success: boolean
 
 // Admin: Update a blog post
 export async function updateBlogPost(slug: string, updates: Partial<BlogPost>): Promise<{ success: boolean; error?: string }> {
+  const supabase = createServerClient();
   const row = transformToRow(updates);
   
   const { error } = await supabase
@@ -171,6 +178,7 @@ export async function updateBlogPost(slug: string, updates: Partial<BlogPost>): 
 
 // Admin: Delete a blog post
 export async function deleteBlogPost(slug: string): Promise<{ success: boolean; error?: string }> {
+  const supabase = createServerClient();
   const { error } = await supabase
     .from('blog_posts')
     .delete()
