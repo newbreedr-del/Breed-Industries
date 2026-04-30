@@ -177,8 +177,15 @@ export async function updateBlogPost(slug: string, updates: Partial<BlogPost>): 
   const row = transformToRow(updates);
   
   console.log('Transformed row:', JSON.stringify(row, null, 2));
+  console.log('Row keys:', Object.keys(row));
   console.log('featured_image in row:', row.featured_image);
   console.log('Updating blog post with slug:', slug);
+  
+  // Check if row is empty
+  if (Object.keys(row).length === 0) {
+    console.error('ERROR: No fields to update - row is empty!');
+    return { success: false, error: 'No fields provided for update' };
+  }
   
   const { data, error, count } = await supabase
     .from('blog_posts')
