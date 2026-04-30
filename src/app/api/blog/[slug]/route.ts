@@ -4,10 +4,10 @@ import { updateBlogPost, deleteBlogPost, getBlogPostBySlugAdmin } from '@/lib/bl
 // GET single blog post (admin - includes drafts)
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const post = await getBlogPostBySlugAdmin(slug);
     
     if (!post) {
@@ -30,10 +30,10 @@ export async function GET(
 // PUT update blog post
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const body = await request.json();
     
     const result = await updateBlogPost(slug, body);
@@ -58,10 +58,10 @@ export async function PUT(
 // DELETE blog post
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     
     const result = await deleteBlogPost(slug);
     
