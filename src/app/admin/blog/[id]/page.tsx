@@ -101,6 +101,10 @@ export default function EditBlogPost() {
   const handleSave = async (publish = false) => {
     setIsSaving(true);
     try {
+      console.log('=== HANDLE SAVE ===');
+      console.log('formData.featuredImage:', formData.featuredImage);
+      console.log('formData.ogImage:', formData.ogImage);
+      
       const postData = {
         slug: formData.slug,
         title: formData.title,
@@ -116,8 +120,10 @@ export default function EditBlogPost() {
         ogImage: formData.ogImage,
       };
 
+      console.log('Sending postData:', JSON.stringify(postData, null, 2));
+      console.log('featuredImage being sent:', postData.featuredImage);
+
       // Save to Supabase via API
-      console.log('Saving post data:', postData);
       const response = await fetch(`/api/blog/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
