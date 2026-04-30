@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <defs>
+    <linearGradient id="pbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0A1A2F"/>
+      <stop offset="100%" stop-color="#001F3F"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1920" fill="url(#pbg)"/>
+
+  <!-- Top eyebrow -->
+  <g transform="translate(540, 200)">
+    <rect x="-180" y="-25" width="360" height="50" rx="25" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+    <text text-anchor="middle" y="7" font-family="Montserrat, Arial, sans-serif" font-size="16" letter-spacing="4" fill="#D4AF37" font-weight="700">NEW ON THEBREED.CO.ZA</text>
+  </g>
+
+  <!-- Headline -->
+  <g font-family="Montserrat, Arial, sans-serif" text-anchor="middle">
+    <text x="540" y="400" font-size="80" font-weight="800" fill="#FFFFFF" letter-spacing="-2">BUILD YOUR OWN</text>
+    <text x="540" y="500" font-size="80" font-weight="800" fill="#FFFFFF" letter-spacing="-2">PACKAGE.</text>
+    <text x="540" y="610" font-size="46" font-weight="700" fill="#D4AF37">PAY FOR EXACTLY</text>
+    <text x="540" y="670" font-size="46" font-weight="700" fill="#D4AF37">WHAT YOU NEED.</text>
+  </g>
+
+  <!-- Mock UI panel -->
+  <g transform="translate(140, 770)">
+    <rect width="800" height="780" rx="24" fill="#001229" stroke="#D4AF37" stroke-width="1" opacity="0.95"/>
+    <!-- header -->
+    <rect x="20" y="20" width="760" height="60" rx="12" fill="#0A2547"/>
+    <circle cx="50" cy="50" r="6" fill="#D4AF37"/>
+    <text x="78" y="56" font-family="Montserrat, Arial, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">Package Builder</text>
+    <text x="760" y="56" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="14" fill="#D4AF37" font-weight="600">Live</text>
+
+    <!-- option rows -->
+    <g font-family="Inter, Arial, sans-serif">
+      <g transform="translate(20, 110)"><rect width="760" height="80" rx="10" fill="#0A2547"/>
+        <rect x="20" y="20" width="40" height="40" rx="8" fill="#D4AF37"/>
+        <text x="80" y="38" font-size="20" font-weight="600" fill="#FFFFFF">Company Registration</text>
+        <text x="80" y="62" font-size="14" fill="#FFFFFF" opacity="0.6">CIPC + Founding Statement</text>
+        <text x="740" y="48" text-anchor="end" font-size="22" font-weight="700" fill="#D4AF37">R1 250</text>
+      </g>
+      <g transform="translate(20, 210)"><rect width="760" height="80" rx="10" fill="#0A2547"/>
+        <rect x="20" y="20" width="40" height="40" rx="8" fill="#D4AF37"/>
+        <text x="80" y="38" font-size="20" font-weight="600" fill="#FFFFFF">Logo + Brand Identity</text>
+        <text x="80" y="62" font-size="14" fill="#FFFFFF" opacity="0.6">3 concepts · full guideline doc</text>
+        <text x="740" y="48" text-anchor="end" font-size="22" font-weight="700" fill="#D4AF37">R3 200</text>
+      </g>
+      <g transform="translate(20, 310)"><rect width="760" height="80" rx="10" fill="#0A2547"/>
+        <rect x="20" y="20" width="40" height="40" rx="8" fill="#D4AF37"/>
+        <text x="80" y="38" font-size="20" font-weight="600" fill="#FFFFFF">5-Page Website</text>
+        <text x="80" y="62" font-size="14" fill="#FFFFFF" opacity="0.6">Mobile-ready · domain · hosting</text>
+        <text x="740" y="48" text-anchor="end" font-size="22" font-weight="700" fill="#D4AF37">R6 500</text>
+      </g>
+      <g transform="translate(20, 410)"><rect width="760" height="80" rx="10" fill="#0A2547"/>
+        <rect x="20" y="20" width="40" height="40" rx="8" fill="#0A2547" stroke="#D4AF37" stroke-width="2"/>
+        <text x="80" y="38" font-size="20" font-weight="600" fill="#FFFFFF" opacity="0.6">Social Media Kit</text>
+        <text x="80" y="62" font-size="14" fill="#FFFFFF" opacity="0.4">10 templates · monthly content</text>
+        <text x="740" y="48" text-anchor="end" font-size="22" font-weight="700" fill="#FFFFFF" opacity="0.5">+ R2 800</text>
+      </g>
+
+      <line x1="20" y1="540" x2="780" y2="540" stroke="#D4AF37" stroke-width="0.5" opacity="0.4"/>
+      <text x="40" y="600" font-family="Montserrat, Arial, sans-serif" font-size="22" font-weight="700" fill="#FFFFFF">YOUR TOTAL</text>
+      <text x="760" y="615" text-anchor="end" font-family="Montserrat, Arial, sans-serif" font-size="48" font-weight="800" fill="#D4AF37">R10 950</text>
+
+      <g transform="translate(20, 660)">
+        <rect width="760" height="80" rx="14" fill="#D4AF37"/>
+        <text x="380" y="50" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="20" font-weight="800" fill="#001F3F" letter-spacing="3">GET MY QUOTE →</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Footer -->
+  <g font-family="Inter, Arial, sans-serif" text-anchor="middle" fill="#FFFFFF">
+    <text x="540" y="1660" font-size="32" font-weight="700" fill="#D4AF37">thebreed.co.za/build-package</text>
+    <text x="540" y="1720" font-size="20" opacity="0.7">No surprises. No hidden costs.</text>
+    <text x="540" y="1820" font-size="18" opacity="0.5" letter-spacing="3">@breedindustries</text>
+  </g>
+</svg>

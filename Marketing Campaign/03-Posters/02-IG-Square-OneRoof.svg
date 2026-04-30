@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F8F5F0"/>
+      <stop offset="100%" stop-color="#E8E2D5"/>
+    </linearGradient>
+    <linearGradient id="gold2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#B68F1F"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1080" fill="url(#bg2)"/>
+
+  <!-- Header bar -->
+  <rect x="0" y="0" width="1080" height="120" fill="#001F3F"/>
+  <text x="60" y="75" font-family="Montserrat, Arial, sans-serif" font-size="22" font-weight="800" fill="#FFFFFF" letter-spacing="6">THE BREED INDUSTRIES</text>
+  <text x="1020" y="75" font-family="Montserrat, Arial, sans-serif" font-size="14" font-weight="500" fill="#D4AF37" letter-spacing="3" text-anchor="end">EST. DURBAN, SA</text>
+
+  <!-- Big number -->
+  <text x="540" y="280" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="36" font-weight="600" fill="#001F3F" letter-spacing="6">EVERYTHING. ONE PLACE.</text>
+
+  <!-- Grid of 4 services -->
+  <g font-family="Montserrat, Arial, sans-serif">
+    <!-- 1 -->
+    <g transform="translate(180, 380)">
+      <rect width="320" height="240" rx="12" fill="#001F3F"/>
+      <text x="40" y="60" font-size="60" font-weight="800" fill="url(#gold2)">01</text>
+      <text x="40" y="135" font-size="22" font-weight="700" fill="#FFFFFF">BUSINESS SETUP</text>
+      <text x="40" y="170" font-size="14" font-weight="400" fill="#FFFFFF" opacity="0.7">CIPC · SARS · B-BBEE · CSD</text>
+      <text x="40" y="195" font-size="14" font-weight="400" fill="#FFFFFF" opacity="0.7">Tax Clearance · Bank Account</text>
+    </g>
+    <!-- 2 -->
+    <g transform="translate(580, 380)">
+      <rect width="320" height="240" rx="12" fill="#001F3F"/>
+      <text x="40" y="60" font-size="60" font-weight="800" fill="url(#gold2)">02</text>
+      <text x="40" y="135" font-size="22" font-weight="700" fill="#FFFFFF">BRANDING</text>
+      <text x="40" y="170" font-size="14" font-weight="400" fill="#FFFFFF" opacity="0.7">Logo · Identity · Cards</text>
+      <text x="40" y="195" font-size="14" font-weight="400" fill="#FFFFFF" opacity="0.7">Flyers · Full Media Kit</text>
+    </g>
+    <!-- 3 -->
+    <g transform="translate(180, 650)">
+      <rect width="320" height="240" rx="12" fill="#001F3F"/>
+      <text x="40" y="60" font-size="60" font-weight="800" fill="url(#gold2)">03</text>
+      <text x="40" y="135" font-size="22" font-weight="700" fill="#FFFFFF">PLANS &amp; PROFILES</text>
+      <text x="40" y="170" font-size="14" font-weight="400" fill="#FFFFFF" opacity="0.7">Investor-ready Plans</text>
+      <text x="40" y="195" font-size="14" font-weight="400" fill="#FFFFFF" opacity="0.7">Profiles · Funding Proposals</text>
+    </g>
+    <!-- 4 -->
+    <g transform="translate(580, 650)">
+      <rect width="320" height="240" rx="12" fill="#D4AF37"/>
+      <text x="40" y="60" font-size="60" font-weight="800" fill="#001F3F">04</text>
+      <text x="40" y="135" font-size="22" font-weight="700" fill="#001F3F">DIGITAL</text>
+      <text x="40" y="170" font-size="14" font-weight="500" fill="#001F3F" opacity="0.8">Websites · Apps · E-commerce</text>
+      <text x="40" y="195" font-size="14" font-weight="500" fill="#001F3F" opacity="0.8">AI Platforms · Custom Build</text>
+    </g>
+  </g>
+
+  <!-- Footer -->
+  <rect x="0" y="960" width="1080" height="120" fill="#001F3F"/>
+  <text x="540" y="1005" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="20" font-weight="700" fill="#D4AF37" letter-spacing="3">BUILD YOUR PACKAGE TODAY</text>
+  <text x="540" y="1042" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="15" fill="#FFFFFF" opacity="0.7">www.thebreed.co.za  ·  @breedindustries  ·  +27 60 496 4105</text>
+</svg>

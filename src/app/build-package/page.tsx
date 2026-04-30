@@ -363,6 +363,7 @@ export default function LabPage() {
           { label: 'Home', href: '/' },
           { label: 'Build Package', href: '/build-package' }
         ]}
+        backgroundImage="/assets/images/build-package-hero.jpg"
         size="large"
         backgroundPattern="blueprint"
         align="left"

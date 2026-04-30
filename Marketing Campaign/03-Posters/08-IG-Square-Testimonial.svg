@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <defs>
+    <linearGradient id="tbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F8F5F0"/>
+      <stop offset="100%" stop-color="#EDE6D6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1080" fill="url(#tbg)"/>
+
+  <!-- Big quote mark -->
+  <text x="120" y="320" font-family="Georgia, serif" font-size="320" fill="#D4AF37" opacity="0.25" font-weight="700">“</text>
+
+  <!-- Quote -->
+  <g font-family="Montserrat, Arial, sans-serif" fill="#001F3F">
+    <text x="120" y="420" font-size="48" font-weight="700" letter-spacing="-1">They didn&#x2019;t just register</text>
+    <text x="120" y="478" font-size="48" font-weight="700" letter-spacing="-1">my company &#x2014; they built</text>
+    <text x="120" y="536" font-size="48" font-weight="700" letter-spacing="-1">the whole engine.</text>
+    <text x="120" y="594" font-size="48" font-weight="700" letter-spacing="-1">Logo, website, profile,</text>
+    <text x="120" y="652" font-size="48" font-weight="700" letter-spacing="-1">and a system that runs</text>
+    <text x="120" y="710" font-size="48" font-weight="700" letter-spacing="-1">while I sleep.</text>
+  </g>
+
+  <!-- Attribution -->
+  <g transform="translate(120, 820)">
+    <line x1="0" y1="0" x2="100" y2="0" stroke="#D4AF37" stroke-width="3"/>
+    <text y="50" font-family="Montserrat, Arial, sans-serif" font-size="22" font-weight="800" fill="#001F3F" letter-spacing="2">FOUNDER, I-GROUP</text>
+    <text y="84" font-family="Inter, Arial, sans-serif" font-size="18" fill="#001F3F" opacity="0.6">Built with The Breed</text>
+  </g>
+
+  <!-- Star rating -->
+  <g transform="translate(800, 860)">
+    <text font-family="Arial" font-size="40" fill="#D4AF37" font-weight="700">★ ★ ★ ★ ★</text>
+  </g>
+
+  <!-- Footer bar -->
+  <rect x="0" y="970" width="1080" height="110" fill="#001F3F"/>
+  <text x="540" y="1010" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="16" letter-spacing="4" fill="#D4AF37" font-weight="700">REAL CLIENTS · REAL EMPIRES</text>
+  <text x="540" y="1048" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="15" fill="#FFFFFF" opacity="0.7">www.thebreed.co.za  ·  @breedindustries</text>
+</svg>
