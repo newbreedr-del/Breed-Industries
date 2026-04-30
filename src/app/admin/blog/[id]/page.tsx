@@ -61,8 +61,11 @@ export default function EditBlogPost() {
 
   const loadPost = async () => {
     try {
-      // Fetch from Supabase via API
-      const response = await fetch(`/api/blog/${id}`);
+      // Fetch from Supabase via API - add cache buster to prevent caching
+      const response = await fetch(`/api/blog/${id}?_=${Date.now()}`, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
+      });
       const data = await response.json();
       
       if (data.post) {

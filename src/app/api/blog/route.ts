@@ -5,7 +5,16 @@ import { getAllBlogPostsAdmin, createBlogPost } from '@/lib/blog';
 export async function GET() {
   try {
     const posts = await getAllBlogPostsAdmin();
-    return NextResponse.json({ posts });
+    return NextResponse.json(
+      { posts },
+      {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        }
+      }
+    );
   } catch (error) {
     console.error('Error fetching blog posts:', error);
     return NextResponse.json(

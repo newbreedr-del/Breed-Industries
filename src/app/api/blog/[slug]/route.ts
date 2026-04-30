@@ -17,7 +17,17 @@ export async function GET(
       );
     }
     
-    return NextResponse.json({ post });
+    // Prevent caching to ensure fresh data
+    return NextResponse.json(
+      { post },
+      {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        }
+      }
+    );
   } catch (error) {
     console.error('Error fetching blog post:', error);
     return NextResponse.json(
