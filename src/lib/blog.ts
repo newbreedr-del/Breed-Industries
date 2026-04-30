@@ -152,19 +152,43 @@ export async function getAllSlugs(): Promise<string[]> {
 
 // Admin: Create a new blog post
 export async function createBlogPost(post: BlogPost): Promise<{ success: boolean; error?: string }> {
-  const supabase = createServerClient();
-  const row = transformToRow(post);
-  
-  const { error } = await supabase
-    .from('blog_posts')
-    .insert([row]);
+  try {
+    const supabase = createServerClient();
+    
+    // Transform CamelCase to snake_case for the database
+    const row = {
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      content: post.content,
+      author: post.author,
+      date: post.date,
+      read_time: post.readTime,
+      category: post.category,
+      tags: post.tags,
+      featured_image: post.featuredImage, // Crucial fix
+      og_image: post.ogImage,
+      status: post.status || 'draft',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
 
-  if (error) {
-    console.error('Error creating blog post:', error);
-    return { success: false, error: error.message };
+    console.log('Creating blog post in Supabase:', row);
+
+    const { error } = await supabase
+      .from('blog_posts')
+      .insert([row]);
+
+    if (error) {
+      console.error('Supabase insert error:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true };
+  } catch (err: any) {
+    console.error('Exception in createBlogPost:', err);
+    return { success: false, error: err.message };
   }
-
-  return { success: true };
 }
 
 // Admin: Update a blog post

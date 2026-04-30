@@ -52,6 +52,9 @@ export default function NewBlogPost() {
   const handleSave = async (publish = false) => {
     setIsSaving(true);
     try {
+      console.log('=== CREATE POST ===');
+      console.log('formData.featuredImage:', formData.featuredImage);
+
       const postData = {
         slug: formData.slug,
         title: formData.title,
@@ -63,9 +66,11 @@ export default function NewBlogPost() {
         category: formData.category,
         status: publish ? 'published' : 'draft',
         tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
-        featuredImage: formData.featuredImage || undefined,
-        ogImage: formData.ogImage || undefined,
+        featuredImage: formData.featuredImage || '',
+        ogImage: formData.ogImage || '',
       };
+
+      console.log('Sending postData to /api/blog:', JSON.stringify(postData, null, 2));
 
       // Save to Supabase via API
       const response = await fetch('/api/blog', {
@@ -74,8 +79,10 @@ export default function NewBlogPost() {
         body: JSON.stringify(postData),
       });
 
+      console.log('Create response status:', response.status);
       if (!response.ok) {
         const error = await response.json();
+        console.error('Create error:', error);
         throw new Error(error.error || 'Failed to save');
       }
       
@@ -257,14 +264,14 @@ export default function NewBlogPost() {
                 label="Featured Image"
                 description="Main image shown on blog post and listing (recommended: 1200x800px)"
                 value={formData.featuredImage}
-                onChange={(url) => setFormData({ ...formData, featuredImage: url })}
+                onChange={(url) => setFormData(prev => ({ ...prev, featuredImage: url }))}
                 folder="blog"
               />
               <ImageUpload
                 label="Social Share Image (OG Image)"
                 description="Image for Facebook/Twitter sharing (recommended: 1200x630px)"
                 value={formData.ogImage}
-                onChange={(url) => setFormData({ ...formData, ogImage: url })}
+                onChange={(url) => setFormData(prev => ({ ...prev, ogImage: url }))}
                 folder="blog"
               />
             </div>
