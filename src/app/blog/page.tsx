@@ -5,7 +5,7 @@ import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Calendar, Clock, ArrowRight, User } from 'lucide-react';
-import { getAllBlogPosts } from '@/lib/blog';
+import { getAllBlogPosts, BlogPost } from '@/lib/blog';
 
 export const metadata: Metadata = {
   title: 'Blog | Business Tips & Guides | Breed Industries',
@@ -27,7 +27,16 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function BlogPage() {
-  const blogPosts = await getAllBlogPosts();
+  let blogPosts: BlogPost[] = [];
+  let error: string | null = null;
+  
+  try {
+    blogPosts = await getAllBlogPosts();
+  } catch (err) {
+    console.error('Error fetching blog posts:', err);
+    error = err instanceof Error ? err.message : 'Failed to load blog posts';
+  }
+  
   return (
     <>
       <Header />
@@ -46,6 +55,14 @@ export default async function BlogPage() {
 
       <section className="py-20 bg-color-bg-secondary">
         <div className="container mx-auto px-4">
+          {/* Error Display */}
+          {error && (
+            <div className="text-center py-12">
+              <p className="text-red-400 mb-4">Error loading blog posts: {error}</p>
+              <p className="text-white/50 text-sm">Check console for details</p>
+            </div>
+          )}
+
           {/* Category Filter */}
           <div className="flex flex-wrap gap-2 mb-12 justify-center">
             {categories.map((category) => (
