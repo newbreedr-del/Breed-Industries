@@ -8,10 +8,9 @@ import { Calendar, Clock, User, ArrowLeft, Share2, ArrowRight } from 'lucide-rea
 import { NewsletterSignup } from '@/components/ui/NewsletterSignup';
 import { getAllSlugs, getBlogPostBySlug, getAllBlogPosts } from '@/lib/blog';
 
-export async function generateStaticParams() {
-  const slugs = await getAllSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
+// Force dynamic rendering - fetch fresh data from Supabase on every request
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
