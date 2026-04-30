@@ -59,19 +59,28 @@ function transformToRow(post: Partial<BlogPost>): any {
 
 // Get all published blog posts
 export async function getAllBlogPosts(): Promise<BlogPost[]> {
-  const supabase = createServerClient();
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .eq('status', 'published')
-    .order('created_at', { ascending: false });
+  try {
+    console.log('Creating Supabase client...');
+    const supabase = createServerClient();
+    console.log('Supabase client created, fetching posts...');
+    
+    const { data, error } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .eq('status', 'published')
+      .order('created_at', { ascending: false });
 
-  if (error) {
-    console.error('Error fetching blog posts:', error);
+    if (error) {
+      console.error('Supabase error fetching blog posts:', error.message, error.details);
+      return [];
+    }
+
+    console.log('Fetched', data?.length || 0, 'blog posts');
+    return (data || []).map(transformRow);
+  } catch (err: any) {
+    console.error('Exception fetching blog posts:', err?.message || err);
     return [];
   }
-
-  return (data || []).map(transformRow);
 }
 
 // Get all blog posts including drafts (for admin)
