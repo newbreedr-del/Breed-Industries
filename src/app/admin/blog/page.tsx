@@ -42,47 +42,25 @@ export default function BlogManagement() {
 
   const loadPosts = async () => {
     try {
-      // In a real implementation, this would fetch from an API or database
-      // For now, we'll use the hardcoded posts from the blog page
-      const defaultPosts: BlogPost[] = [
-        {
-          slug: 'how-to-register-company-south-africa',
-          title: 'How to Register a Company in South Africa: Complete 2026 Guide',
-          excerpt: 'Step-by-step guide to registering your company with CIPC in South Africa.',
-          author: 'Breed Industries',
-          date: '30 April 2026',
-          readTime: '8 min read',
-          category: 'Business Registration',
-          status: 'published',
-          tags: ['CIPC', 'company registration', 'South Africa', 'business startup'],
-          featuredImage: '/assets/images/blog/company-registration.jpg',
-        },
-        {
-          slug: 'startup-costs-south-africa-2026',
-          title: 'Startup Costs in South Africa 2026: Real Budget Breakdown',
-          excerpt: 'Real costs to start a business in South Africa in 2026.',
-          author: 'Breed Industries',
-          date: '28 April 2026',
-          readTime: '10 min read',
-          category: 'Startup Guide',
-          status: 'published',
-          tags: ['startup costs', 'business budget', 'South Africa', 'entrepreneurship'],
-          featuredImage: '/assets/images/blog/startup-costs.jpg',
-        },
-        {
-          slug: 'why-your-business-needs-professional-logo',
-          title: 'Why Your Business Needs a Professional Logo: 10 Reasons',
-          excerpt: 'Discover why a professional logo is crucial for business success.',
-          author: 'Breed Industries',
-          date: '25 April 2026',
-          readTime: '6 min read',
-          category: 'Branding',
-          status: 'published',
-          tags: ['logo design', 'branding', 'business identity', 'South Africa'],
-          featuredImage: '/assets/images/blog/professional-logo.jpg',
-        },
-      ];
-      setPosts(defaultPosts);
+      const response = await fetch('/api/blog');
+      const data = await response.json();
+      
+      if (data.posts) {
+        // Transform snake_case to camelCase
+        const transformedPosts = data.posts.map((post: any) => ({
+          slug: post.slug,
+          title: post.title,
+          excerpt: post.excerpt,
+          author: post.author,
+          date: post.date,
+          readTime: post.read_time,
+          category: post.category,
+          status: post.status,
+          tags: post.tags || [],
+          featuredImage: post.featured_image,
+        }));
+        setPosts(transformedPosts);
+      }
     } catch (error) {
       console.error('Error loading posts:', error);
     } finally {
@@ -96,9 +74,16 @@ export default function BlogManagement() {
     }
     
     try {
-      // In production, this would call an API to delete from database
-      setPosts(posts.filter(post => post.slug !== slug));
-      alert('Blog post deleted successfully');
+      const response = await fetch(`/api/blog/${slug}`, {
+        method: 'DELETE',
+      });
+      
+      if (response.ok) {
+        setPosts(posts.filter(post => post.slug !== slug));
+        alert('Blog post deleted successfully');
+      } else {
+        throw new Error('Failed to delete');
+      }
     } catch (error) {
       console.error('Error deleting post:', error);
       alert('Failed to delete post');

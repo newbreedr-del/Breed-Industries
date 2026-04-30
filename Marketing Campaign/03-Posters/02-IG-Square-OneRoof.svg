@@ -1,62 +1,87 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
   <defs>
+    <linearGradient id="amber2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E5A835"/>
+      <stop offset="100%" stop-color="#9B6310"/>
+    </linearGradient>
     <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#F8F5F0"/>
-      <stop offset="100%" stop-color="#E8E2D5"/>
+      <stop offset="0%" stop-color="#242426"/>
+      <stop offset="100%" stop-color="#0E0E0F"/>
     </linearGradient>
-    <linearGradient id="gold2" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#D4AF37"/>
-      <stop offset="100%" stop-color="#B68F1F"/>
-    </linearGradient>
+    <symbol id="bm2" viewBox="-110 -110 220 220">
+      <polygon points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" fill="#F8F5F0"/>
+      <g fill="#1A1A1B">
+        <rect x="-55" y="-50" width="110" height="22"/>
+        <rect x="33" y="-28" width="22" height="20"/>
+        <rect x="-55" y="-8" width="110" height="16"/>
+        <rect x="-55" y="8" width="22" height="20"/>
+        <rect x="-55" y="28" width="110" height="22"/>
+      </g>
+    </symbol>
   </defs>
+
   <rect width="1080" height="1080" fill="url(#bg2)"/>
 
   <!-- Header bar -->
-  <rect x="0" y="0" width="1080" height="120" fill="#001F3F"/>
-  <text x="60" y="75" font-family="Montserrat, Arial, sans-serif" font-size="22" font-weight="800" fill="#FFFFFF" letter-spacing="6">THE BREED INDUSTRIES</text>
-  <text x="1020" y="75" font-family="Montserrat, Arial, sans-serif" font-size="14" font-weight="500" fill="#D4AF37" letter-spacing="3" text-anchor="end">EST. DURBAN, SA</text>
+  <rect x="0" y="0" width="1080" height="120" fill="#0E0E0F"/>
+  <line x1="0" y1="120" x2="1080" y2="120" stroke="#CA8114" stroke-width="1" opacity="0.4"/>
+  <use href="#bm2" width="48" height="48" x="44" y="36"/>
+  <text x="106" y="62" font-family="Montserrat, Arial, sans-serif" font-size="20" font-weight="800" fill="#FFFFFF" letter-spacing="5">BREED</text>
+  <text x="106" y="84" font-family="Montserrat, Arial, sans-serif" font-size="10" font-weight="600" fill="#CA8114" letter-spacing="5">INDUSTRIES</text>
+  <text x="1036" y="75" font-family="Montserrat, Arial, sans-serif" font-size="13" font-weight="600" fill="#CA8114" letter-spacing="3" text-anchor="end">EST. DURBAN, SA</text>
 
-  <!-- Big number -->
-  <text x="540" y="280" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="36" font-weight="600" fill="#001F3F" letter-spacing="6">EVERYTHING. ONE PLACE.</text>
+  <!-- Eyebrow -->
+  <text x="540" y="220" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="13" letter-spacing="6" fill="#CA8114" font-weight="700">EVERYTHING. ONE PLACE.</text>
 
-  <!-- Grid of 4 services -->
+  <!-- Hero -->
+  <g font-family="Montserrat, Arial, sans-serif" text-anchor="middle">
+    <text x="540" y="295" font-size="48" font-weight="800" fill="#FFFFFF" letter-spacing="-1">Stop juggling vendors.</text>
+    <text x="540" y="345" font-size="34" font-weight="500" fill="#FFFFFF" opacity="0.65">One team. Four pillars. Real impact.</text>
+  </g>
+
+  <!-- 4 service cards -->
   <g font-family="Montserrat, Arial, sans-serif">
-    <!-- 1 -->
-    <g transform="translate(180, 380)">
-      <rect width="320" height="240" rx="12" fill="#001F3F"/>
-      <text x="40" y="60" font-size="60" font-weight="800" fill="url(#gold2)">01</text>
+    <g transform="translate(60, 410)">
+      <rect width="470" height="240" rx="14" fill="#242426" stroke="#CA8114" stroke-width="1" opacity="1"/>
+      <text x="40" y="74" font-size="64" font-weight="800" fill="url(#amber2)">01</text>
       <text x="40" y="135" font-size="22" font-weight="700" fill="#FFFFFF">BUSINESS SETUP</text>
-      <text x="40" y="170" font-size="14" font-weight="400" fill="#FFFFFF" opacity="0.7">CIPC · SARS · B-BBEE · CSD</text>
-      <text x="40" y="195" font-size="14" font-weight="400" fill="#FFFFFF" opacity="0.7">Tax Clearance · Bank Account</text>
+      <line x1="40" y1="150" x2="80" y2="150" stroke="#CA8114" stroke-width="2"/>
+      <text x="40" y="180" font-family="Inter, Arial, sans-serif" font-size="14" fill="#FFFFFF" opacity="0.65">CIPC · SARS · BEE Certification</text>
+      <text x="40" y="205" font-family="Inter, Arial, sans-serif" font-size="14" fill="#FFFFFF" opacity="0.65">Tax Clearance · COID</text>
+      <text x="430" y="220" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#CA8114">From R550</text>
     </g>
-    <!-- 2 -->
-    <g transform="translate(580, 380)">
-      <rect width="320" height="240" rx="12" fill="#001F3F"/>
-      <text x="40" y="60" font-size="60" font-weight="800" fill="url(#gold2)">02</text>
+    <g transform="translate(550, 410)">
+      <rect width="470" height="240" rx="14" fill="#242426" stroke="#CA8114" stroke-width="1"/>
+      <text x="40" y="74" font-size="64" font-weight="800" fill="url(#amber2)">02</text>
       <text x="40" y="135" font-size="22" font-weight="700" fill="#FFFFFF">BRANDING</text>
-      <text x="40" y="170" font-size="14" font-weight="400" fill="#FFFFFF" opacity="0.7">Logo · Identity · Cards</text>
-      <text x="40" y="195" font-size="14" font-weight="400" fill="#FFFFFF" opacity="0.7">Flyers · Full Media Kit</text>
+      <line x1="40" y1="150" x2="80" y2="150" stroke="#CA8114" stroke-width="2"/>
+      <text x="40" y="180" font-family="Inter, Arial, sans-serif" font-size="14" fill="#FFFFFF" opacity="0.65">Logo Design · Identity Systems</text>
+      <text x="40" y="205" font-family="Inter, Arial, sans-serif" font-size="14" fill="#FFFFFF" opacity="0.65">Cards · Flyers · Media Kits</text>
+      <text x="430" y="220" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#CA8114">From R1,500</text>
     </g>
-    <!-- 3 -->
-    <g transform="translate(180, 650)">
-      <rect width="320" height="240" rx="12" fill="#001F3F"/>
-      <text x="40" y="60" font-size="60" font-weight="800" fill="url(#gold2)">03</text>
+    <g transform="translate(60, 670)">
+      <rect width="470" height="240" rx="14" fill="#242426" stroke="#CA8114" stroke-width="1"/>
+      <text x="40" y="74" font-size="64" font-weight="800" fill="url(#amber2)">03</text>
       <text x="40" y="135" font-size="22" font-weight="700" fill="#FFFFFF">PLANS &amp; PROFILES</text>
-      <text x="40" y="170" font-size="14" font-weight="400" fill="#FFFFFF" opacity="0.7">Investor-ready Plans</text>
-      <text x="40" y="195" font-size="14" font-weight="400" fill="#FFFFFF" opacity="0.7">Profiles · Funding Proposals</text>
+      <line x1="40" y1="150" x2="80" y2="150" stroke="#CA8114" stroke-width="2"/>
+      <text x="40" y="180" font-family="Inter, Arial, sans-serif" font-size="14" fill="#FFFFFF" opacity="0.65">Business Plans · Profiles</text>
+      <text x="40" y="205" font-family="Inter, Arial, sans-serif" font-size="14" fill="#FFFFFF" opacity="0.65">Funding Proposals · Training</text>
+      <text x="430" y="220" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" fill="#CA8114">From R850</text>
     </g>
-    <!-- 4 -->
-    <g transform="translate(580, 650)">
-      <rect width="320" height="240" rx="12" fill="#D4AF37"/>
-      <text x="40" y="60" font-size="60" font-weight="800" fill="#001F3F">04</text>
-      <text x="40" y="135" font-size="22" font-weight="700" fill="#001F3F">DIGITAL</text>
-      <text x="40" y="170" font-size="14" font-weight="500" fill="#001F3F" opacity="0.8">Websites · Apps · E-commerce</text>
-      <text x="40" y="195" font-size="14" font-weight="500" fill="#001F3F" opacity="0.8">AI Platforms · Custom Build</text>
+    <g transform="translate(550, 670)">
+      <rect width="470" height="240" rx="14" fill="url(#amber2)"/>
+      <text x="40" y="74" font-size="64" font-weight="800" fill="#1A1A1B">04</text>
+      <text x="40" y="135" font-size="22" font-weight="700" fill="#1A1A1B">DIGITAL</text>
+      <line x1="40" y1="150" x2="80" y2="150" stroke="#1A1A1B" stroke-width="2"/>
+      <text x="40" y="180" font-family="Inter, Arial, sans-serif" font-size="14" fill="#1A1A1B" opacity="0.85">Websites · Mobile Apps</text>
+      <text x="40" y="205" font-family="Inter, Arial, sans-serif" font-size="14" fill="#1A1A1B" opacity="0.85">E-commerce · AI Platforms</text>
+      <text x="430" y="220" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#1A1A1B">From R5,000</text>
     </g>
   </g>
 
   <!-- Footer -->
-  <rect x="0" y="960" width="1080" height="120" fill="#001F3F"/>
-  <text x="540" y="1005" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="20" font-weight="700" fill="#D4AF37" letter-spacing="3">BUILD YOUR PACKAGE TODAY</text>
-  <text x="540" y="1042" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="15" fill="#FFFFFF" opacity="0.7">www.thebreed.co.za  ·  @breedindustries  ·  +27 60 496 4105</text>
+  <rect x="0" y="970" width="1080" height="110" fill="#0E0E0F"/>
+  <line x1="0" y1="970" x2="1080" y2="970" stroke="#CA8114" stroke-width="1" opacity="0.4"/>
+  <text x="540" y="1010" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="20" font-weight="800" fill="url(#amber2)" letter-spacing="3">BUILD YOUR PACKAGE TODAY</text>
+  <text x="540" y="1045" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" fill="#FFFFFF" opacity="0.6">www.thebreed.co.za/build-package  ·  @breedindustries</text>
 </svg>

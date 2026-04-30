@@ -61,81 +61,25 @@ export default function EditBlogPost() {
 
   const loadPost = async () => {
     try {
-      // In production, this would fetch from API/database
-      const defaultPosts: Record<string, BlogPost> = {
-        'how-to-register-company-south-africa': {
-          slug: 'how-to-register-company-south-africa',
-          title: 'How to Register a Company in South Africa: Complete 2026 Guide',
-          excerpt: 'Step-by-step guide to registering your company with CIPC in South Africa. Learn about costs, requirements, timelines, and common mistakes to avoid.',
-          content: `Starting a business in South Africa begins with proper company registration. This comprehensive guide walks you through the entire process, from choosing your business structure to receiving your registration certificate.
-
-## Why Register Your Company?
-
-Before diving into the how, let's understand the why:
-
-- **Legal Protection**: Separate your personal assets from business liabilities
-- **Credibility**: Customers, suppliers, and investors trust registered businesses
-- **Funding Access**: Banks and investors require registration for financing
-- **Tax Benefits**: Access to business tax deductions and incentives
-- **Bidding Opportunities**: Required for government and corporate tenders
-
-## Types of Business Structures in South Africa
-
-### 1. Private Company (Pty) Ltd - Most Popular
-- **Best for**: Most businesses, startups, SMEs
-- **Owners**: 1-50 shareholders
-- **Liability**: Limited to investment amount
-- **Tax**: 27% corporate tax rate
-
-## Conclusion
-
-Company registration is your foundation for business success in South Africa.`,
-          author: 'Breed Industries',
-          date: '30 April 2026',
-          readTime: '8 min read',
-          category: 'Business Registration',
-          status: 'published',
-          tags: ['CIPC', 'company registration', 'South Africa', 'business startup'],
-          featuredImage: '/assets/images/blog/company-registration.jpg',
-          ogImage: '/assets/images/blog/company-registration-og.jpg',
-        },
-        'startup-costs-south-africa-2026': {
-          slug: 'startup-costs-south-africa-2026',
-          title: 'Startup Costs in South Africa 2026: Real Budget Breakdown',
-          excerpt: 'Real costs to start a business in South Africa in 2026. Budget breakdown for registration, branding, website, and first-year operations.',
-          content: 'Starting a business requires capital, but how much do you really need? This guide breaks down actual startup costs for South African businesses in 2026.',
-          author: 'Breed Industries',
-          date: '28 April 2026',
-          readTime: '10 min read',
-          category: 'Startup Guide',
-          status: 'published',
-          tags: ['startup costs', 'business budget', 'South Africa', 'entrepreneurship'],
-          featuredImage: '/assets/images/blog/startup-costs.jpg',
-          ogImage: '/assets/images/blog/startup-costs-og.jpg',
-        },
-        'why-your-business-needs-professional-logo': {
-          slug: 'why-your-business-needs-professional-logo',
-          title: 'Why Your Business Needs a Professional Logo: 10 Reasons',
-          excerpt: 'Discover why a professional logo is crucial for business success. Learn how quality branding impacts credibility, customer trust, and revenue.',
-          content: 'First impressions last 50 milliseconds. Your logo is often the first interaction potential customers have with your brand.',
-          author: 'Breed Industries',
-          date: '25 April 2026',
-          readTime: '6 min read',
-          category: 'Branding',
-          status: 'published',
-          tags: ['logo design', 'branding', 'business identity', 'South Africa'],
-          featuredImage: '/assets/images/blog/professional-logo.jpg',
-          ogImage: '/assets/images/blog/professional-logo-og.jpg',
-        },
-      };
-
-      const post = defaultPosts[id];
-      if (post) {
+      // Fetch from Supabase via API
+      const response = await fetch(`/api/blog/${id}`);
+      const data = await response.json();
+      
+      if (data.post) {
+        const post = data.post;
         setFormData({
-          ...post,
-          tagsString: post.tags.join(', '),
-          featuredImage: post.featuredImage || '',
-          ogImage: post.ogImage || '',
+          slug: post.slug,
+          title: post.title,
+          excerpt: post.excerpt,
+          content: post.content,
+          author: post.author,
+          date: post.date,
+          readTime: post.read_time,
+          category: post.category,
+          status: post.status,
+          tagsString: (post.tags || []).join(', '),
+          featuredImage: post.featured_image || '',
+          ogImage: post.og_image || '',
         });
       } else {
         alert('Post not found');
@@ -143,6 +87,8 @@ Company registration is your foundation for business success in South Africa.`,
       }
     } catch (error) {
       console.error('Error loading post:', error);
+      alert('Failed to load post');
+      router.push('/admin/blog');
     } finally {
       setIsLoading(false);
     }
@@ -152,15 +98,30 @@ Company registration is your foundation for business success in South Africa.`,
     setIsSaving(true);
     try {
       const postData = {
-        ...formData,
+        title: formData.title,
+        excerpt: formData.excerpt,
+        content: formData.content,
+        author: formData.author,
+        date: formData.date,
+        readTime: formData.readTime,
+        category: formData.category,
         status: publish ? 'published' : 'draft',
         tags: formData.tagsString.split(',').map(t => t.trim()).filter(Boolean),
+        featuredImage: formData.featuredImage,
+        ogImage: formData.ogImage,
       };
 
-      // In production, this would save to database via API
-      console.log('Saving post:', postData);
-      
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Save to Supabase via API
+      const response = await fetch(`/api/blog/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(postData),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to save');
+      }
       
       alert(publish ? 'Post published successfully!' : 'Changes saved successfully!');
     } catch (error) {
@@ -177,8 +138,15 @@ Company registration is your foundation for business success in South Africa.`,
     }
     
     try {
-      // In production, this would delete from database
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Delete from Supabase via API
+      const response = await fetch(`/api/blog/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete');
+      }
+      
       alert('Post deleted successfully');
       router.push('/admin/blog');
     } catch (error) {

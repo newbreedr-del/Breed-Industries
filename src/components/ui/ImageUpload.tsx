@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Upload, X, ImageIcon, Loader2 } from 'lucide-react';
+import { Upload, X, ImageIcon, Loader2, ExternalLink } from 'lucide-react';
+import { uploadImage, isSupabaseStorageUrl } from '@/lib/supabase-storage';
 
 interface ImageUploadProps {
   value: string;
@@ -30,22 +31,14 @@ export function ImageUpload({
     setError(null);
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('folder', folder);
+      // Upload directly to Supabase Storage
+      const result = await uploadImage(file, folder);
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Upload failed');
+      if (!result.success) {
+        throw new Error(result.error || 'Upload failed');
       }
 
-      onChange(data.url);
+      onChange(result.url!);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
@@ -67,22 +60,14 @@ export function ImageUpload({
     setError(null);
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('folder', folder);
+      // Upload directly to Supabase Storage
+      const result = await uploadImage(file, folder);
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Upload failed');
+      if (!result.success) {
+        throw new Error(result.error || 'Upload failed');
       }
 
-      onChange(data.url);
+      onChange(result.url!);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
@@ -110,14 +95,27 @@ export function ImageUpload({
               className="w-full h-full object-cover"
             />
           </div>
-          <button
-            onClick={handleClear}
-            className="absolute top-2 right-2 p-2 bg-red-500/80 hover:bg-red-500 text-white rounded-lg transition-colors"
-            title="Remove image"
-          >
-            <X className="w-4 h-4" />
-          </button>
-          <p className="text-white/40 text-xs mt-2 break-all">{value}</p>
+          <div className="absolute top-2 right-2 flex gap-2">
+            <a
+              href={value}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors"
+              title="View image"
+            >
+              <ExternalLink className="w-4 h-4" />
+            </a>
+            <button
+              onClick={handleClear}
+              className="p-2 bg-red-500/80 hover:bg-red-500 text-white rounded-lg transition-colors"
+              title="Remove image"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <p className="text-white/40 text-xs mt-2 break-all">
+            {isSupabaseStorageUrl(value) ? '📦 Stored in Supabase' : '🔗 External URL'}
+          </p>
         </div>
       ) : (
         <div
@@ -163,12 +161,12 @@ export function ImageUpload({
 
       {/* Manual URL Input */}
       <div className="mt-3">
-        <p className="text-white/50 text-xs mb-1">Or enter image URL manually:</p>
+        <p className="text-white/50 text-xs mb-1">Or enter external image URL:</p>
         <input
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="e.g., /assets/images/blog/my-image.jpg"
+          placeholder="https://example.com/image.jpg"
           className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-accent"
         />
       </div>

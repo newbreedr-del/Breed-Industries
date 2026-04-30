@@ -1,76 +1,85 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#001F3F"/>
-      <stop offset="60%" stop-color="#001229"/>
-      <stop offset="100%" stop-color="#000813"/>
+    <linearGradient id="amber" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E5A835"/>
+      <stop offset="50%" stop-color="#CA8114"/>
+      <stop offset="100%" stop-color="#9B6310"/>
     </linearGradient>
-    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#F4D77A"/>
-      <stop offset="50%" stop-color="#D4AF37"/>
-      <stop offset="100%" stop-color="#A6841F"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#242426"/>
+      <stop offset="60%" stop-color="#1A1A1B"/>
+      <stop offset="100%" stop-color="#0E0E0F"/>
     </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.35"/>
-      <stop offset="100%" stop-color="#D4AF37" stop-opacity="0"/>
+    <radialGradient id="glow" cx="50%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="#CA8114" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#CA8114" stop-opacity="0"/>
     </radialGradient>
-    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#D4AF37" stroke-width="0.5" opacity="0.08"/>
+    <pattern id="hexgrid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#CA8114" stroke-width="0.5" opacity="0.08"/>
     </pattern>
+    <symbol id="breedmark" viewBox="-110 -110 220 220">
+      <polygon points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" fill="#F8F5F0"/>
+      <g fill="#1A1A1B">
+        <rect x="-55" y="-50" width="110" height="22"/>
+        <rect x="33" y="-28" width="22" height="20"/>
+        <rect x="-55" y="-8" width="110" height="16"/>
+        <rect x="-55" y="8" width="22" height="20"/>
+        <rect x="-55" y="28" width="110" height="22"/>
+      </g>
+    </symbol>
   </defs>
 
-  <!-- Background -->
   <rect width="1080" height="1080" fill="url(#bg)"/>
-  <rect width="1080" height="1080" fill="url(#grid)"/>
-  <circle cx="270" cy="270" r="450" fill="url(#glow)"/>
-  <circle cx="810" cy="810" r="380" fill="url(#glow)" opacity="0.6"/>
+  <rect width="1080" height="1080" fill="url(#hexgrid)"/>
+  <ellipse cx="540" cy="450" rx="600" ry="500" fill="url(#glow)"/>
 
   <!-- Frame -->
-  <rect x="40" y="40" width="1000" height="1000" fill="none" stroke="#D4AF37" stroke-width="2" opacity="0.4"/>
-  <rect x="55" y="55" width="970" height="970" fill="none" stroke="#D4AF37" stroke-width="0.5" opacity="0.3"/>
+  <rect x="36" y="36" width="1008" height="1008" fill="none" stroke="#CA8114" stroke-width="1" opacity="0.35"/>
 
-  <!-- Top tag -->
+  <!-- Top wordmark + logo -->
   <g transform="translate(540, 130)">
-    <rect x="-145" y="-20" width="290" height="40" rx="20" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
-    <text x="0" y="6" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="14" letter-spacing="4" fill="#D4AF37" font-weight="600">PREMIUM GROWTH AGENCY · DURBAN</text>
+    <use href="#breedmark" width="56" height="56" x="-200" y="-28"/>
+    <text x="-130" y="-2" font-family="Montserrat, Arial, sans-serif" font-size="22" font-weight="800" fill="#FFFFFF" letter-spacing="6">BREED</text>
+    <text x="-130" y="22" font-family="Montserrat, Arial, sans-serif" font-size="11" font-weight="600" fill="#CA8114" letter-spacing="6">INDUSTRIES</text>
+    <line x1="20" y1="0" x2="200" y2="0" stroke="#CA8114" stroke-width="0.7" opacity="0.5"/>
   </g>
+
+  <!-- Eyebrow -->
+  <text x="540" y="280" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="13" letter-spacing="6" fill="#CA8114" font-weight="700">PREMIUM GROWTH AGENCY · DURBAN</text>
 
   <!-- Headline -->
   <g font-family="Montserrat, Arial, sans-serif" text-anchor="middle">
-    <text x="540" y="370" font-size="92" font-weight="800" fill="#FFFFFF" letter-spacing="-2">FROM IDEA</text>
-    <text x="540" y="475" font-size="92" font-weight="800" fill="#FFFFFF" letter-spacing="-2">TO</text>
-    <text x="540" y="590" font-size="124" font-weight="800" fill="url(#gold)" letter-spacing="-3">EMPIRE.</text>
+    <text x="540" y="430" font-size="96" font-weight="800" fill="#FFFFFF" letter-spacing="-3">FROM IDEA</text>
+    <text x="540" y="535" font-size="96" font-weight="800" fill="#FFFFFF" letter-spacing="-3">TO</text>
+    <text x="540" y="675" font-size="148" font-weight="800" fill="url(#amber)" letter-spacing="-5">EMPIRE.</text>
   </g>
 
   <!-- Sub -->
-  <g font-family="Inter, Arial, sans-serif" text-anchor="middle" fill="#FFFFFF" opacity="0.85">
-    <text x="540" y="660" font-size="22" font-weight="500">Registration. Branding. Websites. Apps.</text>
-    <text x="540" y="694" font-size="22" font-weight="500">All under one roof.</text>
+  <g font-family="Inter, Arial, sans-serif" text-anchor="middle" fill="#FFFFFF" opacity="0.75">
+    <text x="540" y="745" font-size="22" font-weight="500">Empowering Growth.</text>
+    <text x="540" y="780" font-size="22" font-weight="500">Building Tomorrow Together.</text>
   </g>
 
-  <!-- Pillars row -->
-  <g font-family="Montserrat, Arial, sans-serif" text-anchor="middle" font-size="13" letter-spacing="3" fill="#D4AF37" font-weight="600">
-    <text x="225" y="790">SETUP</text>
-    <text x="430" y="790">BRAND</text>
-    <text x="650" y="790">PROFILE</text>
-    <text x="855" y="790">DIGITAL</text>
+  <!-- Pillar row -->
+  <g font-family="Montserrat, Arial, sans-serif" text-anchor="middle" font-size="12" letter-spacing="4" fill="#CA8114" font-weight="700">
+    <text x="225" y="855">SETUP</text>
+    <text x="430" y="855">BRAND</text>
+    <text x="650" y="855">PROFILE</text>
+    <text x="855" y="855">DIGITAL</text>
   </g>
-  <g stroke="#D4AF37" stroke-width="1" opacity="0.4">
-    <line x1="180" y1="810" x2="270" y2="810"/>
-    <line x1="385" y1="810" x2="475" y2="810"/>
-    <line x1="600" y1="810" x2="700" y2="810"/>
-    <line x1="810" y1="810" x2="900" y2="810"/>
+  <g stroke="#CA8114" stroke-width="0.8" opacity="0.4">
+    <line x1="180" y1="875" x2="270" y2="875"/>
+    <line x1="385" y1="875" x2="475" y2="875"/>
+    <line x1="600" y1="875" x2="700" y2="875"/>
+    <line x1="810" y1="875" x2="900" y2="875"/>
   </g>
 
   <!-- CTA -->
-  <g transform="translate(540, 900)">
-    <rect x="-200" y="-32" width="400" height="64" rx="32" fill="url(#gold)"/>
-    <text x="0" y="8" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="20" font-weight="700" fill="#001F3F" letter-spacing="2">BUILD YOUR EMPIRE →</text>
+  <g transform="translate(540, 950)">
+    <rect x="-220" y="-30" width="440" height="60" rx="30" fill="url(#amber)"/>
+    <text y="8" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="18" font-weight="800" fill="#1A1A1B" letter-spacing="3">START YOUR PROJECT  →</text>
   </g>
 
   <!-- Footer -->
-  <g font-family="Inter, Arial, sans-serif" text-anchor="middle" fill="#FFFFFF" opacity="0.7">
-    <text x="540" y="985" font-size="18" font-weight="600">www.thebreed.co.za</text>
-    <text x="540" y="1015" font-size="14">@breedindustries  ·  +27 60 496 4105</text>
-  </g>
+  <text x="540" y="1025" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" fill="#FFFFFF" opacity="0.55">www.thebreed.co.za  ·  @breedindustries  ·  +27 60 496 4105</text>
 </svg>

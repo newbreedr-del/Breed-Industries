@@ -53,19 +53,31 @@ export default function NewBlogPost() {
     setIsSaving(true);
     try {
       const postData = {
-        ...formData,
-        status: publish ? 'published' : 'draft',
+        slug: formData.slug,
+        title: formData.title,
+        excerpt: formData.excerpt,
+        content: formData.content,
+        author: formData.author,
         date: new Date().toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' }),
+        readTime: formData.readTime,
+        category: formData.category,
+        status: publish ? 'published' : 'draft',
         tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
         featuredImage: formData.featuredImage || undefined,
         ogImage: formData.ogImage || undefined,
       };
 
-      // In production, this would save to a database via API
-      console.log('Saving post:', postData);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Save to Supabase via API
+      const response = await fetch('/api/blog', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(postData),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to save');
+      }
       
       alert(publish ? 'Post published successfully!' : 'Draft saved successfully!');
       router.push('/admin/blog');

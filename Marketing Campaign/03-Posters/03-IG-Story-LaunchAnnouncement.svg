@@ -1,77 +1,106 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
   <defs>
-    <linearGradient id="sbg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#001F3F"/>
-      <stop offset="50%" stop-color="#001A36"/>
-      <stop offset="100%" stop-color="#000814"/>
+    <linearGradient id="amber3" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E5A835"/>
+      <stop offset="100%" stop-color="#9B6310"/>
     </linearGradient>
-    <linearGradient id="sg" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#F4D77A"/>
-      <stop offset="100%" stop-color="#A6841F"/>
+    <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#242426"/>
+      <stop offset="60%" stop-color="#1A1A1B"/>
+      <stop offset="100%" stop-color="#0A0A0B"/>
     </linearGradient>
-    <radialGradient id="halo" cx="50%" cy="40%" r="60%">
-      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.4"/>
-      <stop offset="100%" stop-color="#D4AF37" stop-opacity="0"/>
+    <radialGradient id="glow3" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#CA8114" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#CA8114" stop-opacity="0"/>
     </radialGradient>
-    <pattern id="sgrid" width="80" height="80" patternUnits="userSpaceOnUse">
-      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#D4AF37" stroke-width="0.5" opacity="0.07"/>
+    <pattern id="hg3" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#CA8114" stroke-width="0.5" opacity="0.07"/>
     </pattern>
+    <symbol id="bm3" viewBox="-110 -110 220 220">
+      <polygon points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" fill="#F8F5F0"/>
+      <g fill="#1A1A1B">
+        <rect x="-55" y="-50" width="110" height="22"/>
+        <rect x="33" y="-28" width="22" height="20"/>
+        <rect x="-55" y="-8" width="110" height="16"/>
+        <rect x="-55" y="8" width="22" height="20"/>
+        <rect x="-55" y="28" width="110" height="22"/>
+      </g>
+    </symbol>
   </defs>
 
-  <rect width="1080" height="1920" fill="url(#sbg)"/>
-  <rect width="1080" height="1920" fill="url(#sgrid)"/>
-  <ellipse cx="540" cy="800" rx="700" ry="500" fill="url(#halo)"/>
+  <rect width="1080" height="1920" fill="url(#bg3)"/>
+  <rect width="1080" height="1920" fill="url(#hg3)"/>
+  <ellipse cx="540" cy="800" rx="700" ry="500" fill="url(#glow3)"/>
 
-  <!-- Top brand tag -->
-  <g transform="translate(540, 250)">
-    <text text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="20" letter-spacing="8" fill="#D4AF37" font-weight="700">JUST LAUNCHED</text>
-    <line x1="-150" y1="20" x2="-30" y2="20" stroke="#D4AF37" stroke-width="1"/>
-    <line x1="30" y1="20" x2="150" y2="20" stroke="#D4AF37" stroke-width="1"/>
+  <!-- Top brand lockup -->
+  <g transform="translate(540, 200)">
+    <use href="#bm3" width="80" height="80" x="-40" y="-40"/>
   </g>
+  <text x="540" y="320" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="20" letter-spacing="8" fill="#CA8114" font-weight="700">JUST LAUNCHED</text>
+  <line x1="380" y1="345" x2="700" y2="345" stroke="#CA8114" stroke-width="0.8" opacity="0.5"/>
 
   <!-- Hero -->
   <g font-family="Montserrat, Arial, sans-serif" text-anchor="middle">
-    <text x="540" y="500" font-size="100" font-weight="800" fill="#FFFFFF" letter-spacing="-3">THE NEW</text>
-    <text x="540" y="620" font-size="100" font-weight="800" fill="#FFFFFF" letter-spacing="-3">HOME OF</text>
-    <text x="540" y="780" font-size="180" font-weight="800" fill="url(#sg)" letter-spacing="-6">BREED.</text>
+    <text x="540" y="500" font-size="86" font-weight="800" fill="#FFFFFF" letter-spacing="-3">REAL WORK.</text>
+    <text x="540" y="600" font-size="86" font-weight="800" fill="#FFFFFF" letter-spacing="-3">REAL CLIENTS.</text>
+    <text x="540" y="730" font-size="120" font-weight="800" fill="url(#amber3)" letter-spacing="-4">REAL IMPACT.</text>
   </g>
 
   <!-- Body -->
   <g font-family="Inter, Arial, sans-serif" text-anchor="middle" fill="#FFFFFF">
-    <text x="540" y="900" font-size="34" font-weight="600" opacity="0.9">One platform.</text>
-    <text x="540" y="950" font-size="34" font-weight="600" opacity="0.9">Every service you need.</text>
-    <text x="540" y="1000" font-size="34" font-weight="600" opacity="0.9">Zero ceiling.</text>
+    <text x="540" y="850" font-size="32" font-weight="600" opacity="0.85">The new home of Breed</text>
+    <text x="540" y="895" font-size="32" font-weight="600" opacity="0.85">is officially live.</text>
+  </g>
+
+  <!-- Stats row -->
+  <g transform="translate(540, 1020)" font-family="Montserrat, Arial, sans-serif" text-anchor="middle">
+    <g transform="translate(-360, 0)">
+      <text font-size="60" font-weight="800" fill="url(#amber3)">23+</text>
+      <text y="40" font-size="13" font-weight="600" fill="#FFFFFF" opacity="0.7" letter-spacing="3">CLIENTS</text>
+    </g>
+    <g transform="translate(-120, 0)">
+      <text font-size="60" font-weight="800" fill="url(#amber3)">5</text>
+      <text y="40" font-size="13" font-weight="600" fill="#FFFFFF" opacity="0.7" letter-spacing="3">PRODUCTS</text>
+    </g>
+    <g transform="translate(120, 0)">
+      <text font-size="60" font-weight="800" fill="url(#amber3)">8+</text>
+      <text y="40" font-size="13" font-weight="600" fill="#FFFFFF" opacity="0.7" letter-spacing="3">BRANDS</text>
+    </g>
+    <g transform="translate(360, 0)">
+      <text font-size="60" font-weight="800" fill="url(#amber3)">45+</text>
+      <text y="40" font-size="13" font-weight="600" fill="#FFFFFF" opacity="0.7" letter-spacing="3">LAUNCHES</text>
+    </g>
   </g>
 
   <!-- Feature pills -->
-  <g font-family="Montserrat, Arial, sans-serif" font-size="20" font-weight="600" fill="#001F3F" text-anchor="middle">
-    <g transform="translate(270, 1130)">
-      <rect x="-180" y="-30" width="360" height="60" rx="30" fill="#D4AF37"/>
-      <text y="8" letter-spacing="3">PACKAGE BUILDER</text>
+  <g font-family="Montserrat, Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle">
+    <g transform="translate(270, 1240)">
+      <rect x="-180" y="-28" width="360" height="56" rx="28" fill="url(#amber3)"/>
+      <text y="6" fill="#1A1A1B" letter-spacing="2">PACKAGE BUILDER</text>
     </g>
-    <g transform="translate(810, 1130)">
-      <rect x="-180" y="-30" width="360" height="60" rx="30" fill="#D4AF37"/>
-      <text y="8" letter-spacing="3">LIVE QUOTES</text>
+    <g transform="translate(810, 1240)">
+      <rect x="-180" y="-28" width="360" height="56" rx="28" fill="url(#amber3)"/>
+      <text y="6" fill="#1A1A1B" letter-spacing="2">LIVE QUOTES</text>
     </g>
-    <g transform="translate(270, 1230)">
-      <rect x="-180" y="-30" width="360" height="60" rx="30" fill="#FFFFFF"/>
-      <text y="8" letter-spacing="3">CLIENT PORTAL</text>
+    <g transform="translate(270, 1330)">
+      <rect x="-180" y="-28" width="360" height="56" rx="28" fill="none" stroke="#CA8114" stroke-width="2"/>
+      <text y="6" fill="#FFFFFF" letter-spacing="2">CLIENT PORTAL</text>
     </g>
-    <g transform="translate(810, 1230)">
-      <rect x="-180" y="-30" width="360" height="60" rx="30" fill="#FFFFFF"/>
-      <text y="8" letter-spacing="3">PORTFOLIO</text>
+    <g transform="translate(810, 1330)">
+      <rect x="-180" y="-28" width="360" height="56" rx="28" fill="none" stroke="#CA8114" stroke-width="2"/>
+      <text y="6" fill="#FFFFFF" letter-spacing="2">PORTFOLIO</text>
     </g>
   </g>
 
   <!-- Big CTA -->
-  <g transform="translate(540, 1500)">
-    <rect x="-330" y="-55" width="660" height="110" rx="55" fill="url(#sg)"/>
-    <text y="14" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="32" font-weight="800" fill="#001F3F" letter-spacing="3">VISIT THE BREED →</text>
+  <g transform="translate(540, 1530)">
+    <rect x="-340" y="-55" width="680" height="110" rx="55" fill="url(#amber3)"/>
+    <text y="14" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="32" font-weight="800" fill="#1A1A1B" letter-spacing="3">VISIT THE BREED  →</text>
   </g>
 
   <!-- Footer -->
   <g font-family="Inter, Arial, sans-serif" text-anchor="middle" fill="#FFFFFF">
-    <text x="540" y="1730" font-size="34" font-weight="700" fill="#D4AF37">thebreed.co.za</text>
+    <text x="540" y="1730" font-size="34" font-weight="700" fill="#CA8114">thebreed.co.za</text>
     <text x="540" y="1780" font-size="22" opacity="0.7">@breedindustries  ·  +27 60 496 4105</text>
     <text x="540" y="1830" font-size="18" opacity="0.5" letter-spacing="3">SWIPE UP TO EXPLORE</text>
   </g>
