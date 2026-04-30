@@ -170,10 +170,15 @@ export async function createBlogPost(post: BlogPost): Promise<{ success: boolean
 // Admin: Update a blog post
 export async function updateBlogPost(slug: string, updates: Partial<BlogPost>): Promise<{ success: boolean; error?: string }> {
   const supabase = createServerClient();
+  
+  console.log('Raw updates received:', JSON.stringify(updates, null, 2));
+  console.log('featuredImage in updates:', updates.featuredImage);
+  
   const row = transformToRow(updates);
   
-  console.log('Updating blog post:', slug);
-  console.log('Update data:', row);
+  console.log('Transformed row:', JSON.stringify(row, null, 2));
+  console.log('featured_image in row:', row.featured_image);
+  console.log('Updating blog post with slug:', slug);
   
   const { data, error, count } = await supabase
     .from('blog_posts')
@@ -186,8 +191,8 @@ export async function updateBlogPost(slug: string, updates: Partial<BlogPost>): 
     return { success: false, error: error.message };
   }
 
-  console.log('Update result - rows affected:', count);
-  console.log('Updated data:', data);
+  console.log('Update result - count:', count, 'data length:', data?.length);
+  console.log('Updated row data:', data);
 
   return { success: true };
 }
