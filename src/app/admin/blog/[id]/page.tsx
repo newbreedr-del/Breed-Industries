@@ -77,6 +77,7 @@ export default function EditBlogPost() {
           readTime: post.read_time,
           category: post.category,
           status: post.status,
+          tags: post.tags || [],
           tagsString: (post.tags || []).join(', '),
           featuredImage: post.featured_image || '',
           ogImage: post.og_image || '',
