@@ -35,11 +35,14 @@ export function ImageUpload({
       const result = await uploadImage(file, folder);
 
       if (!result.success) {
-        throw new Error(result.error || 'Upload failed');
+        console.error('Upload failed:', result.error);
+        throw new Error(result.error || 'Upload failed - check Supabase storage policies');
       }
 
+      console.log('Upload successful:', result.url);
       onChange(result.url!);
     } catch (err) {
+      console.error('Upload error:', err);
       setError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
       setIsUploading(false);
@@ -64,11 +67,14 @@ export function ImageUpload({
       const result = await uploadImage(file, folder);
 
       if (!result.success) {
-        throw new Error(result.error || 'Upload failed');
+        console.error('Upload failed:', result.error);
+        throw new Error(result.error || 'Upload failed - check Supabase storage policies');
       }
 
+      console.log('Upload successful:', result.url);
       onChange(result.url!);
     } catch (err) {
+      console.error('Upload error:', err);
       setError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
       setIsUploading(false);

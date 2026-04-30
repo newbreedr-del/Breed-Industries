@@ -102,6 +102,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   fill
                   priority
                   className="object-cover"
+                  onError={(e) => {
+                    // Hide broken image
+                    e.currentTarget.style.display = 'none';
+                  }}
                 />
               </div>
             )}

@@ -69,6 +69,12 @@ export default async function BlogPage() {
                       alt={post.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={(e) => {
+                        // Fallback to gradient if image fails to load
+                        const target = e.currentTarget;
+                        target.style.display = 'none';
+                        target.parentElement?.classList.add('bg-gradient-to-br', 'from-accent/20', 'to-color-bg-deep/50');
+                      }}
                     />
                   ) : (
                     <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-color-bg-deep/50 group-hover:scale-105 transition-transform duration-500" />
