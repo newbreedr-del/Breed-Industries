@@ -129,57 +129,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {/* Content */}
         <div className="container mx-auto px-4 py-12 max-w-4xl">
-          <div className="prose prose-invert prose-lg max-w-none">
-            {post.content.split('\n\n').map((paragraph, index) => {
-              if (paragraph.startsWith('## ')) {
-                return (
-                  <h2 key={index} className="text-2xl font-bold text-white mt-12 mb-6">
-                    {paragraph.replace('## ', '')}
-                  </h2>
-                );
-              }
-              if (paragraph.startsWith('### ')) {
-                return (
-                  <h3 key={index} className="text-xl font-bold text-white mt-8 mb-4">
-                    {paragraph.replace('### ', '')}
-                  </h3>
-                );
-              }
-              if (paragraph.startsWith('| ')) {
-                // Table handling - simplified
-                return (
-                  <div key={index} className="overflow-x-auto mb-6">
-                    <pre className="text-sm text-white/80">{paragraph}</pre>
-                  </div>
-                );
-              }
-              if (paragraph.includes('\n- ')) {
-                const items = paragraph.split('\n- ').filter(Boolean);
-                return (
-                  <ul key={index} className="list-disc list-inside space-y-2 text-white/80 mb-6">
-                    {items.map((item, i) => (
-                      <li key={i}>{item.replace(/^- /, '')}</li>
-                    ))}
-                  </ul>
-                );
-              }
-              if (paragraph.includes('\n1. ')) {
-                const items = paragraph.split('\n').filter(line => line.match(/^\d+\./));
-                return (
-                  <ol key={index} className="list-decimal list-inside space-y-2 text-white/80 mb-6">
-                    {items.map((item, i) => (
-                      <li key={i}>{item.replace(/^\d+\.\s*/, '')}</li>
-                    ))}
-                  </ol>
-                );
-              }
-              return paragraph ? (
-                <p key={index} className="text-white/80 mb-6 leading-relaxed">
-                  {paragraph}
-                </p>
-              ) : null;
-            })}
-          </div>
+          <div 
+            className="prose prose-invert prose-lg max-w-none"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mt-12 pt-8 border-t border-white/10">
