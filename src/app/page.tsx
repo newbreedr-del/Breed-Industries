@@ -5,7 +5,8 @@ import { Footer } from '@/components/layout/Footer';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronRight, ArrowRight, Zap, Rocket, Shield, CheckCircle2, Code2, Palette, FileText, Users } from 'lucide-react';
+import { ChevronRight, ArrowRight, Zap, Rocket, Shield, CheckCircle2, Code2, Palette, FileText, Users, Sprout } from 'lucide-react';
+import { FreshStartPopup } from '@/components/ui/FreshStartPopup';
 
 export default function Home() {
   const featuredServices = [
@@ -372,7 +373,49 @@ export default function Home() {
         </div>
       </section>
       
+      {/* Fresh Start — Minimal Callout */}
+      <section className="py-14 relative overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'linear-gradient(135deg, rgba(255,159,0,0.04) 0%, transparent 60%)' }}
+        />
+        <div className="container mx-auto px-4 relative z-10">
+          <div
+            className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 rounded-2xl px-8 py-7"
+            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,159,0,0.2)' }}
+          >
+            <div className="flex items-start gap-4">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                style={{ background: 'rgba(255,159,0,0.12)' }}
+              >
+                <Sprout size={18} style={{ color: '#FF9F00' }} strokeWidth={2.5} />
+              </div>
+              <div>
+                <p className="text-white font-bold text-base mb-1">
+                  Not ready for a full package yet?
+                </p>
+                <p className="text-white/50 text-sm leading-relaxed">
+                  <span style={{ color: '#FF9F00' }} className="font-semibold">Fresh Start</span> helps entrepreneurs access government and private funding first — then we build together.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/fresh-start"
+              className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-sm whitespace-nowrap transition-opacity hover:opacity-90"
+              style={{ background: '#FF9F00', color: '#0B1118' }}
+            >
+              Learn about Fresh Start
+              <ArrowRight size={15} strokeWidth={2.5} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <Footer />
+
+      {/* Fresh Start Popup — slides in from bottom-left on scroll */}
+      <FreshStartPopup />
     </>
   );
 }

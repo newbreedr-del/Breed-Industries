@@ -39,6 +39,7 @@ const navItems = [
     ]
   },
   { name: 'Build Package', path: '/build-package' },
+  { name: 'Fresh Start', path: '/fresh-start' },
   { name: 'Portfolio', path: '/portfolio' },
   { name: 'About', path: '/about' },
   { name: 'Contact', path: '/contact' },
