@@ -97,24 +97,36 @@ export async function POST(request: NextRequest) {
       <!-- What happens next -->
       <div style="background:#0B1118;border-radius:8px;padding:24px;margin-bottom:24px;">
         <p style="margin:0 0 16px;color:#FF9F00;font-size:12px;text-transform:uppercase;letter-spacing:2px;font-weight:700;">What Happens Next</p>
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          <div style="display:flex;align-items:flex-start;gap:12px;">
-            <div style="background:#FF9F00;color:#fff;font-weight:700;font-size:12px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-align:center;line-height:22px;">1</div>
-            <p style="margin:0;color:#ccc;font-size:13px;line-height:1.6;">We review your application and confirm the best-fit funding programmes for your situation.</p>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:12px;">
-            <div style="background:#FF9F00;color:#fff;font-weight:700;font-size:12px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-align:center;line-height:22px;">2</div>
-            <p style="margin:0;color:#ccc;font-size:13px;line-height:1.6;">We draft your application and engage with the relevant agencies on your behalf.</p>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:12px;">
-            <div style="background:#FF9F00;color:#fff;font-weight:700;font-size:12px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-align:center;line-height:22px;">3</div>
-            <p style="margin:0;color:#ccc;font-size:13px;line-height:1.6;">Once your funding is approved, your R1,000 commitment fee is deducted from your Breed Industries package.</p>
-          </div>
-        </div>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;">
+          <tr>
+            <td width="34" valign="top" style="padding-bottom:14px;">
+              <div style="background:#FF9F00;color:#0B1118;font-weight:700;font-size:11px;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;display:block;">1</div>
+            </td>
+            <td valign="top" style="padding-bottom:14px;">
+              <p style="margin:0;color:#ccc;font-size:13px;line-height:1.6;padding-top:3px;">We review your application and confirm the best-fit funding programmes for your situation.</p>
+            </td>
+          </tr>
+          <tr>
+            <td width="34" valign="top" style="padding-bottom:14px;">
+              <div style="background:#FF9F00;color:#0B1118;font-weight:700;font-size:11px;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;display:block;">2</div>
+            </td>
+            <td valign="top" style="padding-bottom:14px;">
+              <p style="margin:0;color:#ccc;font-size:13px;line-height:1.6;padding-top:3px;">We draft your application and engage with the relevant agencies on your behalf.</p>
+            </td>
+          </tr>
+          <tr>
+            <td width="34" valign="top">
+              <div style="background:#FF9F00;color:#0B1118;font-weight:700;font-size:11px;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;display:block;">3</div>
+            </td>
+            <td valign="top">
+              <p style="margin:0;color:#ccc;font-size:13px;line-height:1.6;padding-top:3px;">Once your funding is approved, your R1,000 commitment fee is deducted from your Breed Industries package.</p>
+            </td>
+          </tr>
+        </table>
       </div>
 
       <p style="color:#444;font-size:14px;margin:0 0 20px;">
-        If you have any questions in the meantime, reply to this email or reach us on WhatsApp at <a href="https://wa.me/27685037221" style="color:#FF9F00;">+27 68 503 7221</a>.
+        If you have any questions in the meantime, reply to this email or reach us on WhatsApp at <a href="https://wa.me/27604964105" style="color:#FF9F00;">+27 60 496 4105</a>.
       </p>
 
       <p style="color:#888;font-size:13px;margin:0;">Warm regards,<br /><strong style="color:#0B1118;">The Breed Industries Team</strong></p>

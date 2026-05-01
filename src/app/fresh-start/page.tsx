@@ -35,9 +35,9 @@ const fundingSources = [
     icon: <Users className="w-6 h-6" />,
     name: 'NYDA',
     fullName: 'National Youth Development Agency',
-    type: 'Government — Youth',
+    type: 'Government (Youth)',
     description:
-      'Grants and business development support for entrepreneurs aged 18–35. The NYDA is specifically designed to reduce barriers for young South Africans looking to start or grow a business.',
+      'Grants and business development support for entrepreneurs aged 18 to 35. The NYDA is specifically designed to reduce barriers for young South Africans looking to start or grow a business.',
     link: 'https://www.nyda.gov.za',
   },
   {
@@ -46,7 +46,7 @@ const fundingSources = [
     fullName: 'Angel Investors & Impact Funds',
     type: 'Private Sector',
     description:
-      'Beyond government programmes, we research relevant private funders and impact investors suited to your industry, stage, and business model — widening your chances of approval.',
+      'Beyond government programmes, we research relevant private funders and impact investors suited to your industry, stage, and business model. This widens your chances of approval.',
     link: null,
   },
   {
@@ -55,7 +55,7 @@ const fundingSources = [
     fullName: 'Industry-Specific Grants & Incentives',
     type: 'Targeted',
     description:
-      'Depending on your industry — agriculture, technology, construction, retail, creative — there may be targeted grants or incentive schemes we identify during the research phase.',
+      'Depending on your industry (agriculture, technology, construction, retail, creative), there may be targeted grants or incentive schemes we identify during the research phase.',
     link: null,
   },
 ];
@@ -66,21 +66,21 @@ const steps = [
     number: '01',
     title: 'Pay R1,000 Commitment Fee',
     description:
-      'A once-off fee that covers our research, application writing, and agency engagement on your behalf. It\'s not a deposit — it\'s an investment in the work we do for you.',
+      'A once-off fee that covers our research, application writing, and agency engagement on your behalf. This is not a deposit. It is payment for the work we do for you.',
     note: 'Credited in full to your Breed Industries package once funding is approved.',
   },
   {
     number: '02',
     title: 'We Research & Apply',
     description:
-      'We assess your business type, sector, and circumstances against available funding programmes — then draft and submit your application, and engage directly with the agencies.',
+      'We assess your business type, sector, and circumstances against available funding programmes. We then draft and submit your application, and engage directly with the agencies.',
     note: 'SEDFA, NYDA, private funders, and sector-specific programmes.',
   },
   {
     number: '03',
-    title: 'Funding Approved — Build Together',
+    title: 'Funding Approved. Build Together.',
     description:
-      'Once your funding comes through, choose the Breed Industries package that fits your goals. Your R1,000 is deducted from the cost, and we start building.',
+      'Once your funding comes through, choose the Breed Industries package that fits your goals. Your R1,000 is deducted from the cost and we start building.',
     note: 'From branding and registration to websites and full digital solutions.',
   },
 ];
@@ -93,7 +93,7 @@ const faqs = [
   },
   {
     q: 'Do you guarantee my funding will be approved?',
-    a: 'No — and any service that promises this should be treated with caution. Funding approvals are decided by third-party agencies based on their own eligibility criteria. We do everything possible to submit a strong application, but we cannot guarantee outcomes.',
+    a: 'No. Any service that promises this should be treated with caution. Funding approvals are decided by third-party agencies based on their own eligibility criteria. We do everything possible to submit a strong application, but we cannot guarantee outcomes.',
   },
   {
     q: 'Do you take a percentage of my funding?',
@@ -105,7 +105,7 @@ const faqs = [
   },
   {
     q: 'How long does the process take?',
-    a: 'The timeline varies by funding body — government programmes typically take 4–12 weeks to process. We\'ll give you realistic expectations based on the specific programmes we\'re pursuing for you.',
+    a: 'The timeline varies by funding body. Government programmes typically take between 4 and 12 weeks to process. We will give you realistic expectations based on the specific programmes we are pursuing for you.',
   },
   {
     q: 'Can I apply if I haven\'t registered my business yet?',
@@ -185,7 +185,7 @@ function ApplicationForm() {
         </div>
         <h3 className="text-white text-2xl font-bold mb-3">Application Received</h3>
         <p className="text-white/60 mb-4 max-w-sm mx-auto text-sm leading-relaxed">
-          We've sent your Fresh Start Welcome Pack to your email — check your inbox (and spam, just in case). Our team will be in touch within 1–2 business days.
+          We've sent your Fresh Start Welcome Pack to your email. Check your inbox (and spam folder, just in case). Our team will be in touch within 1 to 2 business days.
         </p>
         {refNumber && (
           <div
@@ -197,7 +197,7 @@ function ApplicationForm() {
           </div>
         )}
         <a
-          href={`https://wa.me/27685037221?text=Hi, I just submitted a Fresh Start application. My reference is ${refNumber}.`}
+          href={`https://wa.me/27604964105?text=Hi, I just submitted a Fresh Start application. My reference is ${refNumber}.`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-sm text-white/50 hover:text-white/80 transition-colors"
@@ -490,7 +490,7 @@ export default function FreshStartPage() {
                 variants={fadeUp}
                 className="text-white/60 text-lg leading-relaxed mb-10 max-w-xl mx-auto"
               >
-                Fresh Start is for entrepreneurs who aren't ready for a full Breed Industries package yet — not because they lack ambition, but because they lack access. We help you unlock government and private funding first, then build together.
+                Fresh Start is for entrepreneurs who aren't ready for a full Breed Industries package yet. Not because they lack ambition, but because they lack access. We help you unlock government and private funding first, then we build together.
               </motion.p>
 
               <motion.div
@@ -502,7 +502,7 @@ export default function FreshStartPage() {
                   className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg font-bold text-sm transition-opacity hover:opacity-90"
                   style={{ background: '#FF9F00', color: '#0B1118' }}
                 >
-                  Apply Now — R1,000 to Start
+                  Apply Now (R1,000 to Start)
                   <ArrowRight size={17} strokeWidth={2.5} />
                 </a>
                 <a
@@ -613,7 +613,7 @@ export default function FreshStartPage() {
                 We know where to look
               </motion.h2>
               <motion.p variants={fadeUp} className="text-white/50 text-sm max-w-xl mx-auto">
-                We research and engage with multiple funding bodies — not just one. Every client's situation is different, and we match you to the programmes you're most likely to qualify for.
+                We research and engage with multiple funding bodies, not just one. Every situation is different and we match you to the programmes you are most likely to qualify for.
               </motion.p>
             </motion.div>
 
@@ -689,11 +689,11 @@ export default function FreshStartPage() {
               <div className="flex items-start gap-4">
                 <FileText style={{ color: '#FF9F00', flexShrink: 0 }} size={22} className="mt-1" />
                 <div>
-                  <h3 className="text-white font-bold text-base mb-3">Key Terms — Plain Language</h3>
+                  <h3 className="text-white font-bold text-base mb-3">Key Terms in Plain Language</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-3">
                     {[
                       'The R1,000 commitment fee is non-refundable as a standalone payment, but credited in full to your Breed Industries package on approval.',
-                      'We do not guarantee funding approval — decisions rest with third-party agencies.',
+                      'We do not guarantee funding approval. Decisions rest with third-party agencies.',
                       'We never take a percentage of your approved funding. Fixed fee only.',
                       'You are responsible for providing accurate information for your application.',
                       'Your data is handled confidentially and used only for application purposes.',

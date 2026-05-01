@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fresh Start Service Agreement – The Breed Industries</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      font-size: 11pt;
+      color: #1a1a1a;
+      background: #fff;
+      line-height: 1.7;
+    }
+
+    /* ── Letterhead ── */
+    .letterhead {
+      background: #0B1118;
+      padding: 32px 48px 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .letterhead-brand { color: #fff; }
+    .letterhead-brand .company { font-family: Arial, sans-serif; font-size: 20pt; font-weight: 700; letter-spacing: 3px; }
+    .letterhead-brand .sub { font-family: Arial, sans-serif; font-size: 8pt; letter-spacing: 5px; color: #FF9F00; margin-top: 2px; }
+    .letterhead-contact { color: #999; font-size: 8.5pt; text-align: right; font-family: Arial, sans-serif; line-height: 1.8; }
+    .letterhead-contact a { color: #FF9F00; text-decoration: none; }
+
+    .accent-bar { background: #FF9F00; height: 4px; }
+    .doc-title-bar {
+      background: #f7f7f7;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 18px 48px;
+      font-family: Arial, sans-serif;
+    }
+    .doc-title-bar h1 { font-size: 14pt; color: #0B1118; font-weight: 700; letter-spacing: 1px; }
+    .doc-title-bar .doc-sub { font-size: 9pt; color: #888; margin-top: 3px; }
+
+    /* ── Body ── */
+    .body { padding: 36px 48px 48px; max-width: 820px; margin: 0 auto; }
+
+    .parties-block {
+      background: #f9f9f9;
+      border-left: 4px solid #FF9F00;
+      padding: 18px 22px;
+      margin-bottom: 28px;
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+    }
+    .parties-block .label { color: #888; font-size: 8.5pt; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .parties-block .value { color: #0B1118; font-weight: 700; }
+    .parties-block .party-row { display: flex; gap: 48px; flex-wrap: wrap; }
+    .parties-block .party { flex: 1; min-width: 200px; }
+
+    .field-line {
+      border-bottom: 1px solid #333;
+      display: inline-block;
+      min-width: 220px;
+      margin-left: 8px;
+      vertical-align: bottom;
+    }
+
+    h2 {
+      font-family: Arial, sans-serif;
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #0B1118;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin: 28px 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #FF9F00;
+    }
+
+    p { margin-bottom: 10px; }
+
+    ul, ol { padding-left: 20px; margin-bottom: 12px; }
+    li { margin-bottom: 6px; }
+
+    .clause { margin-bottom: 8px; }
+    .clause strong { color: #0B1118; }
+
+    .highlight-box {
+      background: #fffbf0;
+      border: 1px solid #FF9F00;
+      border-radius: 4px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 10.5pt;
+    }
+
+    /* ── Signature Block ── */
+    .signature-section {
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid #ddd;
+    }
+    .sig-grid { display: flex; gap: 40px; flex-wrap: wrap; margin-top: 16px; }
+    .sig-party { flex: 1; min-width: 220px; }
+    .sig-party .party-label {
+      font-family: Arial, sans-serif;
+      font-size: 9pt;
+      font-weight: 700;
+      color: #0B1118;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 30px;
+    }
+    .sig-line { border-bottom: 1px solid #333; width: 100%; margin-bottom: 6px; height: 28px; }
+    .sig-field { font-family: Arial, sans-serif; font-size: 8.5pt; color: #666; margin-bottom: 18px; }
+
+    /* ── Footer ── */
+    .doc-footer {
+      background: #0B1118;
+      color: #666;
+      font-family: Arial, sans-serif;
+      font-size: 8pt;
+      text-align: center;
+      padding: 14px 48px;
+      margin-top: 48px;
+    }
+
+    @media print {
+      body { font-size: 10.5pt; }
+      .letterhead { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .accent-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .doc-title-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .doc-footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      h2 { page-break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Letterhead -->
+  <div class="letterhead">
+    <div class="letterhead-brand">
+      <div class="company">BREED</div>
+      <div class="sub">INDUSTRIES</div>
+    </div>
+    <div class="letterhead-contact">
+      The Breed Industries (PTY) LTD<br />
+      12 Kings Road, Pinetown, Durban 3610<br />
+      +27 60 496 4105<br />
+      <a href="mailto:info@thebreed.co.za">info@thebreed.co.za</a><br />
+      <a href="https://www.thebreed.co.za">www.thebreed.co.za</a>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+
+  <!-- Document Title -->
+  <div class="doc-title-bar">
+    <h1>Fresh Start Funding Assistance Service Agreement</h1>
+    <div class="doc-sub">Agreement Number: FS-_____________ &nbsp;&nbsp;|&nbsp;&nbsp; Date: _____________________</div>
+  </div>
+
+  <div class="body">
+
+    <!-- Parties -->
+    <div class="parties-block">
+      <p class="label">This agreement is entered into between:</p>
+      <div class="party-row">
+        <div class="party">
+          <div class="label">Service Provider</div>
+          <div class="value">The Breed Industries (PTY) LTD</div>
+          Registration No: (PTY) LTD<br />
+          12 Kings Road, Pinetown, Durban 3610<br />
+          +27 60 496 4105 | info@thebreed.co.za
+        </div>
+        <div class="party">
+          <div class="label">Client</div>
+          Full Name: <span class="field-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br /><br />
+          ID Number: <span class="field-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br /><br />
+          Email: <span class="field-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br /><br />
+          Phone: <span class="field-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        </div>
+      </div>
+    </div>
+
+    <p>The parties agree as follows:</p>
+
+    <!-- 1. Purpose -->
+    <h2>1. Purpose of This Agreement</h2>
+    <p>
+      This Agreement governs the provision of the <strong>Fresh Start Funding Assistance Service</strong> by The Breed Industries (PTY) LTD ("the Service Provider") to the individual identified above ("the Client"). The purpose of this service is to assist the Client in identifying suitable funding programmes and preparing and submitting funding applications on the Client's behalf.
+    </p>
+    <p>
+      This Agreement does not constitute a guarantee of funding approval and does not create a relationship of employment, agency, or financial intermediary between the parties beyond the scope described herein.
+    </p>
+
+    <!-- 2. Scope of Service -->
+    <h2>2. Scope of Service</h2>
+    <p>The Service Provider agrees to perform the following services on behalf of the Client:</p>
+    <ol>
+      <li><strong>Funding Suitability Assessment:</strong> A review of the Client's business idea, sector, and personal circumstances to identify the most appropriate government and private funding programmes available.</li>
+      <li><strong>Application Drafting:</strong> Preparation of the funding application, including motivation letters, business summaries, and supporting documentation as required by the relevant funding body.</li>
+      <li><strong>Agency Engagement:</strong> Where permitted by the relevant agency, the Service Provider will submit the application on the Client's behalf and follow up on the application status.</li>
+      <li><strong>Programme Research:</strong> Research into government institutions including SEDFA (Small Enterprise Development and Finance Agency), the NYDA (National Youth Development Agency), and other applicable private or sector-specific funding bodies based on the Client's profile.</li>
+    </ol>
+    <p>
+      Services not listed above are not included in this Agreement and will require a separate written quotation.
+    </p>
+
+    <!-- 3. Commitment Fee -->
+    <h2>3. Commitment Fee and Payment Terms</h2>
+
+    <div class="highlight-box">
+      <strong>Commitment Fee: R1,000.00 (One Thousand Rand)</strong><br />
+      This fee is due and payable before any service work commences. Work will not begin until payment has been received and confirmed.
+    </div>
+
+    <p>The Commitment Fee is structured as follows:</p>
+    <ul>
+      <li><strong>Non-refundable as a standalone payment:</strong> The R1,000 Commitment Fee is earned by the Service Provider upon receipt and applied immediately toward the cost of research, application drafting, and agency engagement. It is not a deposit and is not refundable in the event that a funding application is declined or unsuccessful.</li>
+      <li><strong>Credited to a Breed Industries Service Package:</strong> Should the Client's funding application be approved and the Client proceeds to engage the Service Provider for any business service package (such as branding, registration, digital solutions, or a combination thereof), the full R1,000 Commitment Fee will be deducted from the agreed package price at the time of invoicing.</li>
+      <li><strong>No further obligation to purchase:</strong> The credit is offered as an incentive and goodwill gesture. The Client is not legally obligated to purchase any further service from the Service Provider following the conclusion of the Fresh Start programme.</li>
+    </ul>
+
+    <p>Payment must be made via EFT to the following account:</p>
+    <div class="highlight-box">
+      Bank: Standard Bank &nbsp;|&nbsp; Account Name: The Breed Industries (PTY) LTD<br />
+      Account Number: 10268731932 &nbsp;|&nbsp; Branch Code: 051001 &nbsp;|&nbsp; SWIFT: SBZA ZA JJ<br />
+      Reference: Client Full Name + "FS"
+    </div>
+
+    <!-- 4. No Guarantee -->
+    <h2>4. No Guarantee of Funding Approval</h2>
+    <p>
+      The Client acknowledges and accepts that the Service Provider cannot and does not guarantee the approval of any funding application. All approval decisions are made exclusively by the relevant funding agencies (including SEDFA, the NYDA, and any private funders) in accordance with their own eligibility criteria, internal policies, and available budgets.
+    </p>
+    <p>
+      The Service Provider undertakes to prepare the strongest possible application based on the information provided by the Client. However, a declined application does not constitute a failure of service and does not entitle the Client to a refund of the Commitment Fee.
+    </p>
+    <p>
+      If the Service Provider determines, during the assessment phase, that the Client is unlikely to qualify for any of the programmes researched, the Service Provider will advise the Client in writing before proceeding further.
+    </p>
+
+    <!-- 5. No Commission -->
+    <h2>5. No Commission on Approved Funds</h2>
+    <p>
+      The Service Provider confirms that it does not charge any commission, success fee, percentage, or any other amount calculated against the value of funding approved for and received by the Client. The only fee under this Agreement is the R1,000 Commitment Fee described in Clause 3.
+    </p>
+    <p>
+      The Service Provider does not act as a financial intermediary and does not receive remuneration from any funding agency in connection with the Client's application.
+    </p>
+
+    <!-- 6. Client Obligations -->
+    <h2>6. Client Obligations</h2>
+    <p>The Client agrees to:</p>
+    <ol>
+      <li>Provide accurate, complete, and truthful information for use in funding applications, including personal details, business information, financial history, and any other relevant documentation requested by the Service Provider or the funding agency.</li>
+      <li>Notify the Service Provider promptly of any changes in circumstances that may affect the funding application.</li>
+      <li>Respond to requests for additional information or documentation within 5 business days of receiving such a request. Failure to do so may cause delays for which the Service Provider bears no responsibility.</li>
+      <li>Not submit applications to the same funding agencies independently or through any other service provider simultaneously, without prior written disclosure to the Service Provider.</li>
+    </ol>
+    <p>
+      The Service Provider will not be liable for the rejection of any application resulting from inaccurate, incomplete, or misleading information provided by the Client. Should such information be found to be deliberately false, this Agreement may be terminated immediately without refund.
+    </p>
+
+    <!-- 7. Confidentiality and Data Protection -->
+    <h2>7. Confidentiality and Data Protection</h2>
+    <p>
+      Both parties agree to treat all information shared in connection with this Agreement as confidential. The Service Provider will not disclose the Client's personal or business information to any third party other than the funding agencies directly involved in the application process, without the Client's prior written consent.
+    </p>
+    <p>
+      All personal information is collected and processed in accordance with the <strong>Protection of Personal Information Act 4 of 2013 (POPIA)</strong>. The Client consents to the Service Provider collecting and processing personal information for the purpose of delivering the Fresh Start service. The Client has the right to access, correct, or request deletion of personal information held by the Service Provider at any time.
+    </p>
+
+    <!-- 8. Limitation of Liability -->
+    <h2>8. Limitation of Liability</h2>
+    <p>
+      To the fullest extent permitted by South African law, the Service Provider shall not be liable for any indirect, consequential, or incidental loss or damage arising from the provision of services under this Agreement, including but not limited to loss of business opportunity, loss of anticipated funding, or reputational damage.
+    </p>
+    <p>
+      The Service Provider's total liability under this Agreement, for any cause and in any circumstance, shall not exceed the amount of the Commitment Fee paid by the Client (R1,000.00).
+    </p>
+
+    <!-- 9. Timeline -->
+    <h2>9. Service Timeline</h2>
+    <p>
+      The Service Provider will begin the funding suitability assessment within 2 business days of receiving the signed Agreement and confirmed Commitment Fee payment. Application drafting and submission timelines will be communicated to the Client in writing following the initial assessment.
+    </p>
+    <p>
+      Funding application processing timelines are determined by the relevant agencies and are outside the control of the Service Provider. Government programmes such as SEDFA and the NYDA typically take between 4 and 12 weeks to process applications. The Service Provider will provide regular updates to the Client on application status as information becomes available.
+    </p>
+
+    <!-- 10. Termination -->
+    <h2>10. Termination</h2>
+    <p>
+      Either party may terminate this Agreement by providing written notice to the other party. The following conditions apply:
+    </p>
+    <ul>
+      <li><strong>Termination by the Client:</strong> The Client may cancel this Agreement at any time. However, the Commitment Fee is non-refundable regardless of the stage of service at the time of cancellation, as work will have commenced upon receipt of payment and the signed Agreement.</li>
+      <li><strong>Termination by the Service Provider:</strong> The Service Provider may terminate this Agreement if the Client provides false information, fails to cooperate, or engages in conduct that makes it impractical to continue providing the service. In such cases, the Commitment Fee will not be refunded.</li>
+      <li><strong>Mutual Agreement:</strong> Both parties may agree in writing to terminate the Agreement on mutually acceptable terms.</li>
+    </ul>
+
+    <!-- 11. Entire Agreement -->
+    <h2>11. Entire Agreement and Amendments</h2>
+    <p>
+      This Agreement constitutes the entire agreement between the parties regarding the Fresh Start Funding Assistance Service and supersedes all prior discussions, proposals, or representations, whether written or verbal. Any amendments to this Agreement must be made in writing and signed by both parties to be valid.
+    </p>
+
+    <!-- 12. Governing Law -->
+    <h2>12. Governing Law and Dispute Resolution</h2>
+    <p>
+      This Agreement is governed by the laws of the Republic of South Africa. The parties agree to first attempt to resolve any dispute arising from this Agreement through good-faith negotiation. If a dispute cannot be resolved within 14 business days of one party notifying the other in writing, the matter may be referred to a mutually agreed mediator before any legal proceedings are instituted.
+    </p>
+    <p>
+      This Agreement is subject to the <strong>Consumer Protection Act 68 of 2008</strong>, the <strong>Electronic Communications and Transactions Act 25 of 2002</strong>, and the <strong>Protection of Personal Information Act 4 of 2013</strong>.
+    </p>
+
+    <!-- 13. Acknowledgement -->
+    <h2>13. Acknowledgement</h2>
+    <p>
+      By signing below, both parties confirm that they have read, understood, and agree to the terms of this Agreement. The Client further confirms that no representations have been made to them regarding guaranteed funding outcomes and that they understand the nature and limitations of the Fresh Start service.
+    </p>
+
+    <!-- Signature Block -->
+    <div class="signature-section">
+      <div class="sig-grid">
+
+        <div class="sig-party">
+          <div class="party-label">For and on behalf of:<br />The Breed Industries (PTY) LTD</div>
+          <div class="sig-line"></div>
+          <div class="sig-field">Signature</div>
+          <div class="sig-line"></div>
+          <div class="sig-field">Full Name &amp; Designation</div>
+          <div class="sig-line"></div>
+          <div class="sig-field">Date</div>
+        </div>
+
+        <div class="sig-party">
+          <div class="party-label">Signed by the Client</div>
+          <div class="sig-line"></div>
+          <div class="sig-field">Signature</div>
+          <div class="sig-line"></div>
+          <div class="sig-field">Full Name</div>
+          <div class="sig-line"></div>
+          <div class="sig-field">Date</div>
+          <div class="sig-line"></div>
+          <div class="sig-field">ID Number</div>
+        </div>
+
+      </div>
+
+      <p style="margin-top:24px;font-size:9pt;color:#888;font-family:Arial,sans-serif;">
+        This document was prepared by The Breed Industries (PTY) LTD. Both parties should retain a signed copy for their records.
+        For queries, contact <a href="mailto:info@thebreed.co.za" style="color:#FF9F00;">info@thebreed.co.za</a> or call +27 60 496 4105.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="doc-footer">
+    The Breed Industries (PTY) LTD &nbsp;·&nbsp; 12 Kings Road, Pinetown, Durban 3610 &nbsp;·&nbsp;
+    info@thebreed.co.za &nbsp;·&nbsp; +27 60 496 4105 &nbsp;·&nbsp; www.thebreed.co.za
+  </div>
+
+</body>
+</html>

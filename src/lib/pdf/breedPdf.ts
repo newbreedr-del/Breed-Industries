@@ -319,12 +319,13 @@ export class BreedPDF {
     steps.forEach((step) => {
       this.checkPageBreak(24);
 
-      // Step number circle
+      // Step number circle — center Y is currentY+5, radius 5
+      // For Helvetica Bold 9pt, cap height ~2.3mm, so baseline = center + ~1.1
       this.doc.setFillColor(...ORANGE);
       this.doc.circle(MARGIN + 5, this.currentY + 5, 5, 'F');
-      this.setFont('bold', 10);
+      this.setFont('bold', 9);
       this.doc.setTextColor(...WHITE);
-      this.doc.text(step.number, MARGIN + 5, this.currentY + 7.5, { align: 'center' });
+      this.doc.text(step.number, MARGIN + 5, this.currentY + 6.1, { align: 'center' });
 
       // Title
       this.setFont('bold', 10);
@@ -435,25 +436,22 @@ export function generateFreshStartPDF(opts: {
   );
 
   // ── How It Works ─────────────────────────────────────────────────────────────
-  pdf.addSection('How Fresh Start Works', '');
+  pdf.addSection(`How Fresh Start Works`, ``);
   pdf.addSteps([
     {
-      number: '1',
-      title: 'Commitment Fee — R1,000',
-      description:
-        'A once-off R1,000 commitment fee is required to begin. This fee covers our initial research, application preparation, and agency engagement on your behalf. It is non-refundable as a standalone payment — however, it is fully credited and deducted from the cost of your chosen Breed Industries service package once your funding is approved and you proceed with us.',
+      number: `1`,
+      title: `Commitment Fee — R1,000`,
+      description: `A once-off R1,000 commitment fee is required to begin. This fee covers our initial research, application preparation, and agency engagement on your behalf. It is non-refundable as a standalone payment — however, it is fully credited and deducted from the cost of your chosen Breed Industries service package once your funding is approved and you proceed with us.`,
     },
     {
-      number: '2',
-      title: 'Funding Research & Application',
-      description:
-        'We research the best-fit funding programmes for your specific business type, sector, and circumstances — including government institutions such as SEDFA, the NYDA, and selected private funding bodies. We draft and submit your application on your behalf, and where permitted, engage with agencies directly to advocate for your application.',
+      number: `2`,
+      title: `Funding Research & Application`,
+      description: `We research the best-fit funding programmes for your specific business type, sector, and circumstances — including government institutions such as SEDFA, the NYDA, and selected private funding bodies. We draft and submit your application on your behalf, and where permitted, engage with agencies directly to advocate for your application.`,
     },
     {
-      number: '3',
-      title: 'Funding Approved — Build Together',
-      description:
-        'Once your funding comes through, your R1,000 commitment fee is deducted from the final cost of your Breed Industries package. You choose the package that fits your business goals, and we get to work building what you set out to create from the start.',
+      number: `3`,
+      title: `Funding Approved — Build Together`,
+      description: `Once your funding comes through, your R1,000 commitment fee is deducted from the final cost of your Breed Industries package. You choose the package that fits your business goals, and we get to work building what you set out to create from the start.`,
     },
   ]);
 
@@ -461,95 +459,91 @@ export function generateFreshStartPDF(opts: {
 
   // ── Funding Sources ──────────────────────────────────────────────────────────
   pdf.addSection(
-    'Funding Sources We Work With',
-    'We research and engage with the following programmes on your behalf. Each client\'s situation is different — we identify which sources are most suitable for your business type, stage, and sector.'
+    `Funding Sources We Work With`,
+    `We research and engage with the following programmes on your behalf. Every situation is different — we identify which sources are most suitable for your business type, stage, and sector.`
   );
 
   pdf.addFundingCards([
     {
-      name: 'SEDFA',
-      type: 'Government',
-      description:
-        'The Small Enterprise Development and Finance Agency (formerly SEDA + SEFA, merged October 2024). Offers both non-financial development support and direct financing for SMMEs.',
+      name: `SEDFA`,
+      type: `Government`,
+      description: `The Small Enterprise Development and Finance Agency (formerly SEDA + SEFA, merged October 2024). Offers both non-financial development support and direct financing for SMMEs.`,
     },
     {
-      name: 'NYDA',
-      type: 'Government — Youth',
-      description:
-        'The National Youth Development Agency provides grants and business development support specifically for entrepreneurs aged 18–35. Ideal for young founders starting out.',
+      name: `NYDA`,
+      type: `Government — Youth`,
+      description: `The National Youth Development Agency provides grants and business development support specifically for entrepreneurs aged 18-35. Ideal for young founders starting out.`,
     },
     {
-      name: 'Private Funding',
-      type: 'Private Sector',
-      description:
-        'We research relevant private funders, angel investors, and impact funds suited to your industry and business model — not just government programmes.',
+      name: `Private Funding`,
+      type: `Private Sector`,
+      description: `We research relevant private funders, angel investors, and impact funds suited to your industry and business model — not just government programmes.`,
     },
     {
-      name: 'Sector-Specific Programmes',
-      type: 'Targeted',
-      description:
-        'Depending on your industry (agriculture, tech, construction, retail, etc.) there may be sector-specific grants or incentives we identify during our research phase.',
+      name: `Sector-Specific Programmes`,
+      type: `Targeted`,
+      description: `Depending on your industry (agriculture, tech, construction, retail, etc.) there may be sector-specific grants or incentives we identify during our research phase.`,
     },
   ]);
 
   pdf.addSpacer(4);
 
   // ── What's Included ───────────────────────────────────────────────────────────
-  pdf.addList('What Your R1,000 Covers', [
+  pdf.addList(`What Your R1,000 Covers`, [
     {
-      label: 'Funding Suitability Assessment',
-      note: 'We assess your business idea, sector, and circumstances against available programmes to identify the best-fit funding opportunities.',
+      label: `Funding Suitability Assessment`,
+      note: `We assess your business idea, sector, and circumstances against available programmes to identify the best-fit funding opportunities.`,
     },
     {
-      label: 'Application Drafting',
-      note: 'We write your funding application — including motivation letters, business summaries, and any supporting documentation required.',
+      label: `Application Drafting`,
+      note: `We write your funding application — including motivation letters, business summaries, and any supporting documentation required.`,
     },
     {
-      label: 'Agency Engagement',
-      note: 'Where permitted, we engage with the funding agency directly and follow up on your application status.',
+      label: `Agency Engagement`,
+      note: `Where permitted, we engage with the funding agency directly and follow up on your application status.`,
     },
     {
-      label: 'R1,000 Credited to Your Package',
-      note: 'Should your funding be approved and you proceed with a Breed Industries service package, this amount is deducted in full from your package cost.',
+      label: `R1,000 Credited to Your Package`,
+      note: `Should your funding be approved and you proceed with a Breed Industries service package, this amount is deducted in full from your package cost.`,
     },
   ]);
 
   pdf.addSpacer(4);
 
   // ── Legal Terms ───────────────────────────────────────────────────────────────
-  pdf.addSection('Terms & Conditions Summary', '');
+  pdf.addSection(`Terms & Conditions Summary`, ``);
 
   pdf.addCallout(
-    'The following is a plain-language summary of the key terms governing this service. The full service agreement will be provided and must be signed prior to commencement of any funding research or application work.',
-    'legal'
+    `The following is a plain-language summary of the key terms governing this service. The full service agreement will be provided and must be signed prior to commencement of any funding research or application work.`,
+    `legal`
   );
 
   pdf.addSpacer(4);
 
-  pdf.addList('Key Terms', [
+  pdf.addList(`Key Terms`, [
     {
-      label: 'Commitment Fee',
-      note: 'R1,000 is payable upfront and is non-refundable as a standalone fee. It is credited in full against your Breed Industries package upon funding approval and package selection.',
+      label: `Commitment Fee`,
+      note: `R1,000 is payable upfront and is non-refundable as a standalone fee. It is credited in full against your Breed Industries package upon funding approval and package selection.`,
     },
     {
-      label: 'No Guarantee of Funding',
-      note: 'Breed Industries acts as a service provider and funding facilitator. We do not guarantee the approval of any funding application. Outcomes depend on the client\'s eligibility and the decisions of third-party agencies.',
+      label: `No Guarantee of Funding`,
+      note: `Breed Industries acts as a service provider and funding facilitator. We do not guarantee the approval of any funding application. Outcomes depend on the client's eligibility and the decisions of third-party agencies.`,
     },
     {
-      label: 'No Commission or Percentage of Funds',
-      note: 'We do not charge a percentage of your approved funding. Our fee structure is fixed and transparent: R1,000 upfront, credited to your package.',
+      label: `No Commission or Percentage of Funds`,
+      note: `We do not charge a percentage of your approved funding. Our fee structure is fixed and transparent: R1,000 upfront, credited to your package.`,
     },
     {
-      label: 'Client Responsibility',
-      note: 'The client is responsible for providing accurate and truthful information for inclusion in applications. Breed Industries is not liable for applications declined due to inaccurate information provided by the client.',
+      label: `Client Responsibility`,
+      note: `The client is responsible for providing accurate and truthful information for inclusion in applications. Breed Industries is not liable for applications declined due to inaccurate information provided by the client.`,
     },
     {
-      label: 'Data & Confidentiality',
-      note: 'All personal and business information provided is handled confidentially and used solely for the purpose of preparing and submitting funding applications. Your data will not be shared with third parties beyond the funding agencies involved.',
+      label: `Data & Confidentiality`,
+      note: `All personal and business information provided is handled confidentially and used solely for the purpose of preparing and submitting funding applications. Your data will not be shared with third parties beyond the funding agencies involved.`,
     },
     {
-      label: 'Governing Law',
-      note: 'This agreement is governed by the laws of the Republic of South Africa, including the Consumer Protection Act 68 of 2008 and the Electronic Communications and Transactions Act 25 of 2002.',
+      label: `Governing Law`,
+      note: `This agreement is governed by the laws of the Republic of South Africa, including the Consumer Protection Act 68 of 2008 and the Electronic Communications and Transactions Act 25 of 2002.`,
     },
   ]);
 

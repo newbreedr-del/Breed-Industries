@@ -7,8 +7,9 @@ import { usePathname } from 'next/navigation';
 import { X, Sprout, ArrowRight } from 'lucide-react';
 
 const STORAGE_KEY = 'fresh_start_popup_dismissed';
-const SCROLL_THRESHOLD = 0.28;   // trigger at 28% scroll depth
-const TIME_FALLBACK_MS = 18000;  // or after 18 seconds, whichever comes first
+const SCROLL_THRESHOLD = 0.55;   // trigger at 55% scroll depth
+const SCROLL_DELAY_MS  = 2000;   // wait 2s after threshold before showing
+const TIME_FALLBACK_MS = 45000;  // or after 45 seconds, whichever comes first
 
 // Pages where the popup should never appear
 const EXCLUDED_PATHS = ['/fresh-start', '/build-package', '/contact', '/admin'];
@@ -41,13 +42,16 @@ export function FreshStartPopup() {
       if (sessionStorage.getItem(STORAGE_KEY)) return;
     } catch { /* noop */ }
 
-    // Scroll-based trigger
+    // Scroll-based trigger — fires after threshold + a short pause
+    let scrollTimer: ReturnType<typeof setTimeout> | null = null;
     const handleScroll = () => {
       if (triggered) return;
       const total = document.documentElement.scrollHeight - window.innerHeight;
       if (total <= 0) return;
       const ratio = window.scrollY / total;
-      if (ratio >= SCROLL_THRESHOLD) trigger();
+      if (ratio >= SCROLL_THRESHOLD && !scrollTimer) {
+        scrollTimer = setTimeout(trigger, SCROLL_DELAY_MS);
+      }
     };
 
     // Time-based fallback — show after TIME_FALLBACK_MS regardless of scroll
@@ -57,6 +61,7 @@ export function FreshStartPopup() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
       clearTimeout(timer);
+      if (scrollTimer) clearTimeout(scrollTimer);
     };
   }, [shouldExclude, trigger, triggered]);
 
