@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Save, Eye, Trash2 } from 'lucide-react';
 import { ImageUpload } from '@/components/ui/ImageUpload';
+import { BlogEditor } from '@/components/blog/BlogEditor';
 
 interface BlogPost {
   slug: string;
@@ -255,24 +256,10 @@ export default function EditBlogPost() {
                   {formData.status}
                 </span>
               </div>
-              <div className="prose prose-invert max-w-none">
-                {formData.content.split('\n').map((paragraph, i) => {
-                  if (paragraph.startsWith('## ')) {
-                    return <h2 key={i} className="text-2xl font-bold text-white mt-8 mb-4">{paragraph.replace('## ', '')}</h2>;
-                  }
-                  if (paragraph.startsWith('### ')) {
-                    return <h3 key={i} className="text-xl font-bold text-white mt-6 mb-3">{paragraph.replace('### ', '')}</h3>;
-                  }
-                  if (paragraph.startsWith('- ')) {
-                    return (
-                      <ul key={i} className="list-disc list-inside mb-4">
-                        <li className="text-white/80">{paragraph.replace('- ', '')}</li>
-                      </ul>
-                    );
-                  }
-                  return paragraph ? <p key={i} className="text-white/80 mb-4">{paragraph}</p> : null;
-                })}
-              </div>
+              <div 
+                className="prose prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ __html: formData.content }}
+              />
             </div>
           </div>
         ) : (
@@ -385,11 +372,9 @@ export default function EditBlogPost() {
             {/* Content */}
             <div>
               <label className="block text-white/70 text-sm mb-2">Content *</label>
-              <textarea
-                value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                rows={20}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-accent font-mono text-sm"
+              <BlogEditor
+                content={formData.content}
+                onChange={(content) => setFormData({ ...formData, content })}
               />
             </div>
           </div>

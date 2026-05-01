@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Save, Eye } from 'lucide-react';
 import { ImageUpload } from '@/components/ui/ImageUpload';
+import { BlogEditor } from '@/components/blog/BlogEditor';
 
 export default function NewBlogPost() {
   const router = useRouter();
@@ -164,11 +165,10 @@ export default function NewBlogPost() {
                 <span>{new Date().toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                 <span>{formData.readTime}</span>
               </div>
-              <div className="prose prose-invert max-w-none">
-                {formData.content.split('\n').map((paragraph, i) => (
-                  <p key={i} className="text-white/80 mb-4">{paragraph}</p>
-                ))}
-              </div>
+              <div 
+                className="prose prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ __html: formData.content || '<p>Start writing your content...</p>' }}
+              />
             </div>
           </div>
         ) : (
@@ -279,20 +279,18 @@ export default function NewBlogPost() {
             {/* Content */}
             <div>
               <label className="block text-white/70 text-sm mb-2">Content *</label>
-              <textarea
-                value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                placeholder="Write your blog post content here... Use markdown formatting: # for headings, ## for subheadings, etc."
-                rows={20}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-accent font-mono text-sm"
+              <BlogEditor
+                content={formData.content}
+                onChange={(content) => setFormData({ ...formData, content })}
               />
             </div>
 
             {/* Tips */}
-            <div className="glass-card p-4 bg-yellow-500/10 border-yellow-500/30">
-              <p className="text-yellow-200 text-sm">
-                <strong>Markdown Tips:</strong> Use # for main title, ## for sections, ### for subsections. 
-                Leave blank lines between paragraphs. The preview will show formatted output.
+            <div className="glass-card p-4 bg-accent/10 border-accent/30">
+              <p className="text-accent/80 text-sm">
+                <strong>Editor Tips:</strong> Use the toolbar above to format your content. 
+                You can make text <strong>bold</strong>, <em>italic</em>, or <u>underlined</u>. 
+                Create lists, quotes, and code blocks with the buttons.
               </p>
             </div>
           </div>
