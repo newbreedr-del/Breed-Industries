@@ -381,25 +381,25 @@ export default function LabPage() {
       <section className="py-20 bg-color-bg-secondary relative">
         <div className="absolute inset-0 grid-overlay"></div>
 
-        <div className="container mx-auto px-4 relative z-10 grid gap-10 lg:grid-cols-[1.1fr_1fr]">
+        <div className="container mx-auto px-4 relative z-10 grid gap-10 grid-cols-1 lg:grid-cols-[1.1fr_1fr]">
           {/* Builder Component Selection */}
           <div className="space-y-8">
-            <div className="glass-card p-8">
+            <div className="glass-card p-4 md:p-6 lg:p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent">
-                  <Calculator className="w-6 h-6" />
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent flex-shrink-0">
+                  <Calculator className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
-                <div>
-                  <h2 className="text-2xl font-heading font-bold text-white">Interactive Builder</h2>
-                  <p className="text-white/60 text-sm">Select components to build your custom package</p>
+                <div className="min-w-0">
+                  <h2 className="text-xl md:text-2xl font-heading font-bold text-white">Interactive Builder</h2>
+                  <p className="text-white/60 text-xs md:text-sm">Select components to build your custom package</p>
                 </div>
               </div>
               
-              <div className="flex gap-4 mb-6 border-b border-white/10 pb-4">
+              <div className="flex flex-wrap gap-2 md:gap-4 mb-6 border-b border-white/10 pb-4">
                 {builderSteps.map((step) => (
                   <button
                     key={step.id}
-                    className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-colors ${activeStep === step.id ? 'bg-accent text-color-bg-deep' : 'bg-white/5 text-white hover:bg-white/10'}`}
+                    className={`px-3 md:px-4 py-2 rounded-lg flex items-center gap-2 text-sm md:text-base transition-colors ${activeStep === step.id ? 'bg-accent text-color-bg-deep' : 'bg-white/5 text-white hover:bg-white/10'}`}
                     onClick={() => setActiveStep(step.id)}
                   >
                     <span>{step.icon}</span>
@@ -416,19 +416,19 @@ export default function LabPage() {
                     className={`rounded-lg border cursor-pointer transition-all ${selectedOptions.includes(option.id) ? 'border-accent bg-accent/10' : 'border-white/10 bg-white/5 hover:bg-white/10'}`}
                     onClick={() => handleOptionToggle(option.id)}
                   >
-                    <div className="flex items-center justify-between p-4">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${selectedOptions.includes(option.id) ? 'bg-accent text-color-bg-deep' : 'bg-white/10 text-white'}`}>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 gap-3 sm:gap-0">
+                      <div className="flex items-start sm:items-center gap-3">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0 ${selectedOptions.includes(option.id) ? 'bg-accent text-color-bg-deep' : 'bg-white/10 text-white'}`}>
                           {selectedOptions.includes(option.id) ? <Check size={16} /> : option.icon}
                         </div>
-                        <div>
-                          <h3 className="text-white font-medium leading-tight">{option.name}</h3>
-                          <p className="text-white/50 text-xs mt-0.5 leading-snug max-w-xs">{option.description}</p>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-white font-medium leading-tight text-sm sm:text-base">{option.name}</h3>
+                          <p className="text-white/50 text-xs mt-0.5 leading-snug">{option.description}</p>
                         </div>
                       </div>
-                      <div className="text-accent font-heading font-bold text-right flex-shrink-0 ml-4">
-                        R{option.price.toLocaleString()}
-                        {option.pricingType === 'monthly' && <span className="text-sm text-white/70">/mo</span>}
+                      <div className="text-accent font-heading font-bold text-left sm:text-right flex-shrink-0 sm:ml-4">
+                        <span className="text-sm sm:text-base">R{option.price.toLocaleString()}</span>
+                        {option.pricingType === 'monthly' && <span className="text-xs sm:text-sm text-white/70">/mo</span>}
                       </div>
                     </div>
                   </div>
@@ -438,25 +438,25 @@ export default function LabPage() {
           </div>
           
           {/* Builder Summary */}
-          <div className="glass-card p-8 h-fit sticky top-24">
-            <h2 className="text-xl font-heading font-semibold text-white mb-6">Your Custom Package</h2>
+          <div className="glass-card p-4 md:p-6 lg:p-8 h-fit lg:sticky lg:top-24">
+            <h2 className="text-lg md:text-xl font-heading font-semibold text-white mb-4 md:mb-6">Your Custom Package</h2>
             
-            <div className="rounded-xl border border-white/10 bg-white/5 p-6 mb-6">
-              <div className="grid gap-4 mb-6">
-                <div className="rounded-lg bg-white/5 p-4">
-                  <h3 className="text-sm font-medium text-white/70 uppercase tracking-wide mb-2">One-Time Fees</h3>
-                  <p className="text-3xl font-heading font-bold text-accent">{formattedOneTimeTotal}</p>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4 md:p-6 mb-4 md:mb-6">
+              <div className="grid gap-4 mb-4 md:mb-6">
+                <div className="rounded-lg bg-white/5 p-3 md:p-4">
+                  <h3 className="text-xs md:text-sm font-medium text-white/70 uppercase tracking-wide mb-2">One-Time Fees</h3>
+                  <p className="text-2xl md:text-3xl font-heading font-bold text-accent">{formattedOneTimeTotal}</p>
                 </div>
                 {monthlyTotal > 0 && (
-                  <div className="rounded-lg bg-white/5 p-4">
-                    <h3 className="text-sm font-medium text-white/70 uppercase tracking-wide mb-2">Monthly Subscription</h3>
-                    <p className="text-3xl font-heading font-bold text-accent">{formattedMonthlyTotal}<span className="text-lg text-white/70">/mo</span></p>
+                  <div className="rounded-lg bg-white/5 p-3 md:p-4">
+                    <h3 className="text-xs md:text-sm font-medium text-white/70 uppercase tracking-wide mb-2">Monthly Subscription</h3>
+                    <p className="text-2xl md:text-3xl font-heading font-bold text-accent">{formattedMonthlyTotal}<span className="text-base md:text-lg text-white/70">/mo</span></p>
                     <p className="text-xs text-white/50 mt-2">Invoiced separately after initial payment</p>
                   </div>
                 )}
-                <div className="rounded-lg bg-white/5 p-4">
-                  <h3 className="text-sm font-medium text-white/70 uppercase tracking-wide mb-2">Timeline</h3>
-                  <p className="text-xl font-heading font-bold text-white">{getEstimatedTimeframe()}</p>
+                <div className="rounded-lg bg-white/5 p-3 md:p-4">
+                  <h3 className="text-xs md:text-sm font-medium text-white/70 uppercase tracking-wide mb-2">Timeline</h3>
+                  <p className="text-lg md:text-xl font-heading font-bold text-white">{getEstimatedTimeframe()}</p>
                 </div>
               </div>
               
@@ -656,48 +656,48 @@ export default function LabPage() {
           </div>
 
           {/* Builder Guidance */}
-          <div className="space-y-8">
-            <div className="glass-card p-8">
-              <h2 className="text-xl font-heading font-semibold text-white mb-6">How the Lab Works</h2>
-              <div className="space-y-6">
+          <div className="space-y-6 md:space-y-8">
+            <div className="glass-card p-4 md:p-6 lg:p-8">
+              <h2 className="text-lg md:text-xl font-heading font-semibold text-white mb-4 md:mb-6">How the Lab Works</h2>
+              <div className="space-y-4 md:space-y-6">
                 {builderSteps.map((step, index) => (
-                  <div key={step.title} className="flex gap-4">
-                    <div className="w-10 h-10 rounded-full bg-accent/15 text-accent flex items-center justify-center font-heading font-bold">
+                  <div key={step.title} className="flex gap-3 md:gap-4">
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-accent/15 text-accent flex items-center justify-center font-heading font-bold text-sm md:text-base flex-shrink-0">
                       {index + 1}
                     </div>
-                    <div>
-                      <h3 className="text-white font-semibold">{step.title}</h3>
-                      <p className="text-white/60 text-sm">{step.description}</p>
+                    <div className="min-w-0">
+                      <h3 className="text-white font-semibold text-sm md:text-base">{step.title}</h3>
+                      <p className="text-white/60 text-xs md:text-sm">{step.description}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="glass-card p-8">
-              <h2 className="text-xl font-heading font-semibold text-white mb-6 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-accent" /> Quick Bundles
+            <div className="glass-card p-4 md:p-6 lg:p-8">
+              <h2 className="text-lg md:text-xl font-heading font-semibold text-white mb-4 md:mb-6 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-accent" /> Quick Bundles
               </h2>
-              <div className="grid gap-6">
+              <div className="grid gap-4 md:gap-6">
                 {quickBundles.map((bundle) => (
                   <div 
                     key={bundle.id} 
-                    className={`rounded-xl border ${selectedBundle === bundle.id ? 'border-accent bg-accent/10' : 'border-white/10 bg-white/5'} p-6 cursor-pointer transition-all hover:bg-white/10`}
+                    className={`rounded-xl border ${selectedBundle === bundle.id ? 'border-accent bg-accent/10' : 'border-white/10 bg-white/5'} p-4 md:p-6 cursor-pointer transition-all hover:bg-white/10`}
                     onClick={() => handleBundleSelect(bundle.id)}
                   >
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${selectedBundle === bundle.id ? 'bg-accent text-color-bg-deep' : 'bg-white/10 text-white'}`}>
-                          {selectedBundle === bundle.id ? <Check className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 md:mb-4 gap-2 sm:gap-0">
+                      <div className="flex items-center gap-2 md:gap-3">
+                        <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center flex-shrink-0 ${selectedBundle === bundle.id ? 'bg-accent text-color-bg-deep' : 'bg-white/10 text-white'}`}>
+                          {selectedBundle === bundle.id ? <Check className="w-3.5 h-3.5 md:w-4 md:h-4" /> : <Sparkles className="w-3.5 h-3.5 md:w-4 md:h-4" />}
                         </div>
-                        <h3 className="text-white font-semibold">{bundle.name}</h3>
+                        <h3 className="text-white font-semibold text-sm md:text-base">{bundle.name}</h3>
                       </div>
-                      <span className="text-accent font-heading font-bold">{bundle.price}</span>
+                      <span className="text-accent font-heading font-bold text-sm md:text-base">{bundle.price}</span>
                     </div>
-                    <ul className="space-y-2 text-white/60 text-sm">
+                    <ul className="space-y-1.5 md:space-y-2 text-white/60 text-xs md:text-sm">
                       {bundle.items.map((item) => (
                         <li key={item} className="flex items-center gap-2">
-                          <Check className="w-4 h-4 text-accent" />
+                          <Check className="w-3.5 h-3.5 md:w-4 md:h-4 text-accent flex-shrink-0" />
                           <span>{item}</span>
                         </li>
                       ))}
@@ -707,12 +707,12 @@ export default function LabPage() {
               </div>
             </div>
 
-            <div className="glass-card p-8">
-              <h2 className="text-xl font-heading font-semibold text-white mb-3">Need a guided build?</h2>
-              <p className="text-white/60 text-sm mb-4">
-                Book a call with our launch architects and we’ll co-create the perfect package in 30 minutes.
+            <div className="glass-card p-4 md:p-6 lg:p-8">
+              <h2 className="text-lg md:text-xl font-heading font-semibold text-white mb-2 md:mb-3">Need a guided build?</h2>
+              <p className="text-white/60 text-xs md:text-sm mb-3 md:mb-4">
+                Book a call with our launch architects and we'll co-create the perfect package in 30 minutes.
               </p>
-              <Link href="/contact" className="btn btn-primary inline-flex items-center gap-2">
+              <Link href="/contact" className="btn btn-primary inline-flex items-center gap-2 text-sm md:text-base">
                 <ClipboardList className="w-4 h-4" /> Schedule Workshop
               </Link>
             </div>
