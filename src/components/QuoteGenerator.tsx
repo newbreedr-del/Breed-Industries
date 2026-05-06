@@ -2,9 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { PlusCircle, MinusCircle, Loader2, CheckCircle, Send, Download, ChevronDown } from 'lucide-react';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import html2canvas from 'html2canvas';
 import { serviceDefinitions } from '@/data/serviceDefinitions';
 
 interface QuoteItem {
@@ -168,590 +165,23 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
     return null;
   };
 
-  // Scope-specific timelines and client requirements
-  const scopeDetails: Record<string, { timeline: string; clientRequirements: string[] }> = {
-    'CIPC Registration': { timeline: '2 – 5 Business Days', clientRequirements: ['Certified copy of ID document (all directors)', 'Proof of residential address (not older than 3 months)', 'Three proposed company name options', 'Signed CIPC forms (provided by Breed Industries)'] },
-    'Tax Compliance': { timeline: '3 – 7 Business Days', clientRequirements: ['CIPC registration certificate (COR 14.3 / COR 15.3)', 'Certified ID copies of all directors', 'Proof of business address', 'Banking details confirmation letter'] },
-    'BEE Certification': { timeline: '5 – 10 Business Days', clientRequirements: ['Latest financial statements or management accounts', 'Signed BEE declaration (EME/QSE affidavit)', 'Payroll records (if applicable)', 'Skills development records'] },
-    'CSD Registration': { timeline: '3 – 7 Business Days', clientRequirements: ['CIPC registration certificate (COR 14.3 / COR 15.3)', 'Tax clearance certificate', 'BEE certificate or affidavit', 'Banking details and bank letter', 'Certified ID copies of all directors', 'Proof of business address'] },
-    'COID Registration / Letter of Good Standing': { timeline: '3 – 7 Business Days', clientRequirements: ['CIPC registration documents', 'Estimated annual payroll amount', 'Nature of business activities', 'Number of employees'] },
-    'UIF Registration & Compliance Letter': { timeline: '3 – 7 Business Days', clientRequirements: ['CIPC registration documents', 'Employee details (ID numbers, start dates)', 'Monthly payroll figures', 'Employer banking details'] },
-    'CIPC Annual Return': { timeline: '1 – 3 Business Days', clientRequirements: ['CIPC customer code and password', 'Current registered office address confirmation', 'Director changes (if any)', 'Annual return fee (paid to CIPC)'] },
-    'Basic Logo Design': { timeline: '3 – 5 Business Days', clientRequirements: ['Brand name and tagline (if applicable)', 'Preferred colours and style references', 'Industry and target audience description', 'Any existing brand assets', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Premium Logo Design': { timeline: '7 – 10 Business Days', clientRequirements: ['Detailed brand brief (provided by Breed Industries)', 'Competitor references and positioning notes', 'Vision, mission, and values statement', 'Stakeholder availability for feedback sessions', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Business Branding': { timeline: '5 – 8 Business Days', clientRequirements: ['Approved logo files', 'Brand story and company background', 'Target market demographics', 'Preferred tone of voice and messaging', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Business Cards (250)': { timeline: '5 – 7 Business Days (incl. print)', clientRequirements: ['Approved logo and brand colours', 'Contact details for each cardholder', 'Preferred card stock and finish', 'Delivery address for printed cards', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Simple Social Media Flyer': { timeline: '2 – 3 Business Days', clientRequirements: ['Text content for the flyer (headline, body text, call-to-action)', 'Logo and brand colors (if available)', 'High-resolution images to be used in the design (optional)', 'Preferred social platform size (Instagram, Facebook, etc.)', 'Style references or examples of designs you like (optional)', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Standard Digital Flyer': { timeline: '3 – 5 Business Days', clientRequirements: ['Complete text content including headline, body, call-to-action, contact details', 'Logo, brand colors, fonts, and brand guidelines', 'High-resolution images to be used in the design', 'Design brief: target audience, design style, tone, and any specific requirements', 'Examples or inspiration of designs you like (optional)', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Premium Event/Brand Flyer': { timeline: '5 – 7 Business Days', clientRequirements: ['Complete text content for all flyer variations', 'Complete brand package: logo, colors, fonts, brand guidelines', 'High-resolution images and graphics to be used', 'Detailed brief including target audience, event details, design requirements', 'List of all required sizes (social media, print, web banners, etc.)', 'Examples, mood boards, or inspiration references (optional)', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Digital Artwork / Graphic Design': { timeline: '2 – 4 Business Days', clientRequirements: ['Description of the artwork or design required', 'Intended use and platform (social media, print, website, etc.)', 'Logo and brand guidelines (if applicable)', 'Any images, icons, or elements to be incorporated', 'Preferred dimensions or size specifications', 'Style references or examples of similar work (optional)', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Marketing Materials': { timeline: '5 – 10 Business Days', clientRequirements: ['List of all materials required (e.g. brochure, pull-up banner, poster, product sheet)', 'Approved brand guidelines (logo, colors, fonts)', 'All text content and copy for each material', 'High-resolution images and product photography (if applicable)', 'Preferred paper stock, finish, and print quantity (for print-ready files)', 'Distribution format: print, digital, or both', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Website Development': { timeline: '10 – 15 Business Days', clientRequirements: ['Sitemap and page structure preferences', 'All text content for each page', 'High-resolution images and media', 'Domain name and hosting credentials (or purchase authorisation)', 'Logo and brand guidelines'] },
-    'Mobile App Development': { timeline: '8 – 12 Weeks', clientRequirements: ['Detailed feature requirements document', 'User flow diagrams or wireframes (if available)', 'API documentation for third-party integrations', 'App Store / Play Store developer account credentials', 'Test device availability'] },
-    'E-commerce Solutions': { timeline: '15 – 25 Business Days', clientRequirements: ['Product catalogue with descriptions, images, and pricing', 'Payment gateway preferences (PayFast, Stripe, etc.)', 'Shipping and delivery policies', 'Domain and hosting details', 'Business registration for payment gateway setup'] },
-    'SEO & Digital Marketing': { timeline: '7 – 14 Business Days (setup)', clientRequirements: ['Website access (CMS admin credentials)', 'Google Analytics and Search Console access', 'Target keywords and competitor list', 'Business goals and KPIs', 'Monthly budget for paid campaigns (if applicable)'] },
-    'Social Media Management': { timeline: '3-Month Engagement', clientRequirements: ['Social media account credentials', 'Brand guidelines and tone of voice', 'Product/service images and descriptions', 'Monthly promotional calendar or events', 'Approval workflow and turnaround expectations'] },
-    'Business Profile - Starter (1\u20134 Pages)': { timeline: '3 – 5 Business Days', clientRequirements: ['Company overview and history', 'Services or products offered', 'Director/owner profiles', 'Contact details and logo'] },
-    'Business Profile - Standard (5\u201310 Pages)': { timeline: '5 – 8 Business Days', clientRequirements: ['Detailed company background and milestones', 'Full service/product catalogue', 'Team profiles with photographs', 'Client references or testimonials', 'Certifications and compliance documents'] },
-    'Business Plan - Basic/Entry-Level': { timeline: '4 – 7 Business Days', clientRequirements: ['Business concept and model description', 'Target market information', 'Revenue model and pricing strategy', 'Startup costs estimate'] },
-    'Business Plan - Standard/Comprehensive': { timeline: '8 – 15 Business Days', clientRequirements: ['Detailed business model and value proposition', 'Market research data and competitor analysis', 'Financial records (existing business) or projections', '3-year revenue and expense forecasts', 'Funding requirements and use of funds breakdown'] },
-    'Training Workbook / Study Guide': { timeline: '7 – 10 Business Days', clientRequirements: ['Training content outline or existing material', 'Target learners and qualification level', 'Number of modules or units', 'Logo and brand guidelines', 'Preferred page count or layout style', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    "Facilitator's / Lecturer's Guide": { timeline: '5 – 8 Business Days', clientRequirements: ['Aligned study guide or content outline', 'Session time allocations per module', 'Assessment activities and questions per module', 'Learning outcomes per module', 'Any specific facilitation notes or instructions', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Training PowerPoint Presentation': { timeline: '4 – 6 Business Days', clientRequirements: ['Training content or speaker notes/script', 'Logo and brand colors/fonts', 'Number of slides required (approximate)', 'Preferred design style or theme', 'Any existing slides to incorporate (optional)', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Full Training Package (All Three)': { timeline: '10 – 15 Business Days', clientRequirements: ['Complete training content outline', 'Target audience and qualification level', 'Number of modules', 'Logo and brand guidelines', 'Session time allocations per module', 'Learning outcomes per module', 'NOTE: Maximum 3 revision rounds included per deliverable. Additional revisions billed at R350/hour.'] },
-    // Album Art
-    'Album Art Design': { timeline: '2 – 4 Business Days', clientRequirements: ['Album/single title, artist name, genre, mood, and theme of the music', 'High-resolution artist photo(s) or images to incorporate (optional)', 'Artist logo, brand colours, or fonts (if applicable)', 'Examples of album artwork or visual styles you like', 'Track listing and credits text (for full album packaging)', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Album Art': { timeline: '2 – 4 Business Days', clientRequirements: ['Album/single title, artist name, genre, mood, and theme of the music', 'High-resolution artist photo(s) or images to incorporate (optional)', 'Artist logo, brand colours, or fonts (if applicable)', 'Examples of album artwork or visual styles you like', 'Track listing and credits text (for full album packaging)', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    // Aliases for serviceDefinitions names that differ from scopeDetails keys
-    'Company Registration (CIPC)': { timeline: '2 – 5 Business Days', clientRequirements: ['Certified copy of ID document (all directors)', 'Proof of residential address (not older than 3 months)', 'Three proposed company name options', 'Signed CIPC forms (provided by Breed Industries)'] },
-    'SARS Tax Returns': { timeline: '3 – 7 Business Days', clientRequirements: ['IRP5/IT3(a) income tax certificates from employers', 'Investment income certificates', 'Medical aid certificates', 'Retirement annuity certificates', 'CIPC registration certificate (for company returns)', 'Certified ID copies of all directors'] },
-    'Tax Clearance Certificate': { timeline: '2 – 5 Business Days', clientRequirements: ['Tax reference number (company or individual)', 'Certified ID copy', 'Reason for tax clearance (tender, emigration, foreign investment)', 'Proof of all outstanding tax submissions'] },
-    'Logo Design': { timeline: '3 – 5 Business Days', clientRequirements: ['Brand name and tagline (if applicable)', 'Preferred colours and style references', 'Industry and target audience description', 'Any existing brand assets', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Full Brand Identity': { timeline: '7 – 10 Business Days', clientRequirements: ['Detailed brand brief covering business overview, mission, vision, values', 'Competitor references and positioning notes', 'Target market demographics', 'Style preferences or mood board', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Brand Guidelines': { timeline: '5 – 8 Business Days', clientRequirements: ['Approved logo files in vector format (AI, EPS, or SVG)', 'Existing brand materials and assets', 'Brand story and messaging guidelines', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'Business Cards': { timeline: '5 – 7 Business Days (incl. print)', clientRequirements: ['Approved logo and brand colours', 'Contact details for each cardholder', 'Preferred card stock and finish', 'Delivery address for printed cards', 'NOTE: Maximum 3 revision rounds included. Additional revisions billed at R350/hour.'] },
-    'SEO & Digital Marketing (Setup)': { timeline: '7 – 14 Business Days', clientRequirements: ['Website access (CMS admin credentials)', 'Google Analytics and Search Console access', 'Target keywords and competitor list', 'Business goals and KPIs'] },
-    'SEO & Digital Marketing (Monthly)': { timeline: 'Ongoing Monthly', clientRequirements: ['Website access (CMS admin credentials)', 'Google Analytics and Search Console access', 'Target keywords and competitor list', 'Monthly budget for paid campaigns (if applicable)', 'Approval workflow and reporting preferences'] },
-    'Social Media Management (Monthly)': { timeline: 'Ongoing Monthly', clientRequirements: ['Social media account credentials', 'Brand guidelines and tone of voice', 'Product/service images and descriptions', 'Monthly promotional calendar or events', 'Approval workflow and turnaround expectations'] },
-  };
-
-  // Generate PDF function
-  const generatePDF = async (quoteNumber: string) => {
-    try {
-      // Create PDF with compression enabled
-      const pdf = new jsPDF({
-        compress: true,
-        unit: 'mm',
-        format: 'a4'
-      });
-      const pageWidth = 210;
-      const pageHeight = 297;
-      const margin = 20;
-      const contentWidth = pageWidth - margin * 2;
-      const accentColor: [number, number, number] = [202, 129, 20]; // #CA8114
-      const darkBg: [number, number, number] = [26, 26, 27];
-      const white: [number, number, number] = [255, 255, 255];
-      const lightGray: [number, number, number] = [245, 245, 245];
-      const textDark: [number, number, number] = [40, 40, 40];
-      const textMuted: [number, number, number] = [100, 100, 100];
-
-      const currentDate = new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
-      const validUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
-      
-      // Separate one-time and monthly fees
-      const oneTimeTotal = items.reduce((sum: number, item: QuoteItem) => {
-        return item.pricingType === 'monthly' ? sum : sum + item.quantity * item.rate;
-      }, 0);
-      const monthlyTotal = items.reduce((sum: number, item: QuoteItem) => {
-        return item.pricingType === 'monthly' ? sum + item.quantity * item.rate : sum;
-      }, 0);
-      
-      const total = oneTimeTotal; // Only one-time fees for deposit calculation
-      const deposit = requireDeposit ? total * 0.5 : 0;
-      const balance = requireDeposit ? total - deposit : total;
-      const fmt = (n: number) => 'R ' + n.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-      // ─── HELPER: draw page footer ───
-      const drawFooter = (pageNum: number, totalPages: number) => {
-        pdf.setFillColor(...darkBg);
-        pdf.rect(0, pageHeight - 18, pageWidth, 18, 'F');
-        pdf.setTextColor(...white);
-        pdf.setFontSize(7);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text('www.thebreed.co.za  |  info@thebreed.co.za  |  +27 60 496 4105', pageWidth / 2, pageHeight - 10, { align: 'center' });
-        pdf.text(`Page ${pageNum} of ${totalPages}`, pageWidth - margin, pageHeight - 10, { align: 'right' });
-      };
-
-      // ═══════════════════════════════════════════
-      // PAGE 1 , QUOTATION
-      // ═══════════════════════════════════════════
-
-      // Header bar
-      pdf.setFillColor(...darkBg);
-      pdf.rect(0, 0, pageWidth, 52, 'F');
-
-      // Load and add logo
-      try {
-        const logoImg = new window.Image();
-        logoImg.crossOrigin = 'anonymous';
-        await new Promise<void>((resolve, reject) => {
-          logoImg.onload = () => resolve();
-          logoImg.onerror = () => reject(new Error('Logo failed to load'));
-          logoImg.src = '/assets/images/The Breed Industries Just Logo-01 igkjh-01.png';
-        });
-        const logoCanvas = document.createElement('canvas');
-        const targetSize = 113;
-        logoCanvas.width = targetSize;
-        logoCanvas.height = targetSize;
-        const ctx = logoCanvas.getContext('2d');
-        if (ctx) {
-          // Draw logo without background
-          ctx.drawImage(logoImg, 0, 0, targetSize, targetSize);
-          const logoData = logoCanvas.toDataURL('image/png', 1.0);
-          pdf.addImage(logoData, 'PNG', margin, 6, 40, 40);
-        }
-      } catch {
-        // Fallback text if logo fails
-        pdf.setTextColor(...white);
-        pdf.setFontSize(20);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('BREED INDUSTRIES', margin, 30);
-      }
-
-      // Company details in header
-      pdf.setTextColor(200, 200, 200);
-      pdf.setFontSize(7);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('The Breed Industries (PTY) LTD', pageWidth - margin, 14, { align: 'right' });
-      pdf.text('12 Kings Road, Pinetown, Durban 3610', pageWidth - margin, 20, { align: 'right' });
-      pdf.text('Phone: +27 60 496 4105', pageWidth - margin, 26, { align: 'right' });
-      pdf.text('Email: info@thebreed.co.za', pageWidth - margin, 32, { align: 'right' });
-      pdf.text('Web: www.thebreed.co.za', pageWidth - margin, 38, { align: 'right' });
-
-      // QUOTE title bar
-      pdf.setFillColor(...accentColor);
-      pdf.rect(0, 52, pageWidth, 14, 'F');
-      pdf.setTextColor(...white);
-      pdf.setFontSize(14);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('QUOTATION', margin, 61);
-      pdf.setFontSize(10);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(`#${quoteNumber}`, pageWidth - margin, 61, { align: 'right' });
-
-      // Quote meta row
-      let y = 74;
-      pdf.setFillColor(...lightGray);
-      pdf.rect(margin, y, contentWidth, 10, 'F');
-      pdf.setTextColor(...textDark);
-      pdf.setFontSize(8);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text(`Date: ${currentDate}`, margin + 4, y + 7);
-      pdf.text(`Valid Until: ${validUntil}`, pageWidth / 2, y + 7);
-      pdf.text(`Payment: ${paymentTerms}`, pageWidth - margin - 4, y + 7, { align: 'right' });
-
-      // Customer & Project info side by side
-      y = 92;
-      pdf.setFillColor(...accentColor);
-      pdf.rect(margin, y, 80, 1, 'F');
-      pdf.rect(margin + 90, y, 80, 1, 'F');
-
-      y += 6;
-      pdf.setTextColor(...accentColor);
-      pdf.setFontSize(9);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('BILL TO', margin, y);
-      pdf.text('PROJECT DETAILS', margin + 90, y);
-
-      y += 6;
-      pdf.setTextColor(...textDark);
-      pdf.setFontSize(8);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text(customerName, margin, y);
-      pdf.text(projectName || 'Custom Services', margin + 90, y);
-
-      y += 5;
-      pdf.setFont('helvetica', 'normal');
-      pdf.setTextColor(...textMuted);
-      if (customerCompany) { pdf.text(customerCompany, margin, y); y += 5; } else { y += 5; }
-      pdf.text(`Contact: ${contactPerson || customerName}`, margin + 90, y - 5);
-      pdf.text(customerEmail, margin, y);
-      pdf.text(`Terms: ${paymentTerms}`, margin + 90, y);
-      y += 5;
-      if (customerPhone) pdf.text(`Tel: ${customerPhone}`, margin, y);
-      if (customerAddress) { y += 5; const addrLines = pdf.splitTextToSize(customerAddress, 75); addrLines.forEach((line: string) => { pdf.text(line, margin, y); y += 4; }); }
-
-      // Items table
-      y = Math.max(y + 8, 138);
-      // Table header
-      pdf.setFillColor(...darkBg);
-      pdf.rect(margin, y, contentWidth, 10, 'F');
-      pdf.setTextColor(...white);
-      pdf.setFontSize(8);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('#', margin + 3, y + 7);
-      pdf.text('Service / Description', margin + 12, y + 7);
-      pdf.text('Qty', margin + 110, y + 7, { align: 'center' });
-      pdf.text('Rate', margin + 135, y + 7, { align: 'right' });
-      pdf.text('Amount', margin + contentWidth - 2, y + 7, { align: 'right' });
-      y += 10;
-
-      // Table rows
-      items.forEach((item, index) => {
-        if (y > 230) { pdf.addPage(); y = 20; }
-        if (index % 2 === 0) { pdf.setFillColor(250, 250, 250); pdf.rect(margin, y, contentWidth, 12, 'F'); }
-        pdf.setTextColor(...textDark);
-        pdf.setFontSize(8);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text(`${index + 1}`, margin + 3, y + 5);
-        pdf.setFont('helvetica', 'bold');
-        const itemName = item.name.substring(0, 55) + (item.pricingType === 'monthly' ? ' (Monthly)' : '');
-        pdf.text(itemName, margin + 12, y + 5);
-        if (item.description) {
-          pdf.setFont('helvetica', 'normal');
-          pdf.setTextColor(...textMuted);
-          pdf.setFontSize(7);
-          const descLines = pdf.splitTextToSize(item.description.substring(0, 120), 90);
-          pdf.text(descLines[0] || '', margin + 12, y + 10);
-        }
-        pdf.setTextColor(...textDark);
-        pdf.setFontSize(8);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text(item.quantity.toString(), margin + 110, y + 5, { align: 'center' });
-        const rateText = fmt(item.rate) + (item.pricingType === 'monthly' ? '/mo' : '');
-        pdf.text(rateText, margin + 135, y + 5, { align: 'right' });
-        pdf.setFont('helvetica', 'bold');
-        const amountText = fmt(item.quantity * item.rate) + (item.pricingType === 'monthly' ? '/mo' : '');
-        pdf.text(amountText, margin + contentWidth - 2, y + 5, { align: 'right' });
-        y += 12;
-      });
-
-      // Totals section
-      y += 4;
-      pdf.setDrawColor(200, 200, 200);
-      pdf.line(margin + 90, y, margin + contentWidth, y);
-      y += 6;
-
-      // One-Time Fees Subtotal
-      pdf.setTextColor(...textMuted);
-      pdf.setFontSize(9);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('One-Time Fees (ex VAT):', margin + 95, y);
-      pdf.text(fmt(oneTimeTotal), margin + contentWidth - 2, y, { align: 'right' });
-      y += 6;
-
-      // Monthly Subscription (if applicable)
-      if (monthlyTotal > 0) {
-        pdf.setTextColor(...textMuted);
-        pdf.setFontSize(9);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text('Monthly Subscription:', margin + 95, y);
-        pdf.text(fmt(monthlyTotal) + '/mo', margin + contentWidth - 2, y, { align: 'right' });
-        y += 6;
-      }
-
-      // Deposit section (conditional)
-      if (requireDeposit) {
-        pdf.setTextColor(...accentColor);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('50% Deposit Required:', margin + 95, y);
-        pdf.text(fmt(deposit), margin + contentWidth - 2, y, { align: 'right' });
-        y += 6;
-
-        // Balance
-        pdf.setTextColor(...textMuted);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text('Balance on Completion:', margin + 95, y);
-        pdf.text(fmt(balance), margin + contentWidth - 2, y, { align: 'right' });
-        y += 4;
-      }
-
-      // Total bar (One-Time Only)
-      pdf.setFillColor(...darkBg);
-      pdf.rect(margin + 90, y, contentWidth - 90, 12, 'F');
-      pdf.setTextColor(...white);
-      pdf.setFontSize(11);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('TOTAL ONE-TIME (EX VAT):', margin + 95, y + 8);
-      pdf.text(fmt(total), margin + contentWidth - 4, y + 8, { align: 'right' });
-      y += 16;
-
-      // Monthly subscription note
-      if (monthlyTotal > 0) {
-        pdf.setFillColor(255, 250, 240);
-        pdf.rect(margin, y, contentWidth, 14, 'F');
-        pdf.setTextColor(...accentColor);
-        pdf.setFontSize(7);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('MONTHLY SUBSCRIPTIONS:', margin + 4, y + 5);
-        pdf.setTextColor(...textDark);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text('Recurring monthly fees will be invoiced separately after initial payment is received.', margin + 4, y + 10);
-        y += 18;
-      }
-
-      pdf.setTextColor(...textMuted);
-      pdf.setFontSize(7);
-      pdf.setFont('helvetica', 'italic');
-      pdf.text('Breed Industries is not VAT registered. All pricing is exclusive of VAT.', margin, y);
-      y += 8;
-
-      // ─── IMPORTANT NOTICE (conditional) ───
-      if (requireDeposit) {
-        pdf.setFillColor(255, 248, 235);
-        pdf.rect(margin, y, contentWidth, 22, 'F');
-        pdf.setDrawColor(...accentColor);
-        pdf.rect(margin, y, contentWidth, 22, 'S');
-        pdf.setTextColor(...accentColor);
-        pdf.setFontSize(9);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('IMPORTANT: 50% DEPOSIT REQUIRED BEFORE WORK COMMENCES', margin + 4, y + 7);
-        pdf.setTextColor(...textDark);
-        pdf.setFontSize(7);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text(`A non-refundable deposit of ${fmt(deposit)} is required before any work will begin. The remaining`, margin + 4, y + 13);
-        pdf.text(`balance of ${fmt(balance)} is due upon project completion and final delivery of all deliverables.`, margin + 4, y + 18);
-        y += 28;
-      } else {
-        pdf.setFillColor(255, 248, 235);
-        pdf.rect(margin, y, contentWidth, 16, 'F');
-        pdf.setDrawColor(...accentColor);
-        pdf.rect(margin, y, contentWidth, 16, 'S');
-        pdf.setTextColor(...accentColor);
-        pdf.setFontSize(9);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('PAYMENT TERMS', margin + 4, y + 7);
-        pdf.setTextColor(...textDark);
-        pdf.setFontSize(7);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text(`Full payment of ${fmt(total)} is due upon project completion and final delivery of all deliverables.`, margin + 4, y + 12);
-        y += 22;
-      }
-
-      // ─── BANKING DETAILS ───
-      if (y > 240) { pdf.addPage(); y = 20; }
-      pdf.setFillColor(...lightGray);
-      pdf.rect(margin, y, contentWidth, 32, 'F');
-      pdf.setTextColor(...accentColor);
-      pdf.setFontSize(9);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('BANKING DETAILS', margin + 4, y + 7);
-      pdf.setTextColor(...textDark);
-      pdf.setFontSize(8);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('Account Name:', margin + 4, y + 14);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('The Breed Industries (PTY) LTD', margin + 40, y + 14);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('Account Number:', margin + 4, y + 20);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('10268731932', margin + 40, y + 20);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('Branch Code:', margin + 4, y + 26);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('051001', margin + 40, y + 26);
-
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('Bank:', margin + contentWidth / 2, y + 14);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('Standard Bank', margin + contentWidth / 2 + 20, y + 14);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('SWIFT:', margin + contentWidth / 2, y + 20);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('SBZA ZA JJ', margin + contentWidth / 2 + 20, y + 20);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('Reference:', margin + contentWidth / 2, y + 26);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text(quoteNumber, margin + contentWidth / 2 + 20, y + 26);
-
-      // Notes
-      if (notes) {
-        y += 38;
-        if (y > 255) { pdf.addPage(); y = 20; }
-        pdf.setTextColor(...accentColor);
-        pdf.setFontSize(9);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('NOTES', margin, y);
-        y += 6;
-        pdf.setTextColor(...textMuted);
-        pdf.setFontSize(7);
-        pdf.setFont('helvetica', 'normal');
-        const splitNotes = pdf.splitTextToSize(notes, contentWidth);
-        splitNotes.forEach((line: string) => {
-          if (y > 265) { pdf.addPage(); y = 20; }
-          pdf.text(line, margin, y);
-          y += 4;
-        });
-      }
-
-      // Page 1 footer
-      drawFooter(1, 2);
-
-      // ═══════════════════════════════════════════
-      // PAGE 2 , CLIENT REQUIREMENTS, TIMELINES & DISCLAIMERS
-      // ═══════════════════════════════════════════
-      pdf.addPage();
-
-      // Header bar
-      pdf.setFillColor(...darkBg);
-      pdf.rect(0, 0, pageWidth, 20, 'F');
-      pdf.setTextColor(...white);
-      pdf.setFontSize(10);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('PROJECT SCHEDULE, CLIENT REQUIREMENTS & TERMS', margin, 13);
-      pdf.setFontSize(7);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(`Quote #${quoteNumber}`, pageWidth - margin, 13, { align: 'right' });
-
-      y = 30;
-
-      // Section: Scope of Work Breakdown
-      pdf.setTextColor(...accentColor);
-      pdf.setFontSize(10);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('1. SCOPE OF WORK , TIMELINES & CLIENT REQUIREMENTS', margin, y);
-      y += 3;
-      pdf.setDrawColor(...accentColor);
-      pdf.line(margin, y, margin + contentWidth, y);
-      y += 6;
-
-      pdf.setTextColor(...textMuted);
-      pdf.setFontSize(7);
-      pdf.setFont('helvetica', 'italic');
-      pdf.text('Each service below lists the estimated delivery timeline and what we need from you to begin work.', margin, y);
-      y += 8;
-
-      items.forEach((item) => {
-        const details = scopeDetails[item.name];
-        const timeline = details?.timeline || '3 – 7 Business Days';
-        const requirements = details?.clientRequirements || ['Content and materials as discussed', 'Timely feedback on deliverables'];
-
-        const blockHeight = 10 + requirements.length * 4 + 4;
-        if (y + blockHeight > 265) { pdf.addPage(); pdf.setFillColor(...darkBg); pdf.rect(0, 0, pageWidth, 12, 'F'); pdf.setTextColor(...white); pdf.setFontSize(7); pdf.setFont('helvetica', 'normal'); pdf.text(`Quote #${quoteNumber} , Continued`, margin, 8); drawFooter(2, 2); y = 20; }
-
-        // Service name + timeline
-        pdf.setFillColor(250, 248, 245);
-        pdf.rect(margin, y - 3, contentWidth, 8, 'F');
-        pdf.setTextColor(...textDark);
-        pdf.setFontSize(8);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text(item.name, margin + 3, y + 2);
-        pdf.setTextColor(...accentColor);
-        pdf.setFontSize(7);
-        pdf.text(`Timeline: ${timeline}`, pageWidth - margin - 3, y + 2, { align: 'right' });
-        y += 8;
-
-        // Requirements
-        pdf.setFontSize(7);
-        requirements.forEach((req) => {
-          if (req.startsWith('NOTE:')) {
-            pdf.setTextColor(...accentColor);
-            pdf.setFont('helvetica', 'bold');
-            pdf.text(`\u26A0  ${req}`, margin + 6, y);
-            pdf.setFont('helvetica', 'normal');
-          } else {
-            pdf.setTextColor(...textMuted);
-            pdf.setFont('helvetica', 'normal');
-            pdf.text(`\u2022  ${req}`, margin + 6, y);
-          }
-          y += 4;
-        });
-        y += 3;
-      });
-
-      // Section: Payment Terms
-      y += 4;
-      if (y > 220) { pdf.addPage(); y = 20; }
-      pdf.setTextColor(...accentColor);
-      pdf.setFontSize(10);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('2. PAYMENT TERMS', margin, y);
-      y += 3;
-      pdf.setDrawColor(...accentColor);
-      pdf.line(margin, y, margin + contentWidth, y);
-      y += 7;
-
-      const paymentTermsList = requireDeposit ? [
-        `A 50% non-refundable deposit of ${fmt(deposit)} is required before any work commences.`,
-        `The remaining balance of ${fmt(balance)} is due upon project completion and final delivery.`,
-        'Payment must be made via EFT to the banking details provided on Page 1.',
-        `Use quote reference "${quoteNumber}" as your payment reference.`,
-        'Proof of payment must be emailed to info@thebreed.co.za before work begins.',
-        'Late payments (beyond 7 days of invoice) will incur interest at 2% per month on the outstanding amount.',
-        'Work will be paused on any account with payments overdue by more than 14 days.',
-      ] : [
-        `Full payment of ${fmt(total)} is due upon project completion and final delivery.`,
-        'Payment must be made via EFT to the banking details provided on Page 1.',
-        `Use quote reference "${quoteNumber}" as your payment reference.`,
-        'Proof of payment must be emailed to info@thebreed.co.za.',
-        'Late payments (beyond 7 days of invoice) will incur interest at 2% per month on the outstanding amount.',
-      ];
-      pdf.setTextColor(...textDark);
-      pdf.setFontSize(7);
-      pdf.setFont('helvetica', 'normal');
-      paymentTermsList.forEach((term) => {
-        if (y > 265) { pdf.addPage(); y = 20; }
-        pdf.text(`\u2022  ${term}`, margin + 3, y);
-        y += 5;
-      });
-
-      // Section: Disclaimers & Terms
-      y += 4;
-      if (y > 210) { pdf.addPage(); y = 20; }
-      pdf.setTextColor(...accentColor);
-      pdf.setFontSize(10);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('3. TERMS, CONDITIONS & DISCLAIMERS', margin, y);
-      y += 3;
-      pdf.setDrawColor(...accentColor);
-      pdf.line(margin, y, margin + contentWidth, y);
-      y += 7;
-
-      const disclaimers = [
-        ['Scope of Work:', 'This quote covers only the services explicitly listed above. Any additional work, revisions beyond the agreed scope, or new requirements will be quoted separately and require written approval before commencement.'],
-        ['Timelines:', 'Estimated timelines begin from the date the 50% deposit clears AND all required client materials have been received. Delays in providing materials or feedback will extend delivery dates accordingly. Breed Industries is not liable for delays caused by the client.'],
-        ['Revisions:', 'Design and artwork deliverables include a maximum of 3 revision rounds. All other deliverables include up to 2 revision rounds. Additional revision rounds beyond the included allowance will be billed at R350/hour. Revision requests must be submitted in writing within 5 business days of receiving each draft.'],
-        ['Intellectual Property:', 'All intellectual property and deliverables remain the property of Breed Industries until full payment has been received. Upon full payment, ownership of final deliverables transfers to the client. Source files and working files remain the property of Breed Industries unless explicitly included in the scope.'],
-        ['Confidentiality:', 'Both parties agree to keep all project-related information confidential. Breed Industries will not share client data with third parties without written consent.'],
-        ['Portfolio Rights:', 'Breed Industries reserves the right to feature completed work in our portfolio, website, and marketing materials unless a written non-disclosure agreement is in place.'],
-        ['Cancellation:', 'If the client cancels the project after the deposit has been paid, the deposit is non-refundable. Work completed beyond the deposit value will be invoiced separately. Breed Industries may cancel this agreement with 14 days written notice, refunding any unearned portion of payments received.'],
-        ['Warranty:', 'All deliverables are guaranteed for 30 days from final delivery. This covers defects in workmanship only, not changes to requirements, content updates, or third-party service failures.'],
-        ['Liability:', 'Breed Industries\u2019 total liability under this agreement shall not exceed the total value of this quote. We are not liable for indirect, consequential, or incidental damages including lost profits, data loss, or business interruption.'],
-        ['Force Majeure:', 'Neither party shall be liable for failure to perform obligations due to circumstances beyond reasonable control, including but not limited to natural disasters, power outages, internet failures, government actions, or pandemics.'],
-        ['Governing Law:', 'This agreement is governed by the laws of the Republic of South Africa. Any disputes shall be resolved through mediation before escalation to the Magistrate\u2019s Court of Durban, KwaZulu-Natal.'],
-        ['Acceptance:', requireDeposit ? 'Payment of the 50% deposit constitutes acceptance of this quote and all terms and conditions contained herein.' : 'Acceptance of this quote and commencement of work constitutes agreement to all terms and conditions contained herein.'],
-      ];
-
-      pdf.setFontSize(7);
-      disclaimers.forEach(([title, text]) => {
-        if (y > 258) { pdf.addPage(); y = 20; }
-        pdf.setTextColor(...textDark);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text(title, margin + 3, y);
-        y += 4;
-        pdf.setTextColor(...textMuted);
-        pdf.setFont('helvetica', 'normal');
-        const lines = pdf.splitTextToSize(text, contentWidth - 6);
-        lines.forEach((line: string) => {
-          if (y > 268) { pdf.addPage(); y = 20; }
-          pdf.text(line, margin + 3, y);
-          y += 3.5;
-        });
-        y += 3;
-      });
-
-      // Acceptance notice
-      if (y > 240) { pdf.addPage(); y = 20; }
-      y += 6;
-      pdf.setFillColor(...lightGray);
-      pdf.rect(margin, y, contentWidth, 16, 'F');
-      pdf.setTextColor(...accentColor);
-      pdf.setFontSize(9);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('ACCEPTANCE OF TERMS', margin + 4, y + 7);
-      pdf.setTextColor(...textDark);
-      pdf.setFontSize(7);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(requireDeposit ? 'Payment of the 50% deposit constitutes acceptance of this quote and all terms and conditions contained herein.' : 'Acceptance of this quote constitutes agreement to all terms and conditions contained herein.', margin + 4, y + 13);
-
-      // Page 2 footer
-      drawFooter(2, 2);
-
-      // Apply final compression and save
-      pdf.setProperties({
-        title: `Breed Industries Quote #${quoteNumber}`,
-        subject: 'Quotation',
-        author: 'Breed Industries',
-        keywords: 'quote, quotation, breed industries',
-        creator: 'Breed Industries Quote Generator'
-      });
-      
-      pdf.save(`Breed_Industries_Quote_${quoteNumber}.pdf`);
-      return null;
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      throw new Error('Failed to generate PDF');
+  // Download PDF from base64
+  const downloadPDF = (base64Data: string, quoteNumber: string) => {
+    const byteCharacters = atob(base64Data);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Breed_Industries_Quote_${quoteNumber}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   };
 
   // Handle form submission
@@ -768,13 +198,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
     setError(null);
     
     try {
-      // Generate quote number
-      const quoteNumber = `Q-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
-      
-      // Generate PDF first (download only, no attachment)
-      await generatePDF(quoteNumber);
-      
-      // Then send email without PDF attachment
+      // Send quote request to server (PDF generated server-side)
       const response = await fetch('/api/generate-quote', {
         method: 'POST',
         headers: {
@@ -789,6 +213,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
           projectName: projectName.trim(),
           contactPerson: contactPerson.trim(),
           paymentTerms,
+          requireDeposit,
           items: items.map((item) => ({
             ...item,
             name: item.name.trim(),
@@ -796,8 +221,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
             quantity: Number(item.quantity),
             rate: Number(item.rate)
           })),
-          notes: notes.trim(),
-          pdfBase64: '' // No PDF attachment
+          notes: notes.trim()
         }),
       });
       
@@ -809,6 +233,11 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       
       const data = await response.json();
       
+      // Download PDF from server response
+      if (data.pdfBase64) {
+        downloadPDF(data.pdfBase64, data.quoteNumber);
+      }
+      
       setQuoteNumber(data.quoteNumber);
       setIsSuccess(true);
       
@@ -818,7 +247,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
       
       // Send WhatsApp notification about new quote
       try {
-        const response = await fetch('/api/notifications', {
+        const notifyResponse = await fetch('/api/notifications', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -834,7 +263,7 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
             }
           })
         });
-        console.log('Quote notification sent:', await response.json());
+        console.log('Quote notification sent:', await notifyResponse.json());
       } catch (notifyError) {
         console.error('Failed to send quote notification:', notifyError);
       }

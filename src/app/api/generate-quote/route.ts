@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { supabase } from '@/lib/supabase';
+import { generateQuotePDF, QuoteData } from '@/lib/pdf/breedPdf';
 
 export const runtime = 'nodejs';
 
@@ -17,6 +18,7 @@ export async function POST(req: NextRequest) {
       projectName = '',
       contactPerson = '',
       paymentTerms = '50% Upfront',
+      requireDeposit = true,
       items = [],
       notes = ''
     } = data ?? {};
@@ -38,6 +40,11 @@ export async function POST(req: NextRequest) {
 
     // Generate quote number
     const quoteNumber = `Q-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    // Add date and validUntil
+    const date = new Date().toLocaleDateString('en-ZA', { day: '2-digit', month: 'long', year: 'numeric' });
+    const validUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+      .toLocaleDateString('en-ZA', { day: '2-digit', month: 'long', year: 'numeric' });
 
     // Calculate total correctly (QuoteGenerator sends item.rate not item.unitPrice)
     const total = items.reduce((sum: number, item: any) => {
@@ -64,6 +71,19 @@ export async function POST(req: NextRequest) {
     if (dbError) {
       console.error('Failed to save quote to database:', dbError.message);
       // Continue — don't block PDF download if DB fails
+    }
+
+    // Generate PDF
+    let pdfBuffer: Buffer | null = null;
+    try {
+      const quoteData: QuoteData = {
+        quoteNumber, customerName, customerCompany, customerAddress,
+        customerEmail, customerPhone, projectName, contactPerson,
+        paymentTerms, requireDeposit, items, notes, date, validUntil,
+      };
+      pdfBuffer = generateQuotePDF(quoteData);
+    } catch (pdfErr) {
+      console.error('Quote PDF generation failed:', pdfErr);
     }
 
     // Send email notification to admin
@@ -204,6 +224,9 @@ export async function POST(req: NextRequest) {
             replyTo: COMPANY_EMAIL,
             subject: `Quote Request Received — Ref ${quoteNumber} | Breed Industries`,
             html: confirmHtml,
+            attachments: pdfBuffer
+              ? [{ filename: `Breed_Industries_Quote_${quoteNumber}.pdf`, content: pdfBuffer }]
+              : [],
           });
           if (confirmResult.error) {
             console.error('Resend error on client confirmation email:', JSON.stringify(confirmResult.error));
@@ -219,7 +242,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Quote generated successfully',
-      quoteNumber
+      quoteNumber,
+      pdfBase64: pdfBuffer ? pdfBuffer.toString('base64') : null,
     });
 
   } catch (error) {
