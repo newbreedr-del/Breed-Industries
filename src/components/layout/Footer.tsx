@@ -201,7 +201,10 @@ export const Footer = () => {
                 <Phone className="w-5 h-5 text-accent mr-3 mt-1" />
                 <div>
                   <p className="text-white font-medium">Call Us</p>
-                  <a href="tel:+27604964105" className="text-white/70 hover:text-accent transition-colors">
+                  <a href="tel:+27314590080" className="text-white/70 hover:text-accent transition-colors block">
+                    +27 31 459 0080
+                  </a>
+                  <a href="tel:+27604964105" className="text-white/50 hover:text-accent transition-colors text-sm">
                     +27 60 496 4105
                   </a>
                 </div>

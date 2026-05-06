@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
-import { 
-  FileText, 
-  Mail, 
-  Users, 
+import {
+  FileText,
+  Mail,
+  Users,
   DollarSign,
   TrendingUp,
   Clock,

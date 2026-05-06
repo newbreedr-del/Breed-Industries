@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
       </div>
 
       <p style="color:#444;font-size:14px;margin:0 0 20px;">
-        If you have any questions in the meantime, reply to this email or reach us on WhatsApp at <a href="https://wa.me/27604964105" style="color:#FF9F00;">+27 60 496 4105</a>.
+        If you have any questions in the meantime, reply to this email or reach us on WhatsApp at <a href="https://wa.me/27604964105" style="color:#FF9F00;">+27 60 496 4105</a> or call our landline at <a href="tel:+27314590080" style="color:#FF9F00;">+27 31 459 0080</a>.
       </p>
 
       <p style="color:#888;font-size:13px;margin:0;">Warm regards,<br /><strong style="color:#0B1118;">The Breed Industries Team</strong></p>
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
     <div style="background:#0B1118;padding:20px;text-align:center;">
       <p style="margin:0;color:#666;font-size:11px;">
         The Breed Industries (PTY) LTD · 12 Kings Road, Pinetown, Durban 3610<br />
-        <a href="https://www.thebreed.co.za" style="color:#FF9F00;">www.thebreed.co.za</a> · info@thebreed.co.za · +27 60 496 4105
+        <a href="https://www.thebreed.co.za" style="color:#FF9F00;">www.thebreed.co.za</a> · info@thebreed.co.za · +27 31 459 0080 / +27 60 496 4105
       </p>
     </div>
   </div>

@@ -18,7 +18,8 @@ Marketing Campaign/
 │   └── Master-Marketing-Plan.md        ← Positioning, channels, KPIs, budget, 90-day plan
 │
 ├── 02-Content-Calendar/
-│   └── 90-Day-Content-Calendar.csv     ← 90 posts mapped — opens in Excel/Sheets
+│   ├── Content-Calendar.html           ← Interactive dashboard (open in browser)
+│   └── 90-Day-Content-Calendar.csv     ← Same data as raw CSV — opens in Excel/Sheets
 │
 ├── 03-Posters/                         ← 12 SVG designs (scale infinitely, lossless)
 │   ├── 01-IG-Square-FromIdeaToEmpire.svg

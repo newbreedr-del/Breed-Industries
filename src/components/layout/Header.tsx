@@ -370,13 +370,22 @@ export const Header = () => {
                     Book Strategy Call
                   </Link>
                   
-                  <a 
-                    href="tel:+27604964105"
-                    className="flex items-center justify-center gap-2 text-white/80 hover:text-accent"
-                  >
-                    <Phone size={16} />
-                    <span>+27 60 496 4105</span>
-                  </a>
+                  <div className="flex flex-col items-center gap-1">
+                    <a 
+                      href="tel:+27314590080"
+                      className="flex items-center gap-2 text-white/80 hover:text-accent"
+                    >
+                      <Phone size={16} />
+                      <span>+27 31 459 0080</span>
+                    </a>
+                    <span className="text-white/40 text-xs">or</span>
+                    <a 
+                      href="tel:+27604964105"
+                      className="flex items-center gap-2 text-white/60 hover:text-accent text-sm"
+                    >
+                      <span>+27 60 496 4105</span>
+                    </a>
+                  </div>
                 </div>
               </nav>
             </motion.div>

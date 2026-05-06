@@ -163,9 +163,10 @@ export default function InvoiceDetailPage() {
       pdf.setTextColor(200,200,200); pdf.setFontSize(7); pdf.setFont('helvetica','normal');
       pdf.text('The Breed Industries (PTY) LTD', pageWidth-margin, 14, {align:'right'});
       pdf.text('12 Kings Road, Pinetown, Durban 3610', pageWidth-margin, 20, {align:'right'});
-      pdf.text('Phone: +27 60 496 4105', pageWidth-margin, 26, {align:'right'});
-      pdf.text('Email: info@thebreed.co.za', pageWidth-margin, 32, {align:'right'});
-      pdf.text('Web: www.thebreed.co.za', pageWidth-margin, 38, {align:'right'});
+      pdf.text('Landline: +27 31 459 0080', pageWidth-margin, 26, {align:'right'});
+      pdf.text('Mobile: +27 60 496 4105', pageWidth-margin, 32, {align:'right'});
+      pdf.text('Email: info@thebreed.co.za', pageWidth-margin, 38, {align:'right'});
+      pdf.text('Web: www.thebreed.co.za', pageWidth-margin, 44, {align:'right'});
       // Title bar
       pdf.setFillColor(...accentColor); pdf.rect(0,52,pageWidth,14,'F');
       pdf.setTextColor(...white); pdf.setFontSize(14); pdf.setFont('helvetica','bold'); pdf.text('INVOICE', margin, 61);

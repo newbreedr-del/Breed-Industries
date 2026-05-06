@@ -67,7 +67,7 @@ const structuredData = {
   image: 'https://thebreed.co.za/assets/images/logos/breed-logo.png',
   '@id': 'https://thebreed.co.za',
   url: 'https://thebreed.co.za',
-  telephone: '+27604964105',
+  telephone: '+27314590080 / +27604964105',
   email: 'info@thebreed.co.za',
   priceRange: '$$',
   address: {

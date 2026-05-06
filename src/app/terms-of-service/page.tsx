@@ -260,7 +260,8 @@ export default function TermsOfServicePage() {
                 <p className="text-white/80">Company: <strong className="text-white">The Breed Industries (PTY) LTD</strong></p>
                 <p className="text-white/80">Address: <strong className="text-white">12 Kings Road, Pinetown, Durban, 3610</strong></p>
                 <p className="text-white/80">Email: <strong className="text-white">info@thebreed.co.za</strong></p>
-                <p className="text-white/80">Phone: <strong className="text-white">+27 60 496 4105</strong></p>
+                <p className="text-white/80">Landline: <strong className="text-white">+27 31 459 0080</strong></p>
+                <p className="text-white/80">Mobile: <strong className="text-white">+27 60 496 4105</strong></p>
                 <p className="text-white/80">Website: <strong className="text-white">www.thebreed.co.za</strong></p>
               </div>
             </div>

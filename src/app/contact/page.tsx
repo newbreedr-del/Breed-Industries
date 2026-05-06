@@ -8,12 +8,12 @@ import { ContactForm } from '@/components/forms/ContactForm';
 
 export const metadata: Metadata = {
   title: 'Contact Us | Breed Industries - Durban Business Agency',
-  description: 'Get in touch with Breed Industries. Call +27 60 496 4105 or email info@thebreed.co.za for business registration, branding, and website services in South Africa.',
+  description: 'Get in touch with Breed Industries. Call +27 31 459 0080 or +27 60 496 4105, or email info@thebreed.co.za for business registration, branding, and website services in South Africa.',
   keywords: ['contact Breed Industries', 'business agency Durban contact', 'company registration help', 'business consultant Durban', 'call Breed Industries'],
   alternates: { canonical: 'https://thebreed.co.za/contact' },
   openGraph: {
     title: 'Contact Breed Industries',
-    description: 'Ready to launch? Call us at +27 60 496 4105. We respond within one business day.',
+    description: 'Ready to launch? Call us at +27 31 459 0080 or +27 60 496 4105. We respond within one business day.',
     url: 'https://thebreed.co.za/contact',
     images: [{ url: '/assets/images/contact-og.jpg', width: 1200, height: 630 }],
   },
@@ -23,8 +23,10 @@ const contactChannels = [
   {
     icon: <Phone className="w-5 h-5" />,
     title: 'Call Us',
-    value: '+27 60 496 4105',
-    href: 'tel:+27604964105',
+    value: '+27 31 459 0080',
+    href: 'tel:+27314590080',
+    secondaryValue: '+27 60 496 4105',
+    secondaryHref: 'tel:+27604964105',
     description: 'Speak directly with our launch specialists Monday – Friday.',
   },
   {
@@ -50,8 +52,11 @@ export default function ContactPage() {
         backgroundImage="/assets/images/contact-hero.jpg"
       >
         <div className="flex flex-wrap gap-4">
-          <Link href="tel:+27604964105" className="btn btn-primary inline-flex items-center gap-2">
-            <Phone className="w-4 h-4" /> Call Now
+          <Link href="tel:+27314590080" className="btn btn-primary inline-flex items-center gap-2">
+            <Phone className="w-4 h-4" /> Call Landline
+          </Link>
+          <Link href="tel:+27604964105" className="btn btn-outline inline-flex items-center gap-2">
+            <Phone className="w-4 h-4" /> Call Mobile
           </Link>
           <Link
             href="https://wa.me/message/4FOGIOMM2A35L1"

@@ -562,7 +562,8 @@ export function generateFreshStartPDF(opts: {
 
   pdf.addList('Contact Us', [
     { label: 'Email', value: 'info@thebreed.co.za' },
-    { label: 'Phone / WhatsApp', value: '+27 60 496 4105' },
+    { label: 'Landline', value: '+27 31 459 0080' },
+    { label: 'Mobile / WhatsApp', value: '+27 60 496 4105' },
     { label: 'Website', value: 'www.thebreed.co.za/fresh-start' },
     { label: 'Reference Number', value: opts.refNumber },
   ]);

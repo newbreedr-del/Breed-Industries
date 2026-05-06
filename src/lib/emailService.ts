@@ -96,7 +96,8 @@ The Breed Industries Team
 ---
 www.thebreed.co.za
 info@thebreed.co.za
-+27 60 496 4105
+Landline: +27 31 459 0080
+Mobile: +27 60 496 4105
   `.trim();
 
   return sendEmail({

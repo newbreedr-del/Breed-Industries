@@ -1,50 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1584 396" width="1584" height="396">
-  <defs>
-    <linearGradient id="bg6" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#242426"/>
-      <stop offset="100%" stop-color="#0A0A0B"/>
-    </linearGradient>
-    <linearGradient id="amber6" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#E5A835"/>
-      <stop offset="100%" stop-color="#9B6310"/>
-    </linearGradient>
-    <pattern id="hg6" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#CA8114" stroke-width="0.5" opacity="0.08"/>
-    </pattern>
-    <symbol id="bm6" viewBox="-110 -110 220 220">
-      <polygon points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" fill="#F8F5F0"/>
-      <g fill="#1A1A1B">
-        <rect x="-55" y="-50" width="110" height="22"/>
-        <rect x="33" y="-28" width="22" height="20"/>
-        <rect x="-55" y="-8" width="110" height="16"/>
-        <rect x="-55" y="8" width="22" height="20"/>
-        <rect x="-55" y="28" width="110" height="22"/>
-      </g>
-    </symbol>
-  </defs>
-  <rect width="1584" height="396" fill="url(#bg6)"/>
-  <rect width="1584" height="396" fill="url(#hg6)"/>
-
-  <g opacity="0.4">
-    <line x1="60" y1="100" x2="220" y2="100" stroke="#CA8114" stroke-width="1"/>
-    <line x1="60" y1="296" x2="220" y2="296" stroke="#CA8114" stroke-width="1"/>
-  </g>
-  <circle cx="1340" cy="200" r="160" fill="#CA8114" opacity="0.07"/>
-  <circle cx="1340" cy="200" r="100" fill="#CA8114" opacity="0.1"/>
-
-  <g transform="translate(80, 110)" font-family="Montserrat, Arial, sans-serif">
-    <use href="#bm6" width="56" height="56" x="0" y="-12"/>
-    <text x="72" y="12" font-size="22" font-weight="800" fill="#FFFFFF" letter-spacing="6">BREED</text>
-    <text x="72" y="34" font-size="11" font-weight="600" fill="#CA8114" letter-spacing="6">INDUSTRIES</text>
-    <text y="92" font-size="14" letter-spacing="6" fill="#CA8114" font-weight="700">PREMIUM GROWTH AGENCY · DURBAN, SOUTH AFRICA</text>
-    <text y="160" font-size="58" font-weight="800" fill="#FFFFFF" letter-spacing="-1.5">We register. We brand.</text>
-    <text y="220" font-size="58" font-weight="800" fill="url(#amber6)" letter-spacing="-1.5">We build empires.</text>
-    <text y="262" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="500" fill="#FFFFFF" opacity="0.7">CIPC · SARS · BEE · Branding · Websites · Apps · AI · Funding-ready Plans</text>
-  </g>
-
-  <g transform="translate(1340, 200)">
-    <circle r="115" fill="#1A1A1B" stroke="#CA8114" stroke-width="2"/>
-    <use href="#bm6" width="120" height="120" x="-60" y="-65"/>
-    <text y="55" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="11" font-weight="700" fill="#CA8114" letter-spacing="3">EST. DURBAN</text>
-  </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 28.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1584 396" style="enable-background:new 0 0 1584 396;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#SVGID_1_);}
+	.st1{opacity:0.4;}
+	.st2{fill:none;stroke:#CA8114;}
+	.st3{opacity:7.000000e-02;fill:#CA8114;enable-background:new    ;}
+	.st4{opacity:0.1;fill:#CA8114;enable-background:new    ;}
+	.st5{fill:#FFFFFF;}
+	.st6{font-family:'Montserrat-ExtraBold';}
+	.st7{font-size:22px;}
+	.st8{letter-spacing:5;}
+	.st9{fill:#CA8114;}
+	.st10{font-family:'Montserrat-SemiBold';}
+	.st11{font-size:11px;}
+	.st12{font-family:'Montserrat-Bold';}
+	.st13{font-size:14px;}
+	.st14{font-size:58px;}
+	.st15{letter-spacing:-1;}
+	.st16{fill:#E5A300;}
+	.st17{opacity:0.7;fill:#FFFFFF;enable-background:new    ;}
+	.st18{font-family:'ArialMT';}
+	.st19{font-size:17px;}
+	.st20{fill:#1A1A1B;stroke:#CA8114;stroke-width:2;}
+	.st21{letter-spacing:2;}
+</style>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="108.9312" y1="582.5328" x2="109.9312" y2="581.5328" gradientTransform="matrix(1584 0 0 -396 -172547 230683)">
+	<stop  offset="0" style="stop-color:#242426"/>
+	<stop  offset="1" style="stop-color:#0A0A0B"/>
+</linearGradient>
+<rect class="st0" width="1584" height="396"/>
+<g class="st1">
+	<line class="st2" x1="60" y1="100" x2="220" y2="100"/>
+	<line class="st2" x1="60" y1="296" x2="220" y2="296"/>
+</g>
+<circle class="st3" cx="1340" cy="200" r="160"/>
+<circle class="st4" cx="1340" cy="200" r="100"/>
+<g transform="translate(80, 110)">
+	<text transform="matrix(1 0 0 1 72 12)" class="st5 st6 st7 st8">BREED</text>
+	<text transform="matrix(1 0 0 1 72 34)" class="st9 st10 st11 st8">INDUSTRIES</text>
+	<text transform="matrix(1 0 0 1 0 92)" class="st9 st12 st13 st8">PREMIUM GROWTH AGENCY · DURBAN, SOUTH AFRICA</text>
+	<text transform="matrix(1 0 0 1 0 160)" class="st5 st6 st14 st15">We register. We brand.</text>
+	<text transform="matrix(1 0 0 1 0 220)" class="st16 st6 st14 st15">We build empires.</text>
+	<text transform="matrix(1 0 0 1 0 262)" class="st17 st18 st19">CIPC · SARS · BEE · Branding · Websites · Apps · AI · Funding-ready Plans</text>
+</g>
+<g transform="translate(1340, 200)">
+	<circle class="st20" cx="0" cy="0" r="115"/>
+	<text transform="matrix(1 0 0 1 -55.6431 55)" class="st9 st12 st11 st21">EST. DURBAN</text>
+</g>
 </svg>
