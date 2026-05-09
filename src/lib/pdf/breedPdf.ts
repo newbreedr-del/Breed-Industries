@@ -738,8 +738,13 @@ export function generateQuotePDF(data: QuoteData): Buffer {
     : 'Full payment is required before any work commences.';
   doc.text(paymentText, MARGIN + 6, y + 14);
 
-  // Banking details block
+  // Banking details block - check if we need a page break
   y += 26;
+  if (y > PAGE_H - 80) {
+    doc.addPage();
+    y = 30;
+  }
+  
   setFont('bold', 10);
   doc.setTextColor(...NAVY);
   doc.text('Banking Details', MARGIN, y);
@@ -761,13 +766,19 @@ export function generateQuotePDF(data: QuoteData): Buffer {
   // Notes
   if (data.notes) {
     y += 8;
+    // Check if notes will fit before footer
+    const noteLines = doc.splitTextToSize(data.notes, CONTENT_W);
+    const notesHeight = noteLines.length * 4 + 10;
+    if (y + notesHeight > PAGE_H - 30) {
+      doc.addPage();
+      y = 30;
+    }
     setFont('bold', 9);
     doc.setTextColor(...NAVY);
     doc.text('Notes:', MARGIN, y);
     y += 6;
     setFont('normal', 8);
     doc.setTextColor(...DARK);
-    const noteLines = doc.splitTextToSize(data.notes, CONTENT_W);
     doc.text(noteLines, MARGIN, y);
     y += noteLines.length * 4;
   }
