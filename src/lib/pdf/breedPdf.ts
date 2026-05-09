@@ -629,7 +629,8 @@ export function generateQuotePDF(data: QuoteData): Buffer {
     // Vertically centre all text within the row
     const textY  = y + rowH / 2 + 1.5;
 
-    doc.setFillColor(i % 2 === 0 ? OFFWHITE : WHITE);
+    const rowColor = i % 2 === 0 ? OFFWHITE : WHITE;
+    doc.setFillColor(...rowColor);
     doc.rect(MARGIN, y, CONTENT_W, rowH, 'F');
 
     // Row number + item name — same baseline as qty/rate/amount
