@@ -1,0 +1,26 @@
+{
+  "customerName": "Nokukhanya Mpanza",
+  "customerCompany": "Test Company",
+  "customerAddress": "123 Test Street, Durban",
+  "customerEmail": "test@example.com",
+  "customerPhone": "+27 12 345 6789",
+  "projectName": "Website Development",
+  "contactPerson": "Nokukhanya Mpanza",
+  "paymentTerms": "50% Upfront",
+  "requireDeposit": true,
+  "items": [
+    {
+      "name": "Website Design",
+      "description": "Custom responsive website design",
+      "quantity": 1,
+      "rate": 5000
+    },
+    {
+      "name": "Development",
+      "description": "Frontend and backend development",
+      "quantity": 1,
+      "rate": 8000
+    }
+  ],
+  "notes": "Test quote to verify fixes"
+}

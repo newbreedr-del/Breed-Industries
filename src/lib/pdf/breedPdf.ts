@@ -12,6 +12,7 @@
 import jsPDF from 'jspdf';
 import fs from 'fs';
 import path from 'path';
+import { scopeDetails as scopeDetailsData } from '@/data/scopeDetails';
 
 // ── Brand Tokens ─────────────────────────────────────────────────────────────
 const NAVY:   [number, number, number] = [11,  17,  24];   // #0B1118
@@ -109,7 +110,7 @@ export class BreedPDF {
     if (this.currentY + neededHeight > PAGE_H - FOOTER_H - 8) {
       this.drawPageFooter();
       this.doc.addPage();
-      this.currentY = MARGIN + 4;
+      this.drawContentPageHeader(); // sets this.currentY = 30
     }
   }
 
@@ -541,11 +542,23 @@ export function generateQuotePDF(data: QuoteData): Buffer {
   y += 18;
   const panelW = (CONTENT_W - 8) / 2;
 
+  // Calculate Bill To panel height dynamically based on content
+  let billToHeight = 44; // Base height
+  if (data.customerAddress) {
+    const addrLines = doc.splitTextToSize(data.customerAddress, panelW - 12);
+    billToHeight += (addrLines.length - 1) * 4; // Add height for extra address lines
+  }
+  if (!data.customerPhone) billToHeight -= 4; // Reduce if no phone
+  
+  // Ensure minimum height matches project panel
+  const projectPanelHeight = 40;
+  const panelHeight = Math.max(billToHeight, projectPanelHeight);
+
   // Bill To panel
   doc.setFillColor(...OFFWHITE);
-  doc.rect(MARGIN, y, panelW, 40, 'F');
+  doc.rect(MARGIN, y, panelW, panelHeight, 'F');
   doc.setFillColor(...ORANGE);
-  doc.rect(MARGIN, y, 3, 40, 'F');
+  doc.rect(MARGIN, y, 3, panelHeight, 'F');
   setFont('bold', 9);
   doc.setTextColor(...ORANGE);
   doc.text('BILL TO', MARGIN + 6, y + 7);
@@ -554,19 +567,27 @@ export function generateQuotePDF(data: QuoteData): Buffer {
   doc.text(data.customerName, MARGIN + 6, y + 16);
   setFont('normal', 8);
   doc.setTextColor(...MUTED);
-  if (data.customerCompany) doc.text(data.customerCompany, MARGIN + 6, y + 22);
+  let currentY = y + 22;
+  if (data.customerCompany) {
+    doc.text(data.customerCompany, MARGIN + 6, currentY);
+    currentY += 6;
+  }
   if (data.customerAddress) {
     const addrLines = doc.splitTextToSize(data.customerAddress, panelW - 12);
-    doc.text(addrLines, MARGIN + 6, y + (data.customerCompany ? 28 : 22));
+    doc.text(addrLines, MARGIN + 6, currentY);
+    currentY += (addrLines.length * 4) + 2;
   }
-  doc.text(data.customerEmail, MARGIN + 6, y + 34);
-  if (data.customerPhone) doc.text(data.customerPhone, MARGIN + 6, y + 38);
+  doc.text(data.customerEmail, MARGIN + 6, currentY);
+  currentY += 6;
+  if (data.customerPhone) {
+    doc.text(data.customerPhone, MARGIN + 6, currentY);
+  }
 
   // Project panel
   doc.setFillColor(...OFFWHITE);
-  doc.rect(MARGIN + panelW + 8, y, panelW, 40, 'F');
+  doc.rect(MARGIN + panelW + 8, y, panelW, panelHeight, 'F');
   doc.setFillColor(...ORANGE);
-  doc.rect(MARGIN + panelW + 8, y, 3, 40, 'F');
+  doc.rect(MARGIN + panelW + 8, y, 3, panelHeight, 'F');
   setFont('bold', 9);
   doc.setTextColor(...ORANGE);
   doc.text('PROJECT', MARGIN + panelW + 14, y + 7);
@@ -751,8 +772,7 @@ export function generateQuotePDF(data: QuoteData): Buffer {
     y += noteLines.length * 4;
   }
 
-  // Page 1 footer
-  drawQFooter(1, 2);
+  // Page 1 footer drawn at the very end once we know total pages
 
   // ═════════════════════════════════════════════════════════════════════════════
   // PAGE 2: Scope of Work, Payment Terms, Terms & Conditions
@@ -791,25 +811,17 @@ export function generateQuotePDF(data: QuoteData): Buffer {
 
   drawSectionHeader('1. SCOPE OF WORK — TIMELINES & CLIENT REQUIREMENTS');
 
-  // Import and use scope details
-  // We need to dynamically import since this runs server-side
-  let scopeDetailMap: Record<string, { timeline: string; clientRequirements: string[] }> = {};
-  try {
-    const scopeModule = require('@/data/scopeDetails');
-    scopeDetailMap = scopeModule.scopeDetails || {};
-  } catch {
-    // If import fails, continue without scope details
-  }
+  // Use statically imported scope details
+  const scopeDetailMap = scopeDetailsData;
 
   data.items.forEach((item) => {
     // Check page break
     if (y > PAGE_H - 60) {
-      drawQFooter(2, 2);
       doc.addPage();
       y = 30;
     }
 
-    const detail = scopeDetailMap[item.name] || { timeline: 'To be confirmed', clientRequirements: [] };
+    const detail = scopeDetailMap[item.name] || { timeline: 'Timeline to be confirmed', clientRequirements: [] };
 
     // Service name bar
     doc.setFillColor(...OFFWHITE);
@@ -826,8 +838,22 @@ export function generateQuotePDF(data: QuoteData): Buffer {
     doc.text(detail.timeline, PAGE_W - MARGIN - 4, y + 7, { align: 'right' });
     y += 12;
 
+    // Service description
+    if (item.description) {
+      setFont('normal', 8);
+      doc.setTextColor(...MUTED);
+      const descLines = doc.splitTextToSize(`Description: ${item.description}`, CONTENT_W - 12);
+      doc.text(descLines, MARGIN + 4, y + 3);
+      y += (descLines.length * 3.5) + 4;
+    }
+
     // Client requirements bullet list
     if (detail.clientRequirements && detail.clientRequirements.length > 0) {
+      setFont('bold', 8);
+      doc.setTextColor(...DARK);
+      doc.text('Client Requirements:', MARGIN + 4, y);
+      y += 5;
+      
       detail.clientRequirements.forEach((req) => {
         // Check page break
         if (y > PAGE_H - 50) {
@@ -845,6 +871,14 @@ export function generateQuotePDF(data: QuoteData): Buffer {
         doc.text(reqLines, MARGIN + 10, y + 3);
         y += (reqLines.length * 3.5) + 3;
       });
+    } else {
+      // Generic requirements if none specified
+      setFont('normal', 8);
+      doc.setTextColor(...MUTED);
+      doc.text('• Specific requirements and timeline will be confirmed upon project initiation.', MARGIN + 4, y);
+      y += 5;
+      doc.text('• Our team will contact you within 24 hours to discuss project details.', MARGIN + 4, y);
+      y += 5;
     }
 
     y += 6;
@@ -874,7 +908,6 @@ export function generateQuotePDF(data: QuoteData): Buffer {
 
   paymentTermsList.forEach((term) => {
     if (y > PAGE_H - 50) {
-      drawQFooter(2, 2);
       doc.addPage();
       y = 30;
     }
@@ -940,15 +973,10 @@ export function generateQuotePDF(data: QuoteData): Buffer {
       title: 'Governing Law',
       body: 'This agreement is governed by the laws of the Republic of South Africa. Any disputes shall be resolved through negotiation or mediation before litigation.',
     },
-    {
-      title: 'Acceptance',
-      body: 'By accepting this quotation and making the required payment, the client agrees to these terms and conditions in full.',
-    },
   ];
 
   terms.forEach((term) => {
     if (y > PAGE_H - 50) {
-      drawQFooter(2, 2);
       doc.addPage();
       y = 30;
     }
@@ -963,8 +991,8 @@ export function generateQuotePDF(data: QuoteData): Buffer {
     y += (bodyLines.length * 3.5) + 6;
   });
 
-  // Acceptance callout block
-  if (y > PAGE_H - 70) {
+  // Payment Agreement Notice (no signature required)
+  if (y > PAGE_H - 60) {
     drawQFooter(2, 2);
     doc.addPage();
     y = 30;
@@ -972,27 +1000,24 @@ export function generateQuotePDF(data: QuoteData): Buffer {
 
   y += 10;
   doc.setFillColor(...ORANGE_LIGHT);
-  doc.rect(MARGIN, y, CONTENT_W, 40, 'F');
+  doc.rect(MARGIN, y, CONTENT_W, 28, 'F');
   doc.setFillColor(...ORANGE);
-  doc.rect(MARGIN, y, 3, 40, 'F');
-  y += 10;
+  doc.rect(MARGIN, y, 3, 28, 'F');
+  y += 8;
   setFont('bold', 10);
   doc.setTextColor(...NAVY);
-  doc.text('ACCEPTANCE', MARGIN + 8, y);
-  y += 10;
+  doc.text('PAYMENT AGREEMENT', MARGIN + 8, y);
+  y += 8;
   setFont('normal', 9);
   doc.setTextColor(...DARK);
-  doc.text('By accepting this quotation and making the required payment,', MARGIN + 8, y);
-  y += 6;
-  doc.text('I hereby agree to the terms and conditions outlined above.', MARGIN + 8, y);
+  doc.text('Receipt of payment constitutes acceptance of this quote and agreement', MARGIN + 8, y);
+  y += 5;
+  doc.text('to all terms and conditions outlined above. No signature required.', MARGIN + 8, y);
   y += 12;
-  setFont('bold', 9);
-  doc.text('Signature: _________________________    Date: _______________', MARGIN + 8, y);
-  y += 15;
 
-  // Final footer
+  // Draw all page footers now that we know the true total
   const totalPages = doc.getNumberOfPages();
-  for (let i = 2; i <= totalPages; i++) {
+  for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
     drawQFooter(i, totalPages);
   }
@@ -1161,4 +1186,374 @@ export function generateFreshStartPDF(opts: {
   ]);
 
   return pdf.toBuffer();
+}
+
+// ── Invoice PDF ───────────────────────────────────────────────────────────────
+
+export interface InvoicePDFItem {
+  name: string;
+  description: string;
+  quantity: number;
+  rate: number;
+  pricingType?: 'one-time' | 'monthly';
+  amount: number;
+}
+
+export interface InvoicePDFData {
+  invoiceNumber: string;
+  quoteNumber?: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string;
+  customerAddress?: string;
+  items: InvoicePDFItem[];
+  oneTimeTotal: number;
+  monthlyTotal: number;
+  deposit: number;
+  balance: number;
+  totalAmount: number;
+  status: string;
+  paymentStatus: string;
+  dueDate: string;
+  issueDate: string;
+  notes?: string;
+}
+
+/**
+ * Generate a fully-branded Invoice PDF.
+ * Matches the quote PDF brand tokens — navy header, orange accents, clean table.
+ */
+export function generateInvoicePDF(data: InvoicePDFData): Buffer {
+  const doc = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
+
+  // ── Brand Tokens ──────────────────────────────────────────────────────────
+  const NAVY: [number, number, number]      = [11, 17, 24];
+  const ORANGE: [number, number, number]    = [255, 159, 0];
+  const WHITE: [number, number, number]     = [255, 255, 255];
+  const OFFWHITE: [number, number, number]  = [248, 248, 250];
+  const MUTED: [number, number, number]     = [110, 118, 130];
+  const DARK: [number, number, number]      = [28, 34, 44];
+  const LIGHT_GRAY: [number, number, number] = [228, 232, 238];
+  const ORANGE_LIGHT: [number, number, number] = [255, 243, 230];
+
+  const PAGE_W  = 210;
+  const PAGE_H  = 297;
+  const MARGIN  = 20;
+  const CONTENT_W = PAGE_W - MARGIN * 2;
+  const HEADER_H  = 52;
+  const FOOTER_Y  = PAGE_H - 14;
+
+  const logoBase64 = loadLogoBase64();
+
+  function setFont(style: 'bold' | 'normal' | 'italic' = 'normal', size: number = 10) {
+    doc.setFont('helvetica', style);
+    doc.setFontSize(size);
+  }
+
+  function fmt(n: number): string {
+    return 'R ' + n.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function drawPageFooter(pageNum: number, totalPages: number) {
+    doc.setDrawColor(...LIGHT_GRAY);
+    doc.setLineWidth(0.3);
+    doc.line(MARGIN, FOOTER_Y, PAGE_W - MARGIN, FOOTER_Y);
+    setFont('normal', 7);
+    doc.setTextColor(...MUTED);
+    doc.text(
+      'The Breed Industries (PTY) LTD · 12 Kings Road, Pinetown, Durban 3610 · www.thebreed.co.za · info@thebreed.co.za · +27 31 459 0080',
+      MARGIN,
+      FOOTER_Y + 5
+    );
+    doc.text(`Page ${pageNum} of ${totalPages}`, PAGE_W - MARGIN, FOOTER_Y + 5, { align: 'right' });
+  }
+
+  // ── Page Header (navy bar + logo) ─────────────────────────────────────────
+  doc.setFillColor(...NAVY);
+  doc.rect(0, 0, PAGE_W, HEADER_H, 'F');
+
+  if (logoBase64) {
+    try { doc.addImage(logoBase64, 'PNG', MARGIN, 8, 36, 36); } catch { /* skip */ }
+  }
+
+  setFont('normal', 7);
+  doc.setTextColor(200, 200, 200);
+  doc.text('The Breed Industries (PTY) LTD',    PAGE_W - MARGIN, 14, { align: 'right' });
+  doc.text('12 Kings Road, Pinetown, Durban 3610', PAGE_W - MARGIN, 20, { align: 'right' });
+  doc.text('Landline: +27 31 459 0080',           PAGE_W - MARGIN, 26, { align: 'right' });
+  doc.text('Mobile: +27 60 496 4105',             PAGE_W - MARGIN, 32, { align: 'right' });
+  doc.text('Email: info@thebreed.co.za',          PAGE_W - MARGIN, 38, { align: 'right' });
+  doc.text('Web: www.thebreed.co.za',             PAGE_W - MARGIN, 44, { align: 'right' });
+
+  // Orange title bar
+  doc.setFillColor(...ORANGE);
+  doc.rect(0, HEADER_H, PAGE_W, 14, 'F');
+  setFont('bold', 14);
+  doc.setTextColor(...NAVY);
+  doc.text('INVOICE', MARGIN, HEADER_H + 10);
+  setFont('bold', 12);
+  doc.text(`#${data.invoiceNumber}`, PAGE_W - MARGIN, HEADER_H + 10, { align: 'right' });
+
+  // ── Meta row ──────────────────────────────────────────────────────────────
+  let y = HEADER_H + 22;
+  doc.setFillColor(...OFFWHITE);
+  doc.rect(MARGIN, y, CONTENT_W, 12, 'F');
+  setFont('bold', 8);
+  doc.setTextColor(...DARK);
+  doc.text(
+    `Issue Date: ${new Date(data.issueDate).toLocaleDateString('en-ZA', { day: '2-digit', month: 'long', year: 'numeric' })}`,
+    MARGIN + 4, y + 8
+  );
+  doc.text(
+    `Due Date: ${new Date(data.dueDate).toLocaleDateString('en-ZA', { day: '2-digit', month: 'long', year: 'numeric' })}`,
+    MARGIN + CONTENT_W / 3, y + 8
+  );
+  // Status badge
+  const statusColor: [number, number, number] =
+    data.paymentStatus === 'paid'    ? [34, 197, 94] :
+    data.paymentStatus === 'pending' ? ORANGE :
+    data.paymentStatus === 'partial' ? [234, 179, 8] :
+    MUTED;
+  doc.setTextColor(...statusColor);
+  doc.text(data.paymentStatus.toUpperCase(), PAGE_W - MARGIN - 4, y + 8, { align: 'right' });
+
+  // ── Bill To + Reference panels ────────────────────────────────────────────
+  y += 18;
+  const panelW = (CONTENT_W - 8) / 2;
+
+  // Bill To
+  doc.setFillColor(...OFFWHITE);
+  doc.rect(MARGIN, y, panelW, 42, 'F');
+  doc.setFillColor(...ORANGE);
+  doc.rect(MARGIN, y, 3, 42, 'F');
+  setFont('bold', 9);
+  doc.setTextColor(...ORANGE);
+  doc.text('BILL TO', MARGIN + 6, y + 7);
+  setFont('bold', 10);
+  doc.setTextColor(...DARK);
+  doc.text(data.customerName, MARGIN + 6, y + 16);
+  setFont('normal', 8);
+  doc.setTextColor(...MUTED);
+  if (data.customerEmail)   doc.text(data.customerEmail,   MARGIN + 6, y + 23);
+  if (data.customerPhone)   doc.text(data.customerPhone,   MARGIN + 6, y + 29);
+  if (data.customerAddress) {
+    const addrLines = doc.splitTextToSize(data.customerAddress, panelW - 12);
+    doc.text(addrLines, MARGIN + 6, y + (data.customerPhone ? 35 : 29));
+  }
+
+  // Invoice reference
+  doc.setFillColor(...OFFWHITE);
+  doc.rect(MARGIN + panelW + 8, y, panelW, 42, 'F');
+  doc.setFillColor(...ORANGE);
+  doc.rect(MARGIN + panelW + 8, y, 3, 42, 'F');
+  setFont('bold', 9);
+  doc.setTextColor(...ORANGE);
+  doc.text('INVOICE DETAILS', MARGIN + panelW + 14, y + 7);
+  setFont('normal', 8);
+  doc.setTextColor(...DARK);
+  doc.text(`Invoice #: ${data.invoiceNumber}`, MARGIN + panelW + 14, y + 16);
+  if (data.quoteNumber) doc.text(`Quote #: ${data.quoteNumber}`, MARGIN + panelW + 14, y + 23);
+  doc.text(`Status: ${data.status.toUpperCase()}`, MARGIN + panelW + 14, y + (data.quoteNumber ? 30 : 23));
+  doc.text(`Payment: ${data.paymentStatus.toUpperCase()}`, MARGIN + panelW + 14, y + (data.quoteNumber ? 37 : 30));
+
+  // ── Items table ───────────────────────────────────────────────────────────
+  y += 50;
+  doc.setFillColor(...NAVY);
+  doc.rect(MARGIN, y, CONTENT_W, 10, 'F');
+  setFont('bold', 9);
+  doc.setTextColor(...WHITE);
+  doc.text('#',                           MARGIN + 4,              y + 6.5);
+  doc.text('Service / Description',       MARGIN + 14,             y + 6.5);
+  doc.text('Qty',   PAGE_W - MARGIN - 52, y + 6.5, { align: 'center' });
+  doc.text('Rate',  PAGE_W - MARGIN - 32, y + 6.5, { align: 'center' });
+  doc.text('Amount',PAGE_W - MARGIN - 4,  y + 6.5, { align: 'right' });
+  y += 10;
+
+  data.items.forEach((item, i) => {
+    if (y > PAGE_H - 60) {
+      doc.addPage();
+      // mini header on continuation page
+      doc.setFillColor(...NAVY);
+      doc.rect(0, 0, PAGE_W, 14, 'F');
+      doc.setFillColor(...ORANGE);
+      doc.rect(0, 14, PAGE_W, 2, 'F');
+      setFont('bold', 9);
+      doc.setTextColor(...WHITE);
+      doc.text('BREED INDUSTRIES — INVOICE CONTINUED', MARGIN, 10);
+      y = 22;
+    }
+
+    const rowH = item.description ? 16 : 10;
+    const rowBg: [number, number, number] = i % 2 === 0 ? OFFWHITE : WHITE;
+    doc.setFillColor(...rowBg);
+    doc.rect(MARGIN, y, CONTENT_W, rowH, 'F');
+
+    setFont('bold', 8.5);
+    doc.setTextColor(...DARK);
+    doc.text(`${i + 1}`, MARGIN + 4, y + 5.5);
+    doc.text(item.name + (item.pricingType === 'monthly' ? ' (Monthly)' : ''), MARGIN + 14, y + 5.5);
+
+    if (item.description) {
+      setFont('normal', 7.5);
+      doc.setTextColor(...MUTED);
+      const descLines = doc.splitTextToSize(item.description, CONTENT_W - 72);
+      doc.text(descLines[0] || '', MARGIN + 14, y + 11);
+    }
+
+    setFont('normal', 8.5);
+    doc.setTextColor(...DARK);
+    doc.text(item.quantity.toString(), PAGE_W - MARGIN - 52, y + (rowH / 2) + 1.5, { align: 'center' });
+    doc.text(
+      fmt(item.rate) + (item.pricingType === 'monthly' ? '/mo' : ''),
+      PAGE_W - MARGIN - 32, y + (rowH / 2) + 1.5, { align: 'center' }
+    );
+    setFont('bold', 8.5);
+    doc.text(
+      fmt(item.amount) + (item.pricingType === 'monthly' ? '/mo' : ''),
+      PAGE_W - MARGIN - 4, y + (rowH / 2) + 1.5, { align: 'right' }
+    );
+    y += rowH;
+  });
+
+  // ── Totals ────────────────────────────────────────────────────────────────
+  y += 8;
+  doc.setDrawColor(...LIGHT_GRAY);
+  doc.setLineWidth(0.3);
+  doc.line(MARGIN + 90, y - 4, MARGIN + CONTENT_W, y - 4);
+
+  if (data.oneTimeTotal > 0) {
+    setFont('normal', 9);
+    doc.setTextColor(...MUTED);
+    doc.text('One-Time Fees:',   PAGE_W - MARGIN - 62, y);
+    doc.setTextColor(...DARK);
+    doc.text(fmt(data.oneTimeTotal), PAGE_W - MARGIN - 4, y, { align: 'right' });
+    y += 7;
+  }
+  if (data.monthlyTotal > 0) {
+    setFont('normal', 9);
+    doc.setTextColor(...MUTED);
+    doc.text('Monthly Subscription:', PAGE_W - MARGIN - 62, y);
+    doc.setTextColor(...DARK);
+    doc.text(fmt(data.monthlyTotal) + '/mo', PAGE_W - MARGIN - 4, y, { align: 'right' });
+    y += 7;
+  }
+  if (data.deposit > 0) {
+    setFont('bold', 9);
+    doc.setTextColor(...ORANGE);
+    doc.text('50% Deposit Required:', PAGE_W - MARGIN - 62, y);
+    doc.text(fmt(data.deposit), PAGE_W - MARGIN - 4, y, { align: 'right' });
+    y += 7;
+    setFont('normal', 9);
+    doc.setTextColor(...MUTED);
+    doc.text('Balance on Completion:', PAGE_W - MARGIN - 62, y);
+    doc.setTextColor(...DARK);
+    doc.text(fmt(data.balance), PAGE_W - MARGIN - 4, y, { align: 'right' });
+    y += 7;
+  }
+
+  // Total bar
+  y += 2;
+  doc.setFillColor(...NAVY);
+  doc.rect(MARGIN, y, CONTENT_W, 14, 'F');
+  setFont('bold', 11);
+  doc.setTextColor(...WHITE);
+  doc.text('TOTAL DUE', MARGIN + 6, y + 9);
+  doc.setTextColor(...ORANGE);
+  doc.text(fmt(data.totalAmount), PAGE_W - MARGIN - 4, y + 9, { align: 'right' });
+  y += 18;
+
+  // Monthly note callout
+  if (data.monthlyTotal > 0) {
+    doc.setFillColor(...ORANGE_LIGHT);
+    doc.rect(MARGIN, y, CONTENT_W, 16, 'F');
+    doc.setFillColor(...ORANGE);
+    doc.rect(MARGIN, y, 3, 16, 'F');
+    setFont('bold', 8);
+    doc.setTextColor(...NAVY);
+    doc.text('MONTHLY SUBSCRIPTIONS:', MARGIN + 6, y + 6);
+    setFont('normal', 8);
+    doc.setTextColor(...DARK);
+    doc.text(
+      `Recurring fee of ${fmt(data.monthlyTotal)}/mo will be invoiced separately after initial payment is received.`,
+      MARGIN + 6, y + 12
+    );
+    y += 22;
+  }
+
+  // VAT note
+  setFont('italic', 7);
+  doc.setTextColor(...MUTED);
+  doc.text('All prices exclude VAT. VAT will be added at the applicable rate where required.', MARGIN, y);
+  y += 10;
+
+  // ── Banking Details ───────────────────────────────────────────────────────
+  doc.setFillColor(...OFFWHITE);
+  doc.rect(MARGIN, y, CONTENT_W, 52, 'F');
+  doc.setFillColor(...ORANGE);
+  doc.rect(MARGIN, y, 3, 52, 'F');
+  setFont('bold', 9);
+  doc.setTextColor(...ORANGE);
+  doc.text('PAYMENT DETAILS', MARGIN + 8, y + 8);
+  setFont('normal', 9);
+  doc.setTextColor(...DARK);
+  doc.text('Bank:',           MARGIN + 8,  y + 18);  doc.text('Standard Bank',                        MARGIN + 48, y + 18);
+  doc.text('Account Name:',   MARGIN + 8,  y + 26);  doc.text('The Breed Industries (PTY) LTD',        MARGIN + 48, y + 26);
+  doc.text('Account Number:', MARGIN + 8,  y + 34);  doc.text('10268731932',                           MARGIN + 48, y + 34);
+  doc.text('Branch Code:',    MARGIN + 8,  y + 42);  doc.text('051001',                                MARGIN + 48, y + 42);
+  doc.text('SWIFT Code:',     MARGIN + 8,  y + 50);  doc.text('SBZAZAJJ',                              MARGIN + 48, y + 50);
+  setFont('bold', 8);
+  doc.setTextColor(...ORANGE);
+  doc.text('Please use the invoice number as your payment reference.', MARGIN + 8, y + 58);
+  y += 64;
+
+  // Notes
+  if (data.notes) {
+    setFont('bold', 9);
+    doc.setTextColor(...NAVY);
+    doc.text('Notes:', MARGIN, y);
+    y += 6;
+    setFont('normal', 8);
+    doc.setTextColor(...DARK);
+    const noteLines = doc.splitTextToSize(data.notes, CONTENT_W);
+    doc.text(noteLines, MARGIN, y);
+    y += noteLines.length * 4 + 6;
+  }
+
+  // ── Draw all page footers now that we know the total ──────────────────────
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    drawPageFooter(i, totalPages);
+  }
+
+  return Buffer.from(doc.output('arraybuffer'));
+}
+
+export interface InvoicePDFItem {
+  name: string;
+  description: string;
+  quantity: number;
+  rate: number;
+  pricingType?: 'one-time' | 'monthly';
+  amount: number;
+}
+
+export interface InvoicePDFData {
+  invoiceNumber: string;
+  quoteNumber?: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string;
+  customerAddress?: string;
+  items: InvoicePDFItem[];
+  oneTimeTotal: number;
+  monthlyTotal: number;
+  deposit: number;
+  balance: number;
+  totalAmount: number;
+  status: string;
+  paymentStatus: string;
+  dueDate: string;
+  issueDate: string;
+  notes?: string;
 }

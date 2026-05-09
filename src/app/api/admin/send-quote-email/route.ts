@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { supabase } from '@/lib/supabase';
+import { generateQuotePDF, QuoteData } from '@/lib/pdf/breedPdf';
 
 export const runtime = 'nodejs';
 
@@ -21,6 +22,32 @@ export async function POST(req: NextRequest) {
 
     const resend = new Resend(RESEND_API_KEY);
     const items: any[] = Array.isArray(quote.items) ? quote.items : [];
+
+    // Generate PDF attachment
+    let pdfBuffer: Buffer | null = null;
+    try {
+      const now = new Date();
+      const quoteData: QuoteData = {
+        quoteNumber:     quote.quote_number || quote.id,
+        customerName:    quote.customer_name,
+        customerCompany: quote.customer_company || '',
+        customerAddress: quote.customer_address || '',
+        customerEmail:   quote.customer_email,
+        customerPhone:   quote.customer_phone || '',
+        projectName:     quote.project_name || quote.customer_name,
+        contactPerson:   quote.contact_person || quote.customer_name,
+        paymentTerms:    quote.payment_terms || '50% Upfront',
+        requireDeposit:  true,
+        items:           items,
+        notes:           quote.notes || '',
+        date:            now.toLocaleDateString('en-ZA', { day: '2-digit', month: 'long', year: 'numeric' }),
+        validUntil:      new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000)
+                           .toLocaleDateString('en-ZA', { day: '2-digit', month: 'long', year: 'numeric' }),
+      };
+      pdfBuffer = generateQuotePDF(quoteData);
+    } catch (pdfErr) {
+      console.error('PDF generation failed for quote email:', pdfErr);
+    }
 
     const itemsHtml = items.map((item: any, i: number) => `
       <tr>
@@ -89,6 +116,9 @@ export async function POST(req: NextRequest) {
       replyTo: COMPANY_EMAIL,
       subject: `Your Quote ${quote.quote_number} from Breed Industries — R${(Number(quote.total) || 0).toLocaleString('en-ZA')}`,
       html: emailHtml,
+      attachments: pdfBuffer
+        ? [{ filename: `Breed_Industries_Quote_${quote.quote_number}.pdf`, content: pdfBuffer }]
+        : [],
     });
 
     if (emailResult.error) {
