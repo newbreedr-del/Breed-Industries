@@ -150,10 +150,7 @@ export default function TendersDashboard() {
     setScraping(true);
     setScrapeResult(null);
     try {
-      const res = await fetch('/api/cron/scrape-tenders', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET ?? ''}` },
-      });
+      const res = await fetch('/api/admin/run-scrape', { method: 'POST' });
       const d = await res.json();
       setScrapeResult(
         res.ok

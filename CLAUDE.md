@@ -172,6 +172,30 @@ CONTACT_PHONE
 
 ---
 
+## Admin API Routes — Scrape Trigger
+
+**Never call `/api/cron/scrape-tenders` from the browser.** That endpoint requires `Authorization: Bearer ${CRON_SECRET}`, which is a server-only env var and is never available in `'use client'` components.
+
+The admin panel uses a dedicated proxy route instead:
+
+```
+POST /api/admin/run-scrape
+```
+
+This route (`src/app/api/admin/run-scrape/route.ts`) authenticates via the `admin_session` cookie (same as all other admin routes) and calls `runTenderScrapeAndMatch()` directly on the server. The button in `src/app/admin/tenders/page.tsx` calls this route — do not change it back to the cron endpoint.
+
+The two endpoints serve different callers:
+- `/api/cron/scrape-tenders` — Vercel Cron only (CRON_SECRET header required)
+- `/api/admin/run-scrape` — Admin panel browser button (admin_session cookie required)
+
+---
+
+## Tender Client Categories
+
+`src/app/admin/tender-clients/page.tsx` contains a `CATEGORIES` constant (~80 entries) aligned to South African government procurement taxonomy: CIDB disciplines, CSD commodity groups, and eTenders portal categories. When adding or removing categories, keep them consistent with the scoring logic in `src/lib/tenderScraper.ts` — the scraper's `scoreTenderForClient()` matches tender categories against `client.service_categories` using case-insensitive substring matching.
+
+---
+
 ## Key Conventions
 
 - All API routes under `src/app/api/` must export `export const runtime = 'nodejs'` — the default Edge runtime breaks `fs`, jsPDF, and the Supabase Node client.
@@ -179,3 +203,4 @@ CONTACT_PHONE
 - `src/lib/supabase-server.ts` and `src/lib/supabase-storage.ts` exist but are legacy — prefer the clients exported from `src/lib/supabase.ts`.
 - Currency is always South African Rand (ZAR). Format as `R {amount}` with no space between R and digits in headings, but `R {amount}` in body text. Breed Industries is not VAT registered — all quotes/invoices are VAT-exclusive.
 - All monetary values stored in Supabase are in **cents** for tender `estimated_value` (`tender.estimated_value / 100` to display), but in **rands** for quotes and invoices.
+- **Never expose `CRON_SECRET` to the browser.** Do not add a `NEXT_PUBLIC_CRON_SECRET` env var — if you need to trigger a scrape from the admin UI, use `/api/admin/run-scrape` instead.
