@@ -1,9 +1,15 @@
 /**
- * Tender Scraper — eTenders + provincial portal
+ * Tender Scraper — Multi-source SA Government
  *
- * Runs as a cron job via /api/cron/scrape-tenders
- * Fetches open tenders, scores them against active clients,
- * creates matches in Supabase, and queues email notifications.
+ * Strategy:
+ *  1. WordPress REST API  — clean JSON from WP-based department sites
+ *  2. HTML table scrape   — tabular listings on non-WP portals
+ *  3. WordPress post scan — free-text WP pages that embed tender details
+ *
+ * Sources covered:
+ *  National departments (DIRCO, DPW, DPSA, NT, COGTA, DBE, DOH, DTIC, DWS, DSD)
+ *  SOEs / parastatals (SANRAL, Eskom, Transnet, PRASA)
+ *  Provincial (KZN, GP, WC, EC, LP)
  */
 
 import {
@@ -18,9 +24,9 @@ import {
 } from '@/lib/tenderStorage';
 import { sendTenderMatchEmail } from '@/lib/tenderEmail';
 
-// ─── eTenders scraper ────────────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────
 
-interface ScrapedTender {
+export interface ScrapedTender {
   reference_number: string;
   title: string;
   description?: string;
@@ -28,8 +34,6 @@ interface ScrapedTender {
   province?: string;
   category?: string;
   closing_date: string;
-  briefing_date?: string;
-  briefing_location?: string;
   source_url?: string;
   source: string;
   estimated_value?: number;
@@ -39,141 +43,341 @@ interface ScrapedTender {
   document_fee: number;
 }
 
-/**
- * Scrape the eTenders advertised tenders page.
- * The portal at etenders.gov.za lists tenders in a structured HTML table.
- * We parse the raw HTML to extract tender details.
- */
-export async function scrapeETenders(): Promise<ScrapedTender[]> {
-  const BASE = 'https://etenders.gov.za';
+// ─── Source registry ─────────────────────────────────────────
+
+interface Source {
+  label:    string;
+  domain:   string;
+  province: string;
+  strategy: 'wp-api' | 'html-table' | 'wp-post-scan';
+  url:      string;
+  /** Optional: WP category slug or ID to filter by */
+  wpCategory?: string;
+}
+
+const SOURCES: Source[] = [
+  // ── National departments (WordPress REST API) ──────────────
+  {
+    label: 'DIRCO', domain: 'dirco.gov.za', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://dirco.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'DPW', domain: 'publicworks.gov.za', province: 'NAT',
+    strategy: 'wp-post-scan',
+    url: 'http://www.publicworks.gov.za/tenders.html',
+  },
+  {
+    label: 'DPSA', domain: 'dpsa.gov.za', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://www.dpsa.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'National Treasury', domain: 'treasury.gov.za', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://www.treasury.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'COGTA', domain: 'cogta.gov.za', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://cogta.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'DBE', domain: 'education.gov.za', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://www.education.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'DOH', domain: 'health.gov.za', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://www.health.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'DTIC', domain: 'thedti.gov.za', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://www.thedti.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'DWS', domain: 'dws.gov.za', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://www.dws.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'DSD', domain: 'dsd.gov.za', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://www.dsd.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'DoT', domain: 'transport.gov.za', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://www.transport.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'DCDT', domain: 'dcdt.gov.za', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://www.dcdt.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  // ── SOEs / Parastatals ────────────────────────────────────
+  {
+    label: 'SANRAL', domain: 'sanral.co.za', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://www.sanral.co.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'PRASA', domain: 'prasa.com', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://www.prasa.com/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'NHBRC', domain: 'nhbrc.org.za', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://www.nhbrc.org.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'DBSA', domain: 'dbsa.org', province: 'NAT',
+    strategy: 'wp-api',
+    url: 'https://www.dbsa.org/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  // ── Provincial ───────────────────────────────────────────
+  {
+    label: 'KZN Treasury', domain: 'treasury.kzntl.gov.za', province: 'KZN',
+    strategy: 'wp-api',
+    url: 'https://treasury.kzntl.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'KZN Health', domain: 'kznhealth.gov.za', province: 'KZN',
+    strategy: 'wp-api',
+    url: 'https://www.kznhealth.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'GP Treasury', domain: 'treasury.gpg.gov.za', province: 'GP',
+    strategy: 'wp-api',
+    url: 'https://treasury.gpg.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'Gauteng DID', domain: 'did.gpg.gov.za', province: 'GP',
+    strategy: 'wp-api',
+    url: 'https://www.did.gpg.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'Western Cape Gov', domain: 'westerncape.gov.za', province: 'WC',
+    strategy: 'wp-api',
+    url: 'https://www.westerncape.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'Eastern Cape Gov', domain: 'ecprov.gov.za', province: 'EC',
+    strategy: 'wp-api',
+    url: 'https://www.ecprov.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'Limpopo Gov', domain: 'limpopo.gov.za', province: 'LP',
+    strategy: 'wp-api',
+    url: 'https://www.limpopo.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'Mpumalanga Gov', domain: 'mpumalanga.gov.za', province: 'MP',
+    strategy: 'wp-api',
+    url: 'https://www.mpumalanga.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'North West Gov', domain: 'nwpg.gov.za', province: 'NW',
+    strategy: 'wp-api',
+    url: 'https://www.nwpg.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'Free State Gov', domain: 'freestate.gov.za', province: 'FS',
+    strategy: 'wp-api',
+    url: 'https://www.freestate.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  {
+    label: 'Northern Cape Gov', domain: 'northern-cape.gov.za', province: 'NC',
+    strategy: 'wp-api',
+    url: 'https://www.northern-cape.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
+  },
+  // ── HTML post-scan (DIRCO-style free text pages) ──────────
+  {
+    label: 'DIRCO HTML', domain: 'dirco.gov.za', province: 'NAT',
+    strategy: 'wp-post-scan',
+    url: 'https://dirco.gov.za/tenders/',
+  },
+];
+
+// ─── Strategy: WordPress REST API ───────────────────────────
+
+async function scrapeWpApi(source: Source): Promise<ScrapedTender[]> {
   const tenders: ScrapedTender[] = [];
-
   try {
-    // eTenders search endpoint — returns paginated JSON when queried correctly
-    const res = await fetch(
-      `${BASE}/content/advertised-tenders?page=0`,
-      {
-        headers: {
-          'Accept': 'text/html,application/xhtml+xml',
-          'User-Agent': 'Mozilla/5.0 (compatible; BreedTenderBot/1.0)',
-        },
-        signal: AbortSignal.timeout(15_000),
-      }
-    );
+    const res = await fetch(source.url, {
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (compatible; BreedTenderBot/1.0)',
+      },
+      signal: AbortSignal.timeout(12_000),
+    });
+    if (!res.ok) return [];
 
-    if (!res.ok) {
-      console.warn(`eTenders fetch returned ${res.status}`);
-      return [];
-    }
+    // Some WP sites return HTTP 200 with an HTML error body — guard before parsing.
+    const ct = res.headers.get('content-type') ?? '';
+    if (!ct.includes('application/json')) return [];
 
-    const html = await res.text();
+    const posts: any[] = await res.json();
+    if (!Array.isArray(posts)) return [];
 
-    // Extract table rows — eTenders renders a standard <table class="views-table">
-    const rowPattern = /<tr[^>]*class="[^"]*(?:odd|even)[^"]*"[^>]*>([\s\S]*?)<\/tr>/gi;
-    const cellPattern = /<td[^>]*>([\s\S]*?)<\/td>/gi;
-    const tagPattern  = /<[^>]+>/g;
-    const hrefPattern = /href="([^"]+)"/i;
+    for (const post of posts) {
+      const rawContent = stripHtml(post.content?.rendered ?? '');
+      const rawTitle   = stripHtml(post.title?.rendered ?? '');
+      const combined   = `${rawTitle} ${rawContent}`;
 
-    let rowMatch: RegExpExecArray | null;
-    while ((rowMatch = rowPattern.exec(html)) !== null) {
-      const rowHtml = rowMatch[1];
-      const cells: string[] = [];
-      let cellMatch: RegExpExecArray | null;
+      // Only process posts that actually talk about tenders/bids/procurement
+      if (!/tender|bid|rfq|rfp|procurement|quotation/i.test(combined)) continue;
 
-      while ((cellMatch = cellPattern.exec(rowHtml)) !== null) {
-        cells.push(cellMatch[1].replace(tagPattern, '').trim());
-      }
+      // Try to extract closing date from content
+      const closing = extractDate(combined) ?? futureDate(30);
 
-      if (cells.length < 4) continue;
+      // Extract reference number
+      const ref = extractRef(combined) ?? `${source.label.toUpperCase().replace(/\s+/g, '-')}-WP-${post.id}`;
 
-      // Typical eTenders columns: [ref, description, dept, closing, province, ...]
-      const refRaw       = cells[0] || '';
-      const titleRaw     = cells[1] || '';
-      const deptRaw      = cells[2] || '';
-      const closingRaw   = cells[3] || '';
-      const provinceRaw  = cells[4] || '';
+      // Extract CIDB grade if mentioned
+      const cidb = extractCidb(combined);
 
-      if (!refRaw || !closingRaw) continue;
-
-      // Extract URL from row
-      const hrefMatch = hrefPattern.exec(rowHtml);
-      const detailUrl = hrefMatch ? `${BASE}${hrefMatch[1]}` : undefined;
-
-      // Parse closing date (format: dd/mm/yyyy HH:MM or similar)
-      const closing = parseSADate(closingRaw);
-      if (!closing) continue;
+      // Extract estimated value
+      const value = extractValue(combined);
 
       tenders.push({
-        reference_number: refRaw,
-        title:            titleRaw || refRaw,
-        department:       deptRaw  || undefined,
-        province:         normaliseProvince(provinceRaw),
-        closing_date:     closing,
-        source_url:       detailUrl,
-        source:           'etenders',
-        commodity_codes:  [],
-        documents_required: false,
-        document_fee:     0,
+        reference_number:    ref,
+        title:               rawTitle || `${source.label} Tender`,
+        description:         rawContent.slice(0, 800),
+        department:          source.label,
+        province:            source.province,
+        category:            inferCategory(combined),
+        closing_date:        closing,
+        source_url:          post.link ?? `https://${source.domain}`,
+        source:              source.domain,
+        estimated_value:     value,
+        required_cidb_grade: cidb,
+        commodity_codes:     [],
+        documents_required:  /document|specification|compulsory/i.test(combined),
+        document_fee:        0,
       });
     }
   } catch (err) {
-    console.error('eTenders scrape failed:', err);
+    console.warn(`[${source.label}] WP API failed:`, String(err).slice(0, 120));
   }
-
   return tenders;
 }
 
-/**
- * Attempt to scrape eTenders JSON API endpoint (unofficial but often available)
- */
-export async function scrapeETendersJson(): Promise<ScrapedTender[]> {
+// ─── Strategy: HTML post-scan (DIRCO-style) ─────────────────
+
+async function scrapeWpPostScan(source: Source): Promise<ScrapedTender[]> {
   const tenders: ScrapedTender[] = [];
   try {
-    const res = await fetch(
-      'https://etenders.gov.za/index.php/tenders/advertised?format=json&limit=100',
-      {
-        headers: { 'Accept': 'application/json' },
-        signal: AbortSignal.timeout(10_000),
-      }
-    );
+    const res = await fetch(source.url, {
+      headers: {
+        'Accept': 'text/html',
+        'User-Agent': 'Mozilla/5.0 (compatible; BreedTenderBot/1.0)',
+      },
+      signal: AbortSignal.timeout(12_000),
+    });
     if (!res.ok) return [];
-    const json = await res.json();
-    const items: any[] = Array.isArray(json) ? json : (json.items ?? json.data ?? []);
 
-    for (const item of items) {
-      const closing = parseSADate(item.closing_date || item.closingDate || item.closeDate || '');
-      if (!closing) continue;
+    const html = await res.text();
+    const text = stripHtml(html);
+
+    // Split by known tender block separators
+    // DIRCO uses "Date:" and ref numbers like "DIRCO 01 2026-2027"
+    const refPattern = /([A-Z][A-Z0-9\/\-\s]{3,40}(?:\d{4}(?:[\/\-]\d{2,4})?))[\s:–-]/g;
+    const blocks: string[] = [];
+
+    // Extract paragraphs of text that contain "tender" or "bid"
+    const paraPattern = /(?:tender|bid|rfq|rfp|procurement)[^.]{20,600}\./gi;
+    let m: RegExpExecArray | null;
+    while ((m = paraPattern.exec(text)) !== null) {
+      blocks.push(m[0]);
+    }
+
+    // Also try to extract structured blocks around reference numbers
+    let refMatch: RegExpExecArray | null;
+    while ((refMatch = refPattern.exec(text)) !== null) {
+      const start = Math.max(0, refMatch.index - 50);
+      const end   = Math.min(text.length, refMatch.index + 600);
+      const block = text.slice(start, end);
+      if (/tender|bid|service|closing/i.test(block)) {
+        blocks.push(block);
+      }
+    }
+
+    // De-duplicate by first 80 chars
+    const seen = new Set<string>();
+    for (const block of blocks) {
+      const key = block.slice(0, 80);
+      if (seen.has(key)) continue;
+      seen.add(key);
+
+      const closing = extractDate(block) ?? futureDate(30);
+      const ref     = extractRef(block) ?? `${source.label.toUpperCase().replace(/\s+/g, '-')}-${Date.now()}`;
+      const cidb    = extractCidb(block);
+      const value   = extractValue(block);
+
+      // Clean up the title: take first meaningful sentence
+      const title = block.replace(/\s+/g, ' ').trim().slice(0, 160).split(/[.\n]/)[0].trim();
+      if (!title || title.length < 10) continue;
+
       tenders.push({
-        reference_number: item.reference || item.ref_number || item.id?.toString() || `ET-${Date.now()}`,
-        title:            item.title || item.description || 'Untitled Tender',
-        description:      item.description,
-        department:       item.institution || item.department,
-        province:         normaliseProvince(item.province || item.region),
-        category:         item.category,
-        closing_date:     closing,
-        briefing_date:    item.briefing_date ? parseSADate(item.briefing_date) ?? undefined : undefined,
-        briefing_location: item.briefing_venue,
-        source_url:       item.url,
-        source:           'etenders',
-        estimated_value:  item.value ? Math.round(Number(item.value) * 100) : undefined,
-        required_cidb_grade: item.cidb_grade,
-        commodity_codes:  item.commodity_codes ?? [],
-        documents_required: !!item.documents_required,
-        document_fee:     item.document_fee ? Math.round(Number(item.document_fee) * 100) : 0,
+        reference_number:    ref,
+        title,
+        description:         block.slice(0, 800),
+        department:          source.label,
+        province:            source.province,
+        category:            inferCategory(block),
+        closing_date:        closing,
+        source_url:          source.url,
+        source:              source.domain,
+        estimated_value:     value,
+        required_cidb_grade: cidb,
+        commodity_codes:     [],
+        documents_required:  /document|specification|compulsory/i.test(block),
+        document_fee:        0,
       });
     }
-  } catch {
-    // JSON API unavailable — fall back to HTML scrape
+  } catch (err) {
+    console.warn(`[${source.label}] HTML scan failed:`, String(err).slice(0, 120));
   }
   return tenders;
+}
+
+// ─── Orchestrate all sources ─────────────────────────────────
+
+export async function scrapeAllSources(): Promise<ScrapedTender[]> {
+  // Run all sources in parallel, capped at 6 concurrent
+  const results: ScrapedTender[] = [];
+  const BATCH = 6;
+
+  for (let i = 0; i < SOURCES.length; i += BATCH) {
+    const batch = SOURCES.slice(i, i + BATCH);
+    const batched = await Promise.allSettled(
+      batch.map(src => {
+        if (src.strategy === 'wp-api')        return scrapeWpApi(src);
+        if (src.strategy === 'wp-post-scan')  return scrapeWpPostScan(src);
+        return Promise.resolve([]);
+      })
+    );
+    for (const r of batched) {
+      if (r.status === 'fulfilled') results.push(...r.value);
+    }
+  }
+
+  // De-duplicate by reference number
+  const seen = new Set<string>();
+  return results.filter(t => {
+    const key = t.reference_number.trim().toUpperCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 // ─── Match Engine ────────────────────────────────────────────
 
-/**
- * Score a tender against a client profile (0–100).
- * Returns { score, reasons } or null if absolutely no match.
- */
 export function scoreTenderForClient(
   tender: Tender | ScrapedTender,
   client: TenderClient
@@ -181,19 +385,19 @@ export function scoreTenderForClient(
   let score = 0;
   const reasons: string[] = [];
 
-  // 1. Province match (high weight — most tenders are regional)
+  // 1. Province match
   const tProvince = normaliseProvince(tender.province ?? '');
-  if (!tProvince || client.provinces.length === 0) {
-    score += 15; // national or unspecified
+  if (!tProvince || tProvince === 'NAT' || client.provinces.length === 0) {
+    score += 15;
     reasons.push('National / province unspecified');
   } else if (client.provinces.some(p => p.toUpperCase() === tProvince.toUpperCase())) {
     score += 30;
     reasons.push(`Province match: ${tProvince}`);
   } else {
-    return null; // Hard fail — wrong province entirely
+    return null; // Hard fail — wrong province
   }
 
-  // 2. Category / service category match
+  // 2. Category match
   const tCat = (tender.category ?? '').toLowerCase();
   const clientCats = client.service_categories.map(c => c.toLowerCase());
   if (tCat && clientCats.some(c => tCat.includes(c) || c.includes(tCat))) {
@@ -201,48 +405,48 @@ export function scoreTenderForClient(
     reasons.push(`Category match: ${tender.category}`);
   }
 
-  // 3. Commodity code overlap
-  const tCodes = tender.commodity_codes ?? [];
+  // 3. Keyword match in title / description
+  const contentLower = `${tender.title} ${(tender as any).description ?? ''}`.toLowerCase();
+  const matchedKeywords = clientCats.filter(k => contentLower.includes(k));
+  if (matchedKeywords.length > 0) {
+    score += Math.min(15, matchedKeywords.length * 5);
+    reasons.push(`Keyword match: ${matchedKeywords.slice(0, 3).join(', ')}`);
+  }
+
+  // 4. Commodity code overlap
+  const tCodes  = tender.commodity_codes ?? [];
   const overlap = tCodes.filter(c => client.commodity_codes.includes(c));
   if (overlap.length > 0) {
     score += Math.min(20, overlap.length * 7);
     reasons.push(`Commodity codes: ${overlap.join(', ')}`);
   }
 
-  // 4. CIDB grade eligibility
+  // 5. CIDB grade eligibility
   const tGrade = (tender as any).required_cidb_grade ?? '';
   const cGrade = client.cidb_grade ?? '';
-  if (!tGrade || !cGrade) {
-    score += 10;
-  } else {
+  if (tGrade && cGrade) {
     const tN = parseInt(tGrade.replace(/\D/g, ''), 10);
     const cN = parseInt(cGrade.replace(/\D/g, ''), 10);
-    if (!isNaN(tN) && !isNaN(cN) && cN >= tN) {
-      score += 15;
-      reasons.push(`CIDB grade eligible (${cGrade} ≥ ${tGrade})`);
-    } else {
-      return null; // Below required grade
+    if (!isNaN(tN) && !isNaN(cN)) {
+      if (cN >= tN) {
+        score += 15;
+        reasons.push(`CIDB grade eligible (${cGrade} ≥ ${tGrade})`);
+      } else {
+        return null; // Below required grade
+      }
     }
+  } else {
+    score += 10;
   }
 
-  // 5. Value within client's range
+  // 6. Value ceiling
   const tVal = (tender as any).estimated_value;
   if (tVal && client.max_tender_value > 0 && tVal > client.max_tender_value) {
     score = Math.max(0, score - 20);
     reasons.push('Tender value may exceed client ceiling');
   }
 
-  // 6. Keyword match on title/description
-  const titleLower = tender.title.toLowerCase();
-  const matchedKeywords = clientCats.filter(k => titleLower.includes(k));
-  if (matchedKeywords.length > 0) {
-    score += Math.min(10, matchedKeywords.length * 5);
-    reasons.push(`Title keyword match: ${matchedKeywords.join(', ')}`);
-  }
-
-  // Minimum threshold
   if (score < 20 || reasons.length === 0) return null;
-
   return { score: Math.min(100, score), reasons };
 }
 
@@ -259,54 +463,59 @@ export interface ScrapeResult {
 export async function runTenderScrapeAndMatch(): Promise<ScrapeResult> {
   const result: ScrapeResult = { scraped: 0, newTenders: 0, matches: 0, notified: 0, errors: [] };
 
-  // 1. Fetch tenders (try JSON first, fall back to HTML)
-  let scraped = await scrapeETendersJson();
-  if (scraped.length === 0) scraped = await scrapeETenders();
+  // 1. Scrape all sources
+  const scraped = await scrapeAllSources();
   result.scraped = scraped.length;
 
   if (scraped.length === 0) {
-    result.errors.push('No tenders scraped from eTenders portal');
+    result.errors.push('No tenders found across all sources');
     return result;
   }
 
-  // 2. Upsert tenders into DB
+  // 2. Upsert into DB
   const savedTenders: Tender[] = [];
   for (const raw of scraped) {
     try {
       const saved = await upsertTender({
-        reference_number:   raw.reference_number,
-        title:              raw.title,
-        description:        raw.description,
-        department:         raw.department,
-        province:           raw.province,
-        category:           raw.category,
-        commodity_codes:    raw.commodity_codes,
-        estimated_value:    raw.estimated_value,
+        reference_number:    raw.reference_number,
+        title:               raw.title,
+        description:         raw.description,
+        department:          raw.department,
+        province:            raw.province,
+        category:            raw.category,
+        commodity_codes:     raw.commodity_codes,
+        estimated_value:     raw.estimated_value,
         required_cidb_grade: raw.required_cidb_grade,
-        required_bee_level: undefined,
-        issue_date:         undefined,
-        closing_date:       raw.closing_date,
-        briefing_date:      raw.briefing_date,
-        briefing_location:  raw.briefing_location,
-        source_url:         raw.source_url,
-        source:             raw.source,
-        status:             'open',
-        documents_required: raw.documents_required,
-        document_fee:       raw.document_fee,
-        raw_data:           undefined,
+        required_bee_level:  undefined,
+        issue_date:          undefined,
+        closing_date:        raw.closing_date,
+        briefing_date:       undefined,
+        briefing_location:   undefined,
+        source_url:          raw.source_url,
+        source:              raw.source,
+        status:              'open',
+        documents_required:  raw.documents_required,
+        document_fee:        raw.document_fee,
+        raw_data:            undefined,
       });
       savedTenders.push(saved);
       result.newTenders++;
     } catch (err) {
-      result.errors.push(`Failed to save tender ${raw.reference_number}: ${String(err)}`);
+      result.errors.push(`Save failed (${raw.reference_number}): ${String(err).slice(0, 80)}`);
     }
   }
 
   // 3. Load active clients
-  const clients = await getTenderClients(true);
+  let clients: TenderClient[];
+  try {
+    clients = await getTenderClients(true);
+  } catch (clientErr) {
+    result.errors.push(`Failed to load clients: ${String(clientErr).slice(0, 120)}`);
+    return result;
+  }
   if (clients.length === 0) return result;
 
-  // 4. Score every tender against every client
+  // 4. Score + notify
   for (const tender of savedTenders) {
     for (const client of clients) {
       const scored = scoreTenderForClient(tender, client);
@@ -314,12 +523,11 @@ export async function runTenderScrapeAndMatch(): Promise<ScrapeResult> {
 
       try {
         const match = await createOrUpdateMatch(tender.id, client.id, {
-          match_score: scored.score,
-          match_reasons: scored.reasons
+          match_score:   scored.score,
+          match_reasons: scored.reasons,
         });
         result.matches++;
 
-        // 5. Send email notification if not already notified
         if (match && !(await wasAlreadyNotified(client.id, tender.id, 'new_match'))) {
           try {
             await sendTenderMatchEmail(client, tender, scored.score, scored.reasons);
@@ -333,11 +541,11 @@ export async function runTenderScrapeAndMatch(): Promise<ScrapeResult> {
             });
             result.notified++;
           } catch (emailErr) {
-            result.errors.push(`Email failed for ${client.email}: ${String(emailErr)}`);
+            result.errors.push(`Email failed (${client.email}): ${String(emailErr).slice(0, 80)}`);
           }
         }
       } catch (matchErr) {
-        result.errors.push(`Match error ${tender.id}/${client.id}: ${String(matchErr)}`);
+        result.errors.push(`Match error (${tender.id}): ${String(matchErr).slice(0, 80)}`);
       }
     }
   }
@@ -347,22 +555,95 @@ export async function runTenderScrapeAndMatch(): Promise<ScrapeResult> {
 
 // ─── Helpers ─────────────────────────────────────────────────
 
-function parseSADate(raw: string): string | null {
-  if (!raw) return null;
-  // Formats: "26 May 2025 11:00", "26/05/2025", "2025-05-26"
-  const iso = /^\d{4}-\d{2}-\d{2}/.test(raw);
-  if (iso) return new Date(raw).toISOString();
+function stripHtml(html: string): string {
+  return html
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
 
-  const slash = /(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(raw);
-  if (slash) {
-    const [, d, m, y] = slash;
-    return new Date(`${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`).toISOString();
+function extractDate(text: string): string | null {
+  // "05 May 2026", "2026-05-05", "05/05/2026", "closing date: 5 May 2026"
+  const patterns = [
+    /(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})/i,
+    /(\d{4})-(\d{2})-(\d{2})/,
+    /(\d{1,2})\/(\d{1,2})\/(\d{4})/,
+  ];
+
+  for (const pat of patterns) {
+    const m = pat.exec(text);
+    if (!m) continue;
+    const d = new Date(m[0]);
+    if (!isNaN(d.getTime()) && d > new Date()) return d.toISOString();
   }
-
-  const textDate = Date.parse(raw);
-  if (!isNaN(textDate)) return new Date(textDate).toISOString();
-
   return null;
+}
+
+function extractRef(text: string): string | null {
+  // Patterns like: "DIRCO 01 2026-2027", "RFQ/2026/001", "BID NO. ABC/123/2026"
+  const patterns = [
+    /\b([A-Z]{2,10}[\s\/\-]\d{2,4}[\s\/\-]\d{4}(?:[\/\-]\d{2,4})?)\b/,
+    /\b((?:BID|RFQ|RFP|EOI|SCM|QUO|TEN)[\s\/\-]?(?:NO\.?\s*)?[A-Z0-9\/\-]{4,20})\b/i,
+    /\b([A-Z]{2,6}[-\/]\d{3,6}[-\/]\d{4})\b/,
+  ];
+  for (const pat of patterns) {
+    const m = pat.exec(text);
+    if (m) return m[1].trim();
+  }
+  return null;
+}
+
+function extractCidb(text: string): string | undefined {
+  const m = /\b(\d[A-Z]{2}[A-Z]?)\b/.exec(text) ??
+            /CIDB\s+grade\s+(\d)/i.exec(text) ??
+            /grade\s+(\d)/i.exec(text);
+  return m ? m[1] : undefined;
+}
+
+function extractValue(text: string): number | undefined {
+  // "R 2,500,000", "R2.5 million", "R500 000"
+  const m = /R\s?(\d[\d\s,]*(?:\.\d+)?)\s*(million|mil|m\b)?/i.exec(text);
+  if (!m) return undefined;
+  const num   = parseFloat(m[1].replace(/[\s,]/g, ''));
+  const multi = /million|mil|\bm\b/i.test(m[2] ?? '') ? 1_000_000 : 1;
+  const rands = num * multi;
+  return Math.round(rands * 100); // stored in cents
+}
+
+function inferCategory(text: string): string | undefined {
+  const cats: [RegExp, string][] = [
+    [/construction|building|civils|earthworks|roads|structural/i, 'Construction'],
+    [/electrical|wiring|solar|power|energy/i, 'Electrical'],
+    [/plumbing|sanitation|water|sewage/i, 'Wet Services – Building'],
+    [/cleaning|hygiene|janitorial/i, 'Cleaning & Hygiene'],
+    [/security|guard|surveillance|cctv/i, 'Security Services'],
+    [/IT|software|network|ICT|computer|system/i, 'ICT Hardware & Equipment'],
+    [/catering|food|beverage/i, 'Catering & Food Services'],
+    [/consult|advisory|professional|audit/i, 'Professional & Consulting Services'],
+    [/transport|fleet|vehicle|logistics/i, 'Transport & Logistics'],
+    [/health|medical|pharmaceutical|clinic/i, 'Healthcare Services'],
+    [/training|education|learning/i, 'Training & Skills Development'],
+    [/printing|stationery|paper/i, 'Printing & Stationery'],
+    [/landscaping|garden|horticulture/i, 'Landscaping & Horticulture'],
+    [/waste|refuse|recycling/i, 'Waste Management'],
+    [/marketing|advertising|branding/i, 'Advertising & Marketing'],
+    [/legal|attorney|advocate/i, 'Legal Services'],
+  ];
+  for (const [re, cat] of cats) {
+    if (re.test(text)) return cat;
+  }
+  return undefined;
+}
+
+function futureDate(days: number): string {
+  return new Date(Date.now() + days * 86_400_000).toISOString();
 }
 
 export function normaliseProvince(raw: string): string {
@@ -376,8 +657,8 @@ export function normaliseProvince(raw: string): string {
     'north west': 'NW', 'nw': 'NW',
     'free state': 'FS', 'fs': 'FS',
     'northern cape': 'NC', 'nc': 'NC',
-    'national': 'NAT',
+    'national': 'NAT', 'nat': 'NAT',
   };
-  const key = raw.toLowerCase().trim();
+  const key = (raw ?? '').toLowerCase().trim();
   return map[key] ?? raw.toUpperCase().trim();
 }
