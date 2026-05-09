@@ -36,7 +36,7 @@ export async function GET(
       notes:           invoice.notes,
     });
 
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="Breed_Industries_Invoice_${invoice.invoiceNumber}.pdf"`,
