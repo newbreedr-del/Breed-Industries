@@ -738,49 +738,51 @@ export function generateQuotePDF(data: QuoteData): Buffer {
     : 'Full payment is required before any work commences.';
   doc.text(paymentText, MARGIN + 6, y + 14);
 
-  // Banking details block - check if we need a page break
-  y += 26;
-  if (y > PAGE_H - 80) {
-    doc.addPage();
-    y = 30;
-  }
-  
+  // Banking details block - compact version to fit on page 1
+  y += 16;
   setFont('bold', 10);
   doc.setTextColor(...NAVY);
   doc.text('Banking Details', MARGIN, y);
-  y += 8;
+  y += 7;
   doc.setFillColor(...OFFWHITE);
-  doc.rect(MARGIN, y, CONTENT_W, 50, 'F');
+  doc.rect(MARGIN, y, CONTENT_W, 36, 'F');
   doc.setFillColor(...ORANGE);
-  doc.rect(MARGIN, y, 3, 50, 'F');
-  y += 10;
-  setFont('normal', 9);
+  doc.rect(MARGIN, y, 3, 36, 'F');
+  y += 8;
+  setFont('normal', 8);
   doc.setTextColor(...DARK);
-  doc.text('Bank:              Standard Bank', MARGIN + 8, y);
-  doc.text('Account Name:      The Breed Industries (PTY) LTD', MARGIN + 8, y + 8);
-  doc.text('Account Number:    10268731932', MARGIN + 8, y + 16);
-  doc.text('Branch Code:       051001', MARGIN + 8, y + 24);
-  doc.text('SWIFT Code:        SBZAZAJJ', MARGIN + 8, y + 32);
-  y += 42;
+  doc.text('Bank:              Standard Bank', MARGIN + 6, y);
+  doc.text('Account Name:      The Breed Industries (PTY) LTD', MARGIN + 6, y + 6);
+  doc.text('Account Number:    10268731932', MARGIN + 6, y + 12);
+  doc.text('Branch Code:       051001', MARGIN + 6, y + 18);
+  doc.text('SWIFT Code:        SBZAZAJJ', MARGIN + 6, y + 24);
+  y += 30;
 
-  // Notes
+  // Notes - keep on page 1 if possible
   if (data.notes) {
-    y += 8;
-    // Check if notes will fit before footer
-    const noteLines = doc.splitTextToSize(data.notes, CONTENT_W);
-    const notesHeight = noteLines.length * 4 + 10;
-    if (y + notesHeight > PAGE_H - 30) {
-      doc.addPage();
-      y = 30;
-    }
-    setFont('bold', 9);
-    doc.setTextColor(...NAVY);
-    doc.text('Notes:', MARGIN, y);
     y += 6;
-    setFont('normal', 8);
-    doc.setTextColor(...DARK);
-    doc.text(noteLines, MARGIN, y);
-    y += noteLines.length * 4;
+    // Only move to page 2 if notes are very long
+    const noteLines = doc.splitTextToSize(data.notes, CONTENT_W);
+    if (noteLines.length > 3) {
+      // Long notes - only keep first 3 lines on page 1
+      const truncatedLines = noteLines.slice(0, 3);
+      setFont('bold', 8);
+      doc.setTextColor(...NAVY);
+      doc.text('Notes:', MARGIN, y);
+      y += 5;
+      setFont('normal', 8);
+      doc.setTextColor(...DARK);
+      doc.text(truncatedLines, MARGIN, y);
+    } else {
+      // Short notes - display all
+      setFont('bold', 8);
+      doc.setTextColor(...NAVY);
+      doc.text('Notes:', MARGIN, y);
+      y += 5;
+      setFont('normal', 8);
+      doc.setTextColor(...DARK);
+      doc.text(noteLines, MARGIN, y);
+    }
   }
 
   // Page 1 footer drawn at the very end once we know total pages
