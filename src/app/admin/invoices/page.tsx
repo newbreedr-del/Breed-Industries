@@ -17,7 +17,8 @@ import {
   CheckCircle,
   Clock,
   XCircle,
-  DollarSign
+  DollarSign,
+  Pencil
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -328,6 +329,13 @@ export default function InvoicesPage() {
                                 title="View Details"
                               >
                                 <Eye size={16} />
+                              </Link>
+                              <Link
+                                href={`/admin/invoices/${invoice.id}/edit`}
+                                className="p-2 rounded-lg bg-white/5 hover:bg-blue-500/20 text-white/70 hover:text-blue-400 transition-colors"
+                                title="Edit Invoice"
+                              >
+                                <Pencil size={16} />
                               </Link>
                               <button
                                 onClick={() => handleDeleteInvoice(invoice.id)}

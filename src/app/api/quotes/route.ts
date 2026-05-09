@@ -58,30 +58,63 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// PATCH /api/quotes - Update quote status
+// PATCH /api/quotes - Update quote (full update or status only)
 export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json();
-    const { id, status } = body;
+    const { id, ...updates } = body;
 
-    if (!id || !status) {
-      return NextResponse.json({ error: 'id and status are required' }, { status: 400 });
+    if (!id) {
+      return NextResponse.json({ error: 'id is required' }, { status: 400 });
     }
+
+    // Remove id from updates and add updated_at
+    const updateData = { ...updates, updated_at: new Date().toISOString() };
+    delete updateData.id;
 
     const { data, error } = await supabase
       .from('quotes')
-      .update({ status, updated_at: new Date().toISOString() })
+      .update(updateData)
       .eq('id', id)
       .select()
       .single();
 
     if (error) {
+      console.error('Error updating quote:', error);
       return NextResponse.json({ error: 'Failed to update quote' }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, quote: data });
   } catch (error) {
+    console.error('Error updating quote:', error);
     return NextResponse.json({ error: 'Failed to update quote' }, { status: 500 });
+  }
+}
+
+// DELETE /api/quotes - Delete quote
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ error: 'id is required' }, { status: 400 });
+    }
+
+    const { error } = await supabase
+      .from('quotes')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting quote:', error);
+      return NextResponse.json({ error: 'Failed to delete quote' }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true, message: 'Quote deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting quote:', error);
+    return NextResponse.json({ error: 'Failed to delete quote' }, { status: 500 });
   }
 }
 

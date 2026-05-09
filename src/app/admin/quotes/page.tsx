@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
-import { FileText, Download, Eye, EyeOff, Search, Filter, Calendar, Receipt, ArrowRight, PlusCircle, Mail, ChevronDown, CheckCircle, Clock, Send } from 'lucide-react';
+import { FileText, Download, Eye, EyeOff, Search, Filter, Calendar, Receipt, ArrowRight, PlusCircle, Mail, ChevronDown, CheckCircle, Clock, Send, Trash2, Pencil } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface Quote {
@@ -103,6 +103,26 @@ export default function QuotesPage() {
       total: String(quote.total),
     });
     router.push(`/admin/invoices/create?${params.toString()}`);
+  };
+
+  const handleDeleteQuote = async (quoteId: string) => {
+    if (!confirm('Are you sure you want to delete this quote? This action cannot be undone.')) return;
+
+    try {
+      const response = await fetch(`/api/quotes?id=${quoteId}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        setQuotes(prev => prev.filter(q => q.id !== quoteId));
+        alert('Quote deleted successfully!');
+      } else {
+        alert('Failed to delete quote');
+      }
+    } catch (error) {
+      console.error('Error deleting quote:', error);
+      alert('Failed to delete quote');
+    }
   };
 
   // Filter quotes based on search query
@@ -298,12 +318,26 @@ export default function QuotesPage() {
                               <Receipt size={14} />
                               {converting === quote.id ? 'Loading…' : 'Invoice'}
                             </button>
+                            <Link
+                              href={`/admin/quotes/${quote.id}/edit`}
+                              className="p-2 rounded-lg bg-white/5 hover:bg-blue-500/20 text-white/70 hover:text-blue-400 transition-colors"
+                              title="Edit Quote"
+                            >
+                              <Pencil size={16} />
+                            </Link>
                             <button
                               onClick={() => setExpandedQuote(expandedQuote === quote.id ? null : quote.id)}
                               className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors"
                               title="View Items"
                             >
                               {expandedQuote === quote.id ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                            <button
+                              onClick={() => handleDeleteQuote(quote.id)}
+                              className="p-2 rounded-lg bg-white/5 hover:bg-red-500/20 text-white/70 hover:text-red-400 transition-colors"
+                              title="Delete Quote"
+                            >
+                              <Trash2 size={16} />
                             </button>
                           </div>
                           {statusMsg?.id === quote.id && (
