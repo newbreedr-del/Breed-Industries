@@ -228,26 +228,28 @@ export default function Home() {
               },
             ].map((service: any) => (
               <Link key={service.title} href={service.href} className="group">
-                <div className={`glass-card p-7 h-full flex flex-col gap-4 transition-all duration-300 group-hover:-translate-y-2 relative ${service.badge ? 'ring-1 ring-accent/40' : ''}`}>
+                <div className={`glass-card p-5 h-[280px] flex flex-col gap-3 transition-all duration-300 group-hover:-translate-y-2 relative ${service.badge ? 'ring-1 ring-accent/40' : ''}`}>
                   {service.badge && (
-                    <span className="absolute -top-3 left-5 bg-accent text-black text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                    <span className="absolute -top-3 left-4 bg-accent text-black text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
                       {service.badge}
                     </span>
                   )}
-                  <div className="w-11 h-11 rounded-full bg-accent/15 flex items-center justify-center">
-                    {service.icon}
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-accent/15 flex items-center justify-center flex-shrink-0">
+                      {service.icon}
+                    </div>
+                    <h3 className="text-base font-heading font-bold text-white leading-tight">{service.title}</h3>
                   </div>
-                  <h3 className="text-lg font-heading font-bold text-white">{service.title}</h3>
-                  <p className="text-white/60 text-sm leading-relaxed">{service.description}</p>
-                  <ul className="mt-auto space-y-1.5">
-                    {service.items.map((item: string) => (
+                  <p className="text-white/60 text-sm leading-snug line-clamp-2">{service.description}</p>
+                  <ul className="flex-1 space-y-1">
+                    {service.items.slice(0, 3).map((item: string) => (
                       <li key={item} className="flex items-center gap-2 text-xs text-white/50">
                         <CheckCircle2 className="w-3 h-3 text-accent flex-shrink-0" />
-                        {item}
+                        <span className="truncate">{item}</span>
                       </li>
                     ))}
                   </ul>
-                  <div className="flex items-center text-accent text-sm font-medium pt-2">
+                  <div className="flex items-center text-accent text-sm font-medium pt-1">
                     <span>{service.badge ? 'Explore now' : 'See pricing'}</span>
                     <ArrowRight size={14} className="ml-2 transition-transform group-hover:translate-x-1" />
                   </div>
