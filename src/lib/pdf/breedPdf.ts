@@ -624,69 +624,71 @@ export function generateQuotePDF(data: QuoteData): Buffer {
       oneTimeTotal += amount;
     }
 
-    // Alternating row colors
-    if (i % 2 === 0) {
-      doc.setFillColor(...OFFWHITE);
-    } else {
-      doc.setFillColor(...WHITE);
+    const hasDesc = item.description && item.description.trim().length > 0;
+    const rowH   = hasDesc ? 18 : 12;
+    // Vertically centre all text within the row
+    const textY  = y + rowH / 2 + 1.5;
+
+    doc.setFillColor(i % 2 === 0 ? OFFWHITE : WHITE);
+    doc.rect(MARGIN, y, CONTENT_W, rowH, 'F');
+
+    // Row number + item name — same baseline as qty/rate/amount
+    setFont('bold', 8.5);
+    doc.setTextColor(...DARK);
+    doc.text(`${i + 1}`, MARGIN + 4, textY);
+    doc.text(item.name + (item.pricingType === 'monthly' ? ' (Monthly)' : ''), MARGIN + 14, textY);
+
+    // Description on a second line when present
+    if (hasDesc) {
+      setFont('normal', 7.5);
+      doc.setTextColor(...MUTED);
+      const descLines = doc.splitTextToSize(item.description, CONTENT_W - 75);
+      doc.text(descLines[0] || '', MARGIN + 14, y + 13);
     }
-    doc.rect(MARGIN, y, CONTENT_W, 14, 'F');
 
-    setFont('bold', 8);
+    // Qty / Rate / Amount — exactly same baseline as name
+    setFont('normal', 8.5);
     doc.setTextColor(...DARK);
-    doc.text(`${i + 1}`, MARGIN + 4, y + 5);
-    doc.text(item.name, MARGIN + 14, y + 5);
+    doc.text(item.quantity.toString(), PAGE_W - MARGIN - 50, textY, { align: 'center' });
+    doc.text(`R${item.rate.toLocaleString('en-ZA')}`, PAGE_W - MARGIN - 30, textY, { align: 'center' });
+    setFont('bold', 8.5);
+    doc.text(`R${amount.toLocaleString('en-ZA')}`, PAGE_W - MARGIN - 4, textY, { align: 'right' });
 
-    setFont('normal', 8);
-    doc.setTextColor(...MUTED);
-    const descLines = doc.splitTextToSize(item.description, CONTENT_W - 70);
-    doc.text(descLines, MARGIN + 14, y + 10);
-
-    doc.setTextColor(...DARK);
-    doc.text(item.quantity.toString(), PAGE_W - MARGIN - 50, y + 8, { align: 'center' });
-    doc.text(`R${item.rate.toLocaleString('en-ZA')}`, PAGE_W - MARGIN - 30, y + 8, { align: 'center' });
-    doc.text(`R${amount.toLocaleString('en-ZA')}`, PAGE_W - MARGIN - 4, y + 8, { align: 'right' });
-
-    y += 14;
+    y += rowH;
   });
 
-  // Totals section
+  // ── Totals ────────────────────────────────────────────────────────────────
   y += 6;
-  const totalBoxY = y;
 
-  // One-time subtotal
   if (oneTimeTotal > 0) {
     setFont('bold', 9);
     doc.setTextColor(...MUTED);
-    doc.text('One-Time Subtotal:', PAGE_W - MARGIN - 60, y);
+    doc.text('One-Time Subtotal:', PAGE_W - MARGIN - 62, y);
     doc.setTextColor(...DARK);
     doc.text(`R${oneTimeTotal.toLocaleString('en-ZA')}`, PAGE_W - MARGIN - 4, y, { align: 'right' });
     y += 7;
   }
 
-  // Monthly subtotal
   if (monthlyTotal > 0) {
     setFont('bold', 9);
     doc.setTextColor(...MUTED);
-    doc.text('Monthly Subscription:', PAGE_W - MARGIN - 60, y);
+    doc.text('Monthly Subscription:', PAGE_W - MARGIN - 62, y);
     doc.setTextColor(...DARK);
     doc.text(`R${monthlyTotal.toLocaleString('en-ZA')}/mo`, PAGE_W - MARGIN - 4, y, { align: 'right' });
     y += 7;
   }
 
-  // Deposit breakdown
   if (data.requireDeposit && oneTimeTotal > 0) {
     const deposit = oneTimeTotal * 0.5;
     const balance = oneTimeTotal - deposit;
     setFont('normal', 8);
     doc.setTextColor(...MUTED);
-    doc.text('50% Deposit Due:', PAGE_W - MARGIN - 60, y);
+    doc.text('50% Deposit Due:', PAGE_W - MARGIN - 62, y);
     doc.setTextColor(...DARK);
     doc.text(`R${deposit.toLocaleString('en-ZA')}`, PAGE_W - MARGIN - 4, y, { align: 'right' });
     y += 6;
-    setFont('normal', 8);
     doc.setTextColor(...MUTED);
-    doc.text('Balance on Completion:', PAGE_W - MARGIN - 60, y);
+    doc.text('Balance on Completion:', PAGE_W - MARGIN - 62, y);
     doc.setTextColor(...DARK);
     doc.text(`R${balance.toLocaleString('en-ZA')}`, PAGE_W - MARGIN - 4, y, { align: 'right' });
     y += 7;
@@ -701,89 +703,83 @@ export function generateQuotePDF(data: QuoteData): Buffer {
   doc.text('TOTAL', MARGIN + 6, y + 9);
   doc.setTextColor(...ORANGE);
   doc.text(`R${oneTimeTotal.toLocaleString('en-ZA')}`, PAGE_W - MARGIN - 4, y + 9, { align: 'right' });
+  y += 14; // advance y past the total bar rect
 
-  // Monthly note callout
+  // Monthly subscription note (optional, below total bar)
   if (monthlyTotal > 0) {
-    y += 20;
+    y += 4;
     doc.setFillColor(...ORANGE_LIGHT);
-    doc.rect(MARGIN, y, CONTENT_W, 16, 'F');
+    doc.rect(MARGIN, y, CONTENT_W, 14, 'F');
     doc.setFillColor(...ORANGE);
-    doc.rect(MARGIN, y, 3, 16, 'F');
-    setFont('normal', 8);
+    doc.rect(MARGIN, y, 3, 14, 'F');
+    setFont('normal', 7.5);
     doc.setTextColor(...DARK);
-    const noteText = `Note: Monthly subscription of R${monthlyTotal.toLocaleString('en-ZA')} will be invoiced separately after initial payment is received.`;
-    const noteLines = doc.splitTextToSize(noteText, CONTENT_W - 12);
-    doc.text(noteLines, MARGIN + 6, y + 6);
+    const noteText = `Monthly subscription of R${monthlyTotal.toLocaleString('en-ZA')}/mo will be invoiced separately after initial payment.`;
+    doc.text(doc.splitTextToSize(noteText, CONTENT_W - 10), MARGIN + 6, y + 5.5);
+    y += 14;
   }
 
-  // VAT disclaimer
-  y += 22;
+  // Notes (if present)
+  if (data.notes) {
+    y += 6;
+    setFont('bold', 8);
+    doc.setTextColor(...NAVY);
+    doc.text('Notes:', MARGIN, y);
+    y += 5;
+    setFont('normal', 8);
+    doc.setTextColor(...DARK);
+    const noteLines = doc.splitTextToSize(data.notes, CONTENT_W);
+    doc.text(noteLines.slice(0, 4), MARGIN, y); // max 4 lines on page 1
+    y += noteLines.slice(0, 4).length * 4 + 2;
+  }
+
+  // ── VAT note ──────────────────────────────────────────────────────────────
+  y += 6;
   setFont('italic', 7);
   doc.setTextColor(...MUTED);
   doc.text('All prices exclude VAT. VAT will be added at the applicable rate where required.', MARGIN, y);
+  y += 10;
 
-  // Payment notice callout
-  y += 12;
-  doc.setFillColor(...ORANGE_LIGHT);
-  doc.rect(MARGIN, y, CONTENT_W, 20, 'F');
+  // ── Payment + Banking two-column block ────────────────────────────────────
+  // This block is designed to always fit above the footer (283mm) regardless
+  // of where y currently sits. If y is too low we push straight to bottom area.
+  const blockH = 44;
+  const blockY = Math.min(y, FOOTER_Y - blockH - 4); // never overlap footer
+  const halfW  = (CONTENT_W - 6) / 2;
+
+  doc.setFillColor(...OFFWHITE);
+  doc.rect(MARGIN, blockY, CONTENT_W, blockH, 'F');
   doc.setFillColor(...ORANGE);
-  doc.rect(MARGIN, y, 3, 20, 'F');
-  setFont('bold', 9);
+  doc.rect(MARGIN, blockY, 3, blockH, 'F');
+
+  // Left column — Payment terms
+  setFont('bold', 8);
   doc.setTextColor(...NAVY);
-  doc.text('PAYMENT REQUIRED', MARGIN + 6, y + 7);
-  setFont('normal', 8);
+  doc.text('PAYMENT REQUIRED', MARGIN + 7, blockY + 9);
+  setFont('normal', 7.5);
   doc.setTextColor(...DARK);
   const paymentText = data.requireDeposit
-    ? 'A 50% deposit is required before any work commences. The balance is due upon project completion.'
+    ? 'A 50% deposit is required before work commences. Balance due on project completion.'
     : 'Full payment is required before any work commences.';
-  doc.text(paymentText, MARGIN + 6, y + 14);
+  const payLines = doc.splitTextToSize(paymentText, halfW - 6);
+  doc.text(payLines, MARGIN + 7, blockY + 17);
 
-  // Banking details block - compact version to fit on page 1
-  y += 16;
-  setFont('bold', 10);
+  // Vertical divider
+  doc.setDrawColor(...LIGHT_GRAY);
+  doc.setLineWidth(0.3);
+  doc.line(MARGIN + halfW + 3, blockY + 6, MARGIN + halfW + 3, blockY + blockH - 6);
+
+  // Right column — Banking details
+  const bx = MARGIN + halfW + 9;
+  setFont('bold', 8);
   doc.setTextColor(...NAVY);
-  doc.text('Banking Details', MARGIN, y);
-  y += 7;
-  doc.setFillColor(...OFFWHITE);
-  doc.rect(MARGIN, y, CONTENT_W, 36, 'F');
-  doc.setFillColor(...ORANGE);
-  doc.rect(MARGIN, y, 3, 36, 'F');
-  y += 8;
-  setFont('normal', 8);
+  doc.text('BANKING DETAILS', bx, blockY + 9);
+  setFont('normal', 7.5);
   doc.setTextColor(...DARK);
-  doc.text('Bank:              Standard Bank', MARGIN + 6, y);
-  doc.text('Account Name:      The Breed Industries (PTY) LTD', MARGIN + 6, y + 6);
-  doc.text('Account Number:    10268731932', MARGIN + 6, y + 12);
-  doc.text('Branch Code:       051001', MARGIN + 6, y + 18);
-  doc.text('SWIFT Code:        SBZAZAJJ', MARGIN + 6, y + 24);
-  y += 30;
-
-  // Notes - keep on page 1 if possible
-  if (data.notes) {
-    y += 6;
-    // Only move to page 2 if notes are very long
-    const noteLines = doc.splitTextToSize(data.notes, CONTENT_W);
-    if (noteLines.length > 3) {
-      // Long notes - only keep first 3 lines on page 1
-      const truncatedLines = noteLines.slice(0, 3);
-      setFont('bold', 8);
-      doc.setTextColor(...NAVY);
-      doc.text('Notes:', MARGIN, y);
-      y += 5;
-      setFont('normal', 8);
-      doc.setTextColor(...DARK);
-      doc.text(truncatedLines, MARGIN, y);
-    } else {
-      // Short notes - display all
-      setFont('bold', 8);
-      doc.setTextColor(...NAVY);
-      doc.text('Notes:', MARGIN, y);
-      y += 5;
-      setFont('normal', 8);
-      doc.setTextColor(...DARK);
-      doc.text(noteLines, MARGIN, y);
-    }
-  }
+  doc.text('Bank:',           bx,      blockY + 17); doc.text('Standard Bank',                    bx + 22, blockY + 17);
+  doc.text('Account:',        bx,      blockY + 24); doc.text('The Breed Industries (PTY) LTD',   bx + 22, blockY + 24);
+  doc.text('Acc No:',         bx,      blockY + 31); doc.text('10268731932',                      bx + 22, blockY + 31);
+  doc.text('Branch / SWIFT:', bx,      blockY + 38); doc.text('051001  ·  SBZAZAJJ',              bx + 22, blockY + 38);
 
   // Page 1 footer drawn at the very end once we know total pages
 
