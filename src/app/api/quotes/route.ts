@@ -98,23 +98,42 @@ export async function DELETE(request: NextRequest) {
     const id = searchParams.get('id');
 
     if (!id) {
-      return NextResponse.json({ error: 'id is required' }, { status: 400 });
+      return NextResponse.json({ error: 'Quote ID is required' }, { status: 400 });
     }
 
-    const { error } = await supabase
+    console.log('API: Attempting to delete quote with ID:', id);
+
+    const { data, error } = await supabase
       .from('quotes')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
+      .select();
 
     if (error) {
-      console.error('Error deleting quote:', error);
-      return NextResponse.json({ error: 'Failed to delete quote' }, { status: 500 });
+      console.error('API: Supabase delete error:', error);
+      return NextResponse.json({ 
+        error: 'Failed to delete quote', 
+        details: error.message,
+        code: error.code 
+      }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, message: 'Quote deleted successfully' });
+    if (!data || data.length === 0) {
+      return NextResponse.json({ error: 'Quote not found' }, { status: 404 });
+    }
+
+    console.log('API: Quote deleted successfully:', data);
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Quote deleted successfully',
+      deleted: data[0]
+    });
   } catch (error) {
-    console.error('Error deleting quote:', error);
-    return NextResponse.json({ error: 'Failed to delete quote' }, { status: 500 });
+    console.error('API: Unexpected error deleting quote:', error);
+    return NextResponse.json({ 
+      error: 'Failed to delete quote', 
+      details: error instanceof Error ? error.message : 'Unknown error' 
+    }, { status: 500 });
   }
 }
 

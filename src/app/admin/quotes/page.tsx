@@ -106,22 +106,31 @@ export default function QuotesPage() {
   };
 
   const handleDeleteQuote = async (quoteId: string) => {
+    if (!quoteId) {
+      alert('Error: Quote ID is missing');
+      return;
+    }
+    
     if (!confirm('Are you sure you want to delete this quote? This action cannot be undone.')) return;
 
     try {
+      console.log('Deleting quote with ID:', quoteId);
       const response = await fetch(`/api/quotes?id=${quoteId}`, {
         method: 'DELETE'
       });
+
+      const data = await response.json();
+      console.log('Delete response:', data);
 
       if (response.ok) {
         setQuotes(prev => prev.filter(q => q.id !== quoteId));
         alert('Quote deleted successfully!');
       } else {
-        alert('Failed to delete quote');
+        alert('Failed to delete quote: ' + (data.error || 'Unknown error'));
       }
     } catch (error) {
       console.error('Error deleting quote:', error);
-      alert('Failed to delete quote');
+      alert('Failed to delete quote: Network error');
     }
   };
 
