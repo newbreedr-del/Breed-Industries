@@ -375,7 +375,7 @@ export default function QuotesPage() {
                                 <tbody>
                                   {(quote.items || []).map((item: any, i: number) => (
                                     <tr key={i} className="border-t border-white/5">
-                                      <td className="px-4 py-2 text-white">{item.name || item.description || '—'}</td>
+                                      <td className="px-4 py-2 text-white">{item.name || item.description || '-'}</td>
                                       <td className="px-4 py-2 text-center text-white/70">{item.quantity || 1}</td>
                                       <td className="px-4 py-2 text-right text-white/70">R{(Number(item.rate) || 0).toLocaleString('en-ZA')}</td>
                                       <td className="px-4 py-2 text-right text-accent font-medium">R{((Number(item.quantity) || 1) * (Number(item.rate) || 0)).toLocaleString('en-ZA')}</td>

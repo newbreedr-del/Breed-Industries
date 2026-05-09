@@ -373,10 +373,10 @@ export default function Home() {
                style={{ background: 'linear-gradient(135deg, rgba(200,169,110,0.07) 0%, rgba(0,0,0,0) 60%)' }}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
 
-              {/* Left — copy */}
+              {/* Left - copy */}
               <div className="p-10 md:p-14 flex flex-col justify-center">
                 <span className="inline-flex items-center gap-2 text-accent text-xs font-bold uppercase tracking-widest mb-5">
-                  <Award size={14} /> New Service — Now Live
+                  <Award size={14} /> New Service - Now Live
                 </span>
                 <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4 leading-tight">
                   Win Government <br className="hidden md:block" />
@@ -385,7 +385,7 @@ export default function Home() {
                 <p className="text-white/65 text-base mb-8 leading-relaxed max-w-md">
                   We built a dedicated tender intelligence engine that scrapes South African procurement portals daily,
                   matches opportunities to your business profile, and notifies you instantly.
-                  From R950/month — or let us handle the whole application for you.
+                  From R950/month, or let us handle the whole application for you.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-3">
@@ -401,7 +401,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Right — feature tiles */}
+              {/* Right - feature tiles */}
               <div className="p-10 md:p-14 grid grid-cols-2 gap-4 content-center border-t lg:border-t-0 lg:border-l border-white/8">
                 {[
                   { icon: Search,      title: 'Daily Scraping',      desc: 'eTenders + provincial portals scraped twice daily' },
@@ -447,7 +447,7 @@ export default function Home() {
         </div>
       </section>
       
-      {/* Fresh Start — Minimal Callout */}
+      {/* Fresh Start - Minimal Callout */}
       <section className="py-14 relative overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
@@ -470,7 +470,7 @@ export default function Home() {
                   Not ready for a full package yet?
                 </p>
                 <p className="text-white/50 text-sm leading-relaxed">
-                  <span style={{ color: '#FF9F00' }} className="font-semibold">Fresh Start</span> helps entrepreneurs access government and private funding first — then we build together.
+                  <span style={{ color: '#FF9F00' }} className="font-semibold">Fresh Start</span> helps entrepreneurs access government and private funding first, then we build together.
                 </p>
               </div>
             </div>
@@ -488,7 +488,7 @@ export default function Home() {
 
       <Footer />
 
-      {/* Fresh Start Popup — slides in from bottom-left on scroll */}
+      {/* Fresh Start Popup - slides in from bottom-left on scroll */}
       <FreshStartPopup />
     </>
   );

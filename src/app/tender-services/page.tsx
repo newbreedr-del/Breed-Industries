@@ -12,7 +12,7 @@ import {
 export const metadata: Metadata = {
   title: 'Tender Services | Government Procurement | Breed Industries',
   description:
-    'Get tender-ready and win government contracts in South Africa. Breed Industries offers full tender registration, daily tender searching, application submissions, and site meeting attendance — from R950/month.',
+    'Get tender-ready and win government contracts in South Africa. Breed Industries offers full tender registration, daily tender searching, application submissions, and site meeting attendance from R950/month.',
   keywords: [
     'government tenders South Africa', 'tender registration Durban', 'CSD registration',
     'CIDB registration', 'tender search service', 'tender application South Africa',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: 'https://thebreed.co.za/tender-services' },
   openGraph: {
-    title: 'Tender Services — Breed Industries',
+    title: 'Tender Services - Breed Industries',
     description: 'Win government tenders. We register, search, apply, and attend on your behalf.',
     url: 'https://thebreed.co.za/tender-services',
   },
@@ -56,7 +56,7 @@ const packages = [
     accent: true,
     badge: 'Most Popular',
     features: [
-      'Daily automated scraping — eTenders + provincial portals',
+      'Daily tender searches matched to your business profile',
       'Business-profile matching (CIDB grade, BEE, province, category)',
       'Instant email alert per new tender match',
       'Closing-date reminders (72 hours before deadline)',
@@ -112,7 +112,7 @@ const howItWorks = [
   {
     step: '01',
     title: 'Get Registered',
-    body: "We ensure your business is compliant and registered on all required portals — CSD, CIDB, SARS — so you're legally eligible to bid.",
+    body: "We ensure your business is compliant and registered on all required portals (CSD, CIDB, SARS) so you're legally eligible to bid.",
     icon: Shield,
   },
   {
@@ -130,7 +130,7 @@ const howItWorks = [
   {
     step: '04',
     title: 'You Get Notified',
-    body: 'When a tender scores above threshold for your profile, you receive an email with the tender details, closing date, and match reasons — within hours of it being published.',
+    body: 'When a tender scores above threshold for your profile, you receive an email with the tender details, closing date, and match reasons within hours of it being published.',
     icon: AlertCircle,
   },
   {
@@ -190,7 +190,7 @@ export default function TenderServicesPage() {
       <PageHero
         title="Tender Services"
         subtitle="Government Procurement"
-        description="South African businesses leave billions on the table every year by missing tenders they qualify for. We fix that — with automation, expertise, and a team that handles the entire process on your behalf."
+        description="South African businesses leave billions on the table every year by missing tenders they qualify for. We fix that with automation, expertise, and a team that handles the entire process on your behalf."
         breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'Services', href: '/services' },
@@ -223,8 +223,7 @@ export default function TenderServicesPage() {
               <div className="space-y-4 text-white/65 leading-relaxed">
                 <p>
                   The South African government spends over <strong className="text-white">R800 billion</strong> annually through public procurement.
-                  A significant portion is reserved for SMMEs, cooperatives, and BEE-compliant businesses —
-                  yet most eligible companies never participate because they don't know where to look,
+                  A significant portion is reserved for SMMEs, cooperatives, and BEE-compliant businesses, yet most eligible companies never participate because they don't know where to look,
                   don't have time to monitor portals daily, or don't understand the compliance requirements.
                 </p>
                 <p>
@@ -232,7 +231,7 @@ export default function TenderServicesPage() {
                   dozens of departments. Missing even one closing deadline means waiting months for the next cycle.
                 </p>
                 <p className="text-white font-medium">
-                  We built a system that watches every portal, every day — and brings the right opportunities directly to you.
+                  We built a system that watches every portal, every day, and brings the right opportunities directly to you.
                 </p>
               </div>
             </div>
@@ -264,7 +263,7 @@ export default function TenderServicesPage() {
               How Tender Services Works
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto">
-              From zero compliance to active bidder — here's the full lifecycle we manage for you.
+              From zero compliance to active bidder, here's the full lifecycle we manage for you.
             </p>
           </div>
 
@@ -383,7 +382,7 @@ export default function TenderServicesPage() {
             <span className="text-accent text-sm uppercase tracking-widest font-medium mb-3 block">Coverage</span>
             <h3 className="text-2xl font-heading font-bold text-white mb-3">Portals We Monitor Daily</h3>
             <p className="text-white/50 text-sm max-w-xl mx-auto">
-              Our scraper runs across all major national and provincial government procurement platforms — so you never need to check them yourself.
+              Our system runs across all major national and provincial government procurement platforms so you never need to check them yourself.
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">

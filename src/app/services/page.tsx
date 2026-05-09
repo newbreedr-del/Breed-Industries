@@ -321,7 +321,7 @@ export default function ServicesPage() {
           <div className="text-center mb-16">
             <span className="text-accent font-medium text-sm uppercase tracking-wider">Government &amp; Corporate Tenders</span>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mt-2 mb-4">
-              Tender Services — Get Into the Procurement Space
+              Tender Services - Get Into the Procurement Space
             </h2>
             <p className="text-white/70 max-w-3xl mx-auto">
               From getting your business tender-ready, to having us search, apply, and attend site meetings on your behalf.
@@ -332,7 +332,7 @@ export default function ServicesPage() {
           {/* Tender Packages */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
 
-            {/* Tier 1 — Tender Ready */}
+            {/* Tier 1 - Tender Ready */}
             <div className="glass-card p-7 flex flex-col">
               <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-5">
                 <Shield className="text-accent w-6 h-6" />
@@ -353,7 +353,7 @@ export default function ServicesPage() {
               <Link href="/contact" className="btn btn-outline w-full text-center text-sm">Get Started</Link>
             </div>
 
-            {/* Tier 2 — Tender Watch */}
+            {/* Tier 2 - Tender Watch */}
             <div className="glass-card p-7 flex flex-col ring-2 ring-accent/30 relative">
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent/20 text-accent text-xs font-medium py-1 px-3 rounded-full border border-accent/30">
                 Most Popular
@@ -377,7 +377,7 @@ export default function ServicesPage() {
               <Link href="/contact" className="btn btn-primary w-full text-center text-sm">Start Watch</Link>
             </div>
 
-            {/* Tier 3 — Tender Apply */}
+            {/* Tier 3 - Tender Apply */}
             <div className="glass-card p-7 flex flex-col">
               <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-5">
                 <Layers className="text-blue-400 w-6 h-6" />
@@ -385,7 +385,7 @@ export default function ServicesPage() {
               <h3 className="text-xl font-heading font-bold text-white mb-1">Tender Apply</h3>
               <p className="text-accent text-2xl font-bold mb-3">R2,500 <span className="text-sm font-normal text-white/50">/month</span></p>
               <p className="text-white/60 text-sm mb-5 flex-1">
-                We don't just find the tenders — we compile and submit the full application on your behalf. Everything in Watch, plus we do the paperwork.
+                We don't just find the tenders, we compile and submit the full application on your behalf. Everything in Watch, plus we do the paperwork.
               </p>
               <ul className="space-y-2 mb-6">
                 {['Everything in Tender Watch', 'Full tender document compilation', 'Application submission on your behalf', 'Application tracking + updates', '+ R800 per tender applied'].map(f => (
@@ -398,7 +398,7 @@ export default function ServicesPage() {
               <Link href="/contact" className="btn btn-outline w-full text-center text-sm">Start Applying</Link>
             </div>
 
-            {/* Tier 4 — Tender Full */}
+            {/* Tier 4 - Tender Full */}
             <div className="glass-card p-7 flex flex-col bg-gradient-to-b from-accent/5 to-transparent">
               <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center mb-5">
                 <TrendingUp className="text-accent w-6 h-6" />
@@ -406,7 +406,7 @@ export default function ServicesPage() {
               <h3 className="text-xl font-heading font-bold text-white mb-1">Tender Full Service</h3>
               <p className="text-accent text-2xl font-bold mb-3">R6,500 <span className="text-sm font-normal text-white/50">/month</span></p>
               <p className="text-white/60 text-sm mb-5 flex-1">
-                The complete managed service. We search, apply, attend compulsory site meetings, and follow up on awarded tenders — all on your behalf.
+                The complete managed service. We search, apply, attend compulsory site meetings, and follow up on awarded tenders, all on your behalf.
               </p>
               <ul className="space-y-2 mb-6">
                 {[

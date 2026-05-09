@@ -37,13 +37,13 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 const PACKAGE_LABELS: Record<string, { label: string; color: string }> = {
-  watch: { label: 'Tender Watch — R950/mo', color: 'text-purple-400' },
-  apply: { label: 'Tender Apply — R2,500/mo', color: 'text-blue-400' },
-  full:  { label: 'Tender Full — R6,500/mo', color: 'text-accent' },
+  watch: { label: 'Tender Watch - R950/mo', color: 'text-purple-400' },
+  apply: { label: 'Tender Apply - R2,500/mo', color: 'text-blue-400' },
+  full:  { label: 'Tender Full - R6,500/mo', color: 'text-accent' },
 };
 
 function fmtDate(iso?: string) {
-  if (!iso) return '—';
+  if (!iso) return '-';
   return new Date(iso).toLocaleDateString('en-ZA', { day: '2-digit', month: 'long', year: 'numeric' });
 }
 

@@ -25,7 +25,7 @@ const brandingOptions = [
   { id: 'flyer-simple', name: 'Simple Social Media Flyer', price: 650, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Single size, single concept digital flyer optimised for Instagram/Facebook. Includes 1 concept and up to 3 revisions.' },
   { id: 'flyer-standard', name: 'Standard Digital Flyer', price: 950, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Professional digital flyer with 2 concepts, 3 revision rounds, delivered in JPG, PNG, and PDF formats.' },
   { id: 'flyer-premium', name: 'Premium Event/Brand Flyer', price: 1250, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'High-end flyer design for events and campaigns. Multiple sizes, 3 revision rounds, all formats including source files.' },
-  { id: 'digital-artwork', name: 'Digital Artwork / Graphic Design', price: 750, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Custom digital artwork and graphic design for any purpose — social media posts, banners, thumbnails, event graphics, or branded visuals.' },
+  { id: 'digital-artwork', name: 'Digital Artwork / Graphic Design', price: 750, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Custom digital artwork and graphic design for any purpose: social media posts, banners, thumbnails, event graphics, or branded visuals.' },
   { id: 'marketing-materials', name: 'Marketing Materials', price: 1500, pricingType: 'one-time', icon: <Briefcase size={16} />, description: 'Full suite of marketing collateral: brochures, product sheets, pull-up banners, posters, and promotional materials. Designed and print-ready.' },
 ];
 
@@ -52,7 +52,7 @@ const businessProfileOptions = [
 const tenderOptions = [
   { id: 'tender-ready', name: 'Tender Ready', price: 3500, pricingType: 'one-time', icon: <Award size={16} />, description: 'Get your business fully registered and compliant for government tenders: CSD, CIDB, BBBEE, Tax Pin, and a professional Company Profile. Once-off setup.' },
   { id: 'tender-watch', name: 'Tender Watch', price: 950, pricingType: 'monthly', icon: <Award size={16} />, description: 'We scrape government portals daily and send you matching tenders by email. Smart matching based on your industry, province, and CIDB grade. Includes monthly digest.' },
-  { id: 'tender-apply', name: 'Tender Apply', price: 2500, pricingType: 'monthly', icon: <Award size={16} />, description: 'Everything in Tender Watch plus we compile all bid documents and submit on your behalf. You focus on running your business — we handle the paperwork.' },
+  { id: 'tender-apply', name: 'Tender Apply', price: 2500, pricingType: 'monthly', icon: <Award size={16} />, description: 'Everything in Tender Watch plus we compile all bid documents and submit on your behalf. You focus on running your business, we handle the paperwork.' },
   { id: 'tender-full', name: 'Tender Full Service', price: 6500, pricingType: 'monthly', icon: <Award size={16} />, description: 'Our most comprehensive package: Watch + full bid compilation + submission + site meeting attendance + award follow-up. Maximum chances of winning.' },
 ];
 
