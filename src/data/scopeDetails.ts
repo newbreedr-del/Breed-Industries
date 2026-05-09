@@ -435,6 +435,51 @@ export const scopeDetails: Record<string, ScopeDetail> = {
       'NOTE: Maximum 3 revision rounds included per deliverable. Additional revisions billed at R350/hour.',
     ],
   },
+
+  // ── Tender Services ────────────────────────────────────────────────────────
+  'Tender Ready': {
+    timeline: '5 – 10 Business Days',
+    clientRequirements: [
+      'Certified ID copies of all directors',
+      'Proof of business address (not older than 3 months)',
+      'CIPC registration certificate (if already registered)',
+      'Banking confirmation letter / bank statement',
+      'Tax reference number (if already registered with SARS)',
+      'CIDB discipline(s) your business operates in',
+      'BBBEE ownership breakdown percentage',
+    ],
+  },
+  'Tender Watch': {
+    timeline: 'Ongoing Monthly — alerts within 24 hours of publication',
+    clientRequirements: [
+      'Short company profile (industry, services, target market)',
+      'Province(s) your business operates in',
+      'Industry/commodity categories (construction, IT, cleaning, catering, etc.)',
+      'CIDB grade (if applicable)',
+      'Maximum contract value your business can handle',
+    ],
+  },
+  'Tender Apply': {
+    timeline: 'Ongoing Monthly — submissions before each closing date',
+    clientRequirements: [
+      'All Tender Watch requirements (above)',
+      'CSD registration confirmation number',
+      'Current tax clearance certificate / PIN',
+      'Valid BEE certificate or sworn affidavit',
+      'Certified ID copies of all directors',
+      'Signed mandate letter authorising Breed Industries to submit bids on your behalf',
+    ],
+  },
+  'Tender Full Service': {
+    timeline: 'Ongoing Monthly — end-to-end from alert to award',
+    clientRequirements: [
+      'All Tender Apply requirements (above)',
+      'Signed Power of Attorney / mandate for site briefing attendance',
+      'Representative available for urgent clarifications',
+      'Any previous tender submissions or experience references',
+      'Company bank statements (3 months)',
+    ],
+  },
 };
 
 /** Fallback scope detail for services not in the map */

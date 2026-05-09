@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/Footer';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronRight, ArrowRight, Zap, Rocket, Shield, CheckCircle2, Code2, Palette, FileText, Users, Sprout } from 'lucide-react';
+import { ChevronRight, ArrowRight, Zap, Rocket, Shield, CheckCircle2, Code2, Palette, FileText, Users, Sprout, Award, TrendingUp, Search } from 'lucide-react';
 import { FreshStartPopup } from '@/components/ui/FreshStartPopup';
 
 export default function Home() {
@@ -188,7 +188,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
             {[
               {
                 icon: <Shield className="w-6 h-6 text-accent" />,
@@ -218,16 +218,29 @@ export default function Home() {
                 items: ['Websites & Web Apps', 'Mobile Applications', 'E-Commerce Stores', 'AI & Custom Platforms'],
                 href: '/services#digital',
               },
-            ].map((service) => (
+              {
+                icon: <Award className="w-6 h-6 text-accent" />,
+                title: 'Tender Services',
+                description: 'Get tender-ready and tap into government procurement. We search, match, apply, and attend meetings on your behalf.',
+                items: ['Tender Registration', 'Daily Tender Watch', 'Application Submissions', 'Site Meeting Attendance'],
+                href: '/tender-services',
+                badge: 'New',
+              },
+            ].map((service: any) => (
               <Link key={service.title} href={service.href} className="group">
-                <div className="glass-card p-7 h-full flex flex-col gap-4 transition-all duration-300 group-hover:-translate-y-2">
+                <div className={`glass-card p-7 h-full flex flex-col gap-4 transition-all duration-300 group-hover:-translate-y-2 relative ${service.badge ? 'ring-1 ring-accent/40' : ''}`}>
+                  {service.badge && (
+                    <span className="absolute -top-3 left-5 bg-accent text-black text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                      {service.badge}
+                    </span>
+                  )}
                   <div className="w-11 h-11 rounded-full bg-accent/15 flex items-center justify-center">
                     {service.icon}
                   </div>
                   <h3 className="text-lg font-heading font-bold text-white">{service.title}</h3>
                   <p className="text-white/60 text-sm leading-relaxed">{service.description}</p>
                   <ul className="mt-auto space-y-1.5">
-                    {service.items.map((item) => (
+                    {service.items.map((item: string) => (
                       <li key={item} className="flex items-center gap-2 text-xs text-white/50">
                         <CheckCircle2 className="w-3 h-3 text-accent flex-shrink-0" />
                         {item}
@@ -235,7 +248,7 @@ export default function Home() {
                     ))}
                   </ul>
                   <div className="flex items-center text-accent text-sm font-medium pt-2">
-                    <span>See pricing</span>
+                    <span>{service.badge ? 'Explore now' : 'See pricing'}</span>
                     <ArrowRight size={14} className="ml-2 transition-transform group-hover:translate-x-1" />
                   </div>
                 </div>
@@ -343,6 +356,65 @@ export default function Home() {
                 <span className="text-white/40 text-[10px] text-center leading-tight">{c.name}</span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Tender Services Banner ─────────────────────────── */}
+      <section className="py-20 relative overflow-hidden">
+        <div className="absolute inset-0 grid-overlay" />
+        {/* Warm glow behind the card */}
+        <div className="absolute left-1/3 top-1/4 w-96 h-96 bg-accent/8 blur-3xl rounded-full pointer-events-none" />
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="rounded-2xl border border-accent/25 overflow-hidden"
+               style={{ background: 'linear-gradient(135deg, rgba(200,169,110,0.07) 0%, rgba(0,0,0,0) 60%)' }}>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+
+              {/* Left — copy */}
+              <div className="p-10 md:p-14 flex flex-col justify-center">
+                <span className="inline-flex items-center gap-2 text-accent text-xs font-bold uppercase tracking-widest mb-5">
+                  <Award size={14} /> New Service — Now Live
+                </span>
+                <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4 leading-tight">
+                  Win Government <br className="hidden md:block" />
+                  <span className="text-gradient-gold">Tenders &amp; Contracts</span>
+                </h2>
+                <p className="text-white/65 text-base mb-8 leading-relaxed max-w-md">
+                  We built a dedicated tender intelligence engine that scrapes South African procurement portals daily,
+                  matches opportunities to your business profile, and notifies you instantly.
+                  From R950/month — or let us handle the whole application for you.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link href="/tender-services" className="btn btn-primary">
+                    See Tender Packages
+                    <ChevronRight size={16} className="ml-1" />
+                  </Link>
+                  <a href="https://tenders.thebreed.co.za" target="_blank" rel="noopener noreferrer"
+                     className="btn btn-outline">
+                    Launch Tender Portal
+                    <ArrowRight size={16} className="ml-1" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Right — feature tiles */}
+              <div className="p-10 md:p-14 grid grid-cols-2 gap-4 content-center border-t lg:border-t-0 lg:border-l border-white/8">
+                {[
+                  { icon: Search,      title: 'Daily Scraping',      desc: 'eTenders + provincial portals scraped twice daily' },
+                  { icon: TrendingUp,  title: 'Smart Matching',       desc: 'AI scoring against your CIDB grade, BEE level & categories' },
+                  { icon: FileText,    title: 'We Apply For You',     desc: 'Full document compilation and submission on your behalf' },
+                  { icon: Award,       title: 'Site Meetings',        desc: 'We attend compulsory briefing sessions where required' },
+                ].map(f => (
+                  <div key={f.title} className="flex flex-col gap-2 p-4 rounded-xl bg-white/4 border border-white/6">
+                    <f.icon className="text-accent" size={20} />
+                    <p className="text-white text-sm font-bold">{f.title}</p>
+                    <p className="text-white/50 text-xs leading-relaxed">{f.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

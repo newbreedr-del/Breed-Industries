@@ -32,11 +32,14 @@ Marketing Campaign/
 │   ├── 08-IG-Square-Testimonial.svg
 │   ├── 09-A3-Print-Poster.svg                  ← 2480x3508 — 300dpi print-ready
 │   ├── 10-IG-Story-Quote-Hook.svg
-│   ├── 11-IG-Square-Stats.svg                  ← NEW: 23+ / 5 / 8+ / 45+
-│   └── 12-IG-Story-Services-Cycle.svg          ← NEW: four pillars vertical stack
+│   ├── 11-IG-Square-Stats.svg                  ← 23+ / 5 / 8+ / 45+
+│   ├── 12-IG-Story-Services-Cycle.svg          ← four pillars vertical stack
+│   ├── 13-IG-Square-TenderWatch.svg            ← NEW: Tender Watch product hero (radar visual)
+│   ├── 14-IG-Story-TenderReady.svg             ← NEW: "Is Your Business Tender Ready?" story
+│   └── 15-IG-Square-TenderPackages.svg         ← NEW: All 4 tender tier pricing cards
 │
 ├── 04-Video-Scripts/
-│   └── Video-Bible.md                  ← 8 scripts with shot lists + production checklists
+│   └── Video-Bible.md                  ← 11 scripts (8 original + 3 NEW Tender scripts #9–#11)
 │
 └── 05-Launch-Kit/
     └── Launch-Kit.md                   ← Press release, LinkedIn post, 3 emails, all platform captions
@@ -86,6 +89,28 @@ The hexagonal S-mark is embedded as native SVG geometry inside each poster — f
 | Off-White (logo / light layouts) | `#F8F5F0` |
 | Headings | Montserrat 700/800 |
 | Body | Inter 400/500/600 |
+
+---
+
+## 🏛️ Tender Services — New Product Line
+
+The Tender Services product is a standalone automation tool. The client portal lives at **tenders.thebreed.co.za**. The main site markets it at **thebreed.co.za/tender-services**.
+
+| Tier | Price | What We Do |
+|---|---|---|
+| **Tender Ready** | From R3,500 once-off | CSD + CIDB + BBBEE + Tax Pin + Company Profile |
+| **Tender Watch** | R950/month | Daily scraping, profile matching, instant email alerts |
+| **Tender Apply** | R2,500/month | Watch + full bid document compilation + submission |
+| **Tender Full Service** | R6,500/month | Apply + site meeting attendance + award follow-up |
+
+**New assets in this release:**
+- Poster 13 — IG Square: Tender Watch hero
+- Poster 14 — IG Story: "Is Your Business Tender Ready?"
+- Poster 15 — IG Square: Tender Packages pricing comparison
+- Video Scripts #9, #10, #11 — three tender-specific short-form video scripts
+- Master Marketing Plan updated with Phase 4 tender launch strategy + persona + hashtags
+
+---
 
 ## 💰 Real packages
 

@@ -1,8 +1,14 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { PlusCircle, MinusCircle, Loader2, CheckCircle, Send, Download, ChevronDown } from 'lucide-react';
+import { useEffect, useMemo, useState, useRef } from 'react';
+import {
+  PlusCircle, MinusCircle, Loader2, CheckCircle,
+  Download, ChevronDown, Search, X, Tag
+} from 'lucide-react';
 import { serviceDefinitions } from '@/data/serviceDefinitions';
+import { getScopeDetail } from '@/data/scopeDetails';
+
+// ── Types ─────────────────────────────────────────────────────────────────────
 
 interface QuoteItem {
   id: string;
@@ -24,186 +30,269 @@ interface SelectedItem {
 }
 
 interface QuoteGeneratorProps {
-  selectedItems: SelectedItem[];
+  selectedItems?: SelectedItem[];
   onSuccess?: (details: { quoteNumber: string; customerEmail: string }) => void;
 }
 
-export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGeneratorProps) {
+// ── Extra services not in serviceDefinitions (tender packages) ────────────────
+
+const tenderServices = [
+  { id: 'tender-ready',   category: 'Tender Services', name: 'Tender Ready',         basePrice: 'R3,500',  pricingType: 'one-time' as const },
+  { id: 'tender-watch',   category: 'Tender Services', name: 'Tender Watch',          basePrice: 'R950',    pricingType: 'monthly'  as const },
+  { id: 'tender-apply',   category: 'Tender Services', name: 'Tender Apply',          basePrice: 'R2,500',  pricingType: 'monthly'  as const },
+  { id: 'tender-full',    category: 'Tender Services', name: 'Tender Full Service',   basePrice: 'R6,500',  pricingType: 'monthly'  as const },
+];
+
+// ── Service picker ────────────────────────────────────────────────────────────
+
+interface ServicePickerProps {
+  onSelect: (name: string, rate: number, description: string, pricingType?: 'one-time' | 'monthly') => void;
+}
+
+function ServicePicker({ onSelect }: ServicePickerProps) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  // Build combined list: real serviceDefinitions + tender services
+  const allServices = useMemo(() => {
+    const mapped = serviceDefinitions.map(s => ({
+      id: s.id,
+      category: s.category,
+      name: s.name,
+      basePrice: s.basePrice ?? '',
+      pricingType: undefined as 'one-time' | 'monthly' | undefined,
+    }));
+    return [...mapped, ...tenderServices];
+  }, []);
+
+  // Group by category
+  const grouped = useMemo(() => {
+    const q = query.toLowerCase();
+    const filtered = q
+      ? allServices.filter(
+          s => s.name.toLowerCase().includes(q) || s.category.toLowerCase().includes(q)
+        )
+      : allServices;
+
+    const map: Record<string, typeof filtered> = {};
+    for (const s of filtered) {
+      if (!map[s.category]) map[s.category] = [];
+      map[s.category].push(s);
+    }
+    return Object.entries(map);
+  }, [allServices, query]);
+
+  const parsePrice = (raw: string): number => {
+    const match = raw.match(/[\d,]+/);
+    return match ? parseFloat(match[0].replace(',', '')) : 0;
+  };
+
+  const handleSelect = (service: typeof allServices[number]) => {
+    const scope = getScopeDetail(service.name);
+    const description = scope.clientRequirements.length
+      ? scope.clientRequirements.join(' · ')
+      : '';
+    onSelect(service.name, parsePrice(service.basePrice), description, service.pricingType);
+    setOpen(false);
+    setQuery('');
+  };
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        className="w-full flex items-center justify-between gap-2 rounded-lg bg-white/5 border border-white/10 px-3 py-2.5 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+      >
+        <span className="flex items-center gap-2">
+          <Tag size={14} className="text-accent" />
+          Pick from service catalogue…
+        </span>
+        <ChevronDown size={14} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      {open && (
+        <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-[#111] border border-white/15 rounded-xl shadow-2xl overflow-hidden">
+          {/* Search */}
+          <div className="p-2 border-b border-white/10">
+            <div className="flex items-center gap-2 bg-white/5 rounded-lg px-3 py-2">
+              <Search size={14} className="text-white/40 shrink-0" />
+              <input
+                autoFocus
+                type="text"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                placeholder="Search services…"
+                className="flex-1 bg-transparent text-white text-sm placeholder-white/30 outline-none"
+              />
+              {query && (
+                <button type="button" onClick={() => setQuery('')}>
+                  <X size={13} className="text-white/40 hover:text-white" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Results */}
+          <div className="max-h-72 overflow-y-auto">
+            {grouped.length === 0 ? (
+              <p className="text-center text-white/40 text-sm py-6">No services match "{query}"</p>
+            ) : (
+              grouped.map(([category, services]) => (
+                <div key={category}>
+                  <div className="px-3 py-1.5 text-xs font-bold text-accent uppercase tracking-wider bg-white/3 border-b border-white/5 sticky top-0 z-10 bg-[#0e0e0f]">
+                    {category}
+                  </div>
+                  {services.map(service => (
+                    <button
+                      key={service.id}
+                      type="button"
+                      onClick={() => handleSelect(service)}
+                      className="w-full text-left flex items-center justify-between px-4 py-2.5 hover:bg-white/5 transition-colors group"
+                    >
+                      <span className="text-sm text-white group-hover:text-accent transition-colors">
+                        {service.name}
+                      </span>
+                      <span className="text-xs text-white/40 group-hover:text-accent/70 transition-colors shrink-0 ml-3">
+                        {service.basePrice}
+                        {service.pricingType === 'monthly' ? '/mo' : ''}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Main component ────────────────────────────────────────────────────────────
+
+export default function QuoteGenerator({ selectedItems = [], onSuccess }: QuoteGeneratorProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [quoteNumber, setQuoteNumber] = useState<string | null>(null);
-  
+
   // Form state
-  const [customerName, setCustomerName] = useState('');
+  const [customerName, setCustomerName]       = useState('');
   const [customerCompany, setCustomerCompany] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
-  const [customerEmail, setCustomerEmail] = useState('');
-  const [customerPhone, setCustomerPhone] = useState('');
-  const [projectName, setProjectName] = useState('');
-  const [contactPerson, setContactPerson] = useState('');
-  const [paymentTerms, setPaymentTerms] = useState('50% Upfront');
-  const [notes, setNotes] = useState('');
-  const [requireDeposit, setRequireDeposit] = useState(true);
-  
-  // Items state
-  const defaultItem: QuoteItem = useMemo(
-    () => ({ id: '1', name: '', description: '', quantity: 1, rate: 0 }),
+  const [customerEmail, setCustomerEmail]     = useState('');
+  const [customerPhone, setCustomerPhone]     = useState('');
+  const [projectName, setProjectName]         = useState('');
+  const [contactPerson, setContactPerson]     = useState('');
+  const [paymentTerms, setPaymentTerms]       = useState('50% Upfront');
+  const [notes, setNotes]                     = useState('');
+  const [requireDeposit, setRequireDeposit]   = useState(true);
+
+  const defaultItem = useMemo<QuoteItem>(
+    () => ({ id: '1', name: '', description: '', quantity: 1, rate: 0, pricingType: 'one-time' }),
     []
   );
+  const [items, setItems] = useState<QuoteItem[]>([defaultItem]);
 
-  const [items, setItems] = useState<QuoteItem[]>([]);
-
+  // Pre-fill from selectedItems (coming from /build-package)
   useEffect(() => {
-    if (selectedItems && selectedItems.length > 0) {
-      const mappedItems = selectedItems.map((item, index) => ({
-        id: item.id ?? (index + 1).toString(),
+    if (selectedItems.length > 0) {
+      setItems(selectedItems.map((item, i) => ({
+        id: item.id ?? String(i + 1),
         name: item.name,
         description: item.description ?? '',
-        quantity: 1,
+        quantity: item.quantity ?? 1,
         rate: item.price ?? 0,
-        pricingType: item.pricingType ?? 'one-time'
-      }));
-      setItems(mappedItems);
-      console.log('Set items from selectedItems:', mappedItems);
+        pricingType: item.pricingType ?? 'one-time',
+      })));
     } else {
       setItems([defaultItem]);
-      console.log('Set default item');
     }
-  }, [selectedItems]);
-  
-  // Add new item
-  const addItem = () => {
-    setItems([
-      ...items,
-      {
-        id: Date.now().toString(),
-        name: '',
-        description: '',
-        quantity: 1,
-        rate: 0
-      }
-    ]);
-  };
-  
-  // Remove item
-  const removeItem = (id: string) => {
-    if (items.length > 1) {
-      setItems(items.filter(item => item.id !== id));
+  }, [selectedItems, defaultItem]);
+
+  // Item mutations
+  const addItem = () =>
+    setItems(prev => [...prev, { id: Date.now().toString(), name: '', description: '', quantity: 1, rate: 0, pricingType: 'one-time' }]);
+
+  const removeItem = (id: string) =>
+    setItems(prev => prev.length > 1 ? prev.filter(i => i.id !== id) : prev);
+
+  const updateItem = (id: string, field: keyof QuoteItem, value: unknown) =>
+    setItems(prev => prev.map(i => i.id === id ? { ...i, [field]: value } : i));
+
+  // Service picker callback — fills row + auto-sets projectName if blank
+  const handleServiceSelected = (
+    itemId: string,
+    name: string,
+    rate: number,
+    description: string,
+    pricingType?: 'one-time' | 'monthly'
+  ) => {
+    setItems(prev => prev.map(i =>
+      i.id === itemId
+        ? { ...i, name, rate, description: description || i.description, pricingType: pricingType ?? 'one-time' }
+        : i
+    ));
+    // Auto-fill project name on first service selection
+    if (!projectName.trim()) {
+      setProjectName(name + ' Package');
     }
-  };
-  
-  // Update item
-  const updateItem = (id: string, field: keyof QuoteItem, value: any) => {
-    setItems(
-      items.map(item => 
-        item.id === id ? { ...item, [field]: value } : item
-      )
-    );
+    // Auto-fill contact person from customer name if blank
+    if (!contactPerson.trim() && customerName.trim()) {
+      setContactPerson(customerName.trim());
+    }
   };
 
-  // Handle service selection
-  const handleServiceSelect = (itemId: string, serviceId: string) => {
-    const service = serviceDefinitions.find(s => s.id === serviceId);
-    if (service) {
-      updateItem(itemId, 'name', service.name);
-      updateItem(itemId, 'description', service.description);
-      // Parse base price to extract numeric value
-      if (service.basePrice) {
-        const priceMatch = service.basePrice.match(/R[\s]*([\d,]+)/);
-        if (priceMatch) {
-          const price = parseFloat(priceMatch[1].replace(',', ''));
-          updateItem(itemId, 'rate', price);
-        }
-      }
-    }
-  };
-  
-  // Calculate total
-  const calculateTotal = () => {
-    return items.reduce((sum, item) => sum + (item.quantity * item.rate), 0);
-  };
-  
+  const calculateTotal = () =>
+    items.reduce((sum, item) => sum + item.quantity * item.rate, 0);
+
   const resetForm = () => {
-    setCustomerName('');
-    setCustomerCompany('');
-    setCustomerAddress('');
-    setCustomerEmail('');
-    setCustomerPhone('');
-    setProjectName('');
-    setContactPerson('');
-    setPaymentTerms('Net 30');
-    setNotes('');
+    setCustomerName(''); setCustomerCompany(''); setCustomerAddress('');
+    setCustomerEmail(''); setCustomerPhone('');
+    setProjectName(''); setContactPerson('');
+    setPaymentTerms('50% Upfront'); setNotes('');
     setItems([defaultItem]);
   };
 
-  const validateForm = () => {
-    if (!customerName.trim()) {
-      return 'Customer name is required.';
-    }
-
-    if (!customerEmail.trim()) {
-      return 'Customer email is required.';
-    }
-
-    if (!projectName.trim()) {
-      return 'Project name is required.';
-    }
-
-    if (!contactPerson.trim()) {
-      return 'Contact person is required.';
-    }
-
-    const invalidItems = items.filter(
-      (item) => !item.name.trim() || item.quantity <= 0 || item.rate <= 0
-    );
-
-    if (invalidItems.length > 0) {
-      return 'Each quote item needs a name, quantity of at least 1, and a rate above 0.';
-    }
-
+  const validateForm = (): string | null => {
+    if (!customerName.trim())   return 'Customer name is required.';
+    if (!customerEmail.trim())  return 'Customer email is required.';
+    if (!projectName.trim())    return 'Project name is required.';
+    if (!contactPerson.trim())  return 'Contact person is required.';
+    const bad = items.filter(i => !i.name.trim() || i.quantity < 1 || i.rate <= 0);
+    if (bad.length) return 'Each item needs a name, quantity ≥ 1, and a rate above R0.';
     return null;
   };
 
-  // Download PDF from base64
-  const downloadPDF = (base64Data: string, quoteNumber: string) => {
-    const byteCharacters = atob(base64Data);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'application/pdf' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `Breed_Industries_Quote_${quoteNumber}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+  const downloadPDF = (base64: string, qNum: string) => {
+    const arr = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+    const url = URL.createObjectURL(new Blob([arr], { type: 'application/pdf' }));
+    const a = Object.assign(document.createElement('a'), { href: url, download: `Breed_Industries_Quote_${qNum}.pdf` });
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const err = validateForm();
+    if (err) { setError(err); return; }
+    setIsLoading(true); setError(null);
 
-    const validationError = validateForm();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-    
-    setIsLoading(true);
-    setError(null);
-    
     try {
-      // Send quote request to server (PDF generated server-side)
-      const response = await fetch('/api/generate-quote', {
+      const res = await fetch('/api/generate-quote', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           customerName: customerName.trim(),
           customerCompany: customerCompany.trim(),
@@ -212,349 +301,265 @@ export default function QuoteGenerator({ selectedItems, onSuccess }: QuoteGenera
           customerPhone: customerPhone.trim(),
           projectName: projectName.trim(),
           contactPerson: contactPerson.trim(),
-          paymentTerms,
-          requireDeposit,
-          items: items.map((item) => ({
-            ...item,
-            name: item.name.trim(),
-            description: item.description.trim(),
-            quantity: Number(item.quantity),
-            rate: Number(item.rate)
+          paymentTerms, requireDeposit,
+          items: items.map(i => ({
+            ...i,
+            name: i.name.trim(),
+            description: i.description.trim(),
+            quantity: Number(i.quantity),
+            rate: Number(i.rate),
           })),
-          notes: notes.trim()
+          notes: notes.trim(),
         }),
       });
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('API Error Response:', errorText);
-        throw new Error(errorText || 'Failed to generate quote');
-      }
-      
-      const data = await response.json();
-      
-      // Download PDF from server response
-      if (data.pdfBase64) {
-        downloadPDF(data.pdfBase64, data.quoteNumber);
-      }
-      
+
+      if (!res.ok) throw new Error(await res.text() || 'Failed to generate quote');
+      const data = await res.json();
+      if (data.pdfBase64) downloadPDF(data.pdfBase64, data.quoteNumber);
       setQuoteNumber(data.quoteNumber);
       setIsSuccess(true);
-      
-      if (onSuccess) {
-        onSuccess({ quoteNumber: data.quoteNumber, customerEmail: customerEmail.trim() });
-      }
-      
-      // Send WhatsApp notification about new quote
-      try {
-        const notifyResponse = await fetch('/api/notifications', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            type: 'quote_status_update',
-            data: {
-              quoteId: data.quoteNumber,
-              clientName: customerName.trim(),
-              status: 'pending',
-              amount: calculateTotal().toFixed(2),
-              updatedAt: new Date().toLocaleString()
-            }
-          })
-        });
-        console.log('Quote notification sent:', await notifyResponse.json());
-      } catch (notifyError) {
-        console.error('Failed to send quote notification:', notifyError);
-      }
+      onSuccess?.({ quoteNumber: data.quoteNumber, customerEmail: customerEmail.trim() });
+
+      // WhatsApp notification (best-effort)
+      fetch('/api/notifications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'quote_status_update',
+          data: { quoteId: data.quoteNumber, clientName: customerName.trim(), status: 'pending', amount: calculateTotal().toFixed(2), updatedAt: new Date().toLocaleString() },
+        }),
+      }).catch(() => {});
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate quote');
     } finally {
       setIsLoading(false);
     }
   };
-  
+
+  // ── Render ─────────────────────────────────────────────────────────────────
+
   return (
     <div className="glass-card p-8">
       <h2 className="text-2xl font-heading font-bold text-white mb-6">Generate Quote</h2>
-      
+
       {isSuccess ? (
         <div className="bg-green-500/20 border border-green-500 rounded-lg p-6 text-center">
           <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-          <h3 className="text-xl font-heading font-bold text-white mb-2">Quote Generated Successfully!</h3>
+          <h3 className="text-xl font-heading font-bold text-white mb-2">Quote Generated!</h3>
           <p className="text-white/70 mb-4">Quote #{quoteNumber} has been sent to {customerEmail}</p>
-          <button 
-            onClick={() => {
-              setIsSuccess(false);
-              setQuoteNumber(null);
-            }}
-            className="btn btn-primary"
-          >
+          <button onClick={() => { setIsSuccess(false); setQuoteNumber(null); resetForm(); }} className="btn btn-primary">
             Generate Another Quote
           </button>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Customer Information */}
-          <div>
-            <h3 className="text-lg font-heading font-semibold text-white mb-4">Customer Information</h3>
+
+          {/* ── Client ─────────────────────────────────────────────────── */}
+          <section>
+            <h3 className="text-base font-heading font-semibold text-white mb-4 pb-2 border-b border-white/10">
+              Client Details
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-white/70 text-sm mb-1">Name *</label>
-                <input
-                  type="text"
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
-                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-                  required
-                />
+                <label className="block text-white/60 text-xs mb-1">Full Name *</label>
+                <input type="text" value={customerName}
+                  onChange={e => { setCustomerName(e.target.value); if (!contactPerson.trim()) setContactPerson(e.target.value); }}
+                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white text-sm focus:border-accent focus:outline-none" required />
               </div>
               <div>
-                <label className="block text-white/70 text-sm mb-1">Company</label>
-                <input
-                  type="text"
-                  value={customerCompany}
-                  onChange={(e) => setCustomerCompany(e.target.value)}
-                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-                />
+                <label className="block text-white/60 text-xs mb-1">Company</label>
+                <input type="text" value={customerCompany} onChange={e => setCustomerCompany(e.target.value)}
+                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white text-sm focus:border-accent focus:outline-none" />
               </div>
               <div>
-                <label className="block text-white/70 text-sm mb-1">Email *</label>
-                <input
-                  type="email"
-                  value={customerEmail}
-                  onChange={(e) => setCustomerEmail(e.target.value)}
-                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-                  required
-                />
+                <label className="block text-white/60 text-xs mb-1">Email *</label>
+                <input type="email" value={customerEmail} onChange={e => setCustomerEmail(e.target.value)}
+                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white text-sm focus:border-accent focus:outline-none" required />
               </div>
               <div>
-                <label className="block text-white/70 text-sm mb-1">Phone</label>
-                <input
-                  type="tel"
-                  value={customerPhone}
-                  onChange={(e) => setCustomerPhone(e.target.value)}
-                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-                />
+                <label className="block text-white/60 text-xs mb-1">Phone</label>
+                <input type="tel" value={customerPhone} onChange={e => setCustomerPhone(e.target.value)}
+                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white text-sm focus:border-accent focus:outline-none" />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-white/70 text-sm mb-1">Address</label>
-                <textarea
-                  value={customerAddress}
-                  onChange={(e) => setCustomerAddress(e.target.value)}
-                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-                  rows={2}
-                />
+                <label className="block text-white/60 text-xs mb-1">Address</label>
+                <textarea value={customerAddress} onChange={e => setCustomerAddress(e.target.value)}
+                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white text-sm focus:border-accent focus:outline-none" rows={2} />
               </div>
             </div>
-          </div>
-          
-          {/* Project Information */}
-          <div>
-            <h3 className="text-lg font-heading font-semibold text-white mb-4">Project Information</h3>
+          </section>
+
+          {/* ── Project ────────────────────────────────────────────────── */}
+          <section>
+            <h3 className="text-base font-heading font-semibold text-white mb-4 pb-2 border-b border-white/10">
+              Project Details
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-white/70 text-sm mb-1">Project Name *</label>
-                <input
-                  type="text"
-                  value={projectName}
-                  onChange={(e) => setProjectName(e.target.value)}
-                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-                  required
-                />
+                <label className="block text-white/60 text-xs mb-1">Project Name *</label>
+                <input type="text" value={projectName} onChange={e => setProjectName(e.target.value)}
+                  placeholder="e.g. CIPC Registration Package"
+                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white text-sm focus:border-accent focus:outline-none" required />
               </div>
               <div>
-                <label className="block text-white/70 text-sm mb-1">Contact Person *</label>
-                <input
-                  type="text"
-                  value={contactPerson}
-                  onChange={(e) => setContactPerson(e.target.value)}
-                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-                  required
-                />
+                <label className="block text-white/60 text-xs mb-1">Contact Person *</label>
+                <input type="text" value={contactPerson} onChange={e => setContactPerson(e.target.value)}
+                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white text-sm focus:border-accent focus:outline-none" required />
               </div>
               <div>
-                <label className="block text-white/70 text-sm mb-1">Payment Terms</label>
-                <select
-                  value={paymentTerms}
-                  onChange={(e) => setPaymentTerms(e.target.value)}
-                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-                >
+                <label className="block text-white/60 text-xs mb-1">Payment Terms</label>
+                <select value={paymentTerms} onChange={e => setPaymentTerms(e.target.value)}
+                  className="w-full rounded-lg bg-[#1a1a1a] border border-white/10 p-3 text-white text-sm focus:border-accent focus:outline-none">
+                  <option value="50% Upfront">50% Upfront</option>
                   <option value="Net 30">Net 30</option>
                   <option value="Net 15">Net 15</option>
                   <option value="Due on Receipt">Due on Receipt</option>
-                  <option value="50% Upfront">50% Upfront</option>
                 </select>
               </div>
             </div>
-            
-            {/* Deposit Toggle */}
-            <div className="mt-4 p-4 border border-white/10 rounded-lg bg-white/5">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={requireDeposit}
-                  onChange={(e) => setRequireDeposit(e.target.checked)}
-                  className="w-5 h-5 rounded border-white/20 bg-white/5 text-accent focus:ring-accent focus:ring-offset-0"
-                />
-                <div>
-                  <span className="text-white font-medium">Require 50% Deposit</span>
-                  <p className="text-white/60 text-sm mt-1">
-                    When enabled, the quote will require a 50% deposit before work commences. 
-                    Uncheck if the client has already paid a deposit or if full payment is required upfront.
-                  </p>
-                </div>
+
+            <div className="mt-4 p-4 border border-white/10 rounded-lg bg-white/5 flex items-start gap-3">
+              <input type="checkbox" id="deposit-toggle" checked={requireDeposit}
+                onChange={e => setRequireDeposit(e.target.checked)}
+                className="mt-0.5 w-4 h-4 rounded border-white/20 bg-white/5 accent-amber-500" />
+              <label htmlFor="deposit-toggle" className="cursor-pointer">
+                <span className="text-white text-sm font-medium">Require 50% deposit</span>
+                <p className="text-white/50 text-xs mt-0.5">Uncheck if the client has already paid or if full payment is required upfront.</p>
               </label>
             </div>
-          </div>
-          
-          {/* Quote Items */}
-          <div>
-            <h3 className="text-lg font-heading font-semibold text-white mb-4">Quote Items</h3>
-            
-            {items.map((item, index) => (
-              <div key={item.id} className="mb-4 p-4 border border-white/10 rounded-lg bg-white/5">
-                <div className="flex justify-between items-center mb-3">
-                  <h4 className="text-white font-medium">Item {index + 1}</h4>
-                  {items.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeItem(item.id)}
-                      className="text-red-400 hover:text-red-300"
-                    >
-                      <MinusCircle size={18} />
-                    </button>
-                  )}
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                  <div>
-                    <label className="block text-white/70 text-sm mb-1">Select Service (Optional)</label>
-                    <div className="relative">
-                      <select
-                        onChange={(e) => e.target.value && handleServiceSelect(item.id, e.target.value)}
-                        className="w-full rounded-lg bg-[#1a1a1a] border border-white/10 p-3 text-white appearance-none cursor-pointer [&>option]:bg-[#1a1a1a] [&>option]:text-white"
-                        defaultValue=""
-                      >
-                        <option value="" className="bg-[#1a1a1a] text-white">Or select from services...</option>
-                        {serviceDefinitions.map(service => (
-                          <option key={service.id} value={service.id} className="bg-[#1a1a1a] text-white">
-                            {service.category} - {service.name} {service.basePrice && `(${service.basePrice})`}
-                          </option>
-                        ))}
-                      </select>
-                      <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none" />
-                    </div>
+          </section>
+
+          {/* ── Items ──────────────────────────────────────────────────── */}
+          <section>
+            <h3 className="text-base font-heading font-semibold text-white mb-4 pb-2 border-b border-white/10">
+              Quote Items
+            </h3>
+
+            <div className="space-y-4">
+              {items.map((item, index) => (
+                <div key={item.id} className="p-4 border border-white/10 rounded-xl bg-white/3">
+                  {/* Item header */}
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-bold text-white/40 uppercase tracking-wider">Item {index + 1}</span>
+                    {items.length > 1 && (
+                      <button type="button" onClick={() => removeItem(item.id)}
+                        className="text-white/30 hover:text-red-400 transition-colors" title="Remove item">
+                        <MinusCircle size={16} />
+                      </button>
+                    )}
                   </div>
-                  <div>
-                    <label className="block text-white/70 text-sm mb-1">Item Name *</label>
-                    <input
-                      type="text"
-                      value={item.name}
-                      onChange={(e) => updateItem(item.id, 'name', e.target.value)}
-                      className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-                      placeholder="Enter item name or select service above"
-                      required
+
+                  {/* Service picker */}
+                  <div className="mb-3">
+                    <label className="block text-white/60 text-xs mb-1">
+                      Quick-fill from catalogue <span className="text-white/30">(optional — search to find a service)</span>
+                    </label>
+                    <ServicePicker
+                      onSelect={(name, rate, desc, pt) => handleServiceSelected(item.id, name, rate, desc, pt)}
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+
+                  {/* Name + pricing type */}
+                  <div className="grid grid-cols-1 md:grid-cols-[1fr_140px] gap-3 mb-3">
                     <div>
-                      <label className="block text-white/70 text-sm mb-1">Quantity *</label>
-                      <input
-                        type="number"
-                        min="1"
-                        value={item.quantity}
-                        onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 1)}
-                        className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-                        required
-                      />
+                      <label className="block text-white/60 text-xs mb-1">Service / Item Name *</label>
+                      <input type="text" value={item.name} onChange={e => updateItem(item.id, 'name', e.target.value)}
+                        placeholder="e.g. CIPC Registration"
+                        className="w-full rounded-lg bg-white/5 border border-white/10 p-2.5 text-white text-sm focus:border-accent focus:outline-none" required />
                     </div>
                     <div>
-                      <label className="block text-white/70 text-sm mb-1">Rate (R) *</label>
-                      <input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={item.rate}
-                        onChange={(e) => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)}
-                        className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-                        required
-                      />
+                      <label className="block text-white/60 text-xs mb-1">Billing</label>
+                      <select value={item.pricingType ?? 'one-time'} onChange={e => updateItem(item.id, 'pricingType', e.target.value)}
+                        className="w-full rounded-lg bg-[#1a1a1a] border border-white/10 p-2.5 text-white text-sm focus:border-accent focus:outline-none">
+                        <option value="one-time">Once-off</option>
+                        <option value="monthly">Monthly</option>
+                      </select>
                     </div>
                   </div>
+
+                  {/* Qty + Rate */}
+                  <div className="grid grid-cols-2 gap-3 mb-3">
+                    <div>
+                      <label className="block text-white/60 text-xs mb-1">Qty *</label>
+                      <input type="number" min="1" value={item.quantity}
+                        onChange={e => updateItem(item.id, 'quantity', parseInt(e.target.value) || 1)}
+                        className="w-full rounded-lg bg-white/5 border border-white/10 p-2.5 text-white text-sm focus:border-accent focus:outline-none" required />
+                    </div>
+                    <div>
+                      <label className="block text-white/60 text-xs mb-1">Rate (R) *</label>
+                      <input type="number" min="0" step="0.01" value={item.rate}
+                        onChange={e => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)}
+                        className="w-full rounded-lg bg-white/5 border border-white/10 p-2.5 text-white text-sm focus:border-accent focus:outline-none" required />
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <div>
+                    <label className="block text-white/60 text-xs mb-1">Description / Scope Notes</label>
+                    <textarea value={item.description} onChange={e => updateItem(item.id, 'description', e.target.value)}
+                      placeholder="What's included, client requirements, revision rounds…"
+                      className="w-full rounded-lg bg-white/5 border border-white/10 p-2.5 text-white text-sm focus:border-accent focus:outline-none" rows={2} />
+                  </div>
+
+                  {/* Line total */}
+                  <div className="mt-2 text-right">
+                    <span className="text-xs text-white/40">
+                      Line total: <span className="text-accent font-bold">R {(item.quantity * item.rate).toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                      {item.pricingType === 'monthly' ? ' /month' : ''}
+                    </span>
+                  </div>
                 </div>
-                
-                <div>
-                  <label className="block text-white/70 text-sm mb-1">Description</label>
-                  <textarea
-                    value={item.description}
-                    onChange={(e) => updateItem(item.id, 'description', e.target.value)}
-                    className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-                    rows={2}
-                  />
-                </div>
-              </div>
-            ))}
-            
-            <button
-              type="button"
-              onClick={addItem}
-              className="flex items-center gap-2 text-accent hover:text-accent/80 mt-2"
-            >
-              <PlusCircle size={18} />
-              <span>Add Another Item</span>
+              ))}
+            </div>
+
+            <button type="button" onClick={addItem}
+              className="flex items-center gap-2 text-accent hover:text-accent/80 mt-3 text-sm">
+              <PlusCircle size={16} />
+              Add another item
             </button>
-            
-            <div className="mt-4 p-4 border border-white/10 rounded-lg bg-white/5">
+
+            {/* Quote total */}
+            <div className="mt-4 p-4 border border-accent/30 rounded-xl bg-accent/5">
               <div className="flex justify-between items-center">
-                <span className="text-white font-medium">Total (ex VAT):</span>
-                <span className="text-accent font-heading font-bold text-xl">
-                  R {calculateTotal().toFixed(2)}
+                <span className="text-white font-medium text-sm">Quote Total (ex VAT)</span>
+                <span className="text-accent font-heading font-bold text-2xl">
+                  R {calculateTotal().toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
-              <p className="text-xs text-white/50 mt-2">Breed Industries is not VAT registered. All figures are exclusive of VAT.</p>
+              <p className="text-xs text-white/40 mt-1">Breed Industries is not VAT registered. All amounts are VAT exclusive.</p>
             </div>
-          </div>
-          
-          {/* Notes */}
-          <div>
-            <h3 className="text-lg font-heading font-semibold text-white mb-4">Notes</h3>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-              rows={3}
-              placeholder="Add any additional notes or terms for this quote..."
-            />
-          </div>
-          
-          {/* Error message */}
+          </section>
+
+          {/* ── Notes ──────────────────────────────────────────────────── */}
+          <section>
+            <h3 className="text-base font-heading font-semibold text-white mb-3 pb-2 border-b border-white/10">
+              Notes <span className="text-white/30 font-normal text-xs">(optional)</span>
+            </h3>
+            <textarea value={notes} onChange={e => setNotes(e.target.value)}
+              placeholder="Additional terms, delivery timeline, or anything else to include on the quote…"
+              className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white text-sm focus:border-accent focus:outline-none" rows={3} />
+          </section>
+
+          {/* Error */}
           {error && (
-            <div className="bg-red-500/20 border border-red-500 rounded-lg p-4 text-white">
+            <div className="bg-red-500/15 border border-red-500/40 rounded-lg p-4 text-red-300 text-sm flex items-start gap-2">
+              <X size={15} className="shrink-0 mt-0.5" />
               {error}
             </div>
           )}
-          
-          {/* Submit button */}
-          <div className="flex justify-center">
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="btn btn-primary px-8 py-3 flex items-center gap-2"
-            >
+
+          {/* Submit */}
+          <div className="flex justify-center pt-2">
+            <button type="submit" disabled={isLoading}
+              className="btn btn-primary px-10 py-3 flex items-center gap-2 text-base">
               {isLoading ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Generating Quote...
-                </>
+                <><Loader2 className="w-5 h-5 animate-spin" /> Generating…</>
               ) : (
-                <>
-                  <Download className="w-5 h-5" />
-                  Download & Send Quote
-                </>
+                <><Download className="w-5 h-5" /> Generate &amp; Download Quote</>
               )}
             </button>
           </div>
+
         </form>
       )}
     </div>

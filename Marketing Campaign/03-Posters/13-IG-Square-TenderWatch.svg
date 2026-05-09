@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <defs>
+    <linearGradient id="amber" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E5A835"/>
+      <stop offset="50%" stop-color="#CA8114"/>
+      <stop offset="100%" stop-color="#9B6310"/>
+    </linearGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#242426"/>
+      <stop offset="60%" stop-color="#1A1A1B"/>
+      <stop offset="100%" stop-color="#0E0E0F"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="30%" r="55%">
+      <stop offset="0%" stop-color="#CA8114" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#CA8114" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="hexgrid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#CA8114" stroke-width="0.5" opacity="0.08"/>
+    </pattern>
+    <symbol id="breedmark" viewBox="-110 -110 220 220">
+      <polygon points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" fill="#F8F5F0"/>
+      <g fill="#1A1A1B">
+        <rect x="-55" y="-50" width="110" height="22"/>
+        <rect x="33" y="-28" width="22" height="20"/>
+        <rect x="-55" y="-8" width="110" height="16"/>
+        <rect x="-55" y="8" width="22" height="20"/>
+        <rect x="-55" y="28" width="110" height="22"/>
+      </g>
+    </symbol>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <rect width="1080" height="1080" fill="url(#hexgrid)"/>
+  <rect width="1080" height="1080" fill="url(#glow)"/>
+
+  <!-- Accent border lines -->
+  <rect x="0" y="0" width="1080" height="6" fill="url(#amber)"/>
+  <rect x="0" y="1074" width="1080" height="6" fill="url(#amber)"/>
+
+  <!-- Decorative radar rings (representing scanning/watching) -->
+  <circle cx="820" cy="200" r="220" fill="none" stroke="#CA8114" stroke-width="1" opacity="0.12"/>
+  <circle cx="820" cy="200" r="160" fill="none" stroke="#CA8114" stroke-width="1" opacity="0.18"/>
+  <circle cx="820" cy="200" r="100" fill="none" stroke="#CA8114" stroke-width="1" opacity="0.25"/>
+  <circle cx="820" cy="200" r="50"  fill="none" stroke="#CA8114" stroke-width="2" opacity="0.4"/>
+  <circle cx="820" cy="200" r="14"  fill="#CA8114" opacity="0.8"/>
+  <!-- Radar sweep line -->
+  <line x1="820" y1="200" x2="980" y2="120" stroke="#CA8114" stroke-width="2" opacity="0.35"/>
+  <line x1="820" y1="200" x2="860" y2="40"  stroke="#CA8114" stroke-width="1" opacity="0.15"/>
+
+  <!-- Logo mark top-left -->
+  <use href="#breedmark" x="72" y="72" width="68" height="68"/>
+
+  <!-- NEW badge -->
+  <rect x="72" y="170" width="110" height="34" rx="17" fill="#CA8114"/>
+  <text x="127" y="192" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="14" fill="#1A1A1B" text-anchor="middle" letter-spacing="2">NEW SERVICE</text>
+
+  <!-- Eyebrow -->
+  <text x="72" y="290" font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="22" fill="#CA8114" letter-spacing="3">TENDER WATCH</text>
+
+  <!-- Main headline -->
+  <text x="72" y="390" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="88" fill="#F8F5F0">NEVER</text>
+  <text x="72" y="490" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="88" fill="#F8F5F0">MISS A</text>
+  <!-- Gradient text simulation via rect clip -->
+  <text x="72" y="590" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="88" fill="url(#amber)">TENDER</text>
+  <text x="72" y="690" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="88" fill="url(#amber)">AGAIN.</text>
+
+  <!-- Divider -->
+  <rect x="72" y="720" width="120" height="4" rx="2" fill="url(#amber)"/>
+
+  <!-- Body copy -->
+  <text x="72" y="778" font-family="Inter, Arial, sans-serif" font-size="30" fill="#F8F5F0" opacity="0.75">We scrape government procurement</text>
+  <text x="72" y="820" font-family="Inter, Arial, sans-serif" font-size="30" fill="#F8F5F0" opacity="0.75">portals daily and match tenders</text>
+  <text x="72" y="862" font-family="Inter, Arial, sans-serif" font-size="30" fill="#F8F5F0" opacity="0.75">to your business profile.</text>
+
+  <!-- Price pill -->
+  <rect x="72" y="908" width="260" height="64" rx="32" fill="#CA8114" opacity="0.15" stroke="#CA8114" stroke-width="1.5"/>
+  <text x="202" y="948" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="32" fill="#CA8114" text-anchor="middle">From R950 / month</text>
+
+  <!-- Bottom URL -->
+  <text x="540" y="1036" font-family="Inter, Arial, sans-serif" font-size="24" fill="#CA8114" opacity="0.7" text-anchor="middle" letter-spacing="1">www.thebreed.co.za/tender-services</text>
+</svg>

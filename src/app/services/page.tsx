@@ -5,7 +5,7 @@ import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
 import {
   Shield, Briefcase, Layers,
-  Check, ChevronRight, ArrowRight
+  Check, ChevronRight, ArrowRight, TrendingUp
 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -313,6 +313,146 @@ export default function ServicesPage() {
         </div>
       </section>
       
+      {/* ── Tender Services ──────────────────────────────────── */}
+      <section className="py-20 bg-color-bg-secondary relative" id="tender-services">
+        <div className="absolute inset-0 grid-overlay"></div>
+        <div className="container mx-auto px-4 relative z-10">
+
+          <div className="text-center mb-16">
+            <span className="text-accent font-medium text-sm uppercase tracking-wider">Government &amp; Corporate Tenders</span>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mt-2 mb-4">
+              Tender Services — Get Into the Procurement Space
+            </h2>
+            <p className="text-white/70 max-w-3xl mx-auto">
+              From getting your business tender-ready, to having us search, apply, and attend site meetings on your behalf.
+              We handle the full tender lifecycle so you can focus on delivering the work.
+            </p>
+          </div>
+
+          {/* Tender Packages */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+
+            {/* Tier 1 — Tender Ready */}
+            <div className="glass-card p-7 flex flex-col">
+              <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-5">
+                <Shield className="text-accent w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-heading font-bold text-white mb-1">Tender Ready</h3>
+              <p className="text-accent text-2xl font-bold mb-3">From R3,500 <span className="text-sm font-normal text-white/50">once-off</span></p>
+              <p className="text-white/60 text-sm mb-5 flex-1">
+                We register your business for all the credentials needed to bid on government tenders.
+              </p>
+              <ul className="space-y-2 mb-6">
+                {['CSD Registration', 'CIDB Registration', 'BBBEE Affidavit / Certificate', 'Tax Clearance Pin', 'Company Profile Document'].map(f => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-white/70">
+                    <Check size={14} className="text-accent mt-0.5 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/contact" className="btn btn-outline w-full text-center text-sm">Get Started</Link>
+            </div>
+
+            {/* Tier 2 — Tender Watch */}
+            <div className="glass-card p-7 flex flex-col ring-2 ring-accent/30 relative">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent/20 text-accent text-xs font-medium py-1 px-3 rounded-full border border-accent/30">
+                Most Popular
+              </span>
+              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-5">
+                <Briefcase className="text-accent w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-heading font-bold text-white mb-1">Tender Watch</h3>
+              <p className="text-accent text-2xl font-bold mb-3">R950 <span className="text-sm font-normal text-white/50">/month</span></p>
+              <p className="text-white/60 text-sm mb-5 flex-1">
+                We continuously scrape government portals and match tenders to your business profile. You get notified every time there's a fit.
+              </p>
+              <ul className="space-y-2 mb-6">
+                {['Automated daily tender scraping', 'Profile-matched tender alerts', 'Email notifications per match', 'Closing-date reminders', 'Monthly tender digest report'].map(f => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-white/70">
+                    <Check size={14} className="text-accent mt-0.5 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/contact" className="btn btn-primary w-full text-center text-sm">Start Watch</Link>
+            </div>
+
+            {/* Tier 3 — Tender Apply */}
+            <div className="glass-card p-7 flex flex-col">
+              <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-5">
+                <Layers className="text-blue-400 w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-heading font-bold text-white mb-1">Tender Apply</h3>
+              <p className="text-accent text-2xl font-bold mb-3">R2,500 <span className="text-sm font-normal text-white/50">/month</span></p>
+              <p className="text-white/60 text-sm mb-5 flex-1">
+                We don't just find the tenders — we compile and submit the full application on your behalf. Everything in Watch, plus we do the paperwork.
+              </p>
+              <ul className="space-y-2 mb-6">
+                {['Everything in Tender Watch', 'Full tender document compilation', 'Application submission on your behalf', 'Application tracking + updates', '+ R800 per tender applied'].map(f => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-white/70">
+                    <Check size={14} className="text-accent mt-0.5 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/contact" className="btn btn-outline w-full text-center text-sm">Start Applying</Link>
+            </div>
+
+            {/* Tier 4 — Tender Full */}
+            <div className="glass-card p-7 flex flex-col bg-gradient-to-b from-accent/5 to-transparent">
+              <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center mb-5">
+                <TrendingUp className="text-accent w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-heading font-bold text-white mb-1">Tender Full Service</h3>
+              <p className="text-accent text-2xl font-bold mb-3">R6,500 <span className="text-sm font-normal text-white/50">/month</span></p>
+              <p className="text-white/60 text-sm mb-5 flex-1">
+                The complete managed service. We search, apply, attend compulsory site meetings, and follow up on awarded tenders — all on your behalf.
+              </p>
+              <ul className="space-y-2 mb-6">
+                {[
+                  'Everything in Tender Apply',
+                  'Site / briefing meeting attendance',
+                  'Tender clarification responses',
+                  'Award follow-up & negotiations',
+                  '+ R1,500 per site meeting attended',
+                  'Extra charges apply for complex submissions',
+                ].map(f => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-white/70">
+                    <Check size={14} className="text-accent mt-0.5 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/contact" className="btn btn-primary w-full text-center text-sm">Go Full Service</Link>
+            </div>
+          </div>
+
+          {/* Tender add-ons callout */}
+          <div className="glass-card p-8 border border-white/10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+              <div>
+                <h3 className="text-xl font-heading font-bold text-white mb-2">Add-on Services</h3>
+                <p className="text-white/60 text-sm">Additional charges apply for the following services outside of your monthly package.</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { name: 'Per Tender Applied',       price: 'R800' },
+                  { name: 'Site Meeting Attendance',  price: 'R1,500' },
+                  { name: 'Tender Compliance Audit',  price: 'R1,200' },
+                  { name: 'Company Profile Update',   price: 'R450' },
+                ].map(addon => (
+                  <div key={addon.name} className="flex items-center justify-between p-3 bg-white/3 rounded-lg">
+                    <span className="text-white/70 text-sm">{addon.name}</span>
+                    <span className="text-accent font-bold text-sm">{addon.price}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 bg-color-bg-secondary relative">
         <div className="absolute inset-0 grid-overlay"></div>

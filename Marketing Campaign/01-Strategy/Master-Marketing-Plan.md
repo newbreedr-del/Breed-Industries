@@ -58,6 +58,46 @@ We are not a freelancer marketplace. We are not a CIPC reseller. We are not "jus
 
 ---
 
+## 1.5 NEW SERVICE LINE — TENDER SERVICES
+
+> **Tender Services is a standalone product powered by a proprietary automation engine.** The client-facing portal lives at `tenders.thebreed.co.za`. The main site (`thebreed.co.za`) markets the product and hosts the packages page at `/tender-services`. This is NOT just a new service line — it is a recurring SaaS-style revenue stream that generates monthly retainers independent of project work.
+
+### Product overview
+
+| Tier | Price | Description |
+|---|---|---|
+| **Tender Ready** | From R3,500 once-off | Registration: CSD, CIDB, BBBEE, Tax Pin, Company Profile |
+| **Tender Watch** | R950/month | Daily portal scraping, profile matching, instant email alerts |
+| **Tender Apply** | R2,500/month | Watch + we compile and submit full bid documents |
+| **Tender Full Service** | R6,500/month | Apply + site meeting attendance + award follow-up |
+
+**Add-ons:** R800/application submitted · R1,500/site meeting · R1,200/compliance audit
+
+### Target audience (tender-specific persona)
+
+**"The Compliant Builder"** — a registered South African SMME or contractor who:
+- Has CIPC registration + basic compliance but has never successfully bid on a government tender
+- Is in construction, civil, cleaning, security, IT, catering, or consulting
+- Operates primarily in KZN or GP but wants to expand
+- Has heard of eTenders but finds it overwhelming or doesn't have time to monitor it
+- **Pain:** misses closing dates, doesn't understand compliance requirements, doesn't know where to start
+- **Trigger to buy:** a peer wins a government contract, a heard-about tender they missed, a compliance workshop
+
+### Tender-specific hashtags
+Add to the core rotation: `#GovernmentTenders #TenderSA #eTenders #SouthAfricanTenders #TenderReady #CSDRegistration #CIDBRegistration #ProcurementSA #PublicSector #TenderWatch`
+
+### Tender launch message hierarchy
+
+| Layer | Line |
+|---|---|
+| **Hook** | "Tenders you qualify for are being awarded right now — without you." |
+| **Problem** | "Most SMMEs miss eTenders because they don't know where to look." |
+| **Solution** | "We built an engine that watches every portal, every day — and puts the right tenders in your inbox." |
+| **Proof** | "From R950/month — or we apply and attend on your behalf." |
+| **CTA** | "thebreed.co.za/tender-services" |
+
+---
+
 ## 2. AUDIENCE
 
 ### 2.1 Primary persona — "The Founder Who's Done Winging It"
@@ -102,6 +142,7 @@ Always pin 3 core + 5 rotating.
 **Core (always):** `#TheBreed #RealWorkRealImpact #PremiumGrowthAgency`
 **Geo:** `#DurbanBusiness #DurbanEntrepreneurs #KZNBusiness #SouthAfricanBusiness`
 **Topical:** `#CIPC #BusinessRegistration #LogoDesign #WebDesignSA #SmallBusinessSA #StartupSA #SAEntrepreneurs #SmmeSA #FromIdeaToEmpire`
+**Tender-specific (add when posting Tender content):** `#GovernmentTenders #TenderSA #eTenders #SouthAfricanTenders #TenderReady #CSDRegistration #CIDBRegistration #ProcurementSA #TenderWatch #PublicProcurement`
 
 ---
 
@@ -112,6 +153,33 @@ Always pin 3 core + 5 rotating.
 - Day 1: Coordinated launch post + reel + LinkedIn article + email + WhatsApp broadcast (carrying the *Real Work. Real Clients. Real Impact.* hero)
 - Day 2–7: Founder voice video, behind-the-scenes, Package Builder demo reel
 - Day 8: Paid ads switch on (R3,000 test budget across IG/Meta + TikTok)
+
+### Phase 4 — TENDER LAUNCH (Week 10–12, rolling always-on)
+**Goal:** Establish Breed Industries as the go-to tender intelligence partner for South African SMMEs. Target first 10 Tender Watch retainers in 30 days.
+
+**Week 10 — Awareness burst:**
+- Day 1: Tender announcement post (Poster 13-IG-Square-TenderWatch) + carousel explaining "What is eTenders and why you're missing it"
+- Day 2: LinkedIn article — *"R800 billion. How Much of SA's Government Spend Is Your Business Missing?"*
+- Day 3: TikTok/Reels — "5 tenders that closed last week that you probably qualified for" (screen-record eTenders, face-cam reaction)
+- Day 5: IG Story sequence using Poster 14-IG-Story-TenderReady — swipe-up to `/tender-services`
+- Day 7: Pricing post (Poster 15-IG-Square-TenderPackages) — "Four ways we help you win tenders"
+
+**Week 11 — Education & proof:**
+- "How CIDB grades work" educational carousel (5 slides)
+- "What is CSD registration and why you need it" — Reel or TikTok
+- Behind-the-scenes: "How our tender engine matches you to opportunities" (screen-record the admin panel, blur sensitive data)
+- WhatsApp broadcast to existing client list: "We now offer Tender Services — reply TENDERS for the full breakdown"
+
+**Week 12 — Social proof + conversion:**
+- Client story / case study of first Tender Watch client getting a match (with permission)
+- "We applied for a tender on behalf of a client — here's what the process looks like" (Reels)
+- Paid: Run `#GovernmentTenders` + `#TenderReady` targeting SMME owners in KZN, GP, WC
+- Email campaign to existing leads list with subject: *"New: We now find tenders for you — from R950/month"*
+
+**Ongoing (always-on tender content cadence):**
+- 2× tender posts/week — mix of education, portal news, compliance tips, client wins
+- 1× tender story/week — countdown to a major tender deadline relevant to SA SMMEs
+- Monthly "Tender Digest" email to subscribers (auto-generated by the tender engine)
 - Day 14: First "case study" reel — feature one existing client (recommended: Engage Africa IO or MLK Apparel)
 
 ### Phase 2 — EDUCATE (Weeks 3–6)

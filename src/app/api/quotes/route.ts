@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase, supabaseAdmin } from '@/lib/supabase';
+
+export const runtime = 'nodejs';
 
 // GET /api/quotes - List all quotes
 export async function GET(request: NextRequest) {
@@ -72,7 +74,7 @@ export async function PATCH(request: NextRequest) {
     const updateData = { ...updates, updated_at: new Date().toISOString() };
     delete updateData.id;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('quotes')
       .update(updateData)
       .eq('id', id)
@@ -103,7 +105,7 @@ export async function DELETE(request: NextRequest) {
 
     console.log('API: Attempting to delete quote with ID:', id);
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('quotes')
       .delete()
       .eq('id', id)
@@ -150,7 +152,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('quotes')
       .insert(body)
       .select()

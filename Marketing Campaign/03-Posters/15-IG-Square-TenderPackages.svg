@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <defs>
+    <linearGradient id="amber" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E5A835"/>
+      <stop offset="50%" stop-color="#CA8114"/>
+      <stop offset="100%" stop-color="#9B6310"/>
+    </linearGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#242426"/>
+      <stop offset="60%" stop-color="#1A1A1B"/>
+      <stop offset="100%" stop-color="#0E0E0F"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#CA8114" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#CA8114" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="hexgrid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#CA8114" stroke-width="0.5" opacity="0.07"/>
+    </pattern>
+    <symbol id="breedmark" viewBox="-110 -110 220 220">
+      <polygon points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" fill="#F8F5F0"/>
+      <g fill="#1A1A1B">
+        <rect x="-55" y="-50" width="110" height="22"/>
+        <rect x="33" y="-28" width="22" height="20"/>
+        <rect x="-55" y="-8" width="110" height="16"/>
+        <rect x="-55" y="8" width="22" height="20"/>
+        <rect x="-55" y="28" width="110" height="22"/>
+      </g>
+    </symbol>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <rect width="1080" height="1080" fill="url(#hexgrid)"/>
+  <rect width="1080" height="1080" fill="url(#glow)"/>
+
+  <!-- Accent lines -->
+  <rect x="0" y="0" width="1080" height="6" fill="url(#amber)"/>
+  <rect x="0" y="1074" width="1080" height="6" fill="url(#amber)"/>
+
+  <!-- Logo -->
+  <use href="#breedmark" x="56" y="56" width="60" height="60"/>
+
+  <!-- Header text -->
+  <text x="540" y="80" font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="20" fill="#CA8114" text-anchor="middle" letter-spacing="3">BREED INDUSTRIES · TENDER SERVICES</text>
+
+  <!-- Main title -->
+  <text x="540" y="175" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="72" fill="#F8F5F0" text-anchor="middle">WIN MORE</text>
+  <text x="540" y="255" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="72" fill="url(#amber)" text-anchor="middle">GOVERNMENT</text>
+  <text x="540" y="335" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="72" fill="#F8F5F0" text-anchor="middle">CONTRACTS</text>
+
+  <!-- Subtitle -->
+  <text x="540" y="385" font-family="Inter, Arial, sans-serif" font-size="25" fill="#F8F5F0" opacity="0.55" text-anchor="middle">Four tiers. One team. Zero missed deadlines.</text>
+
+  <!-- Divider -->
+  <rect x="160" y="408" width="760" height="2" rx="1" fill="#CA8114" opacity="0.25"/>
+
+  <!-- ─── Package cards ─── -->
+  <!-- Card 1: Tender Ready -->
+  <rect x="48" y="428" width="230" height="340" rx="16" fill="#1E1E20" stroke="#CA8114" stroke-width="1" opacity="1"/>
+  <rect x="48" y="428" width="230" height="6" rx="3" fill="#CA8114" opacity="0.5"/>
+  <text x="163" y="492" font-family="Montserrat" font-weight="800" font-size="21" fill="#CA8114" text-anchor="middle">TENDER</text>
+  <text x="163" y="518" font-family="Montserrat" font-weight="800" font-size="21" fill="#CA8114" text-anchor="middle">READY</text>
+  <text x="163" y="570" font-family="Montserrat" font-weight="800" font-size="42" fill="#F8F5F0" text-anchor="middle">R3,500</text>
+  <text x="163" y="598" font-family="Inter" font-size="19" fill="#F8F5F0" opacity="0.4" text-anchor="middle">once-off</text>
+  <rect x="88" y="622" width="150" height="1" fill="#CA8114" opacity="0.2"/>
+  <text x="163" y="650" font-family="Inter" font-size="18" fill="#F8F5F0" opacity="0.6" text-anchor="middle">CSD + CIDB</text>
+  <text x="163" y="676" font-family="Inter" font-size="18" fill="#F8F5F0" opacity="0.6" text-anchor="middle">BBBEE + Tax Pin</text>
+  <text x="163" y="702" font-family="Inter" font-size="18" fill="#F8F5F0" opacity="0.6" text-anchor="middle">Company Profile</text>
+  <text x="163" y="740" font-family="Montserrat" font-weight="700" font-size="18" fill="#CA8114" text-anchor="middle">GET STARTED →</text>
+
+  <!-- Card 2: Tender Watch (highlighted) -->
+  <rect x="298" y="416" width="230" height="362" rx="16" fill="#1E1E20" stroke="#CA8114" stroke-width="2.5"/>
+  <rect x="298" y="416" width="230" height="8" rx="4" fill="url(#amber)"/>
+  <rect x="353" y="398" width="120" height="32" rx="16" fill="#CA8114"/>
+  <text x="413" y="420" font-family="Montserrat" font-weight="800" font-size="15" fill="#1A1A1B" text-anchor="middle" letter-spacing="1">POPULAR</text>
+  <text x="413" y="490" font-family="Montserrat" font-weight="800" font-size="21" fill="#CA8114" text-anchor="middle">TENDER</text>
+  <text x="413" y="516" font-family="Montserrat" font-weight="800" font-size="21" fill="#CA8114" text-anchor="middle">WATCH</text>
+  <text x="413" y="572" font-family="Montserrat" font-weight="800" font-size="46" fill="#F8F5F0" text-anchor="middle">R950</text>
+  <text x="413" y="602" font-family="Inter" font-size="19" fill="#F8F5F0" opacity="0.4" text-anchor="middle">/month</text>
+  <rect x="338" y="626" width="150" height="1" fill="#CA8114" opacity="0.2"/>
+  <text x="413" y="654" font-family="Inter" font-size="18" fill="#F8F5F0" opacity="0.6" text-anchor="middle">Daily scraping</text>
+  <text x="413" y="680" font-family="Inter" font-size="18" fill="#F8F5F0" opacity="0.6" text-anchor="middle">Smart matching</text>
+  <text x="413" y="706" font-family="Inter" font-size="18" fill="#F8F5F0" opacity="0.6" text-anchor="middle">Instant alerts</text>
+  <text x="413" y="732" font-family="Inter" font-size="18" fill="#F8F5F0" opacity="0.6" text-anchor="middle">Monthly digest</text>
+  <text x="413" y="756" font-family="Montserrat" font-weight="700" font-size="18" fill="#CA8114" text-anchor="middle">START NOW →</text>
+
+  <!-- Card 3: Tender Apply -->
+  <rect x="548" y="428" width="230" height="340" rx="16" fill="#1E1E20" stroke="#3B5BDB" stroke-width="1" opacity="1"/>
+  <rect x="548" y="428" width="230" height="6" rx="3" fill="#3B5BDB" opacity="0.8"/>
+  <text x="663" y="492" font-family="Montserrat" font-weight="800" font-size="21" fill="#7B9BFF" text-anchor="middle">TENDER</text>
+  <text x="663" y="518" font-family="Montserrat" font-weight="800" font-size="21" fill="#7B9BFF" text-anchor="middle">APPLY</text>
+  <text x="663" y="570" font-family="Montserrat" font-weight="800" font-size="42" fill="#F8F5F0" text-anchor="middle">R2,500</text>
+  <text x="663" y="598" font-family="Inter" font-size="19" fill="#F8F5F0" opacity="0.4" text-anchor="middle">/month</text>
+  <rect x="603" y="622" width="120" height="1" fill="#7B9BFF" opacity="0.2"/>
+  <text x="663" y="650" font-family="Inter" font-size="18" fill="#F8F5F0" opacity="0.6" text-anchor="middle">Watch included</text>
+  <text x="663" y="676" font-family="Inter" font-size="18" fill="#F8F5F0" opacity="0.6" text-anchor="middle">We compile docs</text>
+  <text x="663" y="702" font-family="Inter" font-size="18" fill="#F8F5F0" opacity="0.6" text-anchor="middle">We submit for you</text>
+  <text x="663" y="740" font-family="Montserrat" font-weight="700" font-size="18" fill="#7B9BFF" text-anchor="middle">APPLY NOW →</text>
+
+  <!-- Card 4: Tender Full -->
+  <rect x="798" y="428" width="234" height="340" rx="16" fill="#1E1E20" stroke="#CA8114" stroke-width="1" opacity="1"/>
+  <rect x="798" y="428" width="234" height="6" rx="3" fill="#CA8114" opacity="0.3"/>
+  <text x="915" y="492" font-family="Montserrat" font-weight="800" font-size="21" fill="#CA8114" text-anchor="middle">FULL</text>
+  <text x="915" y="518" font-family="Montserrat" font-weight="800" font-size="21" fill="#CA8114" text-anchor="middle">SERVICE</text>
+  <text x="915" y="570" font-family="Montserrat" font-weight="800" font-size="42" fill="#F8F5F0" text-anchor="middle">R6,500</text>
+  <text x="915" y="598" font-family="Inter" font-size="19" fill="#F8F5F0" opacity="0.4" text-anchor="middle">/month</text>
+  <rect x="855" y="622" width="120" height="1" fill="#CA8114" opacity="0.2"/>
+  <text x="915" y="650" font-family="Inter" font-size="18" fill="#F8F5F0" opacity="0.6" text-anchor="middle">Apply included</text>
+  <text x="915" y="676" font-family="Inter" font-size="18" fill="#F8F5F0" opacity="0.6" text-anchor="middle">Site meetings</text>
+  <text x="915" y="702" font-family="Inter" font-size="18" fill="#F8F5F0" opacity="0.6" text-anchor="middle">Full managed</text>
+  <text x="915" y="740" font-family="Montserrat" font-weight="700" font-size="18" fill="#CA8114" text-anchor="middle">GO FULL →</text>
+
+  <!-- Bottom strip -->
+  <rect x="48" y="810" width="984" height="2" fill="#CA8114" opacity="0.15"/>
+
+  <!-- Bottom CTA row -->
+  <text x="540" y="878" font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="30" fill="#F8F5F0" text-anchor="middle">Book a strategy call to get started:</text>
+  <text x="540" y="928" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="34" fill="#CA8114" text-anchor="middle">www.thebreed.co.za/tender-services</text>
+
+  <!-- Icon row -->
+  <text x="270" y="1010" font-family="Inter, Arial, sans-serif" font-size="22" fill="#F8F5F0" opacity="0.45" text-anchor="middle">📡 Daily Scraping</text>
+  <text x="540" y="1010" font-family="Inter, Arial, sans-serif" font-size="22" fill="#F8F5F0" opacity="0.45" text-anchor="middle">🎯 Smart Matching</text>
+  <text x="810" y="1010" font-family="Inter, Arial, sans-serif" font-size="22" fill="#F8F5F0" opacity="0.45" text-anchor="middle">📄 Full Applications</text>
+
+  <text x="540" y="1052" font-family="Inter, Arial, sans-serif" font-size="20" fill="#CA8114" opacity="0.5" text-anchor="middle">tenders.thebreed.co.za · info@thebreed.co.za</text>
+</svg>

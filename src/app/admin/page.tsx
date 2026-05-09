@@ -15,7 +15,8 @@ import {
   AlertCircle,
   LogOut,
   BookOpen,
-  HelpCircle
+  HelpCircle,
+  Award
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -29,9 +30,15 @@ export default function AdminDashboard() {
     recentQuotes: 0,
     pendingServiceRequests: 0
   });
+  const [tenderStats, setTenderStats] = useState({
+    activeClients: 0,
+    openTenders: 0,
+    newMatches: 0,
+  });
 
   useEffect(() => {
     fetchDashboardStats();
+    fetchTenderStats();
   }, []);
 
   const handleLogout = async () => {
@@ -106,6 +113,22 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchTenderStats = async () => {
+    try {
+      const [clientsRes, tendersRes] = await Promise.all([
+        fetch('/api/tender-clients?active=true'),
+        fetch('/api/tenders?status=open&limit=1'),
+      ]);
+      const clients  = clientsRes.ok  ? await clientsRes.json()  : {};
+      const tenders  = tendersRes.ok  ? await tendersRes.json()  : {};
+      setTenderStats({
+        activeClients: clients.total  ?? 0,
+        openTenders:   tenders.total  ?? 0,
+        newMatches:    0,
+      });
+    } catch { /* non-fatal */ }
+  };
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
@@ -171,6 +194,14 @@ export default function AdminDashboard() {
       href: '/admin/faq',
       color: 'from-teal-500 to-teal-600',
       stats: 'Edit FAQs'
+    },
+    {
+      title: 'Tenders',
+      description: 'Track open tenders, matched clients, and applications',
+      icon: Award,
+      href: '/admin/tenders',
+      color: 'from-yellow-500 to-amber-600',
+      stats: `${tenderStats.openTenders} open · ${tenderStats.activeClients} clients`
     }
   ];
 

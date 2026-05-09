@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <defs>
+    <linearGradient id="amber" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E5A835"/>
+      <stop offset="50%" stop-color="#CA8114"/>
+      <stop offset="100%" stop-color="#9B6310"/>
+    </linearGradient>
+    <linearGradient id="amberV" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E5A835"/>
+      <stop offset="100%" stop-color="#9B6310"/>
+    </linearGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#242426"/>
+      <stop offset="70%" stop-color="#1A1A1B"/>
+      <stop offset="100%" stop-color="#0E0E0F"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="50%" cy="25%" r="50%">
+      <stop offset="0%" stop-color="#CA8114" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#CA8114" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="50%" cy="75%" r="45%">
+      <stop offset="0%" stop-color="#CA8114" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#CA8114" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="hexgrid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#CA8114" stroke-width="0.5" opacity="0.06"/>
+    </pattern>
+    <symbol id="breedmark" viewBox="-110 -110 220 220">
+      <polygon points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" fill="#F8F5F0"/>
+      <g fill="#1A1A1B">
+        <rect x="-55" y="-50" width="110" height="22"/>
+        <rect x="33" y="-28" width="22" height="20"/>
+        <rect x="-55" y="-8" width="110" height="16"/>
+        <rect x="-55" y="8" width="22" height="20"/>
+        <rect x="-55" y="28" width="110" height="22"/>
+      </g>
+    </symbol>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <rect width="1080" height="1920" fill="url(#hexgrid)"/>
+  <rect width="1080" height="1920" fill="url(#glow1)"/>
+  <rect width="1080" height="1920" fill="url(#glow2)"/>
+
+  <!-- Top accent bar -->
+  <rect x="0" y="0" width="1080" height="8" fill="url(#amber)"/>
+
+  <!-- Logo + brand mark -->
+  <use href="#breedmark" x="60" y="80" width="72" height="72"/>
+  <text x="152" y="122" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="28" fill="#F8F5F0" letter-spacing="2">BREED INDUSTRIES</text>
+
+  <!-- Hero section top -->
+  <rect x="60" y="210" width="140" height="6" rx="3" fill="url(#amber)"/>
+  <text x="60" y="300" font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="26" fill="#CA8114" letter-spacing="3">IS YOUR BUSINESS</text>
+  <text x="60" y="410" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="116" fill="#F8F5F0">TENDER</text>
+  <text x="60" y="530" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="116" fill="url(#amber)">READY?</text>
+
+  <!-- Sub line -->
+  <text x="60" y="610" font-family="Inter, Arial, sans-serif" font-size="32" fill="#F8F5F0" opacity="0.65">Most businesses qualify for</text>
+  <text x="60" y="655" font-family="Inter, Arial, sans-serif" font-size="32" fill="#F8F5F0" opacity="0.65">tenders they never know exist.</text>
+
+  <!-- Divider -->
+  <rect x="60" y="700" width="960" height="1" fill="#CA8114" opacity="0.2"/>
+
+  <!-- Checklist section heading -->
+  <text x="60" y="780" font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="28" fill="#CA8114" letter-spacing="2">TENDER READY INCLUDES:</text>
+
+  <!-- Checklist items -->
+  <g font-family="Inter, Arial, sans-serif" font-size="34" fill="#F8F5F0" opacity="0.85">
+    <!-- Item 1 -->
+    <circle cx="94" cy="838" r="16" fill="#CA8114" opacity="0.9"/>
+    <text x="84" y="846" font-family="Montserrat" font-weight="800" font-size="18" fill="#1A1A1B" text-anchor="middle">✓</text>
+    <text x="130" y="848">CSD Registration</text>
+
+    <!-- Item 2 -->
+    <circle cx="94" cy="912" r="16" fill="#CA8114" opacity="0.9"/>
+    <text x="84" y="920" font-family="Montserrat" font-weight="800" font-size="18" fill="#1A1A1B" text-anchor="middle">✓</text>
+    <text x="130" y="922">CIDB Registration</text>
+
+    <!-- Item 3 -->
+    <circle cx="94" cy="986" r="16" fill="#CA8114" opacity="0.9"/>
+    <text x="84" y="994" font-family="Montserrat" font-weight="800" font-size="18" fill="#1A1A1B" text-anchor="middle">✓</text>
+    <text x="130" y="996">BBBEE Affidavit / Certificate</text>
+
+    <!-- Item 4 -->
+    <circle cx="94" cy="1060" r="16" fill="#CA8114" opacity="0.9"/>
+    <text x="84" y="1068" font-family="Montserrat" font-weight="800" font-size="18" fill="#1A1A1B" text-anchor="middle">✓</text>
+    <text x="130" y="1070">SARS Tax Clearance Pin</text>
+
+    <!-- Item 5 -->
+    <circle cx="94" cy="1134" r="16" fill="#CA8114" opacity="0.9"/>
+    <text x="84" y="1142" font-family="Montserrat" font-weight="800" font-size="18" fill="#1A1A1B" text-anchor="middle">✓</text>
+    <text x="130" y="1144">Bid-Ready Company Profile</text>
+  </g>
+
+  <!-- Mid divider -->
+  <rect x="60" y="1210" width="960" height="1" fill="#CA8114" opacity="0.2"/>
+
+  <!-- Then choose your watch tier -->
+  <text x="540" y="1290" font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="26" fill="#CA8114" text-anchor="middle" letter-spacing="2">THEN LEVEL UP WITH:</text>
+
+  <!-- Three tiers -->
+  <g>
+    <!-- Watch -->
+    <rect x="60" y="1320" width="290" height="200" rx="16" fill="#CA8114" opacity="0.08" stroke="#CA8114" stroke-width="1.5"/>
+    <text x="205" y="1390" font-family="Montserrat" font-weight="800" font-size="26" fill="#CA8114" text-anchor="middle">WATCH</text>
+    <text x="205" y="1430" font-family="Montserrat" font-weight="800" font-size="36" fill="#F8F5F0" text-anchor="middle">R950</text>
+    <text x="205" y="1465" font-family="Inter" font-size="20" fill="#F8F5F0" opacity="0.5" text-anchor="middle">/month</text>
+
+    <!-- Apply -->
+    <rect x="395" y="1320" width="290" height="200" rx="16" fill="#CA8114" opacity="0.15" stroke="#CA8114" stroke-width="2"/>
+    <text x="540" y="1390" font-family="Montserrat" font-weight="800" font-size="26" fill="#CA8114" text-anchor="middle">APPLY</text>
+    <text x="540" y="1430" font-family="Montserrat" font-weight="800" font-size="36" fill="#F8F5F0" text-anchor="middle">R2,500</text>
+    <text x="540" y="1465" font-family="Inter" font-size="20" fill="#F8F5F0" opacity="0.5" text-anchor="middle">/month</text>
+
+    <!-- Full -->
+    <rect x="730" y="1320" width="290" height="200" rx="16" fill="#CA8114" opacity="0.08" stroke="#CA8114" stroke-width="1.5"/>
+    <text x="875" y="1390" font-family="Montserrat" font-weight="800" font-size="26" fill="#CA8114" text-anchor="middle">FULL</text>
+    <text x="875" y="1430" font-family="Montserrat" font-weight="800" font-size="36" fill="#F8F5F0" text-anchor="middle">R6,500</text>
+    <text x="875" y="1465" font-family="Inter" font-size="20" fill="#F8F5F0" opacity="0.5" text-anchor="middle">/month</text>
+  </g>
+
+  <!-- CTA button -->
+  <rect x="190" y="1580" width="700" height="100" rx="50" fill="url(#amberV)"/>
+  <text x="540" y="1643" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="36" fill="#1A1A1B" text-anchor="middle" letter-spacing="1">GET TENDER-READY TODAY</text>
+
+  <!-- Portal URL -->
+  <text x="540" y="1740" font-family="Inter, Arial, sans-serif" font-size="28" fill="#CA8114" opacity="0.7" text-anchor="middle">tenders.thebreed.co.za</text>
+  <text x="540" y="1785" font-family="Inter, Arial, sans-serif" font-size="24" fill="#F8F5F0" opacity="0.4" text-anchor="middle">www.thebreed.co.za</text>
+
+  <!-- Bottom accent bar -->
+  <rect x="0" y="1912" width="1080" height="8" fill="url(#amber)"/>
+</svg>

@@ -203,4 +203,73 @@
 
 ---
 
-*From Idea to Empire. — The Breed Industries · @breedindustries · www.thebreed.co.za*
+## SCRIPT #9 — "The Tender You Just Missed"
+**Duration:** 30s · **Channel:** TikTok primary, Reels mirror · **Pillar:** Tender Awareness / Hook
+**Hook line:** *"A tender that closed yesterday. Your business qualifies. You never knew it existed."*
+
+| # | Time | Shot | Action / VO | On-screen text |
+|---|---|---|---|---|
+| 1 | 0:00–0:02 | Founder face, looking at phone with mild shock | — | "A tender closed yesterday." |
+| 2 | 0:02–0:06 | Cut to eTenders portal on screen, highlight a specific tender | Mouse scrolls | "R2.4m. Cleaning services. KZN." |
+| 3 | 0:06–0:10 | Cut back to founder face | VO: "Your business qualifies for this." | "You never saw it." |
+| 4 | 0:10–0:16 | Screen recording: Breed Tender Portal dashboard, matches highlighted | Ping SFX, email notification pops | "This is what Tender Watch looks like." |
+| 5 | 0:16–0:22 | Quick-cut montage: email alert → portal dashboard → match score | — | "We find it. You get the alert. Every. Single. Day." |
+| 6 | 0:22–0:28 | Founder looking satisfied at phone | VO: "From R950 a month." | "Never miss a tender again." |
+| 7 | 0:28–0:30 | Brand end card | — | "DM TENDER — we'll set you up" |
+
+**Caption:**
+> That tender that closed yesterday? Your business qualified. You just didn't know about it.
+> We built an engine that watches eTenders + all provincial portals daily and puts matching opportunities in your inbox.
+> From **R950/month**.
+> DM us **TENDER** and we'll send you the full breakdown.
+> #GovernmentTenders #TenderSA #TenderWatch #TheBreed #DurbanBusiness #SmmeSA #eTenders #ProcurementSA
+
+---
+
+## SCRIPT #10 — "We Applied for a Tender on Their Behalf — Here's How"
+**Duration:** 45s · **Channel:** TikTok / Reels · **Pillar:** Behind The Breed / Process
+**Hook line:** *"Most people don't apply for tenders because the paperwork looks like this…"*
+
+| # | Time | Shot | Action / VO | On-screen text |
+|---|---|---|---|---|
+| 1 | 0:00–0:03 | Dramatic reveal of a thick stack of printed tender documents | Thud on desk SFX | "This is a government tender application." |
+| 2 | 0:03–0:08 | Slow zoom into the document — complex forms visible | VO: "Tax clearance. CIDB grading. BBBEE certificate. Pricing schedule. Method statement…" | List appears one-by-one on screen |
+| 3 | 0:08–0:14 | Founder reaction: overwhelmed, pushes document away | "No wonder most people give up." | "The average bid document: 80–120 pages." |
+| 4 | 0:14–0:18 | Cut to: calm Breed team member at desk, typing | "This is what we do every week." | "We do this for our clients." |
+| 5 | 0:18–0:28 | Hyperlapse: document checklist being ticked, forms filled, upload in progress | — | "Document check. Pricing. Submitted." |
+| 6 | 0:28–0:36 | Close-up: submission confirmation email | Ping SFX | "Submitted 48 hours before deadline." |
+| 7 | 0:36–0:42 | Founder looking at camera | VO: "You just need to deliver the work." | "R2,500/month — we handle the rest." |
+| 8 | 0:42–0:45 | Brand end card | — | "DM APPLY to get started" |
+
+**Caption:**
+> Most SMMEs qualify for government contracts but never apply — because the paperwork kills them.
+> On our **Tender Apply** package (R2,500/month), we compile and submit the full bid document on your behalf.
+> You focus on the delivery. We handle the admin.
+> DM us **APPLY** and we'll walk you through it.
+> #GovernmentTenders #TenderSA #TenderApply #TheBreed #SmallBusinessSA #SmmeSA #DurbanBusiness
+
+---
+
+## SCRIPT #11 — "4 Things Your Business Needs Before Bidding on a Tender"
+**Duration:** 40s · **Channel:** TikTok / Reels / LinkedIn · **Pillar:** Education / Compliance
+**Hook line:** *"Thinking about bidding on government tenders? Watch this first."*
+
+| # | Time | Shot | Action / VO | On-screen text |
+|---|---|---|---|---|
+| 1 | 0:00–0:03 | Face-cam, direct address | "Before you even look at eTenders, you need 4 things." | "4 things before you bid:" |
+| 2 | 0:03–0:09 | Screen share: CSD website | VO: "One — CSD registration. That's the Central Supplier Database. Without this, government can't pay you." | "#1 CSD Registration" |
+| 3 | 0:09–0:16 | Screen share: CIDB website | VO: "Two — CIDB grade. If it's a construction tender, you need the right grade or your bid is automatically disqualified." | "#2 CIDB Grade" |
+| 4 | 0:16–0:23 | Quick cut to B-BBEE certificate on screen | VO: "Three — B-BBEE certificate or affidavit. Most government tenders have a B-BBEE requirement. EME? You just need an affidavit." | "#3 BBBEE Certificate" |
+| 5 | 0:23–0:30 | Screen share: SARS eFiling, Tax Clearance section | VO: "Four — Tax Clearance Pin. No pin? Automatic disqualification. Get it free on SARS eFiling." | "#4 Tax Clearance Pin" |
+| 6 | 0:30–0:36 | Face-cam | "Don't have all four? We sort it in 5–10 business days. From R3,500." | "Tender Ready package: From R3,500" |
+| 7 | 0:36–0:40 | Brand end card | — | "DM READY and we'll check your compliance for free" |
+
+**Caption:**
+> Missing even ONE of these will get your tender bid disqualified — automatically.
+> We get your business tender-ready: CSD, CIDB, BBBEE, Tax Pin + Company Profile. From **R3,500 once-off**.
+> DM us **READY** for a free compliance check.
+> #TenderReady #GovernmentTenders #CSDRegistration #CIDBRegistration #BBBEE #TheBreed #SmmeSA
+
+---
+
+*From Idea to Empire. — The Breed Industries · @breedindustries · www.thebreed.co.za · tenders.thebreed.co.za*

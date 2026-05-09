@@ -5,7 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
-import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, CheckCircle2, Download, ArrowRight, Loader2, Send } from 'lucide-react';
+import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, CheckCircle2, Download, ArrowRight, Loader2, Send, Award } from 'lucide-react';
 
 const complianceOptions = [
   { id: 'cipc', name: 'CIPC Registration', price: 550, pricingType: 'one-time', icon: <Shield size={16} />, description: 'Complete company registration with CIPC including name reservation and registration certificate' },
@@ -49,6 +49,13 @@ const businessProfileOptions = [
   { id: 'training-full', name: 'Full Training Package (All Three)', price: 6500, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Best value: Study Guide + Facilitator Guide + PowerPoint Presentation. Complete package for full training programme delivery.' },
 ];
 
+const tenderOptions = [
+  { id: 'tender-ready', name: 'Tender Ready', price: 3500, pricingType: 'one-time', icon: <Award size={16} />, description: 'Get your business fully registered and compliant for government tenders: CSD, CIDB, BBBEE, Tax Pin, and a professional Company Profile. Once-off setup.' },
+  { id: 'tender-watch', name: 'Tender Watch', price: 950, pricingType: 'monthly', icon: <Award size={16} />, description: 'We scrape government portals daily and send you matching tenders by email. Smart matching based on your industry, province, and CIDB grade. Includes monthly digest.' },
+  { id: 'tender-apply', name: 'Tender Apply', price: 2500, pricingType: 'monthly', icon: <Award size={16} />, description: 'Everything in Tender Watch plus we compile all bid documents and submit on your behalf. You focus on running your business — we handle the paperwork.' },
+  { id: 'tender-full', name: 'Tender Full Service', price: 6500, pricingType: 'monthly', icon: <Award size={16} />, description: 'Our most comprehensive package: Watch + full bid compilation + submission + site meeting attendance + award follow-up. Maximum chances of winning.' },
+];
+
 const builderSteps = [
   {
     id: 'compliance',
@@ -82,6 +89,14 @@ const builderSteps = [
     icon: <FileText className="w-5 h-5" />,
     shortLabel: 'Documents',
   },
+  {
+    id: 'tender',
+    title: 'Government tender services',
+    description: 'Let Breed find, compile, and submit government tenders on your behalf. Pick your level of involvement.',
+    options: tenderOptions,
+    icon: <Award className="w-5 h-5" />,
+    shortLabel: 'Tenders',
+  },
 ];
 
 const quickBundles = [
@@ -109,9 +124,17 @@ const quickBundles = [
     items: ['Custom Web Portal', 'Media Kit', '3 Months Social Management'],
     components: ['logo-premium', 'brand-guide', 'ecommerce', 'social']
   },
+  {
+    id: 'tender-starter',
+    name: 'Tender Starter Pack',
+    price: 'R4,450',
+    numericPrice: 4450,
+    items: ['CSD + CIDB + BBBEE + Tax Pin', 'Company Profile', 'Tender Watch (1st month)'],
+    components: ['tender-ready', 'tender-watch']
+  },
 ];
 
-const allOptions = [...complianceOptions, ...brandingOptions, ...digitalOptions, ...businessProfileOptions];
+const allOptions = [...complianceOptions, ...brandingOptions, ...digitalOptions, ...businessProfileOptions, ...tenderOptions];
 
 const clientRequirementsMap: Record<string, string[]> = {
   'CIPC Registration': ['Certified copy of ID document (all directors)', 'Proof of residential address (not older than 3 months)', 'Three proposed company name options', 'Signed CIPC forms (provided by Breed Industries)'],
@@ -144,6 +167,10 @@ const clientRequirementsMap: Record<string, string[]> = {
   "Facilitator's / Lecturer's Guide": ['Aligned study guide or content outline', 'Session time allocations per module', 'Assessment activities and questions per module', 'Learning outcomes per module', 'Any specific facilitation notes or instructions'],
   'Training PowerPoint Presentation': ['Training content or speaker notes/script', 'Logo and brand colors/fonts', 'Number of slides required (approximate)', 'Preferred design style or theme', 'Any existing slides to incorporate (optional)'],
   'Full Training Package (All Three)': ['Complete training content outline', 'Target audience and qualification level', 'Number of modules', 'Logo and brand guidelines', 'Session time allocations per module', 'Learning outcomes per module'],
+  'Tender Ready': ['Certified ID copies of all directors', 'Proof of business address (not older than 3 months)', 'CIPC registration certificate (if already registered)', 'Banking confirmation letter / bank statement', 'Tax reference number (if already registered)', 'CIDB discipline(s) your business operates in', 'BBBEE ownership breakdown'],
+  'Tender Watch': ['Short company profile (1 page or a few bullet points)', 'Province(s) you operate in', 'Industry categories (construction, IT, catering, cleaning, etc.)', 'CIDB grade (if applicable)', 'Maximum contract value you can handle'],
+  'Tender Apply': ['All documents listed under Tender Watch', 'CSD registration confirmation', 'Current tax clearance / PIN', 'BEE certificate or affidavit', 'Director ID copies', 'Signed mandate letter allowing Breed to submit on your behalf'],
+  'Tender Full Service': ['All documents listed under Tender Apply', 'Signed Power of Attorney / mandate for site meetings', 'Representative availability for site briefings', 'Any previous tender submissions for reference', 'Company bank statement (3 months)'],
 };
 
 export default function LabPage() {

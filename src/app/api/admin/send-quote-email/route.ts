@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 import { generateQuotePDF, QuoteData } from '@/lib/pdf/breedPdf';
 
 export const runtime = 'nodejs';

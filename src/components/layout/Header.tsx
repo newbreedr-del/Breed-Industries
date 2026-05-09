@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Menu, X, ChevronDown, Phone, 
-  MessageSquare, Layers, Briefcase, 
+import {
+  Menu, X, ChevronDown, Phone,
+  MessageSquare, Layers, Briefcase,
   Users, LayoutGrid, Settings,
-  Search
+  Search, Award
 } from 'lucide-react';
 
 const navItems = [
@@ -35,6 +35,12 @@ const navItems = [
         icon: <Layers className="w-5 h-5" />,
         description: 'Web, mobile, and digital marketing solutions',
         link: '/services#digital'
+      },
+      {
+        title: 'Tender Services',
+        icon: <Award className="w-5 h-5" />,
+        description: 'Find, apply & win government tenders',
+        link: '/tender-services'
       }
     ]
   },
@@ -169,7 +175,7 @@ export const Header = () => {
                       <AnimatePresence>
                         {activeMegaMenu === item.name && (
                           <motion.div
-                            className="absolute top-full left-0 mt-2 w-[700px] glass-card-strong p-5 rounded-xl"
+                            className="absolute top-full left-0 mt-2 w-[780px] glass-card-strong p-5 rounded-xl"
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
@@ -177,7 +183,7 @@ export const Header = () => {
                             onMouseEnter={() => setActiveMegaMenu(item.name)}
                             onMouseLeave={() => setActiveMegaMenu(null)}
                           >
-                            <div className="grid grid-cols-[180px_1fr] gap-5">
+                            <div className="grid grid-cols-[200px_1fr] gap-5">
                               {/* Service Categories */}
                               <div>
                                 <h3 className="text-xs uppercase tracking-wider text-accent mb-3">Categories</h3>
