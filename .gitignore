@@ -46,3 +46,4 @@ public/assets/videos/
 
 # invoice data storage
 /data/
+.netlify/
