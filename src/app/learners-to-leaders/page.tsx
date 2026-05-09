@@ -92,7 +92,7 @@ export default function LearnersToLeaders() {
               {...fadeUp(0.2)}
             >
               A 6-month Business Development Programme that transforms emerging entrepreneurs from
-              Ntuzuma and surrounding communities into fundable, market-ready business owners —
+              Ntuzuma and surrounding communities into fundable, market-ready business owners,
               backed by accredited training and real procurement pathways.
             </motion.p>
 
@@ -172,7 +172,7 @@ export default function LearnersToLeaders() {
                 The Learners to Leaders Business Development Programme (L2L) was designed to close
                 the gap between entrepreneurial potential and business reality in the Ntuzuma
                 community and greater eThekwini region. Many aspiring entrepreneurs have the ideas
-                and drive — what they lack is structure, skills, and a credible pathway to funding
+                and drive, what they lack is structure, skills, and a credible pathway to funding
                 and procurement.
               </p>
               <p className="text-white/60 leading-relaxed mb-8">
@@ -183,7 +183,7 @@ export default function LearnersToLeaders() {
               <ul className="space-y-3">
                 {[
                   'QCTO-accredited New Venture Creation qualification',
-                  'Delivered at ICDT Complex, Ntuzuma — accessible to the community',
+                  'Delivered at ICDT Complex, Ntuzuma, accessible to the community',
                   'Real procurement and investor connections at graduation',
                   'GoBizz digital platform access throughout the programme',
                   'Post-programme incubation and business support',
@@ -211,7 +211,7 @@ export default function LearnersToLeaders() {
               Three Stages. One Transformation.
             </h2>
             <p className="text-white/60 max-w-xl mx-auto">
-              From your first assessment to standing in front of investors — every step is
+              From your first assessment to standing in front of investors, every step is
               structured, supported, and accredited.
             </p>
           </motion.div>
@@ -344,7 +344,7 @@ export default function LearnersToLeaders() {
               <div className="relative rounded-2xl overflow-hidden aspect-[4/3] border border-white/10">
                 <Image
                   src="/assets/images/l2l/nvc-qualification.svg"
-                  alt="New Venture Creation Qualification — NQF Level 2, 32 Credits"
+                  alt="New Venture Creation Qualification - NQF Level 2, 32 Credits"
                   fill
                   className="object-cover"
                 />
@@ -441,7 +441,7 @@ export default function LearnersToLeaders() {
                 website: 'www.thebreed.co.za',
                 email: 'info@thebreed.co.za',
                 description:
-                  'Breed Industries is the lead operator of the Learners to Leaders programme. We manage the end-to-end delivery — learner recruitment, community engagement, partner coordination, and the Grand Pitch Event at ICDT Complex, Ntuzuma.',
+                  'Breed Industries is the lead operator of the Learners to Leaders programme. We manage the end-to-end delivery including learner recruitment, community engagement, partner coordination, and the Grand Pitch Event at ICDT Complex, Ntuzuma.',
                 role: 'Operations · Recruitment · Events',
                 accent: true,
                 logo: '/assets/images/logos/breed-logo-just.png',
@@ -534,7 +534,7 @@ export default function LearnersToLeaders() {
                 Programme Venue
               </p>
               <h3 className="text-white font-heading font-bold text-xl mb-1">
-                ICDT Complex — Inanda Community Dev. Trust
+                ICDT Complex - Inanda Community Dev. Trust
               </h3>
               <p className="text-white/60 text-sm">
                 20 Ntuzuma Accent Road, Ntuzuma, Durban, KwaZulu-Natal

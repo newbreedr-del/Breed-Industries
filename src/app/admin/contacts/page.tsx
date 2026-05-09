@@ -133,7 +133,7 @@ export default function ContactsPage() {
                           <p className="text-white/60 text-sm">{c.email}</p>
                           {c.company && <p className="text-white/40 text-xs">{c.company}</p>}
                         </td>
-                        <td className="px-6 py-4 text-white/70 text-sm">{c.phone || '—'}</td>
+                        <td className="px-6 py-4 text-white/70 text-sm">{c.phone || '-'}</td>
                         <td className="px-6 py-4">
                           <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${c.source === 'quote' ? 'bg-accent/20 text-accent' : 'bg-blue-500/20 text-blue-400'}`}>
                             {c.source === 'quote' ? <FileText size={10} /> : <ClipboardList size={10} />}
@@ -142,7 +142,7 @@ export default function ContactsPage() {
                         </td>
                         <td className="px-6 py-4 text-white/70 text-sm max-w-[200px] truncate">{c.detail}</td>
                         <td className="px-6 py-4 text-white/50 text-sm whitespace-nowrap">
-                          {c.date ? new Date(c.date).toLocaleDateString('en-ZA') : '—'}
+                          {c.date ? new Date(c.date).toLocaleDateString('en-ZA') : '-'}
                         </td>
                         <td className="px-6 py-4 text-right">
                           <a href={`mailto:${c.email}`}

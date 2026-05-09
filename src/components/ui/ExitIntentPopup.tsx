@@ -84,7 +84,7 @@ export function ExitIntentPopup() {
               Don&apos;t Leave Empty-Handed!
             </h3>
             <p className="text-white/60 text-sm leading-relaxed">
-              Whether you're ready to build now or need funding first — we've got a path for you.
+              Whether you're ready to build now or need funding first, we've got a path for you.
             </p>
           </div>
 

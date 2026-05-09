@@ -221,7 +221,7 @@ export default function TenderClientsPage() {
                         <td className="px-5 py-3 text-white/60">
                           {c.cidb_grade && <span className="mr-2">{c.cidb_grade}</span>}
                           {c.bee_level  && <span>BEE {c.bee_level}</span>}
-                          {!c.cidb_grade && !c.bee_level && '—'}
+                          {!c.cidb_grade && !c.bee_level && '-'}
                         </td>
                         <td className="px-5 py-3">
                           <div className="flex flex-wrap gap-1">

@@ -231,7 +231,7 @@ export default function QuoteGenerator({ selectedItems = [], onSuccess }: QuoteG
   const updateItem = (id: string, field: keyof QuoteItem, value: unknown) =>
     setItems(prev => prev.map(i => i.id === id ? { ...i, [field]: value } : i));
 
-  // Service picker callback — fills row + auto-sets projectName if blank
+  // Service picker callback - fills row + auto-sets projectName if blank
   const handleServiceSelected = (
     itemId: string,
     name: string,
@@ -452,7 +452,7 @@ export default function QuoteGenerator({ selectedItems = [], onSuccess }: QuoteG
                   {/* Service picker */}
                   <div className="mb-3">
                     <label className="block text-white/60 text-xs mb-1">
-                      Quick-fill from catalogue <span className="text-white/30">(optional — search to find a service)</span>
+                      Quick-fill from catalogue <span className="text-white/30">(optional - search to find a service)</span>
                     </label>
                     <ServicePicker
                       onSelect={(name, rate, desc, pt) => handleServiceSelected(item.id, name, rate, desc, pt)}

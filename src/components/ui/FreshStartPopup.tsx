@@ -42,7 +42,7 @@ export function FreshStartPopup() {
       if (sessionStorage.getItem(STORAGE_KEY)) return;
     } catch { /* noop */ }
 
-    // Scroll-based trigger — fires after threshold + a short pause
+    // Scroll-based trigger - fires after threshold + a short pause
     let scrollTimer: ReturnType<typeof setTimeout> | null = null;
     const handleScroll = () => {
       if (triggered) return;
@@ -54,7 +54,7 @@ export function FreshStartPopup() {
       }
     };
 
-    // Time-based fallback — show after TIME_FALLBACK_MS regardless of scroll
+    // Time-based fallback - show after TIME_FALLBACK_MS regardless of scroll
     const timer = setTimeout(trigger, TIME_FALLBACK_MS);
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -119,7 +119,7 @@ export function FreshStartPopup() {
               </div>
 
               <p className="text-white/60 text-xs leading-relaxed mb-4">
-                We help entrepreneurs access government and private funding first — then build your business with us.
+                We help entrepreneurs access government and private funding first, then build your business with us.
               </p>
 
               <Link

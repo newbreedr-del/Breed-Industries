@@ -330,7 +330,7 @@ export default function PortfolioPage() {
             Every logo here was designed from scratch for a South African business, giving them a professional face to show the world.
           </p>
 
-          {/* Infinite auto-scroll carousel — 4 visible at once on desktop */}
+          {/* Infinite auto-scroll carousel - 4 visible at once on desktop */}
           <div className="relative overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)' }}>
             <div className="flex gap-5 logo-marquee">
               {[...brandingClients, ...brandingClients, ...brandingClients, ...brandingClients].map((client, i) => (
@@ -426,7 +426,7 @@ export default function PortfolioPage() {
             Eye-catching promotional materials designed for businesses, events, and community initiatives across South Africa.
           </p>
 
-          {/* Auto-scroll carousel — 4 visible at once on desktop */}
+          {/* Auto-scroll carousel - 4 visible at once on desktop */}
           <div className="relative overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)' }}>
             <div className="flex gap-5 poster-marquee">
               {[...[

@@ -61,12 +61,12 @@ function daysLeft(iso: string) {
 }
 
 function fmtDate(iso?: string) {
-  if (!iso) return '—';
+  if (!iso) return '-';
   return new Date(iso).toLocaleDateString('en-ZA', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
 function fmtRand(cents?: number) {
-  if (!cents) return '—';
+  if (!cents) return '-';
   return `R${(cents / 100).toLocaleString('en-ZA', { maximumFractionDigits: 0 })}`;
 }
 
@@ -103,7 +103,7 @@ export default function TendersDashboard() {
       }
       // Load matches via a separate endpoint
       const matchRes = await fetch('/api/tenders?limit=1'); // ping
-      // Actually fetch matches — we'll pull from all tenders
+      // Actually fetch matches - we'll pull from all tenders
       const allMatchRes = await fetch('/api/tender-clients?active=true');
       if (allMatchRes.ok) {
         const cData = await allMatchRes.json();
@@ -365,7 +365,7 @@ export default function TendersDashboard() {
                             <p className="text-white font-medium truncate">{t.title}</p>
                             <p className="text-white/40 text-xs truncate">{t.department}</p>
                           </td>
-                          <td className="px-5 py-3 text-white/70">{t.province ?? '—'}</td>
+                          <td className="px-5 py-3 text-white/70">{t.province ?? '-'}</td>
                           <td className="px-5 py-3">
                             <p className={`font-medium ${days <= 3 ? 'text-red-400' : days <= 7 ? 'text-yellow-400' : 'text-white/70'}`}>
                               {fmtDate(t.closing_date)}
@@ -442,7 +442,7 @@ export default function TendersDashboard() {
                           <p className="text-white/80 font-mono text-xs">{m.tender?.reference_number}</p>
                           <p className="text-white/50 text-xs truncate">{m.tender?.title}</p>
                         </td>
-                        <td className="px-5 py-3 text-white/60 text-xs">{m.tender?.province ?? '—'}</td>
+                        <td className="px-5 py-3 text-white/60 text-xs">{m.tender?.province ?? '-'}</td>
                         <td className="px-5 py-3">
                           {m.tender?.closing_date && (() => {
                             const d = daysLeft(m.tender.closing_date);
