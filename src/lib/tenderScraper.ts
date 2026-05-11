@@ -425,7 +425,7 @@ async function scrapeHtmlScan(source: Source): Promise<ScrapedTender[]> {
         'Accept': 'text/html,application/xhtml+xml',
         'User-Agent': 'Mozilla/5.0 (compatible; BreedTenderBot/1.0)',
       },
-      signal: AbortSignal.timeout(15_000),
+      signal: AbortSignal.timeout(8_000),
     });
     if (!res.ok) {
       console.warn(`[${source.label}] HTTP ${res.status}`);
@@ -514,7 +514,7 @@ async function scrapeRss(source: Source): Promise<ScrapedTender[]> {
         'Accept': 'application/rss+xml, application/atom+xml, text/xml, */*',
         'User-Agent': 'Mozilla/5.0 (compatible; BreedTenderBot/1.0)',
       },
-      signal: AbortSignal.timeout(12_000),
+      signal: AbortSignal.timeout(6_000),
     });
     if (!res.ok) return [];
 
@@ -569,7 +569,7 @@ function getXmlField(xml: string, field: string): string | null {
 
 export async function scrapeAllSources(): Promise<ScrapedTender[]> {
   const results: ScrapedTender[] = [];
-  const BATCH = 6;
+  const BATCH = 3; // Reduced from 6 to prevent timeouts
   const sourceLog: Record<string, number> = {};
 
   for (let i = 0; i < SOURCES.length; i += BATCH) {
