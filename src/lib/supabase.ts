@@ -4,7 +4,14 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://zdpbkrrohdw
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpkcGJrcnJvaGR3b2hlbHNydmljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MDc4NzUsImV4cCI6MjA5MDA4Mzg3NX0.Hm_eQqBuBZoFO7AI6DUv7Xbov3Di0ilhqt7vTtadOe0';
 
 // Public client — uses anon key, subject to RLS
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    flowType: 'pkce',
+    detectSessionInUrl: true,
+    persistSession: true,
+    autoRefreshToken: true,
+  }
+});
 
 // Admin client — uses service role key, bypasses RLS
 // Only import this in server-side code (API routes), never in client components
