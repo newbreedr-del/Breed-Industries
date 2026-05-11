@@ -193,7 +193,7 @@ export default function TenderClientDetail({ params }: { params: Promise<{ id: s
 
         // Parse reg docs from notes field
         const notes: string = d.client?.notes ?? '';
-        const docsMatch = notes.match(/__docs:(.*?)(?:__end|$)/s);
+        const docsMatch = notes.match(/__docs:([\s\S]*?)(?:__end|$)/);
         if (docsMatch) {
           try { setRegDocs(JSON.parse(docsMatch[1])); } catch { /* ignore */ }
         }
@@ -255,7 +255,7 @@ export default function TenderClientDetail({ params }: { params: Promise<{ id: s
     if (!client) return;
     setSavingDocs(true);
     // Store docs JSON in notes field, preserving any real notes
-    const baseNotes = (client.notes ?? '').replace(/__docs:.*?(?:__end|$)/s, '').trim();
+    const baseNotes = (client.notes ?? '').replace(/__docs:[\s\S]*?(?:__end|$)/, '').trim();
     const newNotes = `${baseNotes}\n__docs:${JSON.stringify(regDocs)}__end`.trim();
     await fetch(`/api/tender-clients/${id}`, {
       method: 'PATCH',
@@ -476,7 +476,7 @@ export default function TenderClientDetail({ params }: { params: Promise<{ id: s
                 </div>
               )}
               {client.notes?.includes('__docs:') && (() => {
-                const clean = client.notes.replace(/__docs:.*?__end/s, '').trim();
+                const clean = client.notes.replace(/__docs:[\s\S]*?__end/, '').trim();
                 return clean ? (
                   <div className="glass-card p-5">
                     <p className="text-white/40 text-xs uppercase tracking-wider mb-2">Notes</p>
