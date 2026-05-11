@@ -249,7 +249,10 @@ export async function createOrUpdateMatch(
   tenderId: string,
   clientId: string,
   matchData: { match_score: number; match_reasons: string[] }
-): Promise<TenderMatch> {
+): Promise<TenderMatch | null> {
+  // ignoreDuplicates: true means existing rows are not updated and no row is returned.
+  // .maybeSingle() returns null (not an error) when zero rows come back — this is the
+  // expected path for already-matched tender/client pairs.
   const { data, error } = await supabase
     .from('tender_matches')
     .upsert(
@@ -263,9 +266,9 @@ export async function createOrUpdateMatch(
       { onConflict: 'tender_id,client_id', ignoreDuplicates: true }
     )
     .select()
-    .single();
+    .maybeSingle();
   if (error) throw error;
-  return data;
+  return data; // null when duplicate (already matched), TenderMatch when new
 }
 
 export async function updateMatchStatus(
