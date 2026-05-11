@@ -1,76 +1,41 @@
 /**
  * POST /api/admin/login
- *
- * Sends a Supabase magic link to the provided email address.
- * Only allows access to authorized email addresses (newbreed.r@gmail.com).
- * The link redirects to /auth/callback, which verifies the token
- * and sets the admin_session cookie if the email is authorised.
+ * Simple username + password login validated against env vars.
+ * Sets an admin_session cookie on success.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
 
 export const runtime = 'nodejs';
 
-// Authorized admin emails
-const AUTHORIZED_EMAILS = ['newbreed.r@gmail.com'];
-
 export async function POST(req: NextRequest) {
   try {
-    const { email } = await req.json();
+    const { username, password } = await req.json();
 
-    if (!email) {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+    const validUser = process.env.ADMIN_USERNAME;
+    const validPass = process.env.ADMIN_PASSWORD;
+
+    if (
+      !validUser || !validPass ||
+      username !== validUser ||
+      password !== validPass
+    ) {
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    // Check if email is authorized
-    if (!AUTHORIZED_EMAILS.includes(email.toLowerCase())) {
-      console.warn(`Unauthorized login attempt for email: ${email}`);
-      return NextResponse.json({ 
-        error: 'This email is not authorized for admin access',
-        unauthorized: true 
-      }, { status: 403 });
-    }
+    const token = Math.random().toString(36).substring(2) + Date.now().toString(36);
+    const response = NextResponse.json({ success: true });
 
-    // Prefer the explicit production URL env var; fall back to the request origin.
-    // Never use NEXT_PUBLIC_APP_URL — that may be localhost in dev environments.
-    const redirectBase =
-      process.env.SUPABASE_REDIRECT_URL ||
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      req.nextUrl.origin;
-
-    // Safety check: refuse to issue magic links that point back to localhost
-    if (redirectBase.includes('localhost') || redirectBase.includes('127.0.0.1')) {
-      return NextResponse.json(
-        { error: 'SUPABASE_REDIRECT_URL must be set to the production URL (https://www.thebreed.co.za) to send magic links.' },
-        { status: 500 },
-      );
-    }
-
-    const emailRedirectTo = `${redirectBase}/auth/callback`;
-
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { 
-        emailRedirectTo,
-        // Configure email template settings if needed
-        data: {
-          role: 'admin',
-          authorized: true
-        }
-      },
+    response.cookies.set('admin_session', token, {
+      httpOnly: true,
+      secure:   process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge:   60 * 60 * 24 * 7, // 7 days
+      path:     '/',
     });
 
-    if (error) {
-      console.error('Magic link send error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    console.log(`Magic link sent to authorized email: ${email}`);
-    return NextResponse.json({ success: true });
-
-  } catch (err) {
-    console.error('Login error:', err);
-    return NextResponse.json({ error: 'Failed to send login link' }, { status: 500 });
+    return response;
+  } catch {
+    return NextResponse.json({ error: 'Login failed' }, { status: 500 });
   }
 }
