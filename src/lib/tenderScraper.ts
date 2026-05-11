@@ -18,6 +18,7 @@ import {
   createOrUpdateMatch,
   wasAlreadyNotified,
   markMatchNotified,
+  logNotification,
   type TenderClient,
   type Tender,
 } from '@/lib/tenderStorage';
