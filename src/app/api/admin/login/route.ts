@@ -19,9 +19,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
-    // Build the callback URL from the incoming request origin
-    const origin = req.headers.get('origin') ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-    const emailRedirectTo = `${origin}/auth/callback`;
+    // Build the callback URL - prioritize production URL, fallback to request origin or localhost
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    const origin = req.headers.get('origin');
+    const baseUrl = siteUrl || origin || 'http://localhost:3000';
+    const emailRedirectTo = `${baseUrl}/auth/callback`;
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
