@@ -2,14 +2,15 @@
  * Tender Scraper — Multi-source SA Government
  *
  * Strategy:
- *  1. WordPress REST API  — clean JSON from WP-based department sites
- *  2. HTML table scrape   — tabular listings on non-WP portals
- *  3. WordPress post scan — free-text WP pages that embed tender details
+ *  1. wp-api       — WordPress REST API (only for verified WP sites)
+ *  2. html-scan    — generic HTML scraping for any tender listing page
+ *  3. rss          — RSS/Atom feed parsing
  *
  * Sources covered:
- *  National departments (DIRCO, DPW, DPSA, NT, COGTA, DBE, DOH, DTIC, DWS, DSD)
- *  SOEs / parastatals (SANRAL, Eskom, Transnet, PRASA)
- *  Provincial (KZN, GP, WC, EC, LP)
+ *  National departments, SOEs/parastatals, Municipalities, Provincial
+ *
+ * NOTE: eTenders (etenders.gov.za) is an Angular SPA — never scrape it directly.
+ * Use /api/admin/run-scrape from the admin panel to trigger manually.
  */
 
 import {
@@ -49,156 +50,300 @@ interface Source {
   label:    string;
   domain:   string;
   province: string;
-  strategy: 'wp-api' | 'html-table' | 'wp-post-scan';
+  /**
+   * wp-api      — WordPress REST API (JSON). Only use for verified WP sites.
+   * html-scan   — Generic HTML scrape of any tender listing page.
+   * rss         — RSS/Atom feed parser.
+   */
+  strategy: 'wp-api' | 'html-scan' | 'rss';
   url:      string;
-  /** Optional: WP category slug or ID to filter by */
-  wpCategory?: string;
 }
 
 const SOURCES: Source[] = [
-  // ── National departments (WordPress REST API) ──────────────
+
+  // ════════════════════════════════════════════════════════════
+  // NATIONAL DEPARTMENTS — html-scan on their actual /tenders pages
+  // ════════════════════════════════════════════════════════════
+  {
+    label: 'DPW', domain: 'publicworks.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'http://www.publicworks.gov.za/tenders.html',
+  },
   {
     label: 'DIRCO', domain: 'dirco.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://dirco.gov.za/tenders/',
+  },
+  {
+    label: 'DPSA', domain: 'dpsa.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.dpsa.gov.za/content/tenders',
+  },
+  {
+    label: 'National Treasury', domain: 'treasury.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.treasury.gov.za/tender-opportunities/',
+  },
+  {
+    label: 'COGTA', domain: 'cogta.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://cogta.gov.za/tenders/',
+  },
+  {
+    label: 'DBE', domain: 'education.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.education.gov.za/tenders/',
+  },
+  {
+    label: 'DOH', domain: 'health.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.health.gov.za/tenders/',
+  },
+  {
+    label: 'DTIC', domain: 'thedti.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.thedti.gov.za/tenders/',
+  },
+  {
+    label: 'DWS', domain: 'dws.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.dws.gov.za/tenders/',
+  },
+  {
+    label: 'DSD', domain: 'dsd.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.dsd.gov.za/tenders/',
+  },
+  {
+    label: 'DoT', domain: 'transport.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.transport.gov.za/tenders/',
+  },
+  {
+    label: 'DCDT', domain: 'dcdt.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.dcdt.gov.za/tenders/',
+  },
+  {
+    label: 'DALRRD', domain: 'dalrrd.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.dalrrd.gov.za/Tenders',
+  },
+  {
+    label: 'DoD / ARMSCOR', domain: 'armscor.co.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.armscor.co.za/tenders/',
+  },
+  {
+    label: 'DoJ', domain: 'justice.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.justice.gov.za/tenders/',
+  },
+  {
+    label: 'SAPS', domain: 'saps.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.saps.gov.za/about/stratframework/tenders/',
+  },
+  {
+    label: 'DHS', domain: 'dhs.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.dhs.gov.za/tenders',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // SOEs / PARASTATALS
+  // ════════════════════════════════════════════════════════════
+  {
+    label: 'SANRAL', domain: 'sanral.co.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.sanral.co.za/tenders/',
+  },
+  {
+    label: 'PRASA', domain: 'prasa.com', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.prasa.com/tenders/',
+  },
+  {
+    label: 'NHBRC', domain: 'nhbrc.org.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.nhbrc.org.za/tenders/',
+  },
+  {
+    label: 'DBSA', domain: 'dbsa.org', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.dbsa.org/tenders',
+  },
+  {
+    label: 'SITA', domain: 'sita.co.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.sita.co.za/about-sita/tenders/',
+  },
+  {
+    label: 'CSIR', domain: 'csir.co.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.csir.co.za/procurement',
+  },
+  {
+    label: 'Transnet', domain: 'transnet.net', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.transnet.net/TendersAndContracts/',
+  },
+  {
+    label: 'Land Bank', domain: 'landbank.co.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.landbank.co.za/tenders/',
+  },
+  {
+    label: 'NHFC', domain: 'nhfc.co.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.nhfc.co.za/tenders/',
+  },
+  {
+    label: 'IDC', domain: 'idc.co.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.idc.co.za/tenders/',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // PROVINCIAL PORTALS
+  // ════════════════════════════════════════════════════════════
+  {
+    label: 'KZN Treasury', domain: 'treasury.kzntl.gov.za', province: 'KZN',
+    strategy: 'html-scan',
+    url: 'https://treasury.kzntl.gov.za/tenders/',
+  },
+  {
+    label: 'KZN Health', domain: 'kznhealth.gov.za', province: 'KZN',
+    strategy: 'html-scan',
+    url: 'https://www.kznhealth.gov.za/tenders.htm',
+  },
+  {
+    label: 'KZN DPW', domain: 'kznpw.gov.za', province: 'KZN',
+    strategy: 'html-scan',
+    url: 'https://www.kznpw.gov.za/Tenders',
+  },
+  {
+    label: 'GP Treasury', domain: 'treasury.gpg.gov.za', province: 'GP',
+    strategy: 'html-scan',
+    url: 'https://treasury.gpg.gov.za/tenders/',
+  },
+  {
+    label: 'Gauteng DID', domain: 'did.gpg.gov.za', province: 'GP',
+    strategy: 'html-scan',
+    url: 'https://www.did.gpg.gov.za/tenders/',
+  },
+  {
+    label: 'Gauteng Health', domain: 'health.gpg.gov.za', province: 'GP',
+    strategy: 'html-scan',
+    url: 'https://www.health.gpg.gov.za/tenders/',
+  },
+  {
+    label: 'Western Cape Gov', domain: 'westerncape.gov.za', province: 'WC',
+    strategy: 'html-scan',
+    url: 'https://www.westerncape.gov.za/tenders/',
+  },
+  {
+    label: 'Eastern Cape Gov', domain: 'ecprov.gov.za', province: 'EC',
+    strategy: 'html-scan',
+    url: 'https://www.ecprov.gov.za/tenders/',
+  },
+  {
+    label: 'Limpopo Gov', domain: 'limpopo.gov.za', province: 'LP',
+    strategy: 'html-scan',
+    url: 'https://www.limpopo.gov.za/tenders/',
+  },
+  {
+    label: 'Mpumalanga Gov', domain: 'mpumalanga.gov.za', province: 'MP',
+    strategy: 'html-scan',
+    url: 'https://www.mpumalanga.gov.za/tenders/',
+  },
+  {
+    label: 'North West Gov', domain: 'nwpg.gov.za', province: 'NW',
+    strategy: 'html-scan',
+    url: 'https://www.nwpg.gov.za/tenders/',
+  },
+  {
+    label: 'Free State Gov', domain: 'freestate.gov.za', province: 'FS',
+    strategy: 'html-scan',
+    url: 'https://www.freestate.gov.za/tenders/',
+  },
+  {
+    label: 'Northern Cape Gov', domain: 'northern-cape.gov.za', province: 'NC',
+    strategy: 'html-scan',
+    url: 'https://www.northern-cape.gov.za/tenders/',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // MUNICIPALITIES — major metros
+  // ════════════════════════════════════════════════════════════
+  {
+    label: 'City of Johannesburg', domain: 'joburg.org.za', province: 'GP',
+    strategy: 'html-scan',
+    url: 'https://www.joburg.org.za/work_/Pages/Tenders/Active-Tenders.aspx',
+  },
+  {
+    label: 'Ekurhuleni Metro', domain: 'ekurhuleni.gov.za', province: 'GP',
+    strategy: 'html-scan',
+    url: 'https://www.ekurhuleni.gov.za/tenders/',
+  },
+  {
+    label: 'City of Tshwane', domain: 'tshwane.gov.za', province: 'GP',
+    strategy: 'html-scan',
+    url: 'https://www.tshwane.gov.za/sites/Departments/Financial%20Services/Pages/Tenders.aspx',
+  },
+  {
+    label: 'eThekwini Municipality', domain: 'durban.gov.za', province: 'KZN',
+    strategy: 'html-scan',
+    url: 'https://www.durban.gov.za/City_Government/City_Manager/SCM/Pages/Tenders.aspx',
+  },
+  {
+    label: 'City of Cape Town', domain: 'capetown.gov.za', province: 'WC',
+    strategy: 'html-scan',
+    url: 'https://www.capetown.gov.za/work%20and%20business/tenders-and-procurement/',
+  },
+  {
+    label: 'Nelson Mandela Bay', domain: 'nelsonmandelabay.gov.za', province: 'EC',
+    strategy: 'html-scan',
+    url: 'https://www.nelsonmandelabay.gov.za/Content/Page/64',
+  },
+  {
+    label: 'Buffalo City Metro', domain: 'buffalocity.gov.za', province: 'EC',
+    strategy: 'html-scan',
+    url: 'https://www.buffalocity.gov.za/tenders/',
+  },
+  {
+    label: 'Mangaung Metro', domain: 'mangaung.co.za', province: 'FS',
+    strategy: 'html-scan',
+    url: 'https://www.mangaung.co.za/tenders/',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // WP-API — Only for sites confirmed to run WordPress REST API
+  // ════════════════════════════════════════════════════════════
+  {
+    label: 'DIRCO WP', domain: 'dirco.gov.za', province: 'NAT',
     strategy: 'wp-api',
     url: 'https://dirco.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
   },
   {
-    label: 'DPW', domain: 'publicworks.gov.za', province: 'NAT',
-    strategy: 'wp-post-scan',
-    url: 'http://www.publicworks.gov.za/tenders.html',
-  },
-  {
-    label: 'DPSA', domain: 'dpsa.gov.za', province: 'NAT',
-    strategy: 'wp-api',
-    url: 'https://www.dpsa.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'National Treasury', domain: 'treasury.gov.za', province: 'NAT',
-    strategy: 'wp-api',
-    url: 'https://www.treasury.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'COGTA', domain: 'cogta.gov.za', province: 'NAT',
+    label: 'COGTA WP', domain: 'cogta.gov.za', province: 'NAT',
     strategy: 'wp-api',
     url: 'https://cogta.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
   },
   {
-    label: 'DBE', domain: 'education.gov.za', province: 'NAT',
-    strategy: 'wp-api',
-    url: 'https://www.education.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'DOH', domain: 'health.gov.za', province: 'NAT',
-    strategy: 'wp-api',
-    url: 'https://www.health.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'DTIC', domain: 'thedti.gov.za', province: 'NAT',
-    strategy: 'wp-api',
-    url: 'https://www.thedti.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'DWS', domain: 'dws.gov.za', province: 'NAT',
-    strategy: 'wp-api',
-    url: 'https://www.dws.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'DSD', domain: 'dsd.gov.za', province: 'NAT',
-    strategy: 'wp-api',
-    url: 'https://www.dsd.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'DoT', domain: 'transport.gov.za', province: 'NAT',
-    strategy: 'wp-api',
-    url: 'https://www.transport.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'DCDT', domain: 'dcdt.gov.za', province: 'NAT',
-    strategy: 'wp-api',
-    url: 'https://www.dcdt.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  // ── SOEs / Parastatals ────────────────────────────────────
-  {
-    label: 'SANRAL', domain: 'sanral.co.za', province: 'NAT',
-    strategy: 'wp-api',
-    url: 'https://www.sanral.co.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'PRASA', domain: 'prasa.com', province: 'NAT',
-    strategy: 'wp-api',
-    url: 'https://www.prasa.com/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'NHBRC', domain: 'nhbrc.org.za', province: 'NAT',
+    label: 'NHBRC WP', domain: 'nhbrc.org.za', province: 'NAT',
     strategy: 'wp-api',
     url: 'https://www.nhbrc.org.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
   },
   {
-    label: 'DBSA', domain: 'dbsa.org', province: 'NAT',
+    label: 'DBSA WP', domain: 'dbsa.org', province: 'NAT',
     strategy: 'wp-api',
     url: 'https://www.dbsa.org/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
   },
-  // ── Provincial ───────────────────────────────────────────
   {
-    label: 'KZN Treasury', domain: 'treasury.kzntl.gov.za', province: 'KZN',
+    label: 'SANRAL WP', domain: 'sanral.co.za', province: 'NAT',
     strategy: 'wp-api',
-    url: 'https://treasury.kzntl.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'KZN Health', domain: 'kznhealth.gov.za', province: 'KZN',
-    strategy: 'wp-api',
-    url: 'https://www.kznhealth.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'GP Treasury', domain: 'treasury.gpg.gov.za', province: 'GP',
-    strategy: 'wp-api',
-    url: 'https://treasury.gpg.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'Gauteng DID', domain: 'did.gpg.gov.za', province: 'GP',
-    strategy: 'wp-api',
-    url: 'https://www.did.gpg.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'Western Cape Gov', domain: 'westerncape.gov.za', province: 'WC',
-    strategy: 'wp-api',
-    url: 'https://www.westerncape.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'Eastern Cape Gov', domain: 'ecprov.gov.za', province: 'EC',
-    strategy: 'wp-api',
-    url: 'https://www.ecprov.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'Limpopo Gov', domain: 'limpopo.gov.za', province: 'LP',
-    strategy: 'wp-api',
-    url: 'https://www.limpopo.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'Mpumalanga Gov', domain: 'mpumalanga.gov.za', province: 'MP',
-    strategy: 'wp-api',
-    url: 'https://www.mpumalanga.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'North West Gov', domain: 'nwpg.gov.za', province: 'NW',
-    strategy: 'wp-api',
-    url: 'https://www.nwpg.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'Free State Gov', domain: 'freestate.gov.za', province: 'FS',
-    strategy: 'wp-api',
-    url: 'https://www.freestate.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  {
-    label: 'Northern Cape Gov', domain: 'northern-cape.gov.za', province: 'NC',
-    strategy: 'wp-api',
-    url: 'https://www.northern-cape.gov.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
-  },
-  // ── HTML post-scan (DIRCO-style free text pages) ──────────
-  {
-    label: 'DIRCO HTML', domain: 'dirco.gov.za', province: 'NAT',
-    strategy: 'wp-post-scan',
-    url: 'https://dirco.gov.za/tenders/',
+    url: 'https://www.sanral.co.za/wp-json/wp/v2/posts?search=tender&per_page=20&orderby=date&order=desc',
   },
 ];
 
@@ -260,80 +405,84 @@ async function scrapeWpApi(source: Source): Promise<ScrapedTender[]> {
         document_fee:        0,
       });
     }
+    console.log(`[${source.label}] wp-api → ${tenders.length} tenders`);
   } catch (err) {
-    console.warn(`[${source.label}] WP API failed:`, String(err).slice(0, 120));
+    console.warn(`[${source.label}] wp-api failed:`, String(err).slice(0, 120));
   }
   return tenders;
 }
 
-// ─── Strategy: HTML post-scan (DIRCO-style) ─────────────────
+// ─── Strategy: Generic HTML scan ────────────────────────────
+// Works on any tender listing page — WP or plain HTML.
+// Extracts blocks of text that contain tender keywords, then
+// parses each block for ref, date, CIDB grade, value, category.
 
-async function scrapeWpPostScan(source: Source): Promise<ScrapedTender[]> {
+async function scrapeHtmlScan(source: Source): Promise<ScrapedTender[]> {
   const tenders: ScrapedTender[] = [];
   try {
     const res = await fetch(source.url, {
       headers: {
-        'Accept': 'text/html',
+        'Accept': 'text/html,application/xhtml+xml',
         'User-Agent': 'Mozilla/5.0 (compatible; BreedTenderBot/1.0)',
       },
-      signal: AbortSignal.timeout(12_000),
+      signal: AbortSignal.timeout(15_000),
     });
-    if (!res.ok) return [];
+    if (!res.ok) {
+      console.warn(`[${source.label}] HTTP ${res.status}`);
+      return [];
+    }
 
     const html = await res.text();
     const text = stripHtml(html);
 
-    // Split by known tender block separators
-    // DIRCO uses "Date:" and ref numbers like "DIRCO 01 2026-2027"
-    const refPattern = /([A-Z][A-Z0-9\/\-\s]{3,40}(?:\d{4}(?:[\/\-]\d{2,4})?))[\s:–-]/g;
     const blocks: string[] = [];
-
-    // Extract paragraphs of text that contain "tender" or "bid"
-    const paraPattern = /(?:tender|bid|rfq|rfp|procurement)[^.]{20,600}\./gi;
-    let m: RegExpExecArray | null;
-    while ((m = paraPattern.exec(text)) !== null) {
-      blocks.push(m[0]);
-    }
-
-    // Also try to extract structured blocks around reference numbers
-    // Use non-overlapping extraction to prevent jumbled descriptions
-    let refMatch: RegExpExecArray | null;
     const usedRanges: [number, number][] = [];
-    while ((refMatch = refPattern.exec(text)) !== null) {
-      const start = Math.max(0, refMatch.index - 50);
-      const end   = Math.min(text.length, refMatch.index + 600);
-      
-      // Check if this range overlaps with any previously used range
-      const overlaps = usedRanges.some(([s, e]) => 
-        (start >= s && start <= e) || (end >= s && end <= e)
-      );
-      
-      if (!overlaps && /tender|bid|service|closing/i.test(text.slice(start, end))) {
+
+    // ── 1. Extract blocks anchored on known reference-number patterns ──
+    const refPattern = /\b([A-Z]{2,10}[\s\/\-]\d{2,6}[\s\/\-]\d{4}(?:[\/\-]\d{2,4})?|(?:BID|RFQ|RFP|EOI|SCM|QUO|TEN)[\s\/\-]?(?:NO\.?\s*)?[A-Z0-9\/\-]{4,20})\b/gi;
+    let rm: RegExpExecArray | null;
+    while ((rm = refPattern.exec(text)) !== null) {
+      const start = Math.max(0, rm.index - 80);
+      const end   = Math.min(text.length, rm.index + 700);
+      const overlaps = usedRanges.some(([s, e]) => start < e && end > s);
+      if (!overlaps && /tender|bid|service|closing|procurement/i.test(text.slice(start, end))) {
         blocks.push(text.slice(start, end));
         usedRanges.push([start, end]);
       }
     }
 
-    // De-duplicate by first 80 chars
+    // ── 2. Extract paragraphs that contain tender keywords ──
+    const paraPattern = /(?:tender|bid|rfq|rfp|procurement|quotation)[^.]{30,700}\./gi;
+    let pm: RegExpExecArray | null;
+    while ((pm = paraPattern.exec(text)) !== null) {
+      const start = pm.index;
+      const end   = pm.index + pm[0].length;
+      const overlaps = usedRanges.some(([s, e]) => start < e && end > s);
+      if (!overlaps) {
+        blocks.push(pm[0]);
+        usedRanges.push([start, end]);
+      }
+    }
+
+    // ── 3. Build tender objects from blocks ──
     const seen = new Set<string>();
     for (const block of blocks) {
-      const key = block.slice(0, 80);
-      if (seen.has(key)) continue;
+      const key = block.slice(0, 80).trim();
+      if (seen.has(key) || key.length < 15) continue;
       seen.add(key);
 
       const closing = extractDate(block) ?? futureDate(30);
-      const ref     = extractRef(block) ?? `${source.label.toUpperCase().replace(/\s+/g, '-')}-${Date.now()}`;
-      const cidb    = extractCidb(block);
-      const value   = extractValue(block);
-
-      // Clean up the title: take first meaningful sentence
-      const title = block.replace(/\s+/g, ' ').trim().slice(0, 160).split(/[.\n]/)[0].trim();
+      const ref     = extractRef(block)
+        ?? `${source.label.toUpperCase().replace(/\s+/g, '-')}-${Date.now()}-${seen.size}`;
+      const cidb  = extractCidb(block);
+      const value = extractValue(block);
+      const title = block.replace(/\s+/g, ' ').trim().slice(0, 180).split(/[.\n]/)[0].trim();
       if (!title || title.length < 10) continue;
 
       tenders.push({
         reference_number:    ref,
         title,
-        description:         block.slice(0, 800),
+        description:         block.replace(/\s+/g, ' ').slice(0, 800),
         department:          source.label,
         province:            source.province,
         category:            inferCategory(block),
@@ -347,32 +496,111 @@ async function scrapeWpPostScan(source: Source): Promise<ScrapedTender[]> {
         document_fee:        0,
       });
     }
+
+    console.log(`[${source.label}] html-scan → ${tenders.length} tenders`);
   } catch (err) {
-    console.warn(`[${source.label}] HTML scan failed:`, String(err).slice(0, 120));
+    console.warn(`[${source.label}] html-scan failed:`, String(err).slice(0, 120));
   }
   return tenders;
+}
+
+// ─── Strategy: RSS / Atom feed ───────────────────────────────
+
+async function scrapeRss(source: Source): Promise<ScrapedTender[]> {
+  const tenders: ScrapedTender[] = [];
+  try {
+    const res = await fetch(source.url, {
+      headers: {
+        'Accept': 'application/rss+xml, application/atom+xml, text/xml, */*',
+        'User-Agent': 'Mozilla/5.0 (compatible; BreedTenderBot/1.0)',
+      },
+      signal: AbortSignal.timeout(12_000),
+    });
+    if (!res.ok) return [];
+
+    const xml  = await res.text();
+    // Parse <item> (RSS) or <entry> (Atom) elements
+    const itemPattern = /<(?:item|entry)[\s>]([\s\S]*?)<\/(?:item|entry)>/gi;
+    let im: RegExpExecArray | null;
+    while ((im = itemPattern.exec(xml)) !== null) {
+      const itemXml = im[1];
+      const title   = stripHtml(getXmlField(itemXml, 'title') ?? '');
+      const desc    = stripHtml(getXmlField(itemXml, 'description') ?? getXmlField(itemXml, 'summary') ?? '');
+      const link    = getXmlField(itemXml, 'link') ?? source.url;
+      const combined = `${title} ${desc}`;
+
+      if (!/tender|bid|rfq|rfp|procurement|quotation/i.test(combined)) continue;
+
+      const closing = extractDate(combined) ?? futureDate(30);
+      const ref     = extractRef(combined)
+        ?? `${source.label.toUpperCase().replace(/\s+/g, '-')}-RSS-${Date.now()}-${tenders.length}`;
+
+      tenders.push({
+        reference_number:    ref,
+        title:               title || `${source.label} Tender`,
+        description:         desc.slice(0, 800),
+        department:          source.label,
+        province:            source.province,
+        category:            inferCategory(combined),
+        closing_date:        closing,
+        source_url:          link.trim(),
+        source:              source.domain,
+        estimated_value:     extractValue(combined),
+        required_cidb_grade: extractCidb(combined),
+        commodity_codes:     [],
+        documents_required:  /document|specification|compulsory/i.test(combined),
+        document_fee:        0,
+      });
+    }
+
+    console.log(`[${source.label}] rss → ${tenders.length} tenders`);
+  } catch (err) {
+    console.warn(`[${source.label}] RSS failed:`, String(err).slice(0, 120));
+  }
+  return tenders;
+}
+
+function getXmlField(xml: string, field: string): string | null {
+  const m = new RegExp(`<${field}[^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${field}>`, 'i').exec(xml);
+  return m ? m[1].trim() : null;
 }
 
 // ─── Orchestrate all sources ─────────────────────────────────
 
 export async function scrapeAllSources(): Promise<ScrapedTender[]> {
-  // Run all sources in parallel, capped at 6 concurrent
   const results: ScrapedTender[] = [];
   const BATCH = 6;
+  const sourceLog: Record<string, number> = {};
 
   for (let i = 0; i < SOURCES.length; i += BATCH) {
     const batch = SOURCES.slice(i, i + BATCH);
     const batched = await Promise.allSettled(
       batch.map(src => {
-        if (src.strategy === 'wp-api')        return scrapeWpApi(src);
-        if (src.strategy === 'wp-post-scan')  return scrapeWpPostScan(src);
+        if (src.strategy === 'wp-api')   return scrapeWpApi(src);
+        if (src.strategy === 'html-scan') return scrapeHtmlScan(src);
+        if (src.strategy === 'rss')      return scrapeRss(src);
         return Promise.resolve([]);
       })
     );
-    for (const r of batched) {
-      if (r.status === 'fulfilled') results.push(...r.value);
+    for (let j = 0; j < batched.length; j++) {
+      const r   = batched[j];
+      const src = batch[j];
+      if (r.status === 'fulfilled') {
+        sourceLog[src.label] = r.value.length;
+        results.push(...r.value);
+      } else {
+        sourceLog[src.label] = -1;
+      }
     }
   }
+
+  // Log summary so Vercel logs show which sources produced results
+  const working = Object.entries(sourceLog).filter(([, n]) => n > 0).map(([l, n]) => `${l}:${n}`);
+  const empty   = Object.entries(sourceLog).filter(([, n]) => n === 0).map(([l]) => l);
+  const failed  = Object.entries(sourceLog).filter(([, n]) => n === -1).map(([l]) => l);
+  console.log(`[scrapeAllSources] working(${working.length}): ${working.join(', ')}`);
+  if (empty.length)  console.log(`[scrapeAllSources] empty(${empty.length}): ${empty.join(', ')}`);
+  if (failed.length) console.warn(`[scrapeAllSources] failed(${failed.length}): ${failed.join(', ')}`);
 
   // De-duplicate by reference number
   const seen = new Set<string>();
