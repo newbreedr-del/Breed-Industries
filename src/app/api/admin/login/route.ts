@@ -32,12 +32,22 @@ export async function POST(req: NextRequest) {
       }, { status: 403 });
     }
 
-    // Always use production URL for Supabase magic links to avoid localhost redirects
-    const redirectUrl = process.env.SUPABASE_REDIRECT_URL || process.env.NEXT_PUBLIC_SITE_URL;
-    if (!redirectUrl) {
-      return NextResponse.json({ error: 'Production URL not configured' }, { status: 500 });
+    // Prefer the explicit production URL env var; fall back to the request origin.
+    // Never use NEXT_PUBLIC_APP_URL — that may be localhost in dev environments.
+    const redirectBase =
+      process.env.SUPABASE_REDIRECT_URL ||
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      req.nextUrl.origin;
+
+    // Safety check: refuse to issue magic links that point back to localhost
+    if (redirectBase.includes('localhost') || redirectBase.includes('127.0.0.1')) {
+      return NextResponse.json(
+        { error: 'SUPABASE_REDIRECT_URL must be set to the production URL (https://www.thebreed.co.za) to send magic links.' },
+        { status: 500 },
+      );
     }
-    const emailRedirectTo = `${redirectUrl}/auth/callback`;
+
+    const emailRedirectTo = `${redirectBase}/auth/callback`;
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
