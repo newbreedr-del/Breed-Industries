@@ -32,11 +32,12 @@ export async function POST(req: NextRequest) {
       }, { status: 403 });
     }
 
-    // Build the callback URL - prioritize production URL, fallback to request origin or localhost
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-    const origin = req.headers.get('origin');
-    const baseUrl = siteUrl || origin || 'http://localhost:3000';
-    const emailRedirectTo = `${baseUrl}/auth/callback`;
+    // Always use production URL for Supabase magic links to avoid localhost redirects
+    const redirectUrl = process.env.SUPABASE_REDIRECT_URL || process.env.NEXT_PUBLIC_SITE_URL;
+    if (!redirectUrl) {
+      return NextResponse.json({ error: 'Production URL not configured' }, { status: 500 });
+    }
+    const emailRedirectTo = `${redirectUrl}/auth/callback`;
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
