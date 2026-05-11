@@ -356,7 +356,8 @@ export default function TendersDashboard() {
               <select
                 value={statusFilter}
                 onChange={e => setStatus(e.target.value)}
-                className="px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-accent"
+                className="px-3 py-2.5 bg-[#0B1118] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-accent"
+                style={{ colorScheme: 'dark' }}
               >
                 <option value="all">All statuses</option>
                 {activeTab === 'tenders'
@@ -544,7 +545,8 @@ export default function TendersDashboard() {
                                     e.target.value = '';
                                   }
                                 }}
-                                className="text-xs bg-white/5 border border-white/10 rounded px-2 py-1 text-white/70 focus:outline-none focus:border-accent"
+                                className="text-xs bg-[#0B1118] border border-white/10 rounded px-2 py-1 text-white focus:outline-none focus:border-accent"
+                                style={{ colorScheme: 'dark' }}
                               >
                                 <option value="">Update…</option>
                                 {['notified','reviewed','applying','applied','won','lost','declined']
