@@ -11,10 +11,7 @@ import { supabase } from '@/lib/supabase';
 
 export const runtime = 'nodejs';
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAIL ?? '')
-  .split(',')
-  .map(e => e.trim().toLowerCase())
-  .filter(Boolean);
+const ADMIN_EMAILS = ['newbreed.r@gmail.com'];
 
 export async function POST(req: Request) {
   try {

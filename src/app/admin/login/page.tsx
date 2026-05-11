@@ -1,21 +1,22 @@
 'use client';
 
 import { useState, Suspense } from 'react';
-import { useSearchParams }    from 'next/navigation';
-import { Header }             from '@/components/layout/Header';
-import { Footer }             from '@/components/layout/Footer';
-import { PageHero }           from '@/components/layout/PageHero';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { PageHero } from '@/components/layout/PageHero';
 import { Mail, Lock, AlertCircle, CheckCircle } from 'lucide-react';
 
 type Stage = 'form' | 'sent' | 'error';
 
 function LoginForm() {
-  const [email, setEmail]   = useState('');
-  const [stage, setStage]   = useState<Stage>('form');
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [stage, setStage] = useState<Stage>('form');
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState('');
   const searchParams = useSearchParams();
-  const urlError     = searchParams.get('error');
+  const urlError = searchParams.get('error');
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,10 +24,10 @@ function LoginForm() {
     setErrMsg('');
 
     try {
-      const res  = await fetch('/api/admin/login', {
-        method:  'POST',
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ email }),
+        body: JSON.stringify({ email }),
       });
       const data = await res.json();
 
@@ -75,7 +76,7 @@ function LoginForm() {
                   Admin Access
                 </h2>
                 <p className="text-white/60 text-sm">
-                  Enter your email and we'll send you a one-click login link.
+                  Enter your email and we'll send you a secure login link.
                 </p>
               </div>
 
@@ -84,7 +85,7 @@ function LoginForm() {
                 <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20 mb-5">
                   <AlertCircle size={16} className="text-red-400 shrink-0" />
                   <p className="text-red-400 text-sm">
-                    That email isn't authorised as an admin. Use your registered admin address.
+                    That email isn't authorised for admin access.
                   </p>
                 </div>
               )}
@@ -97,7 +98,7 @@ function LoginForm() {
                   </div>
                   <p className="text-white font-medium">Check your inbox</p>
                   <p className="text-white/60 text-sm leading-relaxed">
-                    We've sent a login link to <strong className="text-white">{email}</strong>.
+                    We've sent a secure login link to <strong className="text-white">{email}</strong>.
                     Click it to access the dashboard — no password needed.
                   </p>
                   <p className="text-white/40 text-xs">Link expires in 1 hour.</p>
@@ -127,7 +128,7 @@ function LoginForm() {
                         required
                         autoFocus
                         className="w-full pl-9 pr-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/40 focus:border-accent/50 focus:outline-none transition-colors text-sm"
-                        placeholder="you@example.com"
+                        placeholder="newbreed.r@gmail.com"
                       />
                     </div>
                   </div>
