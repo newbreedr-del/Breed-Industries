@@ -362,7 +362,7 @@ export default function ServicesPage() {
                 <Briefcase className="text-accent w-6 h-6" />
               </div>
               <h3 className="text-xl font-heading font-bold text-white mb-1">Tender Watch</h3>
-              <p className="text-accent text-2xl font-bold mb-3">R950 <span className="text-sm font-normal text-white/50">/month</span></p>
+              <p className="text-accent text-2xl font-bold mb-3">R350 <span className="text-sm font-normal text-white/50">/month</span></p>
               <p className="text-white/60 text-sm mb-5 flex-1">
                 We continuously scrape government portals and match tenders to your business profile. You get notified every time there's a fit.
               </p>
@@ -383,12 +383,12 @@ export default function ServicesPage() {
                 <Layers className="text-blue-400 w-6 h-6" />
               </div>
               <h3 className="text-xl font-heading font-bold text-white mb-1">Tender Apply</h3>
-              <p className="text-accent text-2xl font-bold mb-3">R2,500 <span className="text-sm font-normal text-white/50">/month</span></p>
+              <p className="text-accent text-2xl font-bold mb-3">R950 <span className="text-sm font-normal text-white/50">/month</span></p>
               <p className="text-white/60 text-sm mb-5 flex-1">
                 We don't just find the tenders, we compile and submit the full application on your behalf. Everything in Watch, plus we do the paperwork.
               </p>
               <ul className="space-y-2 mb-6">
-                {['Everything in Tender Watch', 'Full tender document compilation', 'Application submission on your behalf', 'Application tracking + updates', '+ R800 per tender applied'].map(f => (
+                {['Everything in Tender Watch', 'Full tender document compilation', 'Application submission on your behalf', 'Application tracking + updates', '+ R750 per tender document set compiled & submitted'].map(f => (
                   <li key={f} className="flex items-start gap-2 text-sm text-white/70">
                     <Check size={14} className="text-accent mt-0.5 shrink-0" />
                     {f}
@@ -404,7 +404,7 @@ export default function ServicesPage() {
                 <TrendingUp className="text-accent w-6 h-6" />
               </div>
               <h3 className="text-xl font-heading font-bold text-white mb-1">Tender Full Service</h3>
-              <p className="text-accent text-2xl font-bold mb-3">R6,500 <span className="text-sm font-normal text-white/50">/month</span></p>
+              <p className="text-accent text-2xl font-bold mb-3">R2,550 <span className="text-sm font-normal text-white/50">/month</span></p>
               <p className="text-white/60 text-sm mb-5 flex-1">
                 The complete managed service. We search, apply, attend compulsory site meetings, and follow up on awarded tenders, all on your behalf.
               </p>
@@ -414,8 +414,8 @@ export default function ServicesPage() {
                   'Site / briefing meeting attendance',
                   'Tender clarification responses',
                   'Award follow-up & negotiations',
-                  '+ R1,500 per site meeting attended',
-                  'Extra charges apply for complex submissions',
+                  '+ R2,000 per tender fully managed end-to-end',
+                  'Site / briefing meeting attendance included',
                 ].map(f => (
                   <li key={f} className="flex items-start gap-2 text-sm text-white/70">
                     <Check size={14} className="text-accent mt-0.5 shrink-0" />

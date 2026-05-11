@@ -38,9 +38,9 @@ interface QuoteGeneratorProps {
 
 const tenderServices = [
   { id: 'tender-ready',   category: 'Tender Services', name: 'Tender Ready',         basePrice: 'R3,500',  pricingType: 'one-time' as const },
-  { id: 'tender-watch',   category: 'Tender Services', name: 'Tender Watch',          basePrice: 'R950',    pricingType: 'monthly'  as const },
-  { id: 'tender-apply',   category: 'Tender Services', name: 'Tender Apply',          basePrice: 'R2,500',  pricingType: 'monthly'  as const },
-  { id: 'tender-full',    category: 'Tender Services', name: 'Tender Full Service',   basePrice: 'R6,500',  pricingType: 'monthly'  as const },
+  { id: 'tender-watch',   category: 'Tender Services', name: 'Tender Watch',          basePrice: 'R350',    pricingType: 'monthly'  as const },
+  { id: 'tender-apply',   category: 'Tender Services', name: 'Tender Apply',          basePrice: 'R950',    pricingType: 'monthly'  as const },
+  { id: 'tender-full',    category: 'Tender Services', name: 'Tender Full Service',   basePrice: 'R2,550',  pricingType: 'monthly'  as const },
 ];
 
 // ── Service picker ────────────────────────────────────────────────────────────

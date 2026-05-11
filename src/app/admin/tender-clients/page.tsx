@@ -118,9 +118,10 @@ const CATEGORIES = [
   'Tourism & Hospitality',
 ];
 const PACKAGES = [
-  { value: 'watch',  label: 'Tender Watch',  price: 'R950/mo',   color: 'bg-purple-500/20 text-purple-300' },
-  { value: 'apply',  label: 'Tender Apply',  price: 'R2,500/mo', color: 'bg-blue-500/20 text-blue-300'   },
-  { value: 'full',   label: 'Tender Full',   price: 'R6,500/mo', color: 'bg-accent/20 text-accent'        },
+  { value: 'ready', label: 'Tender Ready',  price: 'R3,500 once-off',         color: 'bg-white/10 text-white/70'      },
+  { value: 'watch', label: 'Tender Watch',  price: 'R350/mo',                 color: 'bg-purple-500/20 text-purple-300' },
+  { value: 'apply', label: 'Tender Apply',  price: 'R950/mo + R750/doc',      color: 'bg-blue-500/20 text-blue-300'   },
+  { value: 'full',  label: 'Full Service',  price: 'R2,550/mo + R2,000/tend', color: 'bg-accent/20 text-accent'        },
 ];
 
 const emptyForm = {

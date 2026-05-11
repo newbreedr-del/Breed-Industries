@@ -385,7 +385,7 @@ export default function Home() {
                 <p className="text-white/65 text-base mb-8 leading-relaxed max-w-md">
                   We built a dedicated tender intelligence engine that scrapes South African procurement portals daily,
                   matches opportunities to your business profile, and notifies you instantly.
-                  From R950/month, or let us handle the whole application for you.
+                  From R350/month, or let us handle the whole application for you.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-3">
