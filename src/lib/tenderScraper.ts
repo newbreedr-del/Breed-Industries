@@ -296,13 +296,21 @@ async function scrapeWpPostScan(source: Source): Promise<ScrapedTender[]> {
     }
 
     // Also try to extract structured blocks around reference numbers
+    // Use non-overlapping extraction to prevent jumbled descriptions
     let refMatch: RegExpExecArray | null;
+    const usedRanges: [number, number][] = [];
     while ((refMatch = refPattern.exec(text)) !== null) {
       const start = Math.max(0, refMatch.index - 50);
       const end   = Math.min(text.length, refMatch.index + 600);
-      const block = text.slice(start, end);
-      if (/tender|bid|service|closing/i.test(block)) {
-        blocks.push(block);
+      
+      // Check if this range overlaps with any previously used range
+      const overlaps = usedRanges.some(([s, e]) => 
+        (start >= s && start <= e) || (end >= s && end <= e)
+      );
+      
+      if (!overlaps && /tender|bid|service|closing/i.test(text.slice(start, end))) {
+        blocks.push(text.slice(start, end));
+        usedRanges.push([start, end]);
       }
     }
 
