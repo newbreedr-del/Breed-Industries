@@ -77,22 +77,22 @@ const SOURCES: Source[] = [
   {
     label: 'DPSA', domain: 'dpsa.gov.za', province: 'NAT',
     strategy: 'html-scan',
-    url: 'https://www.dpsa.gov.za/content/tenders',
+    url: 'https://www.dpsa.gov.za/newsroom/tenders/',
   },
   {
     label: 'National Treasury', domain: 'treasury.gov.za', province: 'NAT',
     strategy: 'html-scan',
-    url: 'https://www.treasury.gov.za/tender-opportunities/',
+    url: 'https://www.treasury.gov.za/default.aspx',
   },
   {
     label: 'COGTA', domain: 'cogta.gov.za', province: 'NAT',
     strategy: 'html-scan',
-    url: 'https://cogta.gov.za/tenders/',
+    url: 'https://www.cogta.gov.za/index.php/cogta-tenders/',
   },
   {
     label: 'DBE', domain: 'education.gov.za', province: 'NAT',
     strategy: 'html-scan',
-    url: 'https://www.education.gov.za/tenders/',
+    url: 'https://www.education.gov.za/Tenders/AdvertisedTenders.aspx',
   },
   {
     label: 'DOH', domain: 'health.gov.za', province: 'NAT',
@@ -102,7 +102,7 @@ const SOURCES: Source[] = [
   {
     label: 'DTIC', domain: 'thedti.gov.za', province: 'NAT',
     strategy: 'html-scan',
-    url: 'https://www.thedti.gov.za/tenders/',
+    url: 'https://www.thedti.gov.za/tender-bulletin/',
   },
   {
     label: 'DWS', domain: 'dws.gov.za', province: 'NAT',
@@ -112,7 +112,7 @@ const SOURCES: Source[] = [
   {
     label: 'DSD', domain: 'dsd.gov.za', province: 'NAT',
     strategy: 'html-scan',
-    url: 'https://www.dsd.gov.za/tenders/',
+    url: 'https://www.dsd.gov.za/index.php/documents/category/26-tenders',
   },
   {
     label: 'DoT', domain: 'transport.gov.za', province: 'NAT',
@@ -202,6 +202,30 @@ const SOURCES: Source[] = [
     label: 'IDC', domain: 'idc.co.za', province: 'NAT',
     strategy: 'html-scan',
     url: 'https://www.idc.co.za/tenders/',
+  },
+  {
+    label: 'SARS', domain: 'sars.gov.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.sars.gov.za/tenders/',
+  },
+  {
+    label: 'Reserve Bank', domain: 'resbank.co.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.resbank.co.za/tenders/',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // AGGREGATION SITES — Multi-source tender platforms
+  // ════════════════════════════════════════════════════════════
+  {
+    label: 'TenderFlow', domain: 'tenderflow.co.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.tenderflow.co.za',
+  },
+  {
+    label: 'Online Tenders', domain: 'onlinetenders.co.za', province: 'NAT',
+    strategy: 'html-scan',
+    url: 'https://www.onlinetenders.co.za',
   },
 
   // ════════════════════════════════════════════════════════════
@@ -316,6 +340,16 @@ const SOURCES: Source[] = [
     strategy: 'html-scan',
     url: 'https://www.mangaung.co.za/tenders/',
   },
+  {
+    label: 'Gauteng Province', domain: 'gauteng.gov.za', province: 'GP',
+    strategy: 'html-scan',
+    url: 'https://www.gauteng.gov.za/tenders/',
+  },
+  {
+    label: 'Western Cape Province', domain: 'westerncape.gov.za', province: 'WC',
+    strategy: 'html-scan',
+    url: 'https://www.westerncape.gov.za/tenders/',
+  },
 
   // ════════════════════════════════════════════════════════════
   // WP-API — Only for sites confirmed to run WordPress REST API
@@ -357,7 +391,7 @@ async function scrapeWpApi(source: Source): Promise<ScrapedTender[]> {
         'Accept': 'application/json',
         'User-Agent': 'Mozilla/5.0 (compatible; BreedTenderBot/1.0)',
       },
-      signal: AbortSignal.timeout(12_000),
+      signal: AbortSignal.timeout(8_000),
     });
     if (!res.ok) return [];
 
@@ -569,7 +603,7 @@ function getXmlField(xml: string, field: string): string | null {
 
 export async function scrapeAllSources(): Promise<ScrapedTender[]> {
   const results: ScrapedTender[] = [];
-  const BATCH = 3; // Reduced from 6 to prevent timeouts
+  const BATCH = 12; // Each source has an 8s hard timeout — 12 concurrent is safe
   const sourceLog: Record<string, number> = {};
 
   for (let i = 0; i < SOURCES.length; i += BATCH) {
