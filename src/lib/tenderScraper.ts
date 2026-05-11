@@ -10,9 +10,12 @@ import {
   getTenderClients,
   upsertTender,
   createOrUpdateMatch,
+  wasAlreadyNotified,
+  markMatchNotified,
   type TenderClient,
   type Tender,
 } from '@/lib/tenderStorage';
+import { sendTenderMatchEmail } from '@/lib/tenderEmail';
 
 // ─── eTenders scraper ────────────────────────────────────────
 
