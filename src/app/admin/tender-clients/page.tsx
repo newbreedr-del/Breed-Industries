@@ -11,6 +11,8 @@ import Link from 'next/link';
 type Client = {
   id: string;
   name: string;
+  first_name?: string;
+  last_name?: string;
   company_name: string;
   email: string;
   phone?: string;
@@ -122,7 +124,8 @@ const PACKAGES = [
 ];
 
 const emptyForm = {
-  name: '', company_name: '', email: '', phone: '',
+  first_name: '', last_name: '', name: '',
+  company_name: '', email: '', phone: '',
   cidb_grade: '', bee_level: '', csd_number: '', tax_pin: '',
   provinces: [] as string[], service_categories: [] as string[],
   commodity_codes: '', max_tender_value: '', package: 'watch', notes: '',
@@ -166,11 +169,13 @@ export default function TenderClientsPage() {
     e.preventDefault();
     setSaving(true);
     try {
+      const displayName = `${form.first_name} ${form.last_name}`.trim() || form.name;
       const res = await fetch('/api/tender-clients', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
+          name:             displayName,
           bee_level:        form.bee_level    ? Number(form.bee_level)    : undefined,
           max_tender_value: form.max_tender_value ? Math.round(parseFloat(form.max_tender_value) * 100) : 0,
           commodity_codes:  form.commodity_codes.split(',').map(s => s.trim()).filter(Boolean),
@@ -246,7 +251,7 @@ export default function TenderClientsPage() {
           </div>
 
           {/* Package summary */}
-          <div className="grid grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
             {PACKAGES.map(p => {
               const count = clients.filter(c => c.package === p.value && c.is_active).length;
               return (
@@ -269,69 +274,117 @@ export default function TenderClientsPage() {
                 <p className="text-white/50">No clients yet. Add your first tender client.</p>
               </div>
             ) : (
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-white/10 text-white/50 text-xs uppercase tracking-wider">
-                    <th className="px-5 py-3 text-left">Company</th>
-                    <th className="px-5 py-3 text-left">Contact</th>
-                    <th className="px-5 py-3 text-left">Package</th>
-                    <th className="px-5 py-3 text-left">CIDB / BEE</th>
-                    <th className="px-5 py-3 text-left">Provinces</th>
-                    <th className="px-5 py-3 text-left">Status</th>
-                    <th className="px-5 py-3" />
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map((c, i) => {
+              <>
+                {/* Desktop table */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-white/10 text-white/50 text-xs uppercase tracking-wider">
+                        <th className="px-4 py-3 text-left">Company</th>
+                        <th className="px-4 py-3 text-left">Contact</th>
+                        <th className="px-4 py-3 text-left">Phone</th>
+                        <th className="px-4 py-3 text-left">Package</th>
+                        <th className="px-4 py-3 text-left">CIDB / BEE</th>
+                        <th className="px-4 py-3 text-left">Provinces</th>
+                        <th className="px-4 py-3 text-left">Status</th>
+                        <th className="px-4 py-3" />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filtered.map((c, i) => {
+                        const p = pkg(c.package);
+                        const displayName = c.first_name
+                          ? `${c.first_name} ${c.last_name ?? ''}`.trim()
+                          : c.name;
+                        return (
+                          <tr
+                            key={c.id}
+                            className={`border-b border-white/5 hover:bg-white/3 transition-colors cursor-pointer ${i % 2 !== 0 ? 'bg-white/[0.02]' : ''}`}
+                            onClick={() => router.push(`/admin/tender-clients/${c.id}`)}
+                          >
+                            <td className="px-4 py-3">
+                              <p className="text-white font-medium">{c.company_name}</p>
+                            </td>
+                            <td className="px-4 py-3">
+                              <p className="text-white/80 text-sm">{displayName}</p>
+                              <p className="text-white/40 text-xs">{c.email}</p>
+                            </td>
+                            <td className="px-4 py-3 text-white/60 text-sm">{c.phone ?? '-'}</td>
+                            <td className="px-4 py-3">
+                              {p && (
+                                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${p.color}`}>
+                                  {p.label}
+                                </span>
+                              )}
+                            </td>
+                            <td className="px-4 py-3 text-white/60 text-sm">
+                              {c.cidb_grade && <span className="mr-2">{c.cidb_grade}</span>}
+                              {c.bee_level  && <span>BEE {c.bee_level}</span>}
+                              {!c.cidb_grade && !c.bee_level && '-'}
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="flex flex-wrap gap-1">
+                                {c.provinces.slice(0, 3).map(pv => (
+                                  <span key={pv} className="px-1.5 py-0.5 bg-white/5 rounded text-xs text-white/60">{pv}</span>
+                                ))}
+                                {c.provinces.length > 3 && (
+                                  <span className="text-xs text-white/40">+{c.provinces.length - 3}</span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className={`px-2 py-0.5 rounded-full text-xs ${c.is_active ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>
+                                {c.is_active ? 'Active' : 'Inactive'}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 text-right">
+                              <ChevronRight size={15} className="text-white/30 ml-auto" />
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Mobile card list */}
+                <div className="md:hidden divide-y divide-white/5">
+                  {filtered.map(c => {
                     const p = pkg(c.package);
+                    const displayName = c.first_name
+                      ? `${c.first_name} ${c.last_name ?? ''}`.trim()
+                      : c.name;
                     return (
-                      <tr
+                      <div
                         key={c.id}
-                        className={`border-b border-white/5 hover:bg-white/3 transition-colors cursor-pointer ${i % 2 === 0 ? '' : 'bg-white/2'}`}
+                        className="p-4 hover:bg-white/3 transition-colors cursor-pointer"
                         onClick={() => router.push(`/admin/tender-clients/${c.id}`)}
                       >
-                        <td className="px-5 py-3">
+                        <div className="flex items-start justify-between gap-2 mb-1">
                           <p className="text-white font-medium">{c.company_name}</p>
-                        </td>
-                        <td className="px-5 py-3">
-                          <p className="text-white/80">{c.name}</p>
-                          <p className="text-white/40 text-xs">{c.email}</p>
-                        </td>
-                        <td className="px-5 py-3">
-                          {p && (
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${p.color}`}>
-                              {p.label}
-                            </span>
-                          )}
-                        </td>
-                        <td className="px-5 py-3 text-white/60">
-                          {c.cidb_grade && <span className="mr-2">{c.cidb_grade}</span>}
-                          {c.bee_level  && <span>BEE {c.bee_level}</span>}
-                          {!c.cidb_grade && !c.bee_level && '-'}
-                        </td>
-                        <td className="px-5 py-3">
-                          <div className="flex flex-wrap gap-1">
-                            {c.provinces.slice(0, 3).map(p => (
-                              <span key={p} className="px-1.5 py-0.5 bg-white/5 rounded text-xs text-white/60">{p}</span>
-                            ))}
-                            {c.provinces.length > 3 && (
-                              <span className="text-xs text-white/40">+{c.provinces.length - 3}</span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-5 py-3">
-                          <span className={`px-2 py-0.5 rounded-full text-xs ${c.is_active ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>
+                          <span className={`px-2 py-0.5 rounded-full text-xs shrink-0 ${c.is_active ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>
                             {c.is_active ? 'Active' : 'Inactive'}
                           </span>
-                        </td>
-                        <td className="px-5 py-3 text-right">
-                          <ChevronRight size={16} className="text-white/30 ml-auto" />
-                        </td>
-                      </tr>
+                        </div>
+                        <p className="text-white/60 text-sm">{displayName}</p>
+                        {c.phone && <p className="text-white/40 text-xs mt-0.5">{c.phone}</p>}
+                        <p className="text-white/40 text-xs">{c.email}</p>
+                        <div className="flex items-center gap-2 mt-2 flex-wrap">
+                          {p && (
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${p.color}`}>{p.label}</span>
+                          )}
+                          {c.cidb_grade && (
+                            <span className="px-1.5 py-0.5 bg-white/5 rounded text-xs text-white/50">{c.cidb_grade}</span>
+                          )}
+                          {c.provinces.slice(0, 3).map(pv => (
+                            <span key={pv} className="px-1.5 py-0.5 bg-white/5 rounded text-xs text-white/50">{pv}</span>
+                          ))}
+                        </div>
+                      </div>
                     );
                   })}
-                </tbody>
-              </table>
+                </div>
+              </>
             )}
           </div>
         </div>
@@ -348,24 +401,59 @@ export default function TenderClientsPage() {
 
             <form onSubmit={submit} className="p-6 space-y-5">
               {/* Contact info */}
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { name: 'company_name', label: 'Company Name *', required: true },
-                  { name: 'name',         label: 'Contact Person *', required: true },
-                  { name: 'email',        label: 'Email *', required: true, type: 'email' },
-                  { name: 'phone',        label: 'Phone' },
-                ].map(f => (
-                  <div key={f.name}>
-                    <label className="block text-white/60 text-xs mb-1">{f.label}</label>
-                    <input
-                      type={f.type ?? 'text'}
-                      required={f.required}
-                      value={(form as any)[f.name]}
-                      onChange={e => setForm(p => ({ ...p, [f.name]: e.target.value }))}
-                      className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-accent"
-                    />
-                  </div>
-                ))}
+              <div>
+                <label className="block text-white/60 text-xs mb-1">Company Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={form.company_name}
+                  onChange={e => setForm(p => ({ ...p, company_name: e.target.value }))}
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-accent"
+                />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-white/60 text-xs mb-1">First Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={form.first_name}
+                    onChange={e => setForm(p => ({ ...p, first_name: e.target.value }))}
+                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-accent"
+                    placeholder="John"
+                  />
+                </div>
+                <div>
+                  <label className="block text-white/60 text-xs mb-1">Last Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={form.last_name}
+                    onChange={e => setForm(p => ({ ...p, last_name: e.target.value }))}
+                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-accent"
+                    placeholder="Doe"
+                  />
+                </div>
+                <div>
+                  <label className="block text-white/60 text-xs mb-1">Email *</label>
+                  <input
+                    type="email"
+                    required
+                    value={form.email}
+                    onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-accent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-white/60 text-xs mb-1">Phone / WhatsApp</label>
+                  <input
+                    type="tel"
+                    value={form.phone}
+                    onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
+                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-accent"
+                    placeholder="+27 60 000 0000"
+                  />
+                </div>
               </div>
 
               {/* Package */}

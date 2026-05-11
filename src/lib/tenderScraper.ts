@@ -10,13 +10,9 @@ import {
   getTenderClients,
   upsertTender,
   createOrUpdateMatch,
-  wasAlreadyNotified,
-  markMatchNotified,
-  logNotification,
   type TenderClient,
   type Tender,
 } from '@/lib/tenderStorage';
-import { sendTenderMatchEmail } from '@/lib/tenderEmail';
 
 // ─── eTenders scraper ────────────────────────────────────────
 
@@ -313,29 +309,13 @@ export async function runTenderScrapeAndMatch(): Promise<ScrapeResult> {
       if (!scored) continue;
 
       try {
-        const match = await createOrUpdateMatch(tender.id, client.id, {
+        await createOrUpdateMatch(tender.id, client.id, {
           match_score: scored.score,
           match_reasons: scored.reasons
         });
         result.matches++;
-
-        // 5. Send email notification if not already notified
-        if (match && !(await wasAlreadyNotified(client.id, tender.id, 'new_match'))) {
-          try {
-            await sendTenderMatchEmail(client, tender, scored.score, scored.reasons);
-            await markMatchNotified(match.id);
-            await logNotification({
-              client_id:         client.id,
-              tender_id:         tender.id,
-              match_id:          match.id,
-              notification_type: 'new_match',
-              sent_to:           client.email,
-            });
-            result.notified++;
-          } catch (emailErr) {
-            result.errors.push(`Email failed for ${client.email}: ${String(emailErr)}`);
-          }
-        }
+        // Emails are NOT sent automatically — admin sends them manually
+        // from the Tender dashboard using the "Send Notifications" button.
       } catch (matchErr) {
         result.errors.push(`Match error ${tender.id}/${client.id}: ${String(matchErr)}`);
       }

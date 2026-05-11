@@ -14,7 +14,9 @@ export type NotifType =
 
 export interface TenderClient {
   id: string;
-  name: string;
+  name: string;       // display name (kept for backwards compat)
+  first_name?: string;
+  last_name?: string;
   company_name: string;
   email: string;
   phone?: string;
@@ -276,6 +278,22 @@ export async function updateMatchStatus(
     .update({ status, ...extras })
     .eq('id', id);
   if (error) throw error;
+}
+
+/** All matches still in 'new' status that haven't had a notification sent yet. */
+export async function getUnnotifiedMatches(): Promise<TenderMatch[]> {
+  const { data, error } = await supabase
+    .from('tender_matches')
+    .select(`
+      *,
+      tender:tenders(*),
+      client:tender_clients(*)
+    `)
+    .eq('status', 'new')
+    .is('notified_at', null)
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  return (data as TenderMatch[]) ?? [];
 }
 
 export async function markMatchNotified(matchId: string): Promise<void> {

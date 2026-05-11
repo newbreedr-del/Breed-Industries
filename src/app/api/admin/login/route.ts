@@ -1,53 +1,41 @@
-import { NextResponse } from 'next/server';
+/**
+ * POST /api/admin/login
+ *
+ * Sends a Supabase magic link to the provided email address.
+ * The link redirects to /auth/callback, which verifies the token
+ * and sets the admin_session cookie if the email is authorised.
+ */
 
-export async function POST(request: Request) {
+import { NextRequest, NextResponse } from 'next/server';
+import { supabase } from '@/lib/supabase';
+
+export const runtime = 'nodejs';
+
+export async function POST(req: NextRequest) {
   try {
-    console.log('Login API called');
-    
-    const body = await request.text();
-    const data = JSON.parse(body);
-    
-    const { username, password } = data;
+    const { email } = await req.json();
 
-    // Validate input
-    if (!username || !password) {
-      return NextResponse.json(
-        { error: 'Username and password are required' },
-        { status: 400 }
-      );
+    if (!email) {
+      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
-    // Simple hardcoded credentials for now
-    const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'breed2025';
+    // Build the callback URL from the incoming request origin
+    const origin = req.headers.get('origin') ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+    const emailRedirectTo = `${origin}/auth/callback`;
 
-    // Verify credentials
-    if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid credentials' },
-        { status: 401 }
-      );
-    }
-
-    // Create session
-    const token = Math.random().toString(36).substring(2) + Date.now().toString(36);
-    
-    const response = NextResponse.json({ success: true });
-    response.cookies.set('admin_session', token, {
-      httpOnly: true,
-      secure: false, // Set to false for local development
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24, // 24 hours
-      path: '/'
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo },
     });
-    
-    return response;
 
-  } catch (error) {
-    console.error('Login error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    if (error) {
+      console.error('Magic link send error:', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error('Login error:', err);
+    return NextResponse.json({ error: 'Failed to send login link' }, { status: 500 });
   }
 }
