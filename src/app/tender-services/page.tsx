@@ -81,7 +81,7 @@ const packages = [
       'Application status tracking & updates',
       'Clarification queries handled by our team',
     ],
-    addons: ['+ R750 per tender document set compiled & submitted'],
+    addons: ['+ From R1,200 per document set (tiered by tender value — see pricing below)'],
     cta: 'Start Applying',
   },
   {
@@ -100,7 +100,7 @@ const packages = [
       'Dedicated account manager',
     ],
     addons: [
-      '+ R2,000 per tender fully managed end-to-end',
+      '+ From R3,000 per tender fully managed (tiered by tender value)',
       '+ R1,500 per site meeting attended',
       'Complex submissions quoted separately',
     ],
@@ -173,8 +173,8 @@ const faqs = [
     a: 'We celebrate with you. On the Full Service package, we assist with the award letter response and contract signing preparation. Any consulting beyond that is quoted separately.',
   },
   {
-    q: 'Does the R800 per-application charge apply to all tenders or just selected ones?',
-    a: 'It applies per tender where we compile and submit the full bid document. On the Tender Watch package, we only notify — no application charge. On Apply and Full, you choose which matched tenders to apply for, and each application carries the R800 fee.',
+    q: 'How does the per-document-set fee work on Apply and Full?',
+    a: 'The fee applies per tender where we compile and submit the full bid document. On Tender Watch we only notify — no application charge. On Apply and Full, you choose which matched tenders to apply for and the per-document fee is tiered by tender value: R1,200 for tenders under R500k, R2,000 for R500k–R2M, and quote-based above R2M.',
   },
   {
     q: 'Do you guarantee tender wins?',

@@ -388,7 +388,7 @@ export default function ServicesPage() {
                 We don't just find the tenders, we compile and submit the full application on your behalf. Everything in Watch, plus we do the paperwork.
               </p>
               <ul className="space-y-2 mb-6">
-                {['Everything in Tender Watch', 'Full tender document compilation', 'Application submission on your behalf', 'Application tracking + updates', '+ R750 per tender document set compiled & submitted'].map(f => (
+                {['Everything in Tender Watch', 'Full tender document compilation', 'Application submission on your behalf', 'Application tracking + updates', '+ From R1,200 per document set (tiered by tender value)'].map(f => (
                   <li key={f} className="flex items-start gap-2 text-sm text-white/70">
                     <Check size={14} className="text-accent mt-0.5 shrink-0" />
                     {f}
@@ -414,7 +414,7 @@ export default function ServicesPage() {
                   'Site / briefing meeting attendance',
                   'Tender clarification responses',
                   'Award follow-up & negotiations',
-                  '+ R2,000 per tender fully managed end-to-end',
+                  '+ From R3,000 per tender fully managed (tiered by value)',
                   'Site / briefing meeting attendance included',
                 ].map(f => (
                   <li key={f} className="flex items-start gap-2 text-sm text-white/70">

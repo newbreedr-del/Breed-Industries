@@ -52,8 +52,8 @@ const businessProfileOptions = [
 const tenderOptions = [
   { id: 'tender-ready', name: 'Tender Ready', price: 3500, pricingType: 'one-time', icon: <Award size={16} />, description: 'Get your business fully registered and compliant for government tenders: CSD, CIDB, BBBEE, Tax Pin, and a professional Company Profile. Once-off setup.' },
   { id: 'tender-watch', name: 'Tender Watch', price: 350, pricingType: 'monthly', icon: <Award size={16} />, description: 'We scrape government portals daily and send you matching tenders by email. Smart matching based on your industry, province, and CIDB grade. Includes monthly digest.' },
-  { id: 'tender-apply', name: 'Tender Apply', price: 950, pricingType: 'monthly', icon: <Award size={16} />, description: 'Everything in Tender Watch plus we compile all bid documents and submit on your behalf. R750 per tender document set compiled & submitted. You focus on running your business, we handle the paperwork.' },
-  { id: 'tender-full', name: 'Tender Full Service', price: 2550, pricingType: 'monthly', icon: <Award size={16} />, description: 'Our most comprehensive package: Watch + full bid compilation + submission + site meeting attendance + award follow-up. R2,000 per tender fully managed end-to-end. Maximum chances of winning.' },
+  { id: 'tender-apply', name: 'Tender Apply', price: 950, pricingType: 'monthly', icon: <Award size={16} />, description: 'Everything in Tender Watch plus we compile all bid documents and submit on your behalf. Per-document-set fee tiered by tender value: R1,200 (under R500k), R2,000 (R500k–R2M), quote-based above R2M. You focus on running your business, we handle the paperwork.' },
+  { id: 'tender-full', name: 'Tender Full Service', price: 2550, pricingType: 'monthly', icon: <Award size={16} />, description: 'Our most comprehensive package: Watch + full bid compilation + submission + site meeting attendance + award follow-up. Per-tender managed fee tiered by value: R3,000 (under R500k), R5,000 (R500k–R2M), quote-based above R2M. Maximum chances of winning.' },
 ];
 
 const builderSteps = [
