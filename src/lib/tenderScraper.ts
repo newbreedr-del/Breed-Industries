@@ -391,7 +391,7 @@ async function scrapeWpApi(source: Source): Promise<ScrapedTender[]> {
         'Accept': 'application/json',
         'User-Agent': 'Mozilla/5.0 (compatible; BreedTenderBot/1.0)',
       },
-      signal: AbortSignal.timeout(8_000),
+      signal: AbortSignal.timeout(5_000),
     });
     if (!res.ok) return [];
 
@@ -459,7 +459,7 @@ async function scrapeHtmlScan(source: Source): Promise<ScrapedTender[]> {
         'Accept': 'text/html,application/xhtml+xml',
         'User-Agent': 'Mozilla/5.0 (compatible; BreedTenderBot/1.0)',
       },
-      signal: AbortSignal.timeout(8_000),
+      signal: AbortSignal.timeout(5_000),
     });
     if (!res.ok) {
       console.warn(`[${source.label}] HTTP ${res.status}`);
@@ -467,7 +467,7 @@ async function scrapeHtmlScan(source: Source): Promise<ScrapedTender[]> {
     }
 
     const html = await res.text();
-    const text = stripHtml(html);
+    const text = stripHtml(html).slice(0, 500000); // Limit text size to prevent memory issues
 
     const blocks: string[] = [];
     const usedRanges: [number, number][] = [];
@@ -548,7 +548,7 @@ async function scrapeRss(source: Source): Promise<ScrapedTender[]> {
         'Accept': 'application/rss+xml, application/atom+xml, text/xml, */*',
         'User-Agent': 'Mozilla/5.0 (compatible; BreedTenderBot/1.0)',
       },
-      signal: AbortSignal.timeout(6_000),
+      signal: AbortSignal.timeout(4_000),
     });
     if (!res.ok) return [];
 
@@ -603,7 +603,7 @@ function getXmlField(xml: string, field: string): string | null {
 
 export async function scrapeAllSources(): Promise<ScrapedTender[]> {
   const results: ScrapedTender[] = [];
-  const BATCH = 12; // Each source has an 8s hard timeout — 12 concurrent is safe
+  const BATCH = 4; // Reduced to prevent 504 timeouts in production
   const sourceLog: Record<string, number> = {};
 
   for (let i = 0; i < SOURCES.length; i += BATCH) {

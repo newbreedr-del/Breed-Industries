@@ -11,8 +11,8 @@
  *
  * Package tiers (from poster):
  *  watch  R350/mo  — matching + alerts + digest
- *  apply  R950/mo + R750/doc set — watch + doc compilation + submission
- *  full   R2,550/mo + R2,000/tender — apply + site meetings + full managed
+ *  apply  R950/mo + from R1,200/doc set (R1,200 <R500k / R2,000 R500k-R2M / quote >R2M)
+ *  full   R2,550/mo + from R3,000/tender  (R3,000 <R500k / R5,000 R500k-R2M / quote >R2M)
  *  ready  R3,500 once-off — registration docs only
  */
 
@@ -84,8 +84,8 @@ const APP_STATUS_COLORS: Record<string, string> = {
 const PACKAGES: Record<string, { label: string; color: string; price: string }> = {
   ready: { label: 'Tender Ready',  color: 'text-white',      price: 'R3,500 once-off' },
   watch: { label: 'Tender Watch',  color: 'text-purple-400', price: 'R350/month' },
-  apply: { label: 'Tender Apply',  color: 'text-blue-400',   price: 'R950/month + R750/doc set' },
-  full:  { label: 'Full Service',  color: 'text-accent',     price: 'R2,550/month + R2,000/tender' },
+  apply: { label: 'Tender Apply',  color: 'text-blue-400',   price: 'R950/month + from R1,200/doc set' },
+  full:  { label: 'Full Service',  color: 'text-accent',     price: 'R2,550/month + from R3,000/tender' },
 };
 
 // Docs required for a full application (Apply + Full packages)
