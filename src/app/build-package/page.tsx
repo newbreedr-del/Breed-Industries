@@ -5,7 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
-import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, CheckCircle2, Download, ArrowRight, Loader2, Send, Award } from 'lucide-react';
+import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, CheckCircle2, Download, ArrowRight, Loader2, Send, Award, Bot } from 'lucide-react';
 
 const complianceOptions = [
   { id: 'cipc', name: 'CIPC Registration', price: 550, pricingType: 'one-time', icon: <Shield size={16} />, description: 'Complete company registration with CIPC including name reservation and registration certificate' },
@@ -56,6 +56,16 @@ const tenderOptions = [
   { id: 'tender-full', name: 'Tender Full Service', price: 2550, pricingType: 'monthly', icon: <Award size={16} />, description: 'Our most comprehensive package: Watch + full bid compilation + submission + site meeting attendance + award follow-up. Per-tender managed fee tiered by value: R3,000 (under R500k), R5,000 (R500k–R2M), quote-based above R2M. Maximum chances of winning.' },
 ];
 
+const platformOptions = [
+  { id: 'platform-starter',   name: 'AI Platform — Starter',        price: 9500,  pricingType: 'one-time', icon: <Sparkles size={16} />, description: 'WhatsApp Business API integration, AI-powered conversation inbox, basic AI agent, contact management, and analytics dashboard. White-label branded to your business.' },
+  { id: 'platform-pro',       name: 'AI Platform — Pro',             price: 18500, pricingType: 'one-time', icon: <Sparkles size={16} />, description: 'Everything in Starter plus visual automation flow builder, knowledge base with AI document indexing, message templates, team assignment, and advanced analytics.' },
+  { id: 'platform-mobile',    name: 'Mobile App (iOS & Android)',    price: 15000, pricingType: 'one-time', icon: <Sparkles size={16} />, description: 'React Native cross-platform mobile app for iOS and Android. Mirrors the platform inbox, real-time push notifications, reply to conversations, and contact view.' },
+  { id: 'platform-app-store', name: 'App Store Submission (Both)',   price: 2500,  pricingType: 'one-time', icon: <Sparkles size={16} />, description: 'Full App Store and Google Play submission: developer account setup, store listing, screenshots, descriptions, and approval management for both platforms.' },
+  { id: 'platform-hosting',   name: 'Platform Hosting',              price: 1500,  pricingType: 'monthly',  icon: <Sparkles size={16} />, description: 'Monthly infrastructure hosting on Railway. Covers server uptime, database backups, SSL, and uptime monitoring. Required for all deployed platforms.' },
+  { id: 'platform-support',   name: 'Platform Support & Updates',    price: 2500,  pricingType: 'monthly',  icon: <Sparkles size={16} />, description: 'Hosting plus proactive maintenance: bug fixes, dependency updates, WhatsApp API changes, and minor feature improvements. Response within 48 hours.' },
+  { id: 'platform-managed',   name: 'Platform Fully Managed',        price: 4500,  pricingType: 'monthly',  icon: <Sparkles size={16} />, description: 'Everything in Support plus priority response (same day), AI model tuning, new feature development (2 hrs/month included), and monthly performance reporting.' },
+];
+
 const builderSteps = [
   {
     id: 'compliance',
@@ -96,6 +106,14 @@ const builderSteps = [
     options: tenderOptions,
     icon: <Award className="w-5 h-5" />,
     shortLabel: 'Tenders',
+  },
+  {
+    id: 'platform',
+    title: 'AI platforms & automation',
+    description: 'Deploy a white-label AI-powered WhatsApp engagement platform for your business — with optional mobile app for iOS and Android.',
+    options: platformOptions,
+    icon: <Bot className="w-5 h-5" />,
+    shortLabel: 'AI Platform',
   },
 ];
 

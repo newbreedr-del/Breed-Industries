@@ -5,7 +5,7 @@ import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
 import {
   Shield, Briefcase, Layers,
-  Check, ChevronRight, ArrowRight, TrendingUp
+  Check, ChevronRight, ArrowRight, TrendingUp, Bot
 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -79,6 +79,21 @@ const serviceCategories = [
       { name: 'E-commerce Solutions', price: 'From R8,000' },
       { name: 'SEO & Digital Marketing', price: 'From R2,500/mo' },
       { name: 'Social Media Management', price: 'From R3,500/mo' }
+    ]
+  },
+  {
+    id: 'ai-platforms',
+    title: 'AI Platforms & Automation',
+    icon: <Bot className="w-8 h-8" />,
+    description: 'White-label AI-powered WhatsApp engagement platforms with automated workflows, AI agents, and optional mobile apps for iOS and Android.',
+    services: [
+      { name: 'AI Platform — Starter', price: 'R9,500 once-off' },
+      { name: 'AI Platform — Pro', price: 'R18,500 once-off' },
+      { name: 'Mobile App (iOS & Android)', price: 'From R15,000' },
+      { name: 'App Store Submission (Both Stores)', price: 'R2,500 once-off' },
+      { name: 'Platform Hosting', price: 'R1,500/mo' },
+      { name: 'Platform Support & Updates', price: 'R2,500/mo' },
+      { name: 'Platform Fully Managed', price: 'R4,500/mo' }
     ]
   }
 ];

@@ -43,6 +43,18 @@ const tenderServices = [
   { id: 'tender-full',    category: 'Tender Services', name: 'Tender Full Service',   basePrice: 'R2,550',  pricingType: 'monthly'  as const },
 ];
 
+const platformServices = [
+  // ── Setup / build (once-off) ──────────────────────────────────────────
+  { id: 'platform-starter',   category: 'AI Platforms & Automation', name: 'AI Platform — Starter',          basePrice: 'R9,500',   pricingType: 'one-time' as const },
+  { id: 'platform-pro',       category: 'AI Platforms & Automation', name: 'AI Platform — Pro',              basePrice: 'R18,500',  pricingType: 'one-time' as const },
+  { id: 'platform-mobile',    category: 'AI Platforms & Automation', name: 'Mobile App (iOS & Android)',     basePrice: 'R15,000',  pricingType: 'one-time' as const },
+  { id: 'platform-app-store', category: 'AI Platforms & Automation', name: 'App Store Submission (Both)',    basePrice: 'R2,500',   pricingType: 'one-time' as const },
+  // ── Monthly maintenance ───────────────────────────────────────────────
+  { id: 'platform-hosting',   category: 'AI Platforms & Automation', name: 'Platform Hosting',               basePrice: 'R1,500',   pricingType: 'monthly'  as const },
+  { id: 'platform-support',   category: 'AI Platforms & Automation', name: 'Platform Support & Updates',     basePrice: 'R2,500',   pricingType: 'monthly'  as const },
+  { id: 'platform-managed',   category: 'AI Platforms & Automation', name: 'Platform Fully Managed',         basePrice: 'R4,500',   pricingType: 'monthly'  as const },
+];
+
 // ── Service picker ────────────────────────────────────────────────────────────
 
 interface ServicePickerProps {
@@ -72,7 +84,7 @@ function ServicePicker({ onSelect }: ServicePickerProps) {
       basePrice: s.basePrice ?? '',
       pricingType: undefined as 'one-time' | 'monthly' | undefined,
     }));
-    return [...mapped, ...tenderServices];
+    return [...mapped, ...tenderServices, ...platformServices];
   }, []);
 
   // Group by category
