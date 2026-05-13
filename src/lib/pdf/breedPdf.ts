@@ -1445,17 +1445,44 @@ export function generateInvoicePDF(data: InvoicePDFData): Buffer {
     setFont('normal', 8.5);
     doc.setTextColor(...DARK);
     doc.text(item.quantity.toString(), PAGE_W - MARGIN - 52, y + (rowH / 2) + 1.5, { align: 'center' });
-    doc.text(
-      fmt(item.rate) + (item.pricingType === 'monthly' ? '/mo' : ''),
-      PAGE_W - MARGIN - 32, y + (rowH / 2) + 1.5, { align: 'center' }
-    );
+    // Rate column: never append /mo — the item name already says "(Monthly)" and the
+    // suffix causes text collision with the Amount column in narrow column widths.
+    doc.text(fmt(item.rate), PAGE_W - MARGIN - 32, y + (rowH / 2) + 1.5, { align: 'center' });
     setFont('bold', 8.5);
+    // Amount column: append /mo only for monthly items so the total is clear.
     doc.text(
       fmt(item.amount) + (item.pricingType === 'monthly' ? '/mo' : ''),
       PAGE_W - MARGIN - 4, y + (rowH / 2) + 1.5, { align: 'right' }
     );
     y += rowH;
   });
+
+  // ── Page-break guard: totals + banking must all fit together ─────────────
+  {
+    const hasDeposit  = data.deposit > 0;
+    const hasMonthly  = data.monthlyTotal > 0;
+    const neededH =
+      8 +                                            // gap after items
+      (data.oneTimeTotal > 0 ? 7 : 0) +             // one-time subtotal line
+      (hasMonthly ? 7 : 0) +                        // monthly line
+      (hasDeposit ? 14 : 0) +                       // deposit + balance lines
+      2 + 14 + 18 +                                 // gap + total bar + y advance
+      (hasMonthly ? 22 : 0) +                       // monthly note callout
+      10 +                                          // VAT note
+      64 + 6;                                       // banking block + reference text
+
+    if (y + neededH > FOOTER_Y) {
+      doc.addPage();
+      doc.setFillColor(...NAVY);
+      doc.rect(0, 0, PAGE_W, 14, 'F');
+      doc.setFillColor(...ORANGE);
+      doc.rect(0, 14, PAGE_W, 2, 'F');
+      setFont('bold', 9);
+      doc.setTextColor(...WHITE);
+      doc.text('BREED INDUSTRIES — INVOICE CONTINUED', MARGIN, 10);
+      y = 22;
+    }
+  }
 
   // ── Totals ────────────────────────────────────────────────────────────────
   y += 8;
