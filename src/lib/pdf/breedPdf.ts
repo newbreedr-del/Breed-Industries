@@ -661,6 +661,39 @@ export function generateQuotePDF(data: QuoteData): Buffer {
   // ── Totals ────────────────────────────────────────────────────────────────
   y += 6;
 
+  // Page-break guard: calculate everything that follows and add a new page if needed
+  {
+    const hasDeposit = data.requireDeposit && oneTimeTotal > 0;
+    const neededH =
+      (oneTimeTotal > 0 ? 7 : 0) +
+      (monthlyTotal > 0 ? 7 : 0) +
+      (hasDeposit ? 13 : 0) +
+      4 + 14 +                       // gap + total bar
+      (monthlyTotal > 0 ? 18 : 0) +  // monthly subscription note
+      (data.notes ? 25 : 0) +        // optional notes block estimate
+      6 + 10 +                       // VAT note gap + height
+      4 + 44 + 4;                    // banking block gap + height + bottom margin
+
+    if (y + neededH > FOOTER_Y) {
+      doc.addPage();
+      // Compact page header (matches page 2+ style)
+      doc.setFillColor(...NAVY);
+      doc.rect(0, 0, PAGE_W, 22, 'F');
+      if (logoBase64) {
+        try { doc.addImage(logoBase64, 'PNG', MARGIN, 3, 14, 14); } catch { /* skip */ }
+      }
+      setFont('bold', 11);
+      doc.setTextColor(...WHITE);
+      doc.text('BREED', MARGIN + 17, 12);
+      setFont('normal', 6);
+      doc.setTextColor(...ORANGE);
+      doc.text('INDUSTRIES', MARGIN + 17, 17);
+      doc.setFillColor(...ORANGE);
+      doc.rect(0, 22, PAGE_W, 2, 'F');
+      y = 32;
+    }
+  }
+
   if (oneTimeTotal > 0) {
     setFont('bold', 9);
     doc.setTextColor(...MUTED);
@@ -742,10 +775,9 @@ export function generateQuotePDF(data: QuoteData): Buffer {
   y += 10;
 
   // ── Payment + Banking two-column block ────────────────────────────────────
-  // This block is designed to always fit above the footer (283mm) regardless
-  // of where y currently sits. If y is too low we push straight to bottom area.
+  // The page-break guard above guarantees there is room below y for this block.
   const blockH = 44;
-  const blockY = Math.min(y, FOOTER_Y - blockH - 4); // never overlap footer
+  const blockY = y; // safe: page break was taken if needed
   const halfW  = (CONTENT_W - 6) / 2;
 
   doc.setFillColor(...OFFWHITE);
