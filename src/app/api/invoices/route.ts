@@ -63,8 +63,9 @@ export async function POST(request: NextRequest) {
     const requireDeposit = body.requireDeposit !== false; // default true
     const deposit = requireDeposit ? oneTimeTotal * 0.5 : 0;
     const balance = oneTimeTotal - deposit;
-    // Total amount due now = deposit (or full one-time) + first month of subscription
-    const totalAmount = (requireDeposit ? deposit : oneTimeTotal) + monthlyTotal;
+    // Total amount due now = deposit (or full one-time total) only.
+    // Monthly subscriptions are invoiced separately after project completion — never included here.
+    const totalAmount = requireDeposit ? deposit : oneTimeTotal;
 
     // Generate invoice number
     const invoiceNumber = await generateInvoiceNumber();
