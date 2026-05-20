@@ -77,13 +77,16 @@ export const scopeDetails: Record<string, ScopeDetail> = {
       'Proof of business address',
     ],
   },
-  'COID Registration / Letter of Good Standing': {
-    timeline: '3 – 7 Business Days',
+  'COIDA Registration & Assessment': {
+    timeline: '5 – 10 Business Days',
     clientRequirements: [
-      'CIPC registration documents',
-      'Estimated annual payroll amount',
-      'Nature of business activities',
-      'Number of employees',
+      'CIPC registration documents (COR 14.3 or COR 15.3)',
+      'Annual payroll / wage bill (total gross earnings including overtime, bonuses, allowances)',
+      'Employee schedule (names, ID numbers, job titles, monthly earnings)',
+      'Nature of business / industry classification (SIC code if known)',
+      'Number of employees (permanent, temporary, and contract workers)',
+      'Director / owner ID copies',
+      'Previous COIDA documentation (if renewing or updating)',
     ],
   },
   'UIF Registration & Compliance Letter': {

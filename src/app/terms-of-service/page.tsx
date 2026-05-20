@@ -50,7 +50,7 @@ export default function TermsOfServicePage() {
                 {[
                   {
                     title: 'Business Setup and Compliance',
-                    body: 'Company registration (CIPC), tax compliance (SARS), B-BBEE certification, CSD registration, COID and Letters of Good Standing.'
+                    body: 'Company registration (CIPC), tax compliance (SARS), B-BBEE certification, CSD registration, COIDA registration and Letters of Good Standing.'
                   },
                   {
                     title: 'Branding and Identity',

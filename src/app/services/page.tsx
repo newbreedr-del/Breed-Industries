@@ -33,7 +33,7 @@ const serviceCategories = [
       { name: 'Tax Compliance (SARS)', price: 'From R850' },
       { name: 'BEE Certification', price: 'From R250' },
       { name: 'CSD Registration', price: 'R450' },
-      { name: 'COID / Letter of Good Standing', price: 'From R850' }
+      { name: 'COIDA Registration & Assessment', price: 'R2,490' }
     ]
   },
   {

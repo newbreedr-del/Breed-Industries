@@ -280,18 +280,21 @@ export const serviceDefinitions: ServiceDefinition[] = [
     additionalInfo: 'We assist with application preparation and booking'
   },
   {
-    id: 'coid-registration',
+    id: 'coida-registration',
     category: 'Business Setup & Compliance',
-    name: 'COID Registration / Letter of Good Standing',
-    description: 'Workplace Compensation Fund registration and annual letter of good standing for compliance',
-    basePrice: 'From R850',
+    name: 'COIDA Registration & Assessment',
+    description: 'Full COIDA (Compensation for Occupational Injuries and Diseases Act) registration, assessment calculation, and Letter of Good Standing',
+    basePrice: 'R2,490',
     requiredDocuments: [
       { name: 'CIPC Registration Documents', description: 'Company registration certificate (COR 14.3 or COR 15.3)', required: true, acceptedFormats: ['.pdf'] },
-      { name: 'Payroll Estimate', description: 'Estimated annual payroll amount or current payroll records', required: true, acceptedFormats: ['.pdf', '.xlsx', '.xls', '.doc', '.docx'] },
-      { name: 'Business Activities Description', description: 'Nature of business activities and job descriptions of employees', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
-      { name: 'Employee Count', description: 'Number of employees and their roles', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] }
+      { name: 'Annual Payroll / Wage Bill', description: 'Total annual earnings of all employees (gross salaries, wages, overtime, bonuses, and allowances)', required: true, acceptedFormats: ['.pdf', '.xlsx', '.xls', '.doc', '.docx'] },
+      { name: 'Employee Schedule', description: 'Full list of employees with names, ID numbers, job titles, and individual monthly earnings', required: true, acceptedFormats: ['.pdf', '.xlsx', '.xls', '.doc', '.docx'] },
+      { name: 'Nature of Business / Industry Classification', description: 'Description of business activities and industry sector (SIC code if known) — used to determine COIDA tariff class', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+      { name: 'Number of Employees', description: 'Total headcount including permanent, temporary, and contract workers', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+      { name: 'Previous COIDA Documentation', description: 'Previous Letter of Good Standing or assessment notices (if renewing or updating)', required: false, acceptedFormats: ['.pdf'] },
+      { name: 'Director / Owner ID Copies', description: 'Certified ID copies of all directors or business owner', required: true, acceptedFormats: ['.pdf', '.jpg', '.png'] }
     ],
-    additionalInfo: 'Letter of Good Standing must be renewed annually'
+    additionalInfo: 'COIDA assessment is calculated based on your industry tariff rate multiplied by your annual wage bill. Letter of Good Standing must be renewed annually. Required for compliance, tenders, and workplace injury cover.'
   },
   {
     id: 'uif-registration',

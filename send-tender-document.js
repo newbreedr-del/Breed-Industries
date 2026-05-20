@@ -1,0 +1,105 @@
+// Email script to send Tender Services Agreement & Intake Form to client
+const fs = require('fs');
+const path = require('path');
+
+// Email content for client
+const emailContent = {
+  to: 'dladlakhalid@gmail.com',
+  from: 'Breed Industries <info@thebreed.co.za>',
+  subject: 'Breed Industries - Tender Services Agreement & Intake Form',
+  html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breed Industries - Tender Services Document</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #0a0a0a; font-family: Arial, sans-serif; color: #ffffff;">
+  
+  <div style="max-width: 600px; margin: 0 auto; background-color: #111111; border-radius: 10px; overflow: hidden;">
+    
+    <!-- Header -->
+    <div style="background-color: #c8a96e; padding: 30px; text-align: center;">
+      <h1 style="margin: 0; color: #111111; font-size: 24px; font-weight: bold;">Breed Industries</h1>
+      <p style="margin: 10px 0 0; color: #333333; font-size: 16px;">Tender Services Agreement & Intake Form</p>
+    </div>
+    
+    <!-- Main Content -->
+    <div style="padding: 30px;">
+      <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+        Dear Valued Client,
+      </p>
+      
+      <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+        Thank you for your interest in our tender services. Please find attached the <strong>Tender Services Agreement & Intake Form</strong> for your review and completion.
+      </p>
+      
+      <div style="background-color: #1a1a1a; border-left: 4px solid #c8a96e; padding: 20px; margin: 20px 0; border-radius: 0 8px 8px 0;">
+        <h3 style="margin: 0 0 15px 0; color: #c8a96e; font-size: 18px;">Document Includes:</h3>
+        <ul style="margin: 0; padding-left: 20px; color: #cccccc; font-size: 15px; line-height: 1.8;">
+          <li style="margin-bottom: 8px;">Tender Services Agreement Terms & Conditions</li>
+          <li style="margin-bottom: 8px;">Client Intake Form for Service Onboarding</li>
+          <li style="margin-bottom: 8px;">Package Options & Pricing Structure</li>
+          <li style="margin-bottom: 8px;">Service Level Agreement Details</li>
+        </ul>
+      </div>
+      
+      <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+        Please complete the intake form and return it to us at your earliest convenience. This will help us understand your specific requirements and tailor our services to meet your needs.
+      </p>
+      
+      <h3 style="color: #c8a96e; margin-bottom: 15px; font-size: 18px;">Next Steps:</h3>
+      <ol style="margin: 0 0 20px 20px; color: #cccccc; font-size: 15px; line-height: 1.8;">
+        <li style="margin-bottom: 10px;">Review the agreement terms</li>
+        <li style="margin-bottom: 10px;">Complete the intake form with your details</li>
+        <li style="margin-bottom: 10px;">Return the completed documents to us</li>
+        <li style="margin-bottom: 10px;">We'll schedule an onboarding call to finalize your service package</li>
+      </ol>
+      
+      <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+        Should you have any questions or need clarification on any aspect of the agreement, please don't hesitate to contact us.
+      </p>
+      
+      <!-- Contact Information -->
+      <div style="background-color: #1a1a1a; padding: 20px; border-radius: 8px; margin-top: 30px;">
+        <h3 style="margin: 0 0 15px 0; color: #c8a96e; font-size: 18px;">Contact Information</h3>
+        <p style="margin: 5px 0; color: #cccccc; font-size: 15px;">
+          <strong>Email:</strong> <a href="mailto:info@thebreed.co.za" style="color: #c8a96e; text-decoration: none;">info@thebreed.co.za</a>
+        </p>
+        <p style="margin: 5px 0; color: #cccccc; font-size: 15px;">
+          <strong>Website:</strong> <a href="https://www.thebreed.co.za" style="color: #c8a96e; text-decoration: none;">www.thebreed.co.za</a>
+        </p>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <div style="background-color: #0a0a0a; padding: 20px; text-align: center; border-top: 1px solid #2a2a2a;">
+      <p style="margin: 0; color: #666666; font-size: 12px;">
+        Breed Industries (PTY) LTD | Professional Tender Services | South Africa
+      </p>
+    </div>
+  </div>
+</body>
+</html>
+  `,
+  attachments: [
+    {
+      filename: 'Breed Industries — Tender Services Agreement & Intake Form.pdf',
+      path: 'C:\\Users\\newbr\\Documents\\BREED INDUSTRIES DOCUMENTS\\Tender Services\\Breed Industries — Tender Services Agreement & Intake Form.pdf'
+    }
+  ]
+};
+
+console.log('Email prepared for:', emailContent.to);
+console.log('Subject:', emailContent.subject);
+console.log('Attachment:', emailContent.attachments[0].filename);
+console.log('\nTo send this email, you can use:');
+console.log('1. Your email client (attach the PDF manually)');
+console.log('2. SendGrid API with the above HTML content');
+console.log('3. Any email service that supports HTML emails and attachments');
+
+// Save email content to file for easy copying
+fs.writeFileSync('tender-document-email.html', emailContent.html);
+console.log('\nEmail HTML saved to: tender-document-email.html');
+console.log('PDF location:', emailContent.attachments[0].path);

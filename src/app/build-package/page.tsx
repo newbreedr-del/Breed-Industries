@@ -12,7 +12,7 @@ const complianceOptions = [
   { id: 'tax', name: 'Tax Compliance', price: 850, pricingType: 'one-time', icon: <FileText size={16} />, description: 'SARS tax registration, income tax number, and initial tax compliance setup' },
   { id: 'bee', name: 'BEE Certification', price: 250, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Basic BEE verification certificate and scorecard for procurement opportunities' },
   { id: 'csd', name: 'CSD Registration', price: 450, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Central Supplier Database registration for government tender opportunities. Required documents: CIPC registration certificate, tax clearance, BEE certificate, banking details, and director ID copies' },
-  { id: 'coid', name: 'COID Registration / Letter of Good Standing', price: 850, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Workplace Compensation Fund registration and annual letter of good standing' },
+  { id: 'coida', name: 'COIDA Registration & Assessment', price: 2490, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Full COIDA registration, assessment calculation, and Letter of Good Standing — covers workplace injury compensation compliance' },
   { id: 'uif', name: 'UIF Registration & Compliance Letter', price: 650, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Unemployment Insurance Fund registration and compliance documentation' },
   { id: 'annual', name: 'CIPC Annual Return', price: 450, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Annual CIPC return filing to maintain company compliance and good standing' },
 ];
@@ -159,7 +159,7 @@ const clientRequirementsMap: Record<string, string[]> = {
   'Tax Compliance': ['CIPC registration certificate', 'Certified ID copies of all directors', 'Proof of business address', 'Banking details confirmation letter'],
   'BEE Certification': ['Latest financial statements or management accounts', 'Signed BEE declaration (EME/QSE affidavit)', 'Payroll records (if applicable)', 'Skills development records'],
   'CSD Registration': ['CIPC registration certificate', 'Tax clearance certificate', 'BEE certificate or affidavit', 'Banking details and bank letter', 'Certified ID copies of all directors', 'Proof of business address'],
-  'COID Registration / Letter of Good Standing': ['CIPC registration documents', 'Estimated annual payroll amount', 'Nature of business activities', 'Number of employees'],
+  'COIDA Registration & Assessment': ['CIPC registration documents', 'Annual payroll / wage bill (total gross earnings of all employees)', 'Employee schedule (names, ID numbers, job titles, monthly earnings)', 'Nature of business / industry classification (SIC code if known)', 'Number of employees (permanent, temporary, and contract)', 'Director / owner ID copies', 'Previous COIDA documentation (if renewing)'],
   'UIF Registration & Compliance Letter': ['CIPC registration documents', 'Employee details (ID numbers, start dates)', 'Monthly payroll figures', 'Employer banking details'],
   'CIPC Annual Return': ['CIPC customer code and password', 'Current registered office address confirmation', 'Director changes (if any)', 'Annual return fee (paid to CIPC)'],
   'Basic Logo Design': ['Brand name and tagline (if applicable)', 'Preferred colours and style references', 'Industry and target audience description', 'Any existing brand assets'],
