@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-import sgMail from '@sendgrid/mail';
+import { Resend } from 'resend';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
+const resend = new Resend(process.env.RESEND_API_KEY || '');
 
 export async function POST(req: NextRequest) {
   try {
@@ -53,13 +53,10 @@ export async function POST(req: NextRequest) {
 
     if (otpError) throw otpError;
 
-    // Send OTP via email
-    const msg = {
+    // Send OTP via Resend
+    const { data, error: emailError } = await resend.emails.send({
+      from: 'Breed Industries <info@thebreed.co.za>',
       to: email.toLowerCase().trim(),
-      from: {
-        email: 'info@thebreed.co.za',
-        name: 'Breed Industries',
-      },
       subject: 'Your Secure Invite Verification Code',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
@@ -86,9 +83,9 @@ export async function POST(req: NextRequest) {
           </p>
         </div>
       `,
-    };
+    });
 
-    await sgMail.send(msg);
+    if (emailError) throw emailError;
 
     return NextResponse.json({ success: true, message: 'OTP sent to your email' });
   } catch (err: any) {

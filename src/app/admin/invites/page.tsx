@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Plus, Send, Trash2, Copy, Check, Loader2, Shield, Eye, Clock, Ban, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Plus, Send, Trash2, Copy, Check, Loader2, Shield, Eye, Clock, Ban, RefreshCw, Users, Upload } from 'lucide-react';
 
 interface Invite {
   id: string;
@@ -24,8 +24,11 @@ export default function AdminInvitesPage() {
   const [invites, setInvites] = useState<Invite[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
+  const [showBulk, setShowBulk] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [bulkCreating, setBulkCreating] = useState(false);
+  const [bulkResults, setBulkResults] = useState<any>(null);
 
   // Form state
   const [form, setForm] = useState({
@@ -36,6 +39,17 @@ export default function AdminInvitesPage() {
     max_views: 10,
     content_title: '',
     content_message: '',
+  });
+
+  // Bulk form state
+  const [bulkForm, setBulkForm] = useState({
+    recipients_text: '', // CSV format: email,name
+    invite_type: 'document',
+    expires_hours: 72,
+    max_views: 10,
+    content_title: '',
+    content_message: '',
+    send_emails: true,
   });
 
   const fetchInvites = async () => {
@@ -120,6 +134,66 @@ export default function AdminInvitesPage() {
     }
   };
 
+  const handleBulkCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBulkCreating(true);
+    setBulkResults(null);
+
+    try {
+      // Parse CSV text into recipients array
+      const lines = bulkForm.recipients_text.trim().split('\n').filter(line => line.trim());
+      const recipients = lines.map(line => {
+        const parts = line.split(',').map(p => p.trim());
+        return {
+          email: parts[0],
+          name: parts[1] || null,
+        };
+      }).filter(r => r.email);
+
+      if (recipients.length === 0) {
+        alert('Please add at least one email address');
+        setBulkCreating(false);
+        return;
+      }
+
+      const res = await fetch('/api/invites/bulk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          recipients,
+          invite_type: bulkForm.invite_type,
+          expires_hours: bulkForm.expires_hours,
+          max_views: bulkForm.max_views,
+          content_title: bulkForm.content_title,
+          content_message: bulkForm.content_message,
+          send_emails: bulkForm.send_emails,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setBulkResults(data);
+        fetchInvites();
+        if (data.created === recipients.length) {
+          setShowBulk(false);
+          setBulkForm({
+            recipients_text: '',
+            invite_type: 'document',
+            expires_hours: 72,
+            max_views: 10,
+            content_title: '',
+            content_message: '',
+            send_emails: true,
+          });
+        }
+      }
+    } catch (err) {
+      console.error('Bulk create failed:', err);
+    } finally {
+      setBulkCreating(false);
+    }
+  };
+
   const copyLink = (token: string, id: string) => {
     const url = `${window.location.origin}/invite/${token}`;
     navigator.clipboard.writeText(url);
@@ -160,6 +234,13 @@ export default function AdminInvitesPage() {
           >
             <Plus className="w-4 h-4" />
             New Invite
+          </button>
+          <button
+            onClick={() => setShowBulk(!showBulk)}
+            className="bg-white/10 text-white font-semibold px-4 py-2 rounded-lg hover:bg-white/20 transition flex items-center gap-2"
+          >
+            <Users className="w-4 h-4" />
+            Bulk Invite
           </button>
         </div>
 
@@ -266,6 +347,144 @@ export default function AdminInvitesPage() {
                 </button>
               </div>
             </form>
+          </div>
+        )}
+
+        {/* Bulk Invite Form */}
+        {showBulk && (
+          <div className="glass-card p-6 mb-8 border border-blue-500/20">
+            <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
+              <Users className="w-4 h-4 text-blue-400" />
+              Bulk Invite Sender
+            </h3>
+            <form onSubmit={handleBulkCreate} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="md:col-span-2">
+                <label className="text-white/70 text-sm block mb-1">Recipients (CSV: email,name - one per line)</label>
+                <textarea
+                  value={bulkForm.recipients_text}
+                  onChange={(e) => setBulkForm({ ...bulkForm, recipients_text: e.target.value })}
+                  placeholder="john@example.com, John Smith&#10;jane@example.com, Jane Doe&#10;bob@example.com, Bob Johnson"
+                  rows={6}
+                  required
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-blue-500/50 font-mono resize-none"
+                />
+                <p className="text-white/40 text-xs mt-1">Format: email,name (one per line). Name is optional.</p>
+              </div>
+              <div>
+                <label className="text-white/70 text-sm block mb-1">Invite Type</label>
+                <select
+                  value={bulkForm.invite_type}
+                  onChange={(e) => setBulkForm({ ...bulkForm, invite_type: e.target.value })}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500/50"
+                >
+                  <option value="document">Document</option>
+                  <option value="proposal">Proposal</option>
+                  <option value="quote">Quote</option>
+                  <option value="contract">Contract</option>
+                  <option value="confidential">Confidential</option>
+                </select>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-white/70 text-sm block mb-1">Expires (hours)</label>
+                  <input
+                    type="number"
+                    value={bulkForm.expires_hours}
+                    onChange={(e) => setBulkForm({ ...bulkForm, expires_hours: parseInt(e.target.value) || 72 })}
+                    min={1}
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500/50"
+                  />
+                </div>
+                <div>
+                  <label className="text-white/70 text-sm block mb-1">Max Views</label>
+                  <input
+                    type="number"
+                    value={bulkForm.max_views}
+                    onChange={(e) => setBulkForm({ ...bulkForm, max_views: parseInt(e.target.value) || 10 })}
+                    min={1}
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500/50"
+                  />
+                </div>
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-white/70 text-sm block mb-1">Content Title (Email Subject)</label>
+                <input
+                  type="text"
+                  value={bulkForm.content_title}
+                  onChange={(e) => setBulkForm({ ...bulkForm, content_title: e.target.value })}
+                  placeholder="e.g. Project Proposal - Confidential"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-blue-500/50"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-white/70 text-sm block mb-1">Content Message (Email Body)</label>
+                <textarea
+                  value={bulkForm.content_message}
+                  onChange={(e) => setBulkForm({ ...bulkForm, content_message: e.target.value })}
+                  placeholder="The content the recipient will see after verification..."
+                  rows={3}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-blue-500/50 resize-none"
+                />
+              </div>
+              <div className="md:col-span-2 flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="send_emails"
+                  checked={bulkForm.send_emails}
+                  onChange={(e) => setBulkForm({ ...bulkForm, send_emails: e.target.checked })}
+                  className="w-4 h-4 rounded bg-white/10 border-white/20"
+                />
+                <label htmlFor="send_emails" className="text-white/70 text-sm">Send invite links via email to all recipients</label>
+              </div>
+              <div className="md:col-span-2 flex gap-3">
+                <button
+                  type="submit"
+                  disabled={bulkCreating}
+                  className="bg-blue-500 text-white font-semibold px-6 py-2.5 rounded-lg hover:bg-blue-500/90 transition disabled:opacity-50 flex items-center gap-2"
+                >
+                  {bulkCreating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                  Create Bulk Invites
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setShowBulk(false); setBulkResults(null); }}
+                  className="text-white/50 hover:text-white px-4 py-2 transition"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+
+            {/* Bulk Results */}
+            {bulkResults && (
+              <div className="mt-6 pt-6 border-t border-white/10">
+                <h4 className="text-white font-medium mb-3">Bulk Invite Results</h4>
+                <div className="grid grid-cols-3 gap-4 mb-4">
+                  <div className="bg-white/5 rounded-lg p-3 text-center">
+                    <p className="text-2xl font-bold text-white">{bulkResults.total}</p>
+                    <p className="text-white/50 text-xs">Total</p>
+                  </div>
+                  <div className="bg-green-500/10 rounded-lg p-3 text-center border border-green-500/20">
+                    <p className="text-2xl font-bold text-green-400">{bulkResults.created}</p>
+                    <p className="text-green-400/70 text-xs">Created</p>
+                  </div>
+                  <div className="bg-red-500/10 rounded-lg p-3 text-center border border-red-500/20">
+                    <p className="text-2xl font-bold text-red-400">{bulkResults.failed}</p>
+                    <p className="text-red-400/70 text-xs">Failed</p>
+                  </div>
+                </div>
+                {bulkResults.errors && bulkResults.errors.length > 0 && (
+                  <div className="bg-red-500/5 border border-red-500/20 rounded-lg p-3">
+                    <p className="text-red-400 text-sm font-medium mb-2">Errors:</p>
+                    <ul className="text-red-400/70 text-xs space-y-1">
+                      {bulkResults.errors.map((err: any, i: number) => (
+                        <li key={i}>{err.email}: {err.error}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 

@@ -164,6 +164,11 @@ export default function InvitePage() {
         {/* Loading */}
         {status === 'loading' && (
           <div className="text-center">
+            <img
+              src="/assets/images/The Breed Industries Just Logo-01-01.png"
+              alt="Breed Industries"
+              className="w-20 h-20 mx-auto mb-6 opacity-90"
+            />
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-6">
               <Loader2 className="w-8 h-8 text-[#00e87e] animate-spin" />
             </div>
@@ -175,6 +180,11 @@ export default function InvitePage() {
         {/* Error */}
         {status === 'error' && (
           <div className="glass-card p-8 text-center border border-red-500/20">
+            <img
+              src="/assets/images/The Breed Industries Just Logo-01-01.png"
+              alt="Breed Industries"
+              className="w-16 h-16 mx-auto mb-6 opacity-90"
+            />
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/10 mb-6">
               <AlertTriangle className="w-8 h-8 text-red-400" />
             </div>
@@ -192,6 +202,11 @@ export default function InvitePage() {
         {status === 'pending' && (
           <div className="glass-card p-8 border border-white/10">
             <div className="text-center mb-6">
+              <img
+                src="/assets/images/The Breed Industries Just Logo-01-01.png"
+                alt="Breed Industries"
+                className="w-16 h-16 mx-auto mb-4 opacity-90"
+              />
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#00e87e]/10 mb-4">
                 <Shield className="w-8 h-8 text-[#00e87e]" />
               </div>
@@ -246,6 +261,11 @@ export default function InvitePage() {
         {status === 'otp_sent' && (
           <div className="glass-card p-8 border border-white/10">
             <div className="text-center mb-6">
+              <img
+                src="/assets/images/The Breed Industries Just Logo-01-01.png"
+                alt="Breed Industries"
+                className="w-16 h-16 mx-auto mb-4 opacity-90"
+              />
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-500/10 mb-4">
                 <Lock className="w-8 h-8 text-blue-400" />
               </div>
@@ -316,15 +336,20 @@ export default function InvitePage() {
               </div>
 
               {/* Header */}
-              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
-                <div className="w-10 h-10 rounded-full bg-[#00e87e]/10 flex items-center justify-center">
-                  <CheckCircle className="w-5 h-5 text-[#00e87e]" />
-                </div>
-                <div>
+              <div className="flex items-center gap-4 mb-6 pb-4 border-b border-white/10">
+                <img
+                  src="/assets/images/The Breed Industries Just Logo-01-01.png"
+                  alt="Breed Industries"
+                  className="w-12 h-12 opacity-90"
+                />
+                <div className="flex-1">
                   <h2 className="text-white font-semibold">Verified & Secured</h2>
                   <p className="text-white/40 text-xs">
                     Locked to your device · {invite.recipient_name || 'Recipient'}
                   </p>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-[#00e87e]/10 flex items-center justify-center">
+                  <CheckCircle className="w-5 h-5 text-[#00e87e]" />
                 </div>
               </div>
 
