@@ -484,7 +484,7 @@ export function generateQuotePDF(data: QuoteData): Buffer {
     setFont('normal', 7);
     doc.setTextColor(...MUTED);
     doc.text(
-      'The Breed Industries (PTY) LTD · 12 Kings Road, Pinetown, Durban 3610 · www.thebreed.co.za · info@thebreed.co.za · +27 31 459 0080',
+      'The Breed Industries (PTY) LTD · Reg: 2021/963126/07 · 12 Kings Road, Pinetown, Durban 3610 · www.thebreed.co.za · info@thebreed.co.za · +27 31 459 0080',
       MARGIN,
       FOOTER_Y + 5
     );
@@ -514,10 +514,11 @@ export function generateQuotePDF(data: QuoteData): Buffer {
   doc.setTextColor(200, 200, 200);
   doc.text('The Breed Industries (PTY) LTD', PAGE_W - MARGIN, 14, { align: 'right' });
   doc.text('12 Kings Road, Pinetown, Durban 3610', PAGE_W - MARGIN, 20, { align: 'right' });
-  doc.text('Landline: +27 31 459 0080', PAGE_W - MARGIN, 26, { align: 'right' });
-  doc.text('Mobile: +27 60 496 4105', PAGE_W - MARGIN, 32, { align: 'right' });
-  doc.text('Email: info@thebreed.co.za', PAGE_W - MARGIN, 38, { align: 'right' });
-  doc.text('Web: www.thebreed.co.za', PAGE_W - MARGIN, 44, { align: 'right' });
+  doc.text('Reg: 2021/963126/07', PAGE_W - MARGIN, 26, { align: 'right' });
+  doc.text('Landline: +27 31 459 0080', PAGE_W - MARGIN, 32, { align: 'right' });
+  doc.text('Mobile: +27 60 496 4105', PAGE_W - MARGIN, 38, { align: 'right' });
+  doc.text('Email: info@thebreed.co.za', PAGE_W - MARGIN, 44, { align: 'right' });
+  doc.text('Web: www.thebreed.co.za', PAGE_W - MARGIN, 50, { align: 'right' });
 
   // Orange title bar
   doc.setFillColor(...ORANGE);
@@ -1303,14 +1304,14 @@ export function generateInvoicePDF(data: InvoicePDFData): Buffer {
     setFont('normal', 7);
     doc.setTextColor(...MUTED);
     doc.text(
-      'The Breed Industries (PTY) LTD · 12 Kings Road, Pinetown, Durban 3610 · www.thebreed.co.za · info@thebreed.co.za · +27 31 459 0080',
+      'The Breed Industries (PTY) LTD · Reg: 2021/963126/07 · 12 Kings Road, Pinetown, Durban 3610 · www.thebreed.co.za · info@thebreed.co.za · +27 31 459 0080',
       MARGIN,
       FOOTER_Y + 5
     );
     doc.text(`Page ${pageNum} of ${totalPages}`, PAGE_W - MARGIN, FOOTER_Y + 5, { align: 'right' });
   }
 
-  // ── Page Header (navy bar + logo) ─────────────────────────────────────────
+  // ── Load Logo ───────────────────────────────────────────────────────────────
   doc.setFillColor(...NAVY);
   doc.rect(0, 0, PAGE_W, HEADER_H, 'F');
 
@@ -1322,10 +1323,11 @@ export function generateInvoicePDF(data: InvoicePDFData): Buffer {
   doc.setTextColor(200, 200, 200);
   doc.text('The Breed Industries (PTY) LTD',    PAGE_W - MARGIN, 14, { align: 'right' });
   doc.text('12 Kings Road, Pinetown, Durban 3610', PAGE_W - MARGIN, 20, { align: 'right' });
-  doc.text('Landline: +27 31 459 0080',           PAGE_W - MARGIN, 26, { align: 'right' });
-  doc.text('Mobile: +27 60 496 4105',             PAGE_W - MARGIN, 32, { align: 'right' });
-  doc.text('Email: info@thebreed.co.za',          PAGE_W - MARGIN, 38, { align: 'right' });
-  doc.text('Web: www.thebreed.co.za',             PAGE_W - MARGIN, 44, { align: 'right' });
+  doc.text('Reg: 2021/963126/07',                  PAGE_W - MARGIN, 26, { align: 'right' });
+  doc.text('Landline: +27 31 459 0080',           PAGE_W - MARGIN, 32, { align: 'right' });
+  doc.text('Mobile: +27 60 496 4105',             PAGE_W - MARGIN, 38, { align: 'right' });
+  doc.text('Email: info@thebreed.co.za',          PAGE_W - MARGIN, 44, { align: 'right' });
+  doc.text('Web: www.thebreed.co.za',             PAGE_W - MARGIN, 50, { align: 'right' });
 
   // Orange title bar
   doc.setFillColor(...ORANGE);
