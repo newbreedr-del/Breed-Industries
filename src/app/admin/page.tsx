@@ -16,7 +16,8 @@ import {
   LogOut,
   BookOpen,
   HelpCircle,
-  Award
+  Award,
+  Shield
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -202,6 +203,14 @@ export default function AdminDashboard() {
       href: '/admin/tenders',
       color: 'from-yellow-500 to-amber-600',
       stats: `${tenderStats.openTenders} open · ${tenderStats.activeClients} clients`
+    },
+    {
+      title: 'Secure Invites',
+      description: 'Create device-locked, single-person invitations',
+      icon: Shield,
+      href: '/admin/invites',
+      color: 'from-emerald-500 to-emerald-600',
+      stats: 'Manage invites'
     }
   ];
 
