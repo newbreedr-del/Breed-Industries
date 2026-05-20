@@ -39,6 +39,7 @@ export default function AdminInvitesPage() {
     max_views: 10,
     content_title: '',
     content_message: '',
+    image_url: '',
   });
 
   // Bulk form state
@@ -49,6 +50,7 @@ export default function AdminInvitesPage() {
     max_views: 10,
     content_title: '',
     content_message: '',
+    image_url: '',
     send_emails: true,
   });
 
@@ -86,13 +88,14 @@ export default function AdminInvitesPage() {
             title: form.content_title || null,
             message: form.content_message || null,
           },
+          image_url: form.image_url || null,
         }),
       });
 
       const data = await res.json();
       if (res.ok) {
         setShowCreate(false);
-        setForm({ recipient_email: '', recipient_name: '', invite_type: 'document', expires_hours: 72, max_views: 10, content_title: '', content_message: '' });
+        setForm({ recipient_email: '', recipient_name: '', invite_type: 'document', expires_hours: 72, max_views: 10, content_title: '', content_message: '', image_url: '' });
         fetchInvites();
         // Copy the invite URL
         if (data.invite_url) {
@@ -166,6 +169,7 @@ export default function AdminInvitesPage() {
           max_views: bulkForm.max_views,
           content_title: bulkForm.content_title,
           content_message: bulkForm.content_message,
+          image_url: bulkForm.image_url || null,
           send_emails: bulkForm.send_emails,
         }),
       });
@@ -183,6 +187,7 @@ export default function AdminInvitesPage() {
             max_views: 10,
             content_title: '',
             content_message: '',
+            image_url: '',
             send_emails: true,
           });
         }
@@ -329,6 +334,17 @@ export default function AdminInvitesPage() {
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#00e87e]/50 resize-none"
                 />
               </div>
+              <div className="md:col-span-2">
+                <label className="text-white/70 text-sm block mb-1">Image URL (optional)</label>
+                <input
+                  type="url"
+                  value={form.image_url}
+                  onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+                  placeholder="https://example.com/image.jpg"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#00e87e]/50"
+                />
+                <p className="text-white/40 text-xs mt-1">Add an image to display in the invite (e.g., proposal cover, document preview)</p>
+              </div>
               <div className="md:col-span-2 flex gap-3">
                 <button
                   type="submit"
@@ -425,6 +441,17 @@ export default function AdminInvitesPage() {
                   rows={3}
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-blue-500/50 resize-none"
                 />
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-white/70 text-sm block mb-1">Image URL (optional)</label>
+                <input
+                  type="url"
+                  value={bulkForm.image_url}
+                  onChange={(e) => setBulkForm({ ...bulkForm, image_url: e.target.value })}
+                  placeholder="https://example.com/image.jpg"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-blue-500/50"
+                />
+                <p className="text-white/40 text-xs mt-1">Same image will be shown to all recipients</p>
               </div>
               <div className="md:col-span-2 flex items-center gap-2">
                 <input

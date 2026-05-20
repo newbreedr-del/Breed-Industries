@@ -21,7 +21,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { recipient_email, recipient_name, invite_type, content, expires_hours = 72, max_views = 10 } = body;
+    const { recipient_email, recipient_name, invite_type, content, expires_hours = 72, max_views = 10, image_url } = body;
 
     if (!recipient_email) {
       return NextResponse.json({ error: 'Recipient email is required' }, { status: 400 });
@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
         recipient_name: recipient_name || null,
         invite_type: invite_type || 'document',
         content: content || null,
+        image_url: image_url || null,
         status: 'pending',
         expires_at,
         max_views,

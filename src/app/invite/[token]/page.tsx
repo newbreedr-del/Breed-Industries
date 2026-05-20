@@ -12,6 +12,7 @@ interface InviteContent {
   recipient_name: string;
   invite_type: string;
   content: any;
+  image_url: string | null;
   verified_at: string;
 }
 
@@ -360,37 +361,54 @@ export default function InvitePage() {
                 onCopy={(e) => e.preventDefault()}
                 onCut={(e) => e.preventDefault()}
               >
+                {/* Image Display */}
+                {invite.image_url && (
+                  <div className="mb-6 rounded-xl overflow-hidden border border-white/10 bg-white/5">
+                    <img
+                      src={invite.image_url}
+                      alt="Invite content"
+                      className="w-full h-auto object-cover"
+                      style={{ maxHeight: '500px', objectFit: 'contain' }}
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+
                 {invite.content ? (
                   <div className="space-y-4">
                     {invite.content.title && (
-                      <h3 className="text-white text-lg font-semibold">{invite.content.title}</h3>
+                      <h3 className="text-white text-xl font-bold">{invite.content.title}</h3>
                     )}
                     {invite.content.message && (
-                      <p className="text-white/70 text-sm leading-relaxed whitespace-pre-wrap">
-                        {invite.content.message}
-                      </p>
+                      <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                        <p className="text-white/80 text-sm leading-relaxed whitespace-pre-wrap">
+                          {invite.content.message}
+                        </p>
+                      </div>
                     )}
                     {invite.content.sections && Array.isArray(invite.content.sections) && (
                       <div className="space-y-3">
                         {invite.content.sections.map((section: any, i: number) => (
-                          <div key={i} className="bg-white/5 rounded-lg p-4">
+                          <div key={i} className="bg-white/5 rounded-lg p-4 border border-white/10">
                             {section.heading && (
-                              <h4 className="text-white font-medium text-sm mb-1">{section.heading}</h4>
+                              <h4 className="text-white font-medium text-sm mb-2">{section.heading}</h4>
                             )}
                             {section.body && (
-                              <p className="text-white/60 text-sm">{section.body}</p>
+                              <p className="text-white/70 text-sm leading-relaxed">{section.body}</p>
                             )}
                           </div>
                         ))}
                       </div>
                     )}
                   </div>
-                ) : (
+                ) : !invite.image_url ? (
                   <div className="text-center py-8">
                     <Eye className="w-8 h-8 text-white/20 mx-auto mb-3" />
                     <p className="text-white/40 text-sm">No content attached to this invite.</p>
                   </div>
-                )}
+                ) : null}
               </div>
 
               {/* Footer */}
