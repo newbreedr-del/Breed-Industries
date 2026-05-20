@@ -297,6 +297,76 @@ export const serviceDefinitions: ServiceDefinition[] = [
     additionalInfo: 'COIDA assessment is calculated based on your industry tariff rate multiplied by your annual wage bill. Letter of Good Standing must be renewed annually. Required for compliance, tenders, and workplace injury cover.'
   },
   {
+    id: 'cidb-grade-1',
+    category: 'Business Setup & Compliance',
+    name: 'CIDB Registration — Grade 1',
+    description: 'Construction Industry Development Board registration at Grade 1 level. Basic online registration for emerging contractors.',
+    basePrice: 'R950',
+    requiredDocuments: [
+      { name: 'CIPC / CK Documents', description: 'Company registration certificate (COR 14.3, COR 15.3, or CK documents)', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Director / Owner ID Copies', description: 'Certified ID copies of all directors or members', required: true, acceptedFormats: ['.pdf', '.jpg', '.png'] },
+      { name: 'CSD Number', description: 'Central Supplier Database registration number', required: true, acceptedFormats: ['.pdf', '.txt'] },
+      { name: 'Tax Clearance / Tax Pin', description: 'Valid SARS tax clearance certificate or tax compliance pin', required: true, acceptedFormats: ['.pdf'] }
+    ],
+    additionalInfo: 'Grade 1 allows contracts up to R200,000. Quick online process with basic documentation.'
+  },
+  {
+    id: 'cidb-grade-2-4',
+    category: 'Business Setup & Compliance',
+    name: 'CIDB Registration — Grade 2 to 4',
+    description: 'CIDB contractor grading for Grades 2–4. Requires verified track records, completed project invoices, and simple financial statements.',
+    basePrice: 'From R2,000 – R4,500',
+    requiredDocuments: [
+      { name: 'CIPC / CK Documents', description: 'Company registration certificate', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Director / Owner ID Copies', description: 'Certified ID copies of all directors or members', required: true, acceptedFormats: ['.pdf', '.jpg', '.png'] },
+      { name: 'CSD Number', description: 'Central Supplier Database registration number', required: true, acceptedFormats: ['.pdf', '.txt'] },
+      { name: 'Tax Clearance Certificate', description: 'Valid SARS tax clearance certificate', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Track Record / Completed Project Invoices', description: 'Invoices and completion certificates for previously completed construction projects', required: true, acceptedFormats: ['.pdf', '.jpg', '.png'] },
+      { name: 'Financial Statements', description: 'Simple financial statements (management accounts or annual financials signed by an accountant)', required: true, acceptedFormats: ['.pdf', '.xlsx', '.xls'] },
+      { name: 'COIDA Letter of Good Standing', description: 'Valid Compensation Fund letter of good standing', required: true, acceptedFormats: ['.pdf'] }
+    ],
+    additionalInfo: 'Grade 2: up to R650,000 | Grade 3: up to R2M | Grade 4: up to R4M. Pricing depends on grade and complexity of documentation.'
+  },
+  {
+    id: 'cidb-grade-5-7',
+    category: 'Business Setup & Compliance',
+    name: 'CIDB Registration — Grade 5 to 7',
+    description: 'CIDB contractor grading for Grades 5–7. Involves auditing complex financials, calculating net asset value, and compiling multi-million Rand project completion certificates.',
+    basePrice: 'From R4,500 – R9,500',
+    requiredDocuments: [
+      { name: 'CIPC / CK Documents', description: 'Company registration certificate', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Director / Owner ID Copies', description: 'Certified ID copies of all directors or members', required: true, acceptedFormats: ['.pdf', '.jpg', '.png'] },
+      { name: 'CSD Number', description: 'Central Supplier Database registration number', required: true, acceptedFormats: ['.pdf', '.txt'] },
+      { name: 'Tax Clearance Certificate', description: 'Valid SARS tax clearance certificate', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Audited Financial Statements', description: 'Audited or independently reviewed financial statements showing net asset value and turnover', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Track Record / Project Completion Certificates', description: 'Completion certificates and invoices for large-scale projects (multi-million Rand value)', required: true, acceptedFormats: ['.pdf', '.jpg', '.png'] },
+      { name: 'COIDA Letter of Good Standing', description: 'Valid Compensation Fund letter of good standing', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'SARS Tax Compliance Status', description: 'Proof of tax compliance (all returns up to date)', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Net Asset Value Calculation', description: 'Breakdown of company net asset value (or we calculate this from your financials)', required: false, acceptedFormats: ['.pdf', '.xlsx', '.xls'] }
+    ],
+    additionalInfo: 'Grade 5: up to R6.5M | Grade 6: up to R13M | Grade 7: up to R40M. Requires thorough financial verification and extensive project track records.'
+  },
+  {
+    id: 'cidb-grade-8-9',
+    category: 'Business Setup & Compliance',
+    name: 'CIDB Registration — Grade 8 to 9',
+    description: 'CIDB contractor grading for Grades 8–9. High-level corporate registration requiring major financial audits, extensive track record verification, and significant compliance assessment.',
+    basePrice: 'From R15,000',
+    requiredDocuments: [
+      { name: 'CIPC / CK Documents', description: 'Company registration certificate and shareholding structure', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Director / Owner ID Copies', description: 'Certified ID copies of all directors', required: true, acceptedFormats: ['.pdf', '.jpg', '.png'] },
+      { name: 'CSD Number', description: 'Central Supplier Database registration number', required: true, acceptedFormats: ['.pdf', '.txt'] },
+      { name: 'Full Audited Financial Statements', description: 'Comprehensive audited financials for the past 2–3 years with full notes and schedules', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Major Project Completion Certificates', description: 'Completion certificates for high-value projects demonstrating capability at the target grade level', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'COIDA Letter of Good Standing', description: 'Valid Compensation Fund letter of good standing', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'SARS Tax Compliance', description: 'Full tax compliance status — all returns and assessments up to date', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Net Asset Value & Financial Analysis', description: 'Detailed net asset value calculation and financial capacity analysis', required: true, acceptedFormats: ['.pdf', '.xlsx', '.xls'] },
+      { name: 'BEE Certificate', description: 'Valid B-BBEE verification certificate', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Organogram & Key Personnel CVs', description: 'Company structure and CVs of key construction professionals', required: false, acceptedFormats: ['.pdf', '.doc', '.docx'] }
+    ],
+    additionalInfo: 'Grade 8: up to R130M | Grade 9: unlimited contract value. Custom quote provided after initial assessment. May be structured as a corporate retainer due to the extensive time investment required.'
+  },
+  {
     id: 'uif-registration',
     category: 'Business Setup & Compliance',
     name: 'UIF Registration & Compliance Letter',

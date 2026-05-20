@@ -89,6 +89,55 @@ export const scopeDetails: Record<string, ScopeDetail> = {
       'Previous COIDA documentation (if renewing or updating)',
     ],
   },
+  'CIDB Registration — Grade 1': {
+    timeline: '3 – 5 Business Days',
+    clientRequirements: [
+      'CIPC / CK documents',
+      'Director / owner certified ID copies',
+      'CSD registration number',
+      'Tax clearance certificate or tax compliance pin',
+    ],
+  },
+  'CIDB Registration — Grade 2 to 4': {
+    timeline: '7 – 14 Business Days',
+    clientRequirements: [
+      'CIPC / CK documents',
+      'Director / owner certified ID copies',
+      'CSD number',
+      'Tax clearance certificate',
+      'Track record / completed project invoices and completion certificates',
+      'Simple financial statements (signed by accountant)',
+      'COIDA Letter of Good Standing',
+    ],
+  },
+  'CIDB Registration — Grade 5 to 7': {
+    timeline: '14 – 21 Business Days',
+    clientRequirements: [
+      'CIPC / CK documents',
+      'Director / owner certified ID copies',
+      'CSD number',
+      'Tax clearance certificate',
+      'Audited financial statements (showing net asset value and turnover)',
+      'Project completion certificates (multi-million Rand value)',
+      'COIDA Letter of Good Standing',
+      'SARS tax compliance status (all returns up to date)',
+    ],
+  },
+  'CIDB Registration — Grade 8 to 9': {
+    timeline: '21 – 30+ Business Days',
+    clientRequirements: [
+      'CIPC / CK documents and shareholding structure',
+      'Director certified ID copies',
+      'CSD number',
+      'Full audited financial statements (past 2–3 years)',
+      'Major project completion certificates at target grade level',
+      'COIDA Letter of Good Standing',
+      'Full SARS tax compliance',
+      'Net asset value and financial capacity analysis',
+      'BEE verification certificate',
+      'Organogram and key personnel CVs (optional)',
+    ],
+  },
   'UIF Registration & Compliance Letter': {
     timeline: '3 – 7 Business Days',
     clientRequirements: [

@@ -33,7 +33,11 @@ const serviceCategories = [
       { name: 'Tax Compliance (SARS)', price: 'From R850' },
       { name: 'BEE Certification', price: 'From R250' },
       { name: 'CSD Registration', price: 'R450' },
-      { name: 'COIDA Registration & Assessment', price: 'R2,490' }
+      { name: 'COIDA Registration & Assessment', price: 'R2,490' },
+      { name: 'CIDB Registration — Grade 1', price: 'R950' },
+      { name: 'CIDB Registration — Grade 2–4', price: 'From R2,000' },
+      { name: 'CIDB Registration — Grade 5–7', price: 'From R4,500' },
+      { name: 'CIDB Registration — Grade 8–9', price: 'From R15,000' }
     ]
   },
   {
