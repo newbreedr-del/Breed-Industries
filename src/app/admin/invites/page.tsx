@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Plus, Send, Trash2, Copy, Check, Loader2, Shield, Eye, Clock, Ban, RefreshCw, Users, Upload } from 'lucide-react';
+import { ArrowLeft, Plus, Send, Trash2, Copy, Check, Loader2, Shield, Eye, Clock, Ban, RefreshCw, Users, Upload, X, Image } from 'lucide-react';
 
 interface Invite {
   id: string;
@@ -29,6 +29,10 @@ export default function AdminInvitesPage() {
   const [creating, setCreating] = useState(false);
   const [bulkCreating, setBulkCreating] = useState(false);
   const [bulkResults, setBulkResults] = useState<any>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadingBulkImage, setUploadingBulkImage] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [bulkImagePreview, setBulkImagePreview] = useState<string | null>(null);
 
   // Form state
   const [form, setForm] = useState({
@@ -96,6 +100,7 @@ export default function AdminInvitesPage() {
       if (res.ok) {
         setShowCreate(false);
         setForm({ recipient_email: '', recipient_name: '', invite_type: 'document', expires_hours: 72, max_views: 10, content_title: '', content_message: '', image_url: '' });
+        setImagePreview(null);
         fetchInvites();
         // Copy the invite URL
         if (data.invite_url) {
@@ -190,12 +195,53 @@ export default function AdminInvitesPage() {
             image_url: '',
             send_emails: true,
           });
+          setBulkImagePreview(null);
         }
       }
     } catch (err) {
       console.error('Bulk create failed:', err);
     } finally {
       setBulkCreating(false);
+    }
+  };
+
+  const handleImageUpload = async (file: File, isBulk: boolean = false) => {
+    if (isBulk) {
+      setUploadingBulkImage(true);
+    } else {
+      setUploadingImage(true);
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/invites/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (res.ok && data.url) {
+        if (isBulk) {
+          setBulkForm({ ...bulkForm, image_url: data.url });
+          setBulkImagePreview(data.url);
+        } else {
+          setForm({ ...form, image_url: data.url });
+          setImagePreview(data.url);
+        }
+      } else {
+        alert(data.error || 'Failed to upload image');
+      }
+    } catch (err) {
+      console.error('Upload error:', err);
+      alert('Failed to upload image');
+    } finally {
+      if (isBulk) {
+        setUploadingBulkImage(false);
+      } else {
+        setUploadingImage(false);
+      }
     }
   };
 
@@ -335,15 +381,53 @@ export default function AdminInvitesPage() {
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="text-white/70 text-sm block mb-1">Image URL (optional)</label>
-                <input
-                  type="url"
-                  value={form.image_url}
-                  onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-                  placeholder="https://example.com/image.jpg"
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#00e87e]/50"
-                />
-                <p className="text-white/40 text-xs mt-1">Add an image to display in the invite (e.g., proposal cover, document preview)</p>
+                <label className="text-white/70 text-sm block mb-2">Image (optional)</label>
+                {!imagePreview ? (
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleImageUpload(file, false);
+                      }}
+                      className="hidden"
+                      id="image-upload"
+                      disabled={uploadingImage}
+                    />
+                    <label
+                      htmlFor="image-upload"
+                      className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/20 rounded-lg cursor-pointer hover:border-[#00e87e]/50 transition ${uploadingImage ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      {uploadingImage ? (
+                        <>
+                          <Loader2 className="w-8 h-8 text-[#00e87e] animate-spin mb-2" />
+                          <p className="text-white/50 text-sm">Uploading...</p>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-8 h-8 text-white/40 mb-2" />
+                          <p className="text-white/60 text-sm">Click to upload image</p>
+                          <p className="text-white/40 text-xs mt-1">PNG, JPG, GIF up to 5MB</p>
+                        </>
+                      )}
+                    </label>
+                  </div>
+                ) : (
+                  <div className="relative rounded-lg overflow-hidden border border-white/10 bg-white/5">
+                    <img src={imagePreview} alt="Preview" className="w-full h-48 object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImagePreview(null);
+                        setForm({ ...form, image_url: '' });
+                      }}
+                      className="absolute top-2 right-2 bg-red-500/90 hover:bg-red-500 text-white rounded-full p-1.5 transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
               </div>
               <div className="md:col-span-2 flex gap-3">
                 <button
@@ -443,15 +527,53 @@ export default function AdminInvitesPage() {
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="text-white/70 text-sm block mb-1">Image URL (optional)</label>
-                <input
-                  type="url"
-                  value={bulkForm.image_url}
-                  onChange={(e) => setBulkForm({ ...bulkForm, image_url: e.target.value })}
-                  placeholder="https://example.com/image.jpg"
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-blue-500/50"
-                />
-                <p className="text-white/40 text-xs mt-1">Same image will be shown to all recipients</p>
+                <label className="text-white/70 text-sm block mb-2">Image (optional)</label>
+                {!bulkImagePreview ? (
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleImageUpload(file, true);
+                      }}
+                      className="hidden"
+                      id="bulk-image-upload"
+                      disabled={uploadingBulkImage}
+                    />
+                    <label
+                      htmlFor="bulk-image-upload"
+                      className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/20 rounded-lg cursor-pointer hover:border-blue-500/50 transition ${uploadingBulkImage ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      {uploadingBulkImage ? (
+                        <>
+                          <Loader2 className="w-8 h-8 text-blue-400 animate-spin mb-2" />
+                          <p className="text-white/50 text-sm">Uploading...</p>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-8 h-8 text-white/40 mb-2" />
+                          <p className="text-white/60 text-sm">Click to upload image</p>
+                          <p className="text-white/40 text-xs mt-1">Same image for all recipients · PNG, JPG, GIF up to 5MB</p>
+                        </>
+                      )}
+                    </label>
+                  </div>
+                ) : (
+                  <div className="relative rounded-lg overflow-hidden border border-white/10 bg-white/5">
+                    <img src={bulkImagePreview} alt="Preview" className="w-full h-48 object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setBulkImagePreview(null);
+                        setBulkForm({ ...bulkForm, image_url: '' });
+                      }}
+                      className="absolute top-2 right-2 bg-red-500/90 hover:bg-red-500 text-white rounded-full p-1.5 transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
               </div>
               <div className="md:col-span-2 flex items-center gap-2">
                 <input

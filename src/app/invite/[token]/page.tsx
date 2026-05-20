@@ -363,12 +363,12 @@ export default function InvitePage() {
               >
                 {/* Image Display */}
                 {invite.image_url && (
-                  <div className="mb-6 rounded-xl overflow-hidden border border-white/10 bg-white/5">
+                  <div className="mb-6 rounded-xl overflow-hidden border border-[#00e87e]/20 bg-gradient-to-br from-white/5 to-white/10 p-2">
                     <img
                       src={invite.image_url}
                       alt="Invite content"
-                      className="w-full h-auto object-cover"
-                      style={{ maxHeight: '500px', objectFit: 'contain' }}
+                      className="w-full h-auto rounded-lg shadow-2xl"
+                      style={{ maxHeight: '600px', objectFit: 'contain', backgroundColor: 'rgba(255,255,255,0.05)' }}
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                       }}
