@@ -68,6 +68,7 @@ export async function POST(req: NextRequest) {
         recipient_name: invite.recipient_name,
         invite_type: invite.invite_type,
         content: invite.content,
+        image_url: invite.image_url,
         verified_at: invite.verified_at,
       },
     });
