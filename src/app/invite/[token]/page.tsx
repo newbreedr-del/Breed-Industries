@@ -13,6 +13,9 @@ interface InviteContent {
   invite_type: string;
   content: any;
   image_url: string | null;
+  background_image_url: string | null;
+  event_date: string | null;
+  event_location: string | null;
   verified_at: string;
 }
 
@@ -28,6 +31,7 @@ export default function InvitePage() {
   const [invite, setInvite] = useState<InviteContent | null>(null);
   const [loading, setLoading] = useState(false);
   const [recipientName, setRecipientName] = useState('');
+  const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   // Get device fingerprint on mount
   useEffect(() => {
@@ -150,6 +154,32 @@ export default function InvitePage() {
     }
   };
 
+  // Countdown timer effect
+  useEffect(() => {
+    if (invite?.event_date) {
+      const updateCountdown = () => {
+        const now = new Date().getTime();
+        const eventTime = new Date(invite.event_date).getTime();
+        const distance = eventTime - now;
+
+        if (distance > 0) {
+          setCountdown({
+            days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+            hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+            minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+            seconds: Math.floor((distance % (1000 * 60)) / 1000),
+          });
+        } else {
+          setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        }
+      };
+
+      updateCountdown();
+      const interval = setInterval(updateCountdown, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [invite]);
+
   // Prevent right-click and text selection on content
   useEffect(() => {
     if (status === 'verified') {
@@ -160,8 +190,24 @@ export default function InvitePage() {
   }, [status]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a0a1a] via-[#1a1a2e] to-[#0a0a1a] flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen relative flex items-center justify-center p-4">
+      {/* Background Image (only for verified status with background_image_url) */}
+      {status === 'verified' && invite?.background_image_url && (
+        <>
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${invite.background_image_url})` }}
+          />
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+        </>
+      )}
+      
+      {/* Default gradient background for non-verified states */}
+      {(!status || status !== 'verified' || !invite?.background_image_url) && (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a1a] via-[#1a1a2e] to-[#0a0a1a]" />
+      )}
+
+      <div className="w-full max-w-md relative z-10">
         {/* Loading */}
         {status === 'loading' && (
           <div className="text-center">
@@ -324,8 +370,18 @@ export default function InvitePage() {
 
         {/* Verified - Show Content */}
         {status === 'verified' && invite && (
-          <div className="w-full max-w-2xl mx-auto">
-            <div className="glass-card p-8 border border-[#00e87e]/20 relative overflow-hidden">
+          <div className="w-full max-w-3xl mx-auto">
+            {/* Glassmorphic Burgundy/Purple Card */}
+            <div 
+              className="relative overflow-hidden rounded-3xl p-8 md:p-12"
+              style={{
+                background: 'linear-gradient(135deg, rgba(128, 0, 64, 0.3) 0%, rgba(75, 0, 130, 0.3) 100%)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                border: '2px solid rgba(255, 255, 255, 0.1)',
+                boxShadow: '0 8px 32px 0 rgba(128, 0, 128, 0.37)',
+              }}
+            >
               {/* Watermark */}
               <div
                 className="absolute inset-0 pointer-events-none select-none opacity-[0.03] flex items-center justify-center"
@@ -337,20 +393,15 @@ export default function InvitePage() {
               </div>
 
               {/* Header */}
-              <div className="flex items-center gap-4 mb-6 pb-4 border-b border-white/10">
-                <img
-                  src="/assets/images/The Breed Industries Just Logo-01-01.png"
-                  alt="Breed Industries"
-                  className="w-12 h-12 opacity-90"
-                />
-                <div className="flex-1">
-                  <h2 className="text-white font-semibold">Verified & Secured</h2>
-                  <p className="text-white/40 text-xs">
-                    Locked to your device · {invite.recipient_name || 'Recipient'}
-                  </p>
-                </div>
-                <div className="w-10 h-10 rounded-full bg-[#00e87e]/10 flex items-center justify-center">
-                  <CheckCircle className="w-5 h-5 text-[#00e87e]" />
+              <div className="text-center mb-8">
+                {invite.content?.title && (
+                  <h1 className="text-white text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                    {invite.content.title}
+                  </h1>
+                )}
+                <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
+                  <CheckCircle className="w-4 h-4 text-green-400" />
+                  <span className="text-white/90 text-sm font-medium">Verified Invite</span>
                 </div>
               </div>
 
@@ -376,39 +427,52 @@ export default function InvitePage() {
                   </div>
                 )}
 
-                {invite.content ? (
-                  <div className="space-y-4">
-                    {invite.content.title && (
-                      <h3 className="text-white text-xl font-bold">{invite.content.title}</h3>
-                    )}
-                    {invite.content.message && (
-                      <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                        <p className="text-white/80 text-sm leading-relaxed whitespace-pre-wrap">
-                          {invite.content.message}
-                        </p>
-                      </div>
-                    )}
-                    {invite.content.sections && Array.isArray(invite.content.sections) && (
-                      <div className="space-y-3">
-                        {invite.content.sections.map((section: any, i: number) => (
-                          <div key={i} className="bg-white/5 rounded-lg p-4 border border-white/10">
-                            {section.heading && (
-                              <h4 className="text-white font-medium text-sm mb-2">{section.heading}</h4>
-                            )}
-                            {section.body && (
-                              <p className="text-white/70 text-sm leading-relaxed">{section.body}</p>
-                            )}
+                {/* Message */}
+                {invite.content?.message && (
+                  <div className="text-center mb-8">
+                    <p className="text-white/90 text-lg leading-relaxed whitespace-pre-wrap">
+                      {invite.content.message}
+                    </p>
+                  </div>
+                )}
+
+                {/* Countdown Timer */}
+                {invite.event_date && (
+                  <div className="mb-8">
+                    <h3 className="text-white text-center text-xl font-bold mb-6">Event Countdown</h3>
+                    <div className="grid grid-cols-4 gap-4">
+                      {[
+                        { label: 'Days', value: countdown.days },
+                        { label: 'Hours', value: countdown.hours },
+                        { label: 'Minutes', value: countdown.minutes },
+                        { label: 'Seconds', value: countdown.seconds },
+                      ].map((item) => (
+                        <div key={item.label} className="text-center">
+                          <div 
+                            className="bg-white/10 rounded-2xl p-4 mb-2"
+                            style={{
+                              backdropFilter: 'blur(10px)',
+                              border: '1px solid rgba(255, 255, 255, 0.2)',
+                            }}
+                          >
+                            <div className="text-white text-3xl md:text-4xl font-bold">
+                              {String(item.value).padStart(2, '0')}
+                            </div>
                           </div>
-                        ))}
-                      </div>
-                    )}
+                          <div className="text-white/70 text-sm font-medium">{item.label}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ) : !invite.image_url ? (
-                  <div className="text-center py-8">
-                    <Eye className="w-8 h-8 text-white/20 mx-auto mb-3" />
-                    <p className="text-white/40 text-sm">No content attached to this invite.</p>
+                )}
+
+                {/* Event Location (only shown after verification) */}
+                {invite.event_location && (
+                  <div className="text-center bg-white/10 rounded-2xl p-6 backdrop-blur-md border border-white/20">
+                    <h3 className="text-white text-lg font-bold mb-2">Event Location</h3>
+                    <p className="text-white/90 text-base">{invite.event_location}</p>
                   </div>
-                ) : null}
+                )}
               </div>
 
               {/* Footer */}

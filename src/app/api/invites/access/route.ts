@@ -69,6 +69,9 @@ export async function POST(req: NextRequest) {
         invite_type: invite.invite_type,
         content: invite.content,
         image_url: invite.image_url,
+        background_image_url: invite.background_image_url,
+        event_date: invite.event_date,
+        event_location: invite.event_location,
         verified_at: invite.verified_at,
       },
     });

@@ -8,7 +8,7 @@ const resend = new Resend(process.env.RESEND_API_KEY || '');
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { recipients, invite_type, expires_hours, max_views, content_title, content_message, send_emails, image_url } = body;
+    const { recipients, invite_type, expires_hours, max_views, content_title, content_message, send_emails, image_url, background_image_url, event_date, event_location } = body;
 
     if (!recipients || !Array.isArray(recipients) || recipients.length === 0) {
       return NextResponse.json({ error: 'Recipients list is required' }, { status: 400 });
@@ -45,6 +45,9 @@ export async function POST(req: NextRequest) {
               message: content_message || null,
             },
             image_url: image_url || null,
+            background_image_url: background_image_url || null,
+            event_date: event_date || null,
+            event_location: event_location || null,
             status: 'pending',
             expires_at,
             max_views: max_views || 10,

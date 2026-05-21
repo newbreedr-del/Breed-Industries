@@ -31,8 +31,12 @@ export default function AdminInvitesPage() {
   const [bulkResults, setBulkResults] = useState<any>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadingBulkImage, setUploadingBulkImage] = useState(false);
+  const [uploadingBgImage, setUploadingBgImage] = useState(false);
+  const [uploadingBulkBgImage, setUploadingBulkBgImage] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [bulkImagePreview, setBulkImagePreview] = useState<string | null>(null);
+  const [bgImagePreview, setBgImagePreview] = useState<string | null>(null);
+  const [bulkBgImagePreview, setBulkBgImagePreview] = useState<string | null>(null);
 
   // Form state
   const [form, setForm] = useState({
@@ -44,6 +48,9 @@ export default function AdminInvitesPage() {
     content_title: '',
     content_message: '',
     image_url: '',
+    background_image_url: '',
+    event_date: '',
+    event_location: '',
   });
 
   // Bulk form state
@@ -55,6 +62,9 @@ export default function AdminInvitesPage() {
     content_title: '',
     content_message: '',
     image_url: '',
+    background_image_url: '',
+    event_date: '',
+    event_location: '',
     send_emails: true,
   });
 
@@ -93,14 +103,18 @@ export default function AdminInvitesPage() {
             message: form.content_message || null,
           },
           image_url: form.image_url || null,
+          background_image_url: form.background_image_url || null,
+          event_date: form.event_date || null,
+          event_location: form.event_location || null,
         }),
       });
 
       const data = await res.json();
       if (res.ok) {
         setShowCreate(false);
-        setForm({ recipient_email: '', recipient_name: '', invite_type: 'document', expires_hours: 72, max_views: 10, content_title: '', content_message: '', image_url: '' });
+        setForm({ recipient_email: '', recipient_name: '', invite_type: 'document', expires_hours: 72, max_views: 10, content_title: '', content_message: '', image_url: '', background_image_url: '', event_date: '', event_location: '' });
         setImagePreview(null);
+        setBgImagePreview(null);
         fetchInvites();
         // Copy the invite URL
         if (data.invite_url) {
@@ -175,6 +189,9 @@ export default function AdminInvitesPage() {
           content_title: bulkForm.content_title,
           content_message: bulkForm.content_message,
           image_url: bulkForm.image_url || null,
+          background_image_url: bulkForm.background_image_url || null,
+          event_date: bulkForm.event_date || null,
+          event_location: bulkForm.event_location || null,
           send_emails: bulkForm.send_emails,
         }),
       });
@@ -193,9 +210,13 @@ export default function AdminInvitesPage() {
             content_title: '',
             content_message: '',
             image_url: '',
+            background_image_url: '',
+            event_date: '',
+            event_location: '',
             send_emails: true,
           });
           setBulkImagePreview(null);
+          setBulkBgImagePreview(null);
         }
       }
     } catch (err) {
@@ -205,11 +226,19 @@ export default function AdminInvitesPage() {
     }
   };
 
-  const handleImageUpload = async (file: File, isBulk: boolean = false) => {
-    if (isBulk) {
-      setUploadingBulkImage(true);
+  const handleImageUpload = async (file: File, isBulk: boolean = false, isBackground: boolean = false) => {
+    if (isBackground) {
+      if (isBulk) {
+        setUploadingBulkBgImage(true);
+      } else {
+        setUploadingBgImage(true);
+      }
     } else {
-      setUploadingImage(true);
+      if (isBulk) {
+        setUploadingBulkImage(true);
+      } else {
+        setUploadingImage(true);
+      }
     }
 
     try {
@@ -223,12 +252,22 @@ export default function AdminInvitesPage() {
 
       const data = await res.json();
       if (res.ok && data.url) {
-        if (isBulk) {
-          setBulkForm({ ...bulkForm, image_url: data.url });
-          setBulkImagePreview(data.url);
+        if (isBackground) {
+          if (isBulk) {
+            setBulkForm({ ...bulkForm, background_image_url: data.url });
+            setBulkBgImagePreview(data.url);
+          } else {
+            setForm({ ...form, background_image_url: data.url });
+            setBgImagePreview(data.url);
+          }
         } else {
-          setForm({ ...form, image_url: data.url });
-          setImagePreview(data.url);
+          if (isBulk) {
+            setBulkForm({ ...bulkForm, image_url: data.url });
+            setBulkImagePreview(data.url);
+          } else {
+            setForm({ ...form, image_url: data.url });
+            setImagePreview(data.url);
+          }
         }
       } else {
         alert(data.error || 'Failed to upload image');
@@ -237,10 +276,18 @@ export default function AdminInvitesPage() {
       console.error('Upload error:', err);
       alert('Failed to upload image');
     } finally {
-      if (isBulk) {
-        setUploadingBulkImage(false);
+      if (isBackground) {
+        if (isBulk) {
+          setUploadingBulkBgImage(false);
+        } else {
+          setUploadingBgImage(false);
+        }
       } else {
-        setUploadingImage(false);
+        if (isBulk) {
+          setUploadingBulkImage(false);
+        } else {
+          setUploadingImage(false);
+        }
       }
     }
   };
@@ -429,6 +476,83 @@ export default function AdminInvitesPage() {
                   </div>
                 )}
               </div>
+              
+              {/* Background Image Upload */}
+              <div className="md:col-span-2">
+                <label className="text-white/70 text-sm block mb-2">Background Image (optional - full screen)</label>
+                {!bgImagePreview ? (
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleImageUpload(file, false, true);
+                      }}
+                      className="hidden"
+                      id="bg-image-upload"
+                      disabled={uploadingBgImage}
+                    />
+                    <label
+                      htmlFor="bg-image-upload"
+                      className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-purple-500/30 rounded-lg cursor-pointer hover:border-purple-500/60 transition ${uploadingBgImage ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      {uploadingBgImage ? (
+                        <>
+                          <Loader2 className="w-8 h-8 text-purple-400 animate-spin mb-2" />
+                          <p className="text-white/50 text-sm">Uploading...</p>
+                        </>
+                      ) : (
+                        <>
+                          <Image className="w-8 h-8 text-purple-400/60 mb-2" />
+                          <p className="text-white/60 text-sm">Upload full-screen background</p>
+                          <p className="text-white/40 text-xs mt-1">This will be the splash screen background</p>
+                        </>
+                      )}
+                    </label>
+                  </div>
+                ) : (
+                  <div className="relative rounded-lg overflow-hidden border border-purple-500/30 bg-white/5">
+                    <img src={bgImagePreview} alt="Background Preview" className="w-full h-48 object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setBgImagePreview(null);
+                        setForm({ ...form, background_image_url: '' });
+                      }}
+                      className="absolute top-2 right-2 bg-red-500/90 hover:bg-red-500 text-white rounded-full p-1.5 transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Event Date */}
+              <div className="md:col-span-2">
+                <label className="text-white/70 text-sm block mb-1">Event Date & Time (optional)</label>
+                <input
+                  type="datetime-local"
+                  value={form.event_date}
+                  onChange={(e) => setForm({ ...form, event_date: e.target.value })}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00e87e]/50"
+                />
+                <p className="text-white/40 text-xs mt-1">Countdown timer will be displayed</p>
+              </div>
+
+              {/* Event Location */}
+              <div className="md:col-span-2">
+                <label className="text-white/70 text-sm block mb-1">Event Location (optional)</label>
+                <input
+                  type="text"
+                  value={form.event_location}
+                  onChange={(e) => setForm({ ...form, event_location: e.target.value })}
+                  placeholder="e.g. The Grand Ballroom, 123 Main St, City"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#00e87e]/50"
+                />
+                <p className="text-white/40 text-xs mt-1">Only shown after verification</p>
+              </div>
+
               <div className="md:col-span-2 flex gap-3">
                 <button
                   type="submit"
@@ -575,6 +699,83 @@ export default function AdminInvitesPage() {
                   </div>
                 )}
               </div>
+
+              {/* Background Image Upload */}
+              <div className="md:col-span-2">
+                <label className="text-white/70 text-sm block mb-2">Background Image (optional - full screen)</label>
+                {!bulkBgImagePreview ? (
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleImageUpload(file, true, true);
+                      }}
+                      className="hidden"
+                      id="bulk-bg-image-upload"
+                      disabled={uploadingBulkBgImage}
+                    />
+                    <label
+                      htmlFor="bulk-bg-image-upload"
+                      className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-purple-500/30 rounded-lg cursor-pointer hover:border-purple-500/60 transition ${uploadingBulkBgImage ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      {uploadingBulkBgImage ? (
+                        <>
+                          <Loader2 className="w-8 h-8 text-purple-400 animate-spin mb-2" />
+                          <p className="text-white/50 text-sm">Uploading...</p>
+                        </>
+                      ) : (
+                        <>
+                          <Image className="w-8 h-8 text-purple-400/60 mb-2" />
+                          <p className="text-white/60 text-sm">Upload full-screen background</p>
+                          <p className="text-white/40 text-xs mt-1">Same background for all recipients</p>
+                        </>
+                      )}
+                    </label>
+                  </div>
+                ) : (
+                  <div className="relative rounded-lg overflow-hidden border border-purple-500/30 bg-white/5">
+                    <img src={bulkBgImagePreview} alt="Background Preview" className="w-full h-48 object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setBulkBgImagePreview(null);
+                        setBulkForm({ ...bulkForm, background_image_url: '' });
+                      }}
+                      className="absolute top-2 right-2 bg-red-500/90 hover:bg-red-500 text-white rounded-full p-1.5 transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Event Date */}
+              <div className="md:col-span-2">
+                <label className="text-white/70 text-sm block mb-1">Event Date & Time (optional)</label>
+                <input
+                  type="datetime-local"
+                  value={bulkForm.event_date}
+                  onChange={(e) => setBulkForm({ ...bulkForm, event_date: e.target.value })}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500/50"
+                />
+                <p className="text-white/40 text-xs mt-1">Countdown timer will be displayed</p>
+              </div>
+
+              {/* Event Location */}
+              <div className="md:col-span-2">
+                <label className="text-white/70 text-sm block mb-1">Event Location (optional)</label>
+                <input
+                  type="text"
+                  value={bulkForm.event_location}
+                  onChange={(e) => setBulkForm({ ...bulkForm, event_location: e.target.value })}
+                  placeholder="e.g. The Grand Ballroom, 123 Main St, City"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-blue-500/50"
+                />
+                <p className="text-white/40 text-xs mt-1">Only shown after verification</p>
+              </div>
+
               <div className="md:col-span-2 flex items-center gap-2">
                 <input
                   type="checkbox"
