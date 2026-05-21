@@ -198,7 +198,7 @@ export default function InvitePage() {
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${invite.background_image_url})` }}
           />
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-black/25" />
         </>
       )}
       
@@ -375,11 +375,11 @@ export default function InvitePage() {
             <div 
               className="relative overflow-hidden rounded-3xl p-8 md:p-12"
               style={{
-                background: 'linear-gradient(135deg, rgba(128, 0, 64, 0.3) 0%, rgba(75, 0, 130, 0.3) 100%)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '2px solid rgba(255, 255, 255, 0.1)',
-                boxShadow: '0 8px 32px 0 rgba(128, 0, 128, 0.37)',
+                background: 'linear-gradient(135deg, rgba(128, 0, 64, 0.15) 0%, rgba(75, 0, 130, 0.15) 100%)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '2px solid rgba(255, 255, 255, 0.15)',
+                boxShadow: '0 8px 32px 0 rgba(128, 0, 128, 0.3)',
               }}
             >
               {/* Watermark */}
@@ -449,13 +449,13 @@ export default function InvitePage() {
                       ].map((item) => (
                         <div key={item.label} className="text-center">
                           <div 
-                            className="bg-white/10 rounded-2xl p-4 mb-2"
+                            className="bg-white/10 rounded-2xl p-4 mb-2 flex items-center justify-center"
                             style={{
                               backdropFilter: 'blur(10px)',
                               border: '1px solid rgba(255, 255, 255, 0.2)',
                             }}
                           >
-                            <div className="text-white text-3xl md:text-4xl font-bold">
+                            <div className="text-white text-3xl md:text-4xl font-bold leading-none">
                               {String(item.value).padStart(2, '0')}
                             </div>
                           </div>
@@ -468,10 +468,16 @@ export default function InvitePage() {
 
                 {/* Event Location (only shown after verification) */}
                 {invite.event_location && (
-                  <div className="text-center bg-white/10 rounded-2xl p-6 backdrop-blur-md border border-white/20">
+                  <button
+                    onClick={() => {
+                      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(invite.event_location || '')}`;
+                      window.open(mapsUrl, '_blank');
+                    }}
+                    className="w-full text-center bg-white/10 rounded-2xl p-6 backdrop-blur-md border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all cursor-pointer"
+                  >
                     <h3 className="text-white text-lg font-bold mb-2">Event Location</h3>
                     <p className="text-white/90 text-base">{invite.event_location}</p>
-                  </div>
+                  </button>
                 )}
               </div>
 
