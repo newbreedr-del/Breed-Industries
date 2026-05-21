@@ -3,13 +3,22 @@
 import { useState, useEffect } from 'react';
 import { X, ArrowRight, CheckCircle2, Sprout } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export function ExitIntentPopup() {
   const [isVisible, setIsVisible] = useState(false);
   const [hasShown, setHasShown] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
+  const pathname = usePathname();
+
+  // Don't show on admin or invite pages
+  const isExcludedPage = pathname?.startsWith('/admin') || pathname?.startsWith('/invite');
 
   useEffect(() => {
+    if (isExcludedPage) {
+      return;
+    }
+
     const sessionDismissed = sessionStorage.getItem('exitPopupDismissed');
     if (sessionDismissed) {
       setIsDismissed(true);
@@ -44,7 +53,7 @@ export function ExitIntentPopup() {
       document.removeEventListener('mouseleave', handleMouseLeave);
       clearTimeout(timer);
     };
-  }, [hasShown, isDismissed]);
+  }, [hasShown, isDismissed, isExcludedPage]);
 
   const handleDismiss = () => {
     setIsVisible(false);
