@@ -449,10 +449,10 @@ export default function InvitePage() {
                       ].map((item) => (
                         <div key={item.label} className="text-center">
                           <div 
-                            className="bg-white/10 rounded-2xl p-4 mb-2 flex items-center justify-center"
+                            className="bg-white/25 rounded-2xl p-4 mb-2 flex items-center justify-center"
                             style={{
                               backdropFilter: 'blur(10px)',
-                              border: '1px solid rgba(255, 255, 255, 0.2)',
+                              border: '1px solid rgba(255, 255, 255, 0.3)',
                             }}
                           >
                             <div className="text-white text-3xl md:text-4xl font-bold leading-none">
@@ -473,7 +473,7 @@ export default function InvitePage() {
                       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(invite.event_location || '')}`;
                       window.open(mapsUrl, '_blank');
                     }}
-                    className="w-full text-center bg-white/10 rounded-2xl p-6 backdrop-blur-md border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all cursor-pointer"
+                    className="w-full text-center bg-white/25 rounded-2xl p-6 backdrop-blur-md border border-white/30 hover:bg-white/35 hover:border-white/40 transition-all cursor-pointer"
                   >
                     <h3 className="text-white text-lg font-bold mb-2">Event Location</h3>
                     <p className="text-white/90 text-base">{invite.event_location}</p>
