@@ -314,9 +314,14 @@
             screen2.classList.remove('hidden');
 
             if (strategy === 'A') {
+                // Vibrate immediately on tap (must be synchronous with user gesture)
+                try {
+                    if ('vibrate' in navigator) {
+                        navigator.vibrate(0); // reset first
+                        navigator.vibrate([150, 80, 150, 80, 300]);
+                    }
+                } catch(e) {}
                 document.body.classList.add('flash-red', 'shake');
-                // Vibrate on mobile - long buzz pattern
-                if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
                 screen2Content.innerHTML = `
                     <div class="pop-in card rounded-2xl p-8 text-center">
                         <div class="text-red-400 text-5xl font-bold mb-4">❌</div>
