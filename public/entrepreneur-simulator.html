@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Entrepreneur Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            overflow: hidden;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            background: #0d1117;
+        }
+
+        /* Subtle scanline overlay for retro feel */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.05) 2px,
+                rgba(0,0,0,0.05) 4px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Subtle dot grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 24px 24px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(15, 20, 30, 0.92);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 24px 48px rgba(0,0,0,0.5);
+        }
+
+        /* Subtle green top accent line */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(74,222,128,0.6), transparent);
+            border-radius: 4px 4px 0 0;
+        }
+
+        .title-glow {
+            text-shadow: 0 0 12px rgba(74, 222, 128, 0.25);
+            letter-spacing: 0.02em;
+        }
+
+        .btn-a {
+            border: 1px solid rgba(255,255,255,0.07);
+            background: rgba(255,255,255,0.03);
+            transition: all 0.15s ease;
+        }
+        .btn-a:hover, .btn-a:focus {
+            border-color: rgba(248, 113, 113, 0.4);
+            background: rgba(248, 113, 113, 0.06);
+        }
+        .btn-b {
+            border: 1px solid rgba(255,255,255,0.07);
+            background: rgba(255,255,255,0.03);
+            transition: all 0.15s ease;
+        }
+        .btn-b:hover, .btn-b:focus {
+            border-color: rgba(74, 222, 128, 0.4);
+            background: rgba(74, 222, 128, 0.06);
+        }
+
+        .flash-red { animation: flashRed 0.6s ease-in-out; }
+        .flash-green { animation: flashGreen 0.6s ease-in-out; }
+
+        @keyframes flashRed {
+            0%,100% { background-color: #0d1117; }
+            40% { background-color: rgba(185,28,28,0.25); }
+        }
+        @keyframes flashGreen {
+            0%,100% { background-color: #0d1117; }
+            40% { background-color: rgba(21,128,61,0.25); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.85) translateY(16px); }
+            60% { transform: scale(1.03) translateY(-2px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .pop-in { animation: popIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+        }
+        .shake { animation: shake 0.45s ease; }
+
+        @keyframes pulseBig {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+        .pulse-big { animation: pulseBig 1.4s ease-in-out infinite; }
+
+        @keyframes countPop {
+            0% { transform: scale(1.4); opacity: 0.6; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .count-pop { animation: countPop 0.3s ease-out; }
+
+        .screen { transition: opacity 0.25s ease; }
+        .hidden { opacity: 0; pointer-events: none; }
+
+        /* Canvas for confetti - sits on top of everything */
+        #confetti-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 10000;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-5">
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Screen 1 -->
+    <div id="screen1" class="screen w-full max-w-sm mx-auto">
+        <div class="card rounded-2xl p-7 text-center">
+            <h1 class="text-white text-2xl font-bold mb-2 title-glow">GET RICH QUICK CONSOLE</h1>
+            <p class="text-gray-500 text-sm mb-7 leading-relaxed">
+                Choose your business strategy<br>to unlock the future
+            </p>
+            <div class="space-y-3">
+                <button onclick="selectStrategy('A')" class="btn-a w-full rounded-xl p-4 text-left active:scale-95">
+                    <div class="text-red-400 text-xs font-semibold tracking-wide uppercase mb-1">Strategy A</div>
+                    <div class="text-white text-sm font-semibold leading-snug">
+                        Work 80 hours a week, pay your taxes, and drink lukewarm coffee.
+                    </div>
+                </button>
+                <button onclick="selectStrategy('B')" class="btn-b w-full rounded-xl p-4 text-left active:scale-95">
+                    <div class="text-green-400 text-xs font-semibold tracking-wide uppercase mb-1">Strategy B</div>
+                    <div class="text-white text-sm font-semibold leading-snug">
+                        Create a fake cryptocurrency named after an obscure farm animal and flee to an island.
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 2 -->
+    <div id="screen2" class="screen hidden fixed inset-0 flex items-center justify-center p-5 z-50">
+        <div id="screen2Content" class="w-full max-w-sm mx-auto text-center"></div>
+    </div>
+
+    <!-- Screen 3 -->
+    <div id="screen3" class="screen hidden fixed inset-0 flex items-center justify-center p-5 z-50">
+        <div class="w-full max-w-sm mx-auto">
+            <div class="card rounded-2xl p-8 text-center pop-in">
+                <div class="text-green-400 text-xs font-semibold tracking-widest uppercase mb-4">Access Granted</div>
+                <h2 class="text-white text-xl font-bold mb-1 title-glow">Status: Qualified Capitalist.</h2>
+                <p class="text-gray-400 text-sm font-semibold mb-8">Welcome to the big leagues.</p>
+                <div id="countdown" class="text-white text-5xl font-bold mb-1 count-pop">3</div>
+                <p class="text-gray-500 text-sm font-semibold mb-8">Redirecting in...</p>
+                <button onclick="redirectNow()"
+                    class="w-full bg-green-400 hover:bg-green-300 text-black font-bold py-3 rounded-xl text-sm transition-all active:scale-95">
+                    Go to Website Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TARGET_URL = "https://thebreed.co.za";
+
+        // ── Canvas confetti ──────────────────────────────────────────────
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animFrame;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const COLORS = [
+            '#f87171','#fb923c','#fbbf24','#34d399',
+            '#38bdf8','#a78bfa','#f472b6','#ffffff'
+        ];
+
+        function launchConfetti() {
+            particles = [];
+            cancelAnimationFrame(animFrame);
+
+            // Launch from two cannons at bottom corners
+            for (let i = 0; i < 160; i++) {
+                const fromLeft = i < 80;
+                particles.push({
+                    x: fromLeft ? canvas.width * 0.1 : canvas.width * 0.9,
+                    y: canvas.height,
+                    vx: fromLeft
+                        ? (Math.random() * 14 + 4)
+                        : -(Math.random() * 14 + 4),
+                    vy: -(Math.random() * 18 + 10),
+                    gravity: 0.45,
+                    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+                    width: Math.random() * 9 + 5,
+                    height: Math.random() * 5 + 3,
+                    rotation: Math.random() * Math.PI * 2,
+                    rotationSpeed: (Math.random() - 0.5) * 0.25,
+                    opacity: 1,
+                    fade: Math.random() * 0.008 + 0.006,
+                    shape: Math.random() > 0.4 ? 'rect' : 'circle',
+                });
+            }
+            drawConfetti();
+        }
+
+        function drawConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let alive = false;
+
+            for (const p of particles) {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += p.gravity;
+                p.vx *= 0.99;
+                p.rotation += p.rotationSpeed;
+                p.opacity -= p.fade;
+
+                if (p.opacity <= 0) continue;
+                alive = true;
+
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, p.opacity);
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation);
+                ctx.fillStyle = p.color;
+
+                if (p.shape === 'circle') {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, p.width / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    ctx.fillRect(-p.width / 2, -p.height / 2, p.width, p.height);
+                }
+                ctx.restore();
+            }
+
+            if (alive) {
+                animFrame = requestAnimationFrame(drawConfetti);
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        // ── Game logic ───────────────────────────────────────────────────
+        function selectStrategy(strategy) {
+            const screen1 = document.getElementById('screen1');
+            const screen2 = document.getElementById('screen2');
+            const screen2Content = document.getElementById('screen2Content');
+
+            screen1.classList.add('hidden');
+            screen2.classList.remove('hidden');
+
+            if (strategy === 'A') {
+                document.body.classList.add('flash-red', 'shake');
+                screen2Content.innerHTML = `
+                    <div class="pop-in card rounded-2xl p-8 text-center">
+                        <div class="text-red-400 text-5xl font-bold mb-4">❌</div>
+                        <div class="text-red-400 text-2xl font-bold mb-4">Lie Detected</div>
+                        <div class="text-white text-base font-semibold leading-relaxed">
+                            Stop lying to yourself. Nobody wants lukewarm coffee.<br><br>
+                            You have the soul of an unpaid intern.
+                        </div>
+                    </div>`;
+                setTimeout(() => document.body.classList.remove('flash-red', 'shake'), 600);
+                setTimeout(() => {
+                    screen2.classList.add('hidden');
+                    screen1.classList.remove('hidden');
+                }, 5000);
+                clearTimeout(window.redirectTimer);
+                clearInterval(window.countdownTimer);
+
+            } else {
+                document.body.classList.add('flash-green');
+                launchConfetti();
+                screen2Content.innerHTML = `
+                    <div class="pop-in card rounded-2xl p-8 text-center">
+                        <div class="text-green-400 text-5xl font-bold mb-4 pulse-big">⚡</div>
+                        <div class="text-green-400 text-2xl font-bold mb-4">System Override</div>
+                        <div class="text-white text-base font-semibold leading-relaxed">
+                            Ding ding ding! A natural born hustler.<br><br>
+                            The South African Revenue Service (SARS) has entered the chat...
+                        </div>
+                        <div class="text-green-400/60 text-sm mt-5 italic">Just kidding.</div>
+                    </div>`;
+                setTimeout(() => document.body.classList.remove('flash-green'), 600);
+                setTimeout(() => showRewardScreen(), 10000);
+            }
+        }
+
+        function showRewardScreen() {
+            document.getElementById('screen2').classList.add('hidden');
+            document.getElementById('screen3').classList.remove('hidden');
+            startCountdown();
+        }
+
+        function startCountdown() {
+            let count = 3;
+            const el = document.getElementById('countdown');
+            window.countdownTimer = setInterval(() => {
+                count--;
+                el.textContent = count;
+                el.classList.remove('count-pop');
+                void el.offsetWidth; // reflow to restart animation
+                el.classList.add('count-pop');
+                if (count <= 0) {
+                    clearInterval(window.countdownTimer);
+                    redirectNow();
+                }
+            }, 1000);
+        }
+
+        function redirectNow() {
+            clearInterval(window.countdownTimer);
+            setTimeout(() => { window.location.href = TARGET_URL; }, 150);
+        }
+
+        // Mobile: prevent double-tap zoom
+        let lastTap = 0;
+        document.addEventListener('touchend', e => {
+            const now = Date.now();
+            if (now - lastTap < 300) e.preventDefault();
+            lastTap = now;
+        }, { passive: false });
+
+        document.addEventListener('touchstart', e => {
+            if (e.touches.length > 1) e.preventDefault();
+        }, { passive: false });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', e => {
+            if (e.key === '1' || e.key.toLowerCase() === 'a') selectStrategy('A');
+            if (e.key === '2' || e.key.toLowerCase() === 'b') selectStrategy('B');
+        });
+    </script>
+</body>
+</html>

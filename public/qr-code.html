@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code - Print</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .qr-wrapper {
+            text-align: center;
+            padding: 40px;
+        }
+
+        #qr-container canvas,
+        #qr-container img {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        .label {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .url-text {
+            margin-top: 6px;
+            font-size: 11px;
+            color: #888;
+            letter-spacing: 0.02em;
+        }
+
+        @media print {
+            body { background: white; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="qr-wrapper">
+        <div id="qr-container"></div>
+        <div class="label">Scan to Enter</div>
+        <div class="url-text" id="url-display"></div>
+
+        <div class="no-print" style="margin-top: 32px;">
+            <button onclick="window.print()" style="
+                background: #000; color: #fff; border: none;
+                padding: 12px 32px; font-size: 14px; font-weight: bold;
+                border-radius: 8px; cursor: pointer; letter-spacing: 0.05em;
+            ">🖨️ Print QR Code</button>
+        </div>
+    </div>
+
+    <!-- QR code library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script>
+        // ── CONFIG ─────────────────────────────────────────────────────────
+        const QR_URL = "https://thebreed.co.za/g";
+        const QR_SIZE = 400; // px — large for crisp printing
+        // ──────────────────────────────────────────────────────────────────
+
+        document.getElementById('url-display').textContent = QR_URL;
+
+        QRCode.toCanvas(QR_URL, {
+            width: QR_SIZE,
+            margin: 4,
+            errorCorrectionLevel: 'L',
+            color: {
+                dark: '#000000',
+                light: '#ffffff',
+            }
+        }, function(err, canvas) {
+            if (err) {
+                document.getElementById('qr-container').innerHTML =
+                    '<p style="color:red">QR generation failed: ' + err + '</p>';
+                return;
+            }
+            canvas.style.display = 'block';
+            document.getElementById('qr-container').appendChild(canvas);
+        });
+    </script>
+</body>
+</html>
