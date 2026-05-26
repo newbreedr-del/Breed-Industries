@@ -17,7 +17,8 @@ import {
   BookOpen,
   HelpCircle,
   Award,
-  Shield
+  Shield,
+  Bell
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -179,6 +180,14 @@ export default function AdminDashboard() {
       href: '/admin/service-requests',
       color: 'from-amber-500 to-amber-600',
       stats: `${stats.pendingServiceRequests} pending`
+    },
+    {
+      title: 'Secretary System',
+      description: 'Client work management & WhatsApp reminders',
+      icon: Bell,
+      href: '/admin/secretary',
+      color: 'from-rose-500 to-rose-600',
+      stats: 'Manage tasks'
     },
     {
       title: 'Blog Posts',
