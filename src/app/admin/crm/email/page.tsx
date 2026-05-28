@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Send, Mail, Users, FileText, RefreshCw, Check, Loader2, X } from 'lucide-react';
+import { ArrowLeft, Send, Mail, Users, FileText, RefreshCw, Check, Loader2, X, Eye } from 'lucide-react';
 
 interface Client { id: string; company_name: string; contact_email: string; }
 interface ClientService { id: string; service_name: string; billing_type: string; renewal_date: string; amount_rands: number; }
@@ -137,6 +137,16 @@ export default function EmailCampaignsPage() {
   const inputStyle = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' };
   const sendBtnClass = 'flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-black disabled:opacity-50';
 
+  const [previewTemplate, setPreviewTemplate] = useState('event_thank_you');
+  const [showPreview, setShowPreview] = useState(false);
+  const TEMPLATE_LABELS: Record<string, string> = {
+    event_thank_you:    'Event Thank You',
+    welcome_client:     'Welcome Client',
+    payment_reminder:   'Payment Reminder',
+    document_renewal:   'Document Renewal Alert',
+    service_checkin:    'Monthly Check-in',
+  };
+
   const paged = history.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
   return (
@@ -242,6 +252,42 @@ export default function EmailCampaignsPage() {
             </div>
           </div>
 
+        </div>
+
+        {/* Template preview */}
+        <div className="rounded-xl overflow-hidden mb-8" style={panelStyle}>
+          <div className="p-4 border-b border-white/8 flex items-center justify-between">
+            <h2 className="text-white font-semibold">Email Template Preview</h2>
+            <button onClick={() => setShowPreview(!showPreview)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-slate-300 hover:text-white transition-colors" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <Eye size={13} /> {showPreview ? 'Hide' : 'Preview'}
+            </button>
+          </div>
+          <div className="p-4 flex flex-wrap gap-2">
+            {Object.entries(TEMPLATE_LABELS).map(([key, label]) => (
+              <button
+                key={key}
+                onClick={() => { setPreviewTemplate(key); setShowPreview(true); }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  previewTemplate === key && showPreview
+                    ? 'text-black'
+                    : 'text-slate-300 hover:text-white'
+                }`}
+                style={{ background: previewTemplate === key && showPreview ? '#FF9F00' : 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          {showPreview && (
+            <div className="border-t border-white/8">
+              <iframe
+                src={`/api/crm/email/preview?template=${previewTemplate}`}
+                className="w-full"
+                style={{ height: '500px', border: 'none' }}
+                title="Email Preview"
+              />
+            </div>
+          )}
         </div>
 
         {/* Send history */}
