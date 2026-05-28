@@ -40,32 +40,35 @@ function emailShell(headerHtml: string, bodyHtml: string): string {
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 </head>
 <body style="margin:0;padding:0;background:#0a0a0a;font-family:Arial,Helvetica,sans-serif;">
-  <div style="max-width:620px;margin:32px auto;background:#111111;border-radius:12px;overflow:hidden;border:1px solid #222;">
+  <div style="max-width:620px;margin:32px auto;background:#111111;border-radius:12px;overflow:hidden;border:1px solid #2a2218;">
 
     <!-- Logo bar -->
-    <div style="background:#1a1a1a;padding:16px 28px;border-bottom:1px solid #222;text-align:left;">
-      <span style="font-size:18px;font-weight:900;color:#c8a96e;letter-spacing:3px;">BREED</span>
-      <span style="font-size:11px;color:#888;letter-spacing:2px;margin-left:6px;">INDUSTRIES</span>
+    <div style="background:#0f0f0f;padding:18px 28px;border-bottom:1px solid #2a2218;display:table;width:100%;box-sizing:border-box;">
+      <div style="display:table-cell;vertical-align:middle;">
+        <span style="font-size:20px;font-weight:900;color:#c8a96e;letter-spacing:4px;font-family:Arial,sans-serif;">BREED</span><span style="font-size:10px;font-weight:400;color:#888;letter-spacing:3px;margin-left:8px;font-family:Arial,sans-serif;">INDUSTRIES</span>
+      </div>
+      <div style="display:table-cell;vertical-align:middle;text-align:right;">
+        <span style="font-size:10px;color:#555;letter-spacing:1px;">PREMIUM GROWTH AGENCY</span>
+      </div>
     </div>
 
     <!-- Coloured header -->
     ${headerHtml}
 
     <!-- Body -->
-    <div style="padding:24px 28px;">
+    <div style="padding:28px 32px;">
       ${bodyHtml}
     </div>
 
     <!-- Footer -->
-    <div style="background:#0d0d0d;padding:16px 28px;border-top:1px solid #1e1e1e;text-align:center;">
-      <p style="margin:0 0 4px;color:#555;font-size:11px;">
-        Breed Industries · Premium Growth Agency · Durban
-      </p>
-      <p style="margin:0;color:#555;font-size:11px;">
+    <div style="background:#0a0a0a;padding:20px 32px;border-top:1px solid #1e1e1e;text-align:center;">
+      <p style="margin:0 0 6px;color:#444;font-size:11px;letter-spacing:0.5px;">Breed Industries (PTY) LTD &nbsp;|&nbsp; Premium Growth Agency &nbsp;|&nbsp; Durban, KZN</p>
+      <p style="margin:0;font-size:11px;">
         <a href="https://www.thebreed.co.za" style="color:#c8a96e;text-decoration:none;">www.thebreed.co.za</a>
-        &nbsp;·&nbsp;
+        &nbsp;&nbsp;
         <a href="mailto:${COMPANY_EMAIL}" style="color:#c8a96e;text-decoration:none;">${COMPANY_EMAIL}</a>
-        &nbsp;·&nbsp;${CONTACT_PHONE}
+        &nbsp;&nbsp;
+        <span style="color:#555;">${CONTACT_PHONE}</span>
       </p>
     </div>
 
@@ -87,7 +90,7 @@ function buildClientMatchHtml(
 
   const header = `
     <div style="background:linear-gradient(135deg,#c8a96e 0%,#9b6310 100%);padding:24px 28px;">
-      <p style="margin:0 0 4px;color:#111;font-size:12px;font-weight:700;letter-spacing:2px;">TENDER WATCH ALERT</p>
+      <p style="margin:0 0 4px;color:#111;font-size:11px;font-weight:700;letter-spacing:2px;">TENDER WATCH ALERT</p>
       <h1 style="margin:0;color:#111;font-size:21px;font-weight:900;line-height:1.3;">
         We found a tender that matches your business
       </h1>
@@ -99,7 +102,7 @@ function buildClientMatchHtml(
       Hi <strong style="color:#fff;">${client.name}</strong>, our tender tracking system
       has found a government tender that looks like a strong fit for
       <strong style="color:#fff;">${client.company_name}</strong>.
-      We're already on it — here are the details so you're in the loop.
+      We're already on it. Here are the details so you're in the loop.
     </p>
 
     <!-- Tender details card -->
@@ -157,7 +160,7 @@ function buildClientMatchHtml(
       <p style="margin:0 0 10px;color:#c8a96e;font-weight:700;font-size:13px;letter-spacing:1px;">WHAT HAPPENS NEXT</p>
       <p style="margin:0 0 8px;color:#ccc;font-size:13px;line-height:1.6;">
         Based on your package, our team will be preparing the bid documents and handling the submission on your behalf.
-        You don't need to do anything — we've got it covered.
+        You don't need to do anything. We've got it covered.
       </p>
       <p style="margin:0;color:#ccc;font-size:13px;line-height:1.6;">
         If you have any supporting documents you'd like us to include, or if you have questions about this tender,
@@ -167,7 +170,7 @@ function buildClientMatchHtml(
 
     <!-- CTA -->
     <div style="text-align:center;margin-bottom:8px;">
-      <a href="mailto:${COMPANY_EMAIL}?subject=Tender ${tender.reference_number} — ${client.company_name}"
+      <a href="mailto:${COMPANY_EMAIL}?subject=Tender ${tender.reference_number} - ${client.company_name}"
          style="display:inline-block;background:#c8a96e;color:#111;padding:12px 28px;border-radius:6px;text-decoration:none;font-weight:900;font-size:14px;letter-spacing:0.5px;margin-bottom:12px;">
         Reply to Our Team →
       </a>
@@ -193,14 +196,14 @@ function buildAdminMatchHtml(
 
   const header = `
     <div style="background:#222;padding:20px 28px;border-bottom:1px solid #333;">
-      <p style="margin:0 0 2px;color:#c8a96e;font-size:11px;font-weight:700;letter-spacing:2px;">INTERNAL — TENDER MATCH</p>
+      <p style="margin:0 0 2px;color:#c8a96e;font-size:11px;font-weight:700;letter-spacing:2px;">INTERNAL / TENDER MATCH</p>
       <h2 style="margin:0;color:#fff;font-size:18px;">${client.company_name} · Score ${score}/100</h2>
     </div>`;
 
   const body = `
     <p style="color:#aaa;font-size:13px;margin:0 0 16px;">
       Client email sent to <strong style="color:#fff;">${client.email}</strong>.
-      Reference: <strong style="color:#c8a96e;">${tender.reference_number}</strong> — closes in ${days} day${days !== 1 ? 's' : ''}.
+      Reference: <strong style="color:#c8a96e;">${tender.reference_number}</strong> - closes in ${days} day${days !== 1 ? 's' : ''}.
     </p>
     <div style="background:#1a1a1a;border-left:3px solid #c8a96e;padding:12px 16px;border-radius:0 6px 6px 0;margin-bottom:20px;">
       ${reasons.map(r => `<p style="margin:0 0 4px;color:#999;font-size:12px;">• ${r}</p>`).join('')}
@@ -228,7 +231,7 @@ export async function sendTenderMatchEmail(
     from:    `Breed Industries Tender Watch <${COMPANY_EMAIL}>`,
     to:      client.email,
     replyTo: COMPANY_EMAIL,
-    subject: `🎯 Tender Match Found for ${client.company_name} — ${tender.reference_number}`,
+    subject: `Tender Match Found for ${client.company_name} - ${tender.reference_number}`,
     html:    buildClientMatchHtml(client, tender, score, reasons),
   });
 
@@ -237,7 +240,7 @@ export async function sendTenderMatchEmail(
     await resend().emails.send({
       from:    `Breed Tender Engine <${COMPANY_EMAIL}>`,
       to:      ADMIN_EMAIL,
-      subject: `[INTERNAL] Tender Match [${score}/100] — ${client.company_name}: ${tender.reference_number}`,
+      subject: `[INTERNAL] Tender Match [${score}/100] - ${client.company_name}: ${tender.reference_number}`,
       html:    buildAdminMatchHtml(client, tender, score, reasons),
     });
   }
@@ -254,7 +257,7 @@ export async function sendClosingReminderEmail(
 
   const clientHeader = `
     <div style="background:linear-gradient(135deg,#c8502a 0%,#8b2a0e 100%);padding:24px 28px;">
-      <p style="margin:0 0 4px;color:#ffd0c0;font-size:12px;font-weight:700;letter-spacing:2px;">DEADLINE APPROACHING</p>
+      <p style="margin:0 0 4px;color:#ffd0c0;font-size:11px;font-weight:700;letter-spacing:2px;">DEADLINE APPROACHING</p>
       <h1 style="margin:0;color:#fff;font-size:21px;font-weight:900;">
         ${days} Day${days !== 1 ? 's' : ''} Left to Submit
       </h1>
@@ -263,7 +266,7 @@ export async function sendClosingReminderEmail(
   const clientBody = `
     <p style="color:#ccc;margin:0 0 20px;font-size:14px;line-height:1.6;">
       Hi <strong style="color:#fff;">${client.name}</strong>, this is a reminder that the tender
-      <strong style="color:#fff;">${tender.reference_number}</strong> — ${tender.title} —
+      <strong style="color:#fff;">${tender.reference_number}</strong> (${tender.title})
       closes on <strong style="color:#c8a96e;">${fmtDate(tender.closing_date)}</strong>.
     </p>
     <p style="color:#ccc;margin:0 0 20px;font-size:14px;line-height:1.6;">
@@ -285,7 +288,7 @@ export async function sendClosingReminderEmail(
     from:    `Breed Industries Tender Watch <${COMPANY_EMAIL}>`,
     to:      client.email,
     replyTo: COMPANY_EMAIL,
-    subject: `⏰ ${days} day${days !== 1 ? 's' : ''} left — ${tender.reference_number} (${client.company_name})`,
+    subject: `${days} day${days !== 1 ? 's' : ''} left - ${tender.reference_number} (${client.company_name})`,
     html:    emailShell(clientHeader, clientBody),
   });
 
@@ -293,7 +296,7 @@ export async function sendClosingReminderEmail(
   if (ADMIN_EMAIL && ADMIN_EMAIL !== client.email) {
     const adminHeader = `
       <div style="background:#222;padding:20px 28px;border-bottom:1px solid #333;">
-        <p style="margin:0 0 2px;color:#ff6b6b;font-size:11px;font-weight:700;letter-spacing:2px;">INTERNAL — CLOSING REMINDER</p>
+        <p style="margin:0 0 2px;color:#ff6b6b;font-size:11px;font-weight:700;letter-spacing:2px;">INTERNAL / CLOSING REMINDER</p>
         <h2 style="margin:0;color:#fff;font-size:18px;">${tender.reference_number} · ${days}d left · ${client.company_name}</h2>
       </div>`;
     const adminBody = `
@@ -309,7 +312,7 @@ export async function sendClosingReminderEmail(
     await resend().emails.send({
       from:    `Breed Tender Engine <${COMPANY_EMAIL}>`,
       to:      ADMIN_EMAIL,
-      subject: `[INTERNAL] ⏰ ${days}d left — ${tender.reference_number} (${client.company_name})`,
+      subject: `[INTERNAL] ${days}d left - ${tender.reference_number} (${client.company_name})`,
       html:    emailShell(adminHeader, adminBody),
     });
   }
@@ -339,7 +342,7 @@ export async function sendWeeklyDigestEmail(
 
   const header = `
     <div style="background:linear-gradient(135deg,#c8a96e 0%,#9b6310 100%);padding:24px 28px;">
-      <p style="margin:0 0 4px;color:#111;font-size:11px;font-weight:700;letter-spacing:2px;">INTERNAL — WEEKLY DIGEST</p>
+      <p style="margin:0 0 4px;color:#111;font-size:11px;font-weight:700;letter-spacing:2px;">INTERNAL / WEEKLY DIGEST</p>
       <h1 style="margin:0;color:#111;font-size:21px;font-weight:900;">Tender Engine Summary</h1>
       <p style="margin:6px 0 0;color:#333;font-size:13px;">${new Date().toLocaleDateString('en-ZA', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
     </div>`;
@@ -384,7 +387,7 @@ export async function sendWeeklyDigestEmail(
   await resend().emails.send({
     from:    `Breed Tender Engine <${COMPANY_EMAIL}>`,
     to:      ADMIN_EMAIL,
-    subject: `📋 Weekly Tender Digest — ${summary.newMatches} clients notified · ${summary.closingThisWeek.length} closing`,
+    subject: `Weekly Tender Digest - ${summary.newMatches} clients notified - ${summary.closingThisWeek.length} closing`,
     html:    emailShell(header, body),
   });
 }

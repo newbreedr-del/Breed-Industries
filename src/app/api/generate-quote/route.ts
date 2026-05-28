@@ -73,6 +73,31 @@ export async function POST(req: NextRequest) {
       // Continue — don't block PDF download if DB fails
     }
 
+    // Auto-upsert CRM client so quote history and CRM stay in sync
+    if (customerEmail) {
+      try {
+        const { data: existingClient } = await supabase
+          .from('crm_clients')
+          .select('id')
+          .eq('email', customerEmail.toLowerCase())
+          .maybeSingle();
+
+        if (!existingClient) {
+          await supabase.from('crm_clients').insert({
+            company_name: customerCompany || customerName,
+            contact_name: contactPerson || customerName,
+            email: customerEmail.toLowerCase(),
+            phone: customerPhone || null,
+            status: 'Lead',
+            source: 'Quote Request',
+            notes: `Auto-created from quote ${quoteNumber}`,
+          });
+        }
+      } catch (crmErr) {
+        console.error('CRM auto-link failed (non-blocking):', crmErr);
+      }
+    }
+
     // Generate PDF
     let pdfBuffer: Buffer | null = null;
     try {
@@ -142,7 +167,7 @@ export async function POST(req: NextRequest) {
           from: `Breed Industries <${COMPANY_EMAIL}>`,
           to: COMPANY_EMAIL,
           replyTo: customerEmail,
-          subject: `📋 New Quote ${quoteNumber} — ${customerName} (R${total.toLocaleString('en-ZA')})`,
+          subject: `New Quote ${quoteNumber} - ${customerName} (R${total.toLocaleString('en-ZA')})`,
           html: emailHtml,
         });
         if (emailResult.error) {
@@ -222,7 +247,7 @@ export async function POST(req: NextRequest) {
             from: `Breed Industries <${COMPANY_EMAIL}>`,
             to: customerEmail,
             replyTo: COMPANY_EMAIL,
-            subject: `Quote Request Received — Ref ${quoteNumber} | Breed Industries`,
+            subject: `Quote Request Received - Ref ${quoteNumber} - Breed Industries`,
             html: confirmHtml,
             attachments: pdfBuffer
               ? [{ filename: `Breed_Industries_Quote_${quoteNumber}.pdf`, content: pdfBuffer }]

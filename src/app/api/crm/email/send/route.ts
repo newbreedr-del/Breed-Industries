@@ -6,62 +6,99 @@ export const runtime = 'nodejs';
 
 const resend = new Resend(process.env.RESEND_API_KEY || '');
 const FROM_EMAIL = 'Breed Industries <info@thebreed.co.za>';
-const BANKING = 'Standard Bank · The Breed Industries (PTY) LTD · Acc: 10268731932 · Branch: 051001 · SWIFT: SBZAZAJJ';
+const BANKING_HTML = `
+  <table style="width:100%;border-collapse:collapse;background:#161616;border-radius:8px;overflow:hidden;margin:16px 0;">
+    <tr><td style="padding:8px 16px;color:#888;font-size:12px;width:40%;">Bank</td><td style="padding:8px 16px;color:#fff;font-size:12px;">Standard Bank</td></tr>
+    <tr style="background:#1a1a1a;"><td style="padding:8px 16px;color:#888;font-size:12px;">Account Name</td><td style="padding:8px 16px;color:#fff;font-size:12px;">The Breed Industries (PTY) LTD</td></tr>
+    <tr><td style="padding:8px 16px;color:#888;font-size:12px;">Account Number</td><td style="padding:8px 16px;color:#c8a96e;font-size:12px;font-weight:700;">10268731932</td></tr>
+    <tr style="background:#1a1a1a;"><td style="padding:8px 16px;color:#888;font-size:12px;">Branch Code</td><td style="padding:8px 16px;color:#fff;font-size:12px;">051001</td></tr>
+    <tr><td style="padding:8px 16px;color:#888;font-size:12px;">SWIFT</td><td style="padding:8px 16px;color:#fff;font-size:12px;">SBZAZAJJ</td></tr>
+  </table>
+  <p style="margin:8px 0 0;color:#c8a96e;font-size:12px;font-weight:700;">Use your company name as payment reference.</p>`;
 
 function isAuthenticated(request: NextRequest): boolean {
   const token = request.cookies.get('admin_session')?.value;
   return !!(token && token.length >= 10);
 }
 
-function baseHtml(content: string): string {
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
-    body{font-family:Arial,sans-serif;background:#0B1118;color:#e2e8f0;margin:0;padding:0}
-    .wrap{max-width:600px;margin:0 auto;padding:32px 24px}
-    .logo{color:#FF9F00;font-size:22px;font-weight:700;letter-spacing:1px;margin-bottom:24px}
-    .card{background:#131c27;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:28px;margin-bottom:20px}
-    h2{color:#fff;margin-top:0}p{color:#94a3b8;line-height:1.6}
-    .highlight{color:#FF9F00;font-weight:600}
-    .banking{background:#0B1118;border-left:3px solid #FF9F00;padding:12px 16px;margin:16px 0;font-size:13px;color:#cbd5e1}
-    .footer{font-size:12px;color:#475569;margin-top:24px;border-top:1px solid rgba(255,255,255,0.06);padding-top:16px}
-    a{color:#FF9F00}
-  </style></head><body><div class="wrap">
-    <div class="logo">BREED INDUSTRIES</div>
-    <div class="card">${content}</div>
-    <div class="footer">Breed Industries (PTY) LTD · info@thebreed.co.za · +27 60 496 4105</div>
-  </div></body></html>`;
+function emailShell(headerHtml: string, bodyHtml: string): string {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+<body style="margin:0;padding:0;background:#0a0a0a;font-family:Arial,Helvetica,sans-serif;">
+  <div style="max-width:620px;margin:32px auto;background:#111111;border-radius:12px;overflow:hidden;border:1px solid #2a2218;">
+    <div style="background:#0f0f0f;padding:18px 28px;border-bottom:1px solid #2a2218;display:table;width:100%;box-sizing:border-box;">
+      <div style="display:table-cell;vertical-align:middle;">
+        <span style="font-size:20px;font-weight:900;color:#c8a96e;letter-spacing:4px;font-family:Arial,sans-serif;">BREED</span><span style="font-size:10px;font-weight:400;color:#888;letter-spacing:3px;margin-left:8px;font-family:Arial,sans-serif;">INDUSTRIES</span>
+      </div>
+      <div style="display:table-cell;vertical-align:middle;text-align:right;">
+        <span style="font-size:10px;color:#555;letter-spacing:1px;">PREMIUM GROWTH AGENCY</span>
+      </div>
+    </div>
+    ${headerHtml}
+    <div style="padding:28px 32px;">${bodyHtml}</div>
+    <div style="background:#0a0a0a;padding:20px 32px;border-top:1px solid #1e1e1e;text-align:center;">
+      <p style="margin:0 0 6px;color:#444;font-size:11px;letter-spacing:0.5px;">Breed Industries (PTY) LTD &nbsp;|&nbsp; Premium Growth Agency &nbsp;|&nbsp; Durban, KZN</p>
+      <p style="margin:0;font-size:11px;">
+        <a href="https://www.thebreed.co.za" style="color:#c8a96e;text-decoration:none;">www.thebreed.co.za</a>
+        &nbsp;&nbsp;
+        <a href="mailto:info@thebreed.co.za" style="color:#c8a96e;text-decoration:none;">info@thebreed.co.za</a>
+        &nbsp;&nbsp;
+        <span style="color:#555;">+27 60 496 4105</span>
+      </p>
+    </div>
+  </div>
+</body></html>`;
 }
 
 function getTemplate(template: string, recipient: any, customMessage?: string): { subject: string; html: string } {
   const firstName = (recipient.contact_name || recipient.full_name || '').split(' ')[0] || 'there';
   const company = recipient.company_name || '';
 
+  const gold = '#c8a96e';
+  const body = (content: string) => `<p style="color:#ccc;font-size:14px;line-height:1.7;margin:0 0 16px;">${content}</p>`;
+  const highlight = (text: string) => `<strong style="color:${gold};">${text}</strong>`;
+  const cta = (label: string, href: string) =>
+    `<div style="text-align:center;margin-top:24px;"><a href="${href}" style="display:inline-block;background:${gold};color:#111;padding:12px 28px;border-radius:6px;text-decoration:none;font-weight:900;font-size:14px;letter-spacing:0.5px;">${label}</a></div>`;
+
   switch (template) {
     case 'event_thank_you': {
       const event = recipient.source_event || 'our recent event';
       const eventDate = recipient.event_date ? new Date(recipient.event_date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
       return {
-        subject: 'Thank you for attending — Breed Industries',
-        html: baseHtml(`
-          <h2>Thank you, ${firstName}!</h2>
-          <p>It was great connecting with you${eventDate ? ` at <span class="highlight">${event}</span> on ${eventDate}` : ` at <span class="highlight">${event}</span>`}.</p>
-          <p>Breed Industries helps South African businesses grow through compliance, branding, digital presence, and government tender support. We would love to explore how we can help <span class="highlight">${company || 'your business'}</span> thrive.</p>
-          ${customMessage ? `<p>${customMessage}</p>` : ''}
-          <p>Reply to this email or call us on <span class="highlight">+27 60 496 4105</span> to get started.</p>
-        `),
+        subject: `Thank you for attending - Breed Industries`,
+        html: emailShell(
+          `<div style="background:linear-gradient(135deg,#c8a96e 0%,#9b6310 100%);padding:24px 28px;">
+            <p style="margin:0 0 4px;color:#111;font-size:11px;font-weight:700;letter-spacing:2px;">THANK YOU FOR ATTENDING</p>
+            <h1 style="margin:0;color:#111;font-size:22px;font-weight:900;line-height:1.3;">Great connecting with you${eventDate ? `, ${firstName}` : ''}!</h1>
+            ${eventDate ? `<p style="margin:8px 0 0;color:#333;font-size:13px;">${event} &nbsp;|&nbsp; ${eventDate}</p>` : ''}
+          </div>`,
+          `${body(`Hi ${highlight(firstName)}, it was a pleasure meeting you${eventDate ? ` at ${highlight(event)}` : ''}.`)}
+           ${body(`Breed Industries helps South African businesses grow through compliance, branding, digital presence, and government tender support. We would love to explore how we can help ${highlight(company || 'your business')} thrive.`)}
+           ${customMessage ? body(customMessage) : ''}
+           ${cta('Get Started with Breed Industries', 'mailto:info@thebreed.co.za?subject=Enquiry from ' + encodeURIComponent(company || firstName))}`
+        ),
       };
     }
 
     case 'welcome_client': {
       const services = (recipient.services || []).filter((s: any) => s.status === 'Active').map((s: any) => s.service_name).join(', ') || 'your services';
       return {
-        subject: `Welcome to Breed Industries — ${company}`,
-        html: baseHtml(`
-          <h2>Welcome aboard, ${firstName}!</h2>
-          <p>We are thrilled to welcome <span class="highlight">${company}</span> to the Breed Industries family.</p>
-          <p>Your active services: <span class="highlight">${services}</span></p>
-          ${customMessage ? `<p>${customMessage}</p>` : ''}
-          <p>Your dedicated contact is <a href="mailto:info@thebreed.co.za">info@thebreed.co.za</a>. Do not hesitate to reach out at any time.</p>
-        `),
+        subject: `Welcome to Breed Industries - ${company}`,
+        html: emailShell(
+          `<div style="background:linear-gradient(135deg,#c8a96e 0%,#9b6310 100%);padding:24px 28px;">
+            <p style="margin:0 0 4px;color:#111;font-size:11px;font-weight:700;letter-spacing:2px;">WELCOME ABOARD</p>
+            <h1 style="margin:0;color:#111;font-size:22px;font-weight:900;">Welcome to the Breed Industries family!</h1>
+          </div>`,
+          `${body(`Hi ${highlight(firstName)}, we are thrilled to welcome ${highlight(company)} to the Breed Industries family.`)}
+           <div style="background:#1a1a1a;border-left:3px solid ${gold};padding:14px 18px;border-radius:0 6px 6px 0;margin:16px 0 20px;">
+             <p style="margin:0 0 4px;color:#fff;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Active Services</p>
+             <p style="margin:0;color:${gold};font-size:14px;">${services}</p>
+           </div>
+           ${customMessage ? body(customMessage) : ''}
+           ${body(`Your dedicated contact is <a href="mailto:info@thebreed.co.za" style="color:${gold};">info@thebreed.co.za</a>. Do not hesitate to reach out at any time.`)}
+           ${cta('Contact Your Account Manager', 'mailto:info@thebreed.co.za')}`
+        ),
       };
     }
 
@@ -69,15 +106,18 @@ function getTemplate(template: string, recipient: any, customMessage?: string): 
       const serviceName = recipient.service_name || 'your service';
       const amount = recipient.amount_rands ? `R${Number(recipient.amount_rands).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}` : '';
       return {
-        subject: `Payment reminder — ${serviceName} — Breed Industries`,
-        html: baseHtml(`
-          <h2>Friendly payment reminder</h2>
-          <p>Hi ${firstName}, this is a friendly reminder that your invoice for <span class="highlight">${serviceName}</span>${amount ? ` (${amount})` : ''} is due.</p>
-          ${customMessage ? `<p>${customMessage}</p>` : ''}
-          <p>Please make payment using the banking details below:</p>
-          <div class="banking">${BANKING}</div>
-          <p>Please use your company name as the payment reference. Contact us once payment has been made.</p>
-        `),
+        subject: `Payment reminder - ${serviceName} - Breed Industries`,
+        html: emailShell(
+          `<div style="background:#1e1e1e;padding:24px 28px;border-bottom:1px solid #2a2218;">
+            <p style="margin:0 0 4px;color:${gold};font-size:11px;font-weight:700;letter-spacing:2px;">PAYMENT REMINDER</p>
+            <h1 style="margin:0;color:#fff;font-size:22px;font-weight:900;">${serviceName}${amount ? ` - ${amount}` : ''}</h1>
+          </div>`,
+          `${body(`Hi ${highlight(firstName)}, this is a friendly reminder that your invoice for ${highlight(serviceName)}${amount ? ` (${amount})` : ''} is due.`)}
+           ${customMessage ? body(customMessage) : ''}
+           <p style="color:#fff;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:20px 0 8px;">Banking Details</p>
+           ${BANKING_HTML}
+           ${cta('Contact Us Once Paid', 'mailto:info@thebreed.co.za?subject=Payment confirmation - ' + encodeURIComponent(serviceName))}`
+        ),
       };
     }
 
@@ -85,14 +125,20 @@ function getTemplate(template: string, recipient: any, customMessage?: string): 
       const docType = recipient.service_name || 'your compliance document';
       const renewalDate = recipient.renewal_date ? new Date(recipient.renewal_date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
       return {
-        subject: `Action required: ${docType} renewal — Breed Industries`,
-        html: baseHtml(`
-          <h2>Your ${docType} is due for renewal</h2>
-          <p>Hi ${firstName}, we want to alert you that your <span class="highlight">${docType}</span>${renewalDate ? ` is due for renewal on <span class="highlight">${renewalDate}</span>` : ' needs to be renewed soon'}.</p>
-          <p>Letting this lapse could result in tender disqualification, compliance penalties, or loss of government supplier status.</p>
-          ${customMessage ? `<p>${customMessage}</p>` : ''}
-          <p>Reply to this email or call us on <span class="highlight">+27 60 496 4105</span> to start your renewal today.</p>
-        `),
+        subject: `Action required: ${docType} renewal - Breed Industries`,
+        html: emailShell(
+          `<div style="background:linear-gradient(135deg,#c8502a 0%,#8b2a0e 100%);padding:24px 28px;">
+            <p style="margin:0 0 4px;color:#ffd0c0;font-size:11px;font-weight:700;letter-spacing:2px;">ACTION REQUIRED</p>
+            <h1 style="margin:0;color:#fff;font-size:22px;font-weight:900;">${docType} Renewal</h1>
+            ${renewalDate ? `<p style="margin:8px 0 0;color:#ffd0c0;font-size:13px;">Due: ${renewalDate}</p>` : ''}
+          </div>`,
+          `${body(`Hi ${highlight(firstName)}, we want to alert you that your ${highlight(docType)}${renewalDate ? ` is due for renewal on ${highlight(renewalDate)}` : ' needs to be renewed soon'}.`)}
+           <div style="background:#1a1a1a;border-left:3px solid #ff6b6b;padding:14px 18px;border-radius:0 6px 6px 0;margin:16px 0 20px;">
+             <p style="margin:0;color:#ccc;font-size:13px;">Letting this lapse could result in tender disqualification, compliance penalties, or loss of government supplier status.</p>
+           </div>
+           ${customMessage ? body(customMessage) : ''}
+           ${cta('Start Your Renewal Today', 'mailto:info@thebreed.co.za?subject=Renewal request - ' + encodeURIComponent(docType))}`
+        ),
       };
     }
 
@@ -100,19 +146,26 @@ function getTemplate(template: string, recipient: any, customMessage?: string): 
       const month = new Date().toLocaleDateString('en-ZA', { month: 'long', year: 'numeric' });
       const services = (recipient.services || []).filter((s: any) => s.status === 'Active').map((s: any) => s.service_name).join(', ') || 'your active services';
       return {
-        subject: `Monthly check-in — ${month} — Breed Industries`,
-        html: baseHtml(`
-          <h2>Your ${month} check-in</h2>
-          <p>Hi ${firstName}, the team at Breed Industries is checking in for the month of <span class="highlight">${month}</span>.</p>
-          <p>Your current active services: <span class="highlight">${services}</span></p>
-          ${customMessage ? `<p>${customMessage}</p>` : ''}
-          <p>Is there anything you need from us this month? We also assist with branding, compliance, digital presence, and tender submissions — reply or call us on <span class="highlight">+27 60 496 4105</span>.</p>
-        `),
+        subject: `Monthly check-in - ${month} - Breed Industries`,
+        html: emailShell(
+          `<div style="background:linear-gradient(135deg,#c8a96e 0%,#9b6310 100%);padding:24px 28px;">
+            <p style="margin:0 0 4px;color:#111;font-size:11px;font-weight:700;letter-spacing:2px;">MONTHLY CHECK-IN</p>
+            <h1 style="margin:0;color:#111;font-size:22px;font-weight:900;">${month}</h1>
+          </div>`,
+          `${body(`Hi ${highlight(firstName)}, the Breed Industries team is checking in for ${highlight(month)}.`)}
+           <div style="background:#1a1a1a;border-left:3px solid ${gold};padding:14px 18px;border-radius:0 6px 6px 0;margin:16px 0 20px;">
+             <p style="margin:0 0 4px;color:#fff;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Your Active Services</p>
+             <p style="margin:0;color:${gold};font-size:14px;">${services}</p>
+           </div>
+           ${customMessage ? body(customMessage) : ''}
+           ${body('Is there anything you need from us this month? We also assist with branding, compliance, digital presence, and tender submissions.')}
+           ${cta('Reply to Our Team', 'mailto:info@thebreed.co.za')}`
+        ),
       };
     }
 
     default:
-      return { subject: 'Message from Breed Industries', html: baseHtml(`<p>${customMessage || ''}</p>`) };
+      return { subject: 'Message from Breed Industries', html: emailShell('', `<p style="color:#ccc;">${customMessage || ''}</p>`) };
   }
 }
 

@@ -1,5 +1,5 @@
 import { Invoice } from '@/types/invoice';
-import { supabase } from './supabase';
+import { supabaseAdmin as supabase } from './supabase';
 
 // Convert database row to Invoice type
 function dbToInvoice(row: any): Invoice {
