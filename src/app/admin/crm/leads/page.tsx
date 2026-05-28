@@ -126,7 +126,7 @@ export default function LeadsPipelinePage() {
   const unsentForEvent = bulkEvent ? leads.filter(l => l.source_event === bulkEvent && !l.thank_you_sent && l.email).length : 0;
 
   const inputClass = 'w-full px-3 py-2 rounded-lg text-white text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all';
-  const inputStyle = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' };
+  const inputStyle = { background: '#1a2535', border: '1px solid rgba(255,255,255,0.12)', colorScheme: 'dark' as const };
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--color-bg-deep, #0B1118)' }}>
@@ -134,10 +134,16 @@ export default function LeadsPipelinePage() {
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/admin/crm" className="text-slate-400 hover:text-white transition-colors"><ArrowLeft size={20} /></Link>
+          <Link href="/admin/crm" className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"><ArrowLeft size={20} /></Link>
           <div className="flex-1">
+            <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
+              <Link href="/admin" className="hover:text-slate-300 transition-colors">Admin</Link>
+              <span>/</span>
+              <Link href="/admin/crm" className="hover:text-slate-300 transition-colors">CRM</Link>
+              <span>/</span>
+              <span className="text-slate-300">Leads Pipeline</span>
+            </div>
             <h1 className="text-2xl font-bold text-white">Leads Pipeline</h1>
-            <p className="text-slate-400 text-sm mt-0.5">{leads.length} total leads</p>
           </div>
           <button onClick={() => setShowBulkModal(true)} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-black" style={{ background: '#FF9F00' }}>
             <Send size={14} /> Send Thank You to All
@@ -224,9 +230,6 @@ export default function LeadsPipelinePage() {
           )}
         </div>
 
-        <div className="mt-8">
-          <Link href="/admin/crm" className="text-slate-400 hover:text-slate-300 text-sm transition-colors">← Back to CRM</Link>
-        </div>
       </div>
 
       {/* Bulk send modal */}

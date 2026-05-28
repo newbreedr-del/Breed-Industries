@@ -98,7 +98,7 @@ export default function ClientDetailPage() {
   };
 
   const inputClass = 'w-full px-3 py-2 rounded-lg text-white text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all';
-  const inputStyle = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' };
+  const inputStyle = { background: '#1a2535', border: '1px solid rgba(255,255,255,0.12)', colorScheme: 'dark' as const };
 
   if (loading) return <div className="min-h-screen flex items-center justify-center" style={{ background: '#0B1118' }}><Loader2 className="animate-spin text-orange-400" /></div>;
   if (!client) return <div className="min-h-screen flex items-center justify-center text-slate-400" style={{ background: '#0B1118' }}>Client not found. <Link href="/admin/crm" className="text-orange-400 ml-2">Back</Link></div>;
@@ -109,8 +109,15 @@ export default function ClientDetailPage() {
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-2">
-          <Link href="/admin/crm" className="text-slate-400 hover:text-white transition-colors"><ArrowLeft size={20} /></Link>
+          <Link href="/admin/crm" className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"><ArrowLeft size={20} /></Link>
           <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
+              <Link href="/admin" className="hover:text-slate-300 transition-colors">Admin</Link>
+              <span>/</span>
+              <Link href="/admin/crm" className="hover:text-slate-300 transition-colors">CRM</Link>
+              <span>/</span>
+              <span className="text-slate-300 truncate">{client?.company_name}</span>
+            </div>
             <div className="flex items-center gap-3 flex-wrap">
               <h1 className="text-2xl font-bold text-white">{client.company_name}</h1>
               <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_STYLES[client.status] || 'text-slate-400 bg-white/8'}`}>{client.status}</span>

@@ -52,7 +52,7 @@ export default function AddClientPage() {
   };
 
   const inputClass = 'w-full px-3 py-2 rounded-lg text-white text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all';
-  const inputStyle = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' };
+  const inputStyle = { background: '#1a2535', border: '1px solid rgba(255,255,255,0.12)', colorScheme: 'dark' as const };
   const labelClass = 'block text-slate-400 text-xs font-medium mb-1';
 
   return (
@@ -60,10 +60,16 @@ export default function AddClientPage() {
       <div className="max-w-2xl mx-auto px-4 py-8">
 
         <div className="flex items-center gap-3 mb-8">
-          <Link href="/admin/crm" className="text-slate-400 hover:text-white transition-colors"><ArrowLeft size={20} /></Link>
+          <Link href="/admin/crm" className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"><ArrowLeft size={20} /></Link>
           <div>
+            <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
+              <Link href="/admin" className="hover:text-slate-300 transition-colors">Admin</Link>
+              <span>/</span>
+              <Link href="/admin/crm" className="hover:text-slate-300 transition-colors">CRM</Link>
+              <span>/</span>
+              <span className="text-slate-300">Add Client</span>
+            </div>
             <h1 className="text-2xl font-bold text-white">Add New Client</h1>
-            <p className="text-slate-400 text-sm mt-0.5">Create a new CRM client record</p>
           </div>
         </div>
 

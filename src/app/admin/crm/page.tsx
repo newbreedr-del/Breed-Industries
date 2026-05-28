@@ -76,8 +76,12 @@ export default function CrmDashboard() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
+            <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
+              <Link href="/admin" className="hover:text-slate-300 transition-colors">Admin</Link>
+              <span>/</span>
+              <span className="text-slate-300">CRM</span>
+            </div>
             <h1 className="text-2xl font-bold text-white">CRM Dashboard</h1>
-            <p className="text-slate-400 text-sm mt-1">Clients, leads, and relationships</p>
           </div>
           <div className="flex gap-3">
             <Link href="/admin/crm/leads" className="px-4 py-2 rounded-lg border border-white/10 text-slate-300 hover:text-white hover:border-white/20 text-sm transition-colors">
@@ -190,10 +194,6 @@ export default function CrmDashboard() {
 
         </div>
 
-        {/* Back link */}
-        <div className="mt-8">
-          <Link href="/admin" className="text-slate-400 hover:text-slate-300 text-sm transition-colors">← Back to Admin Dashboard</Link>
-        </div>
       </div>
     </div>
   );
