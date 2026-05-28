@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Send, UserPlus, Search, X, Check, Loader2, ChevronDown, Trash2 } from 'lucide-react';
+import { ArrowLeft, Send, UserPlus, Search, X, Check, Loader2, ChevronDown, Trash2, Pencil } from 'lucide-react';
 
 interface Lead {
   id: string; full_name: string; company_name: string; position: string;
@@ -40,6 +40,36 @@ export default function LeadsPipelinePage() {
   const [converting, setConverting]             = useState(false);
   const [sendingTY, setSendingTY]               = useState<string | null>(null);
   const [sentTY, setSentTY]                     = useState<Set<string>>(new Set());
+
+  // Edit lead modal
+  const [editLead, setEditLead]                 = useState<Lead | null>(null);
+  const [editForm, setEditForm]                 = useState<Partial<Lead>>({});
+  const [savingEdit, setSavingEdit]             = useState(false);
+
+  const openEdit = (l: Lead) => {
+    setEditLead(l);
+    setEditForm({
+      full_name: l.full_name, company_name: l.company_name, position: l.position,
+      email: l.email, phone: l.phone, source_event: l.source_event, event_date: l.event_date,
+      follow_up_date: l.follow_up_date, package_interest: l.package_interest, notes: l.notes,
+    });
+  };
+
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editLead) return;
+    setSavingEdit(true);
+    const res = await fetch(`/api/crm/leads/${editLead.id}`, {
+      method: 'PATCH', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(editForm),
+    });
+    if (res.ok) {
+      setLeads(ls => ls.map(l => l.id === editLead.id ? { ...l, ...editForm } as Lead : l));
+      setEditLead(null);
+    }
+    setSavingEdit(false);
+  };
 
   useEffect(() => {
     fetch('/api/crm/leads', { credentials: 'include' })
@@ -219,7 +249,8 @@ export default function LeadsPipelinePage() {
                               {sentTY.has(l.id) || l.thank_you_sent ? 'Sent' : 'Thank You'}
                             </button>
                           )}
-                          <button onClick={() => handleDelete(l.id)} className="text-red-400/50 hover:text-red-400 transition-colors"><Trash2 size={13} /></button>
+                          <button onClick={() => openEdit(l)} className="text-slate-400/60 hover:text-slate-200 transition-colors" title="Edit lead"><Pencil size={13} /></button>
+                          <button onClick={() => handleDelete(l.id)} className="text-red-400/50 hover:text-red-400 transition-colors" title="Delete lead"><Trash2 size={13} /></button>
                         </div>
                       </td>
                     </tr>
@@ -269,6 +300,74 @@ export default function LeadsPipelinePage() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Edit Lead modal */}
+      {editLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.75)' }}>
+          <div className="w-full max-w-lg rounded-2xl p-6 max-h-[90vh] overflow-y-auto" style={{ background: '#131c27', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-white font-semibold">Edit Lead</h3>
+              <button onClick={() => setEditLead(null)} className="text-slate-400 hover:text-white"><X size={18} /></button>
+            </div>
+            <form onSubmit={handleSaveEdit} className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-400 text-xs font-medium mb-1">Full Name *</label>
+                  <input required className={inputClass} style={inputStyle} value={editForm.full_name || ''} onChange={e => setEditForm(f => ({...f, full_name: e.target.value}))} />
+                </div>
+                <div>
+                  <label className="block text-slate-400 text-xs font-medium mb-1">Company</label>
+                  <input className={inputClass} style={inputStyle} value={editForm.company_name || ''} onChange={e => setEditForm(f => ({...f, company_name: e.target.value}))} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-400 text-xs font-medium mb-1">Position / Title</label>
+                  <input className={inputClass} style={inputStyle} value={editForm.position || ''} onChange={e => setEditForm(f => ({...f, position: e.target.value}))} />
+                </div>
+                <div>
+                  <label className="block text-slate-400 text-xs font-medium mb-1">Phone</label>
+                  <input className={inputClass} style={inputStyle} value={editForm.phone || ''} onChange={e => setEditForm(f => ({...f, phone: e.target.value}))} />
+                </div>
+              </div>
+              <div>
+                <label className="block text-slate-400 text-xs font-medium mb-1">Email</label>
+                <input type="email" className={inputClass} style={inputStyle} value={editForm.email || ''} onChange={e => setEditForm(f => ({...f, email: e.target.value}))} />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-400 text-xs font-medium mb-1">Source Event</label>
+                  <input className={inputClass} style={inputStyle} value={editForm.source_event || ''} onChange={e => setEditForm(f => ({...f, source_event: e.target.value}))} />
+                </div>
+                <div>
+                  <label className="block text-slate-400 text-xs font-medium mb-1">Event Date</label>
+                  <input type="date" className={inputClass} style={inputStyle} value={editForm.event_date?.slice(0,10) || ''} onChange={e => setEditForm(f => ({...f, event_date: e.target.value}))} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-400 text-xs font-medium mb-1">Follow-up Date</label>
+                  <input type="date" className={inputClass} style={inputStyle} value={editForm.follow_up_date?.slice(0,10) || ''} onChange={e => setEditForm(f => ({...f, follow_up_date: e.target.value}))} />
+                </div>
+                <div>
+                  <label className="block text-slate-400 text-xs font-medium mb-1">Package Interest</label>
+                  <input className={inputClass} style={inputStyle} value={editForm.package_interest || ''} onChange={e => setEditForm(f => ({...f, package_interest: e.target.value}))} />
+                </div>
+              </div>
+              <div>
+                <label className="block text-slate-400 text-xs font-medium mb-1">Notes</label>
+                <textarea rows={3} className={inputClass} style={inputStyle} value={editForm.notes || ''} onChange={e => setEditForm(f => ({...f, notes: e.target.value}))} />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button type="button" onClick={() => setEditLead(null)} className="flex-1 py-2.5 rounded-lg text-sm text-slate-300" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>Cancel</button>
+                <button type="submit" disabled={savingEdit} className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium text-black disabled:opacity-50" style={{ background: '#FF9F00' }}>
+                  {savingEdit ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />} Save Changes
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

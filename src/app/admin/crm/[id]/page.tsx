@@ -37,6 +37,37 @@ export default function ClientDetailPage() {
   const [emails, setEmails]   = useState<EmailSend[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Edit client modal
+  const [showEditClient, setShowEditClient] = useState(false);
+  const [editForm, setEditForm] = useState<Partial<Client>>({});
+  const [savingClient, setSavingClient] = useState(false);
+
+  const openEditClient = () => {
+    if (!client) return;
+    setEditForm({
+      company_name: client.company_name, contact_name: client.contact_name,
+      contact_email: client.contact_email, contact_phone: client.contact_phone,
+      status: client.status, source: client.source, industry: client.industry,
+      drive_folder_url: client.drive_folder_url, notes: client.notes,
+    });
+    setShowEditClient(true);
+  };
+
+  const handleSaveClient = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingClient(true);
+    const res = await fetch(`/api/crm/clients/${id}`, {
+      method: 'PATCH', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(editForm),
+    });
+    if (res.ok) {
+      setClient(c => c ? { ...c, ...editForm } as Client : c);
+      setShowEditClient(false);
+    }
+    setSavingClient(false);
+  };
+
   // Add service form
   const [showAddService, setShowAddService] = useState(false);
   const [newService, setNewService] = useState({ service_name: '', service_category: '', billing_type: 'Once-off', amount_rands: '', status: 'Active', renewal_date: '', notes: '' });
@@ -130,6 +161,9 @@ export default function ClientDetailPage() {
                 <ExternalLink size={14} /> Drive
               </a>
             )}
+            <button onClick={openEditClient} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white transition-colors" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <Edit2 size={14} /> Edit
+            </button>
             <button onClick={() => setShowEmailModal(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-black" style={{ background: '#FF9F00' }}>
               <Send size={14} /> Send Email
             </button>
@@ -247,6 +281,72 @@ export default function ClientDetailPage() {
         </div>
 
       </div>
+
+      {/* Edit Client modal */}
+      {showEditClient && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.75)' }}>
+          <div className="w-full max-w-lg rounded-2xl p-6 max-h-[90vh] overflow-y-auto" style={{ background: '#131c27', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-white font-semibold">Edit Client</h3>
+              <button onClick={() => setShowEditClient(false)} className="text-slate-400 hover:text-white"><X size={18} /></button>
+            </div>
+            <form onSubmit={handleSaveClient} className="space-y-3">
+              <div>
+                <label className="block text-slate-400 text-xs font-medium mb-1">Company Name *</label>
+                <input required className={inputClass} style={inputStyle} value={editForm.company_name || ''} onChange={e => setEditForm(f => ({...f, company_name: e.target.value}))} />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-400 text-xs font-medium mb-1">Contact Name</label>
+                  <input className={inputClass} style={inputStyle} value={editForm.contact_name || ''} onChange={e => setEditForm(f => ({...f, contact_name: e.target.value}))} />
+                </div>
+                <div>
+                  <label className="block text-slate-400 text-xs font-medium mb-1">Phone</label>
+                  <input className={inputClass} style={inputStyle} value={editForm.contact_phone || ''} onChange={e => setEditForm(f => ({...f, contact_phone: e.target.value}))} />
+                </div>
+              </div>
+              <div>
+                <label className="block text-slate-400 text-xs font-medium mb-1">Email</label>
+                <input type="email" className={inputClass} style={inputStyle} value={editForm.contact_email || ''} onChange={e => setEditForm(f => ({...f, contact_email: e.target.value}))} />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-400 text-xs font-medium mb-1">Status</label>
+                  <select className={inputClass} style={inputStyle} value={editForm.status || 'Active'} onChange={e => setEditForm(f => ({...f, status: e.target.value}))}>
+                    <option>Active</option>
+                    <option>On Hold</option>
+                    <option>Churned</option>
+                    <option>Prospect</option>
+                    <option>Lead</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-slate-400 text-xs font-medium mb-1">Industry</label>
+                  <input className={inputClass} style={inputStyle} value={editForm.industry || ''} onChange={e => setEditForm(f => ({...f, industry: e.target.value}))} />
+                </div>
+              </div>
+              <div>
+                <label className="block text-slate-400 text-xs font-medium mb-1">Source</label>
+                <input className={inputClass} style={inputStyle} value={editForm.source || ''} onChange={e => setEditForm(f => ({...f, source: e.target.value}))} />
+              </div>
+              <div>
+                <label className="block text-slate-400 text-xs font-medium mb-1">Google Drive Folder URL</label>
+                <input type="url" className={inputClass} style={inputStyle} placeholder="https://drive.google.com/..." value={editForm.drive_folder_url || ''} onChange={e => setEditForm(f => ({...f, drive_folder_url: e.target.value}))} />
+              </div>
+              <div>
+                <label className="block text-slate-400 text-xs font-medium mb-1">Notes</label>
+                <textarea rows={3} className={inputClass} style={inputStyle} value={editForm.notes || ''} onChange={e => setEditForm(f => ({...f, notes: e.target.value}))} />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button type="button" onClick={() => setShowEditClient(false)} className="flex-1 py-2.5 rounded-lg text-sm text-slate-300" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>Cancel</button>
+                <button type="submit" disabled={savingClient} className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium text-black disabled:opacity-50" style={{ background: '#FF9F00' }}>
+                  {savingClient ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />} Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Email modal */}
       {showEmailModal && (
