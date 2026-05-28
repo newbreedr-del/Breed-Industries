@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+export const runtime = 'nodejs';
+
 export async function POST(req: NextRequest) {
   try {
     const { token, email, otp_code, device_fingerprint } = await req.json();

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { updateBlogPost, deleteBlogPost, getBlogPostBySlugAdmin } from '@/lib/blog';
 
+export const runtime = 'nodejs';
+
 // GET single blog post (admin - includes drafts)
 export async function GET(
   request: NextRequest,

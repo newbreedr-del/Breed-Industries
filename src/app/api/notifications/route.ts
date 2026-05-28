@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { twilioNotifications } from '@/lib/twilio';
 import { logNotification } from '@/lib/notifications';
 
+export const runtime = 'nodejs';
+
 export async function POST(request: NextRequest) {
   try {
     const { type, data, recipient } = await request.json();

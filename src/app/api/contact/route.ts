@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { supabase } from '@/lib/supabase';
+import { supabase, supabaseAdmin } from '@/lib/supabase';
+
+export const runtime = 'nodejs';
 
 async function sendWhatsAppNotification(data: any) {
   try {
@@ -83,7 +85,7 @@ export async function POST(request: Request) {
       sendWhatsAppNotification({ name, email, phone, message }).catch(console.error);
 
       // Save to Supabase (non-blocking — fails gracefully if table doesn't exist yet)
-      supabase.from('contact_messages').insert({
+      supabaseAdmin.from('contact_messages').insert({
         id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         name,
         email,
@@ -127,7 +129,7 @@ export async function GET() {
 export async function PATCH(request: Request) {
   try {
     const { id, status } = await request.json();
-    await supabase.from('contact_messages').update({ status, updated_at: new Date().toISOString() }).eq('id', id);
+    await supabaseAdmin.from('contact_messages').update({ status, updated_at: new Date().toISOString() }).eq('id', id);
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false });

@@ -18,7 +18,8 @@ import {
   HelpCircle,
   Award,
   Shield,
-  Bell
+  Bell,
+  UserPlus
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -156,6 +157,30 @@ export default function AdminDashboard() {
       href: '/admin/quotes',
       color: 'from-green-500 to-green-600',
       stats: `${stats.recentQuotes} recent`
+    },
+    {
+      title: 'CRM — Clients',
+      description: 'Manage CRM clients, services, and monthly recurring revenue',
+      icon: TrendingUp,
+      href: '/admin/crm',
+      color: 'from-orange-500 to-amber-600',
+      stats: 'View clients'
+    },
+    {
+      title: 'CRM — Leads',
+      description: 'Event leads pipeline, convert to clients, send thank you emails',
+      icon: UserPlus,
+      href: '/admin/crm/leads',
+      color: 'from-sky-500 to-blue-600',
+      stats: 'View pipeline'
+    },
+    {
+      title: 'CRM — Email',
+      description: 'Send targeted campaigns, payment reminders, and check-ins',
+      icon: Mail,
+      href: '/admin/crm/email',
+      color: 'from-indigo-500 to-purple-600',
+      stats: 'Send emails'
     },
     {
       title: 'Contacts',

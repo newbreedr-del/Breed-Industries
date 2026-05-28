@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { ServiceRequestCreateRequest } from '@/types/serviceRequest';
+
 import { createServiceRequest, getServiceRequests } from '@/lib/serviceRequestStorage';
 import { getServiceById } from '@/data/serviceDefinitions';
+
+export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
   try {

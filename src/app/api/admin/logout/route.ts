@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { clearSessionCookie } from '@/lib/adminAuth';
 
+export const runtime = 'nodejs';
+
 export async function POST(request: NextRequest) {
   try {
     return clearSessionCookie();

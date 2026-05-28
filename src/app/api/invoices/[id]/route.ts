@@ -6,6 +6,8 @@ import {
   deleteInvoice 
 } from '@/lib/invoiceStorage';
 
+export const runtime = 'nodejs';
+
 // GET /api/invoices/[id] - Get single invoice
 export async function GET(
   request: NextRequest,

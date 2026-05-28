@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllBlogPostsAdmin, createBlogPost } from '@/lib/blog';
 
+export const runtime = 'nodejs';
+
 // GET all blog posts (admin - includes drafts)
 export async function GET() {
   try {

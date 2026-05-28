@@ -153,7 +153,6 @@ SELECT
   c.company_name,
   c.industry,
   c.phone as client_phone,
-  c.whatsapp_number,
   ct.whatsapp_enabled,
   ct.whatsapp_number as task_whatsapp_override,
   s.name as service_name,

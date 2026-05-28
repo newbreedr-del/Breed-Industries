@@ -3,6 +3,8 @@ import { getPaymentStatus } from '@/lib/stitchService';
 import { getInvoiceById, updateInvoice } from '@/lib/invoiceStorage';
 import { StitchWebhookPayload } from '@/types/stitch';
 
+export const runtime = 'nodejs';
+
 export async function POST(request: Request) {
   try {
     const payload: StitchWebhookPayload = await request.json();

@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { createPaymentRequest } from '@/lib/stitchService';
 import { getInvoiceById, updateInvoice } from '@/lib/invoiceStorage';
 
+export const runtime = 'nodejs';
+
 export async function POST(request: Request) {
   try {
     const { invoiceId } = await request.json();

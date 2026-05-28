@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+export const runtime = 'nodejs';
+
 // POST - check if a device can access an already-verified invite
 export async function POST(req: NextRequest) {
   try {

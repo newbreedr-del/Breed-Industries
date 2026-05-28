@@ -1,9 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
+export const runtime = 'nodejs';
 
 // This endpoint should be called by a cron job (e.g., Vercel Cron, or external scheduler)
 // It checks for due tasks and sends WhatsApp reminders

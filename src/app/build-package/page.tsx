@@ -5,7 +5,14 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
-import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, CheckCircle2, Download, ArrowRight, Loader2, Send, Award, Bot } from 'lucide-react';
+import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, CheckCircle2, Download, ArrowRight, Loader2, Send, Award, Bot, Eye, TrendingUp, Rocket } from 'lucide-react';
+
+const retainerOptions = [
+  { id: 'business-watch', name: 'Business Watch (Monthly)', price: 950, pricingType: 'monthly', icon: <Eye size={16} />, description: 'Monthly funding & accreditation monitoring with alerts and support.' },
+  { id: 'business-growth-essentials', name: 'Business Growth Essentials (Monthly)', price: 950, pricingType: 'monthly', icon: <TrendingUp size={16} />, description: 'Monthly retainer: compliance monitoring + tender alerts + social media support + strategy check-in.' },
+  { id: 'brand-launch-package', name: 'Brand Launch Package', price: 4500, pricingType: 'one-time', icon: <Rocket size={16} />, description: 'Company Registration + Logo + Business Profile + Business Cards. Everything to launch your brand.' },
+  { id: 'tender-growth-package', name: 'Tender Growth Package (Monthly)', price: 1950, pricingType: 'monthly', icon: <Award size={16} />, description: 'Full compliance setup + monthly tender watch. Compliance audit in month 1.' },
+];
 
 const complianceOptions = [
   { id: 'cipc', name: 'CIPC Registration', price: 550, pricingType: 'one-time', icon: <Shield size={16} />, description: 'Complete company registration with CIPC including name reservation and registration certificate' },
@@ -71,6 +78,14 @@ const platformOptions = [
 ];
 
 const builderSteps = [
+  {
+    id: 'retainer',
+    title: 'Retainer Packages',
+    description: 'Monthly and bundled packages for ongoing business support, compliance monitoring, and growth.',
+    options: retainerOptions,
+    icon: <TrendingUp className="w-5 h-5" />,
+    shortLabel: 'Retainers',
+  },
   {
     id: 'compliance',
     title: 'Pick your foundation',
@@ -156,7 +171,7 @@ const quickBundles = [
   },
 ];
 
-const allOptions = [...complianceOptions, ...brandingOptions, ...digitalOptions, ...businessProfileOptions, ...tenderOptions];
+const allOptions = [...retainerOptions, ...complianceOptions, ...brandingOptions, ...digitalOptions, ...businessProfileOptions, ...tenderOptions, ...platformOptions];
 
 const clientRequirementsMap: Record<string, string[]> = {
   'CIPC Registration': ['Certified copy of ID document (all directors)', 'Proof of residential address (not older than 3 months)', 'Three proposed company name options', 'Signed CIPC forms (provided by Breed Industries)'],

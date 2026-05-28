@@ -9,6 +9,51 @@ export interface ScopeDetail {
 }
 
 export const scopeDetails: Record<string, ScopeDetail> = {
+  // ── Retainer Packages ────────────────────────────────────────────────────────
+  'Business Watch (Monthly)': {
+    timeline: 'Month-to-month — first report within 5 business days',
+    clientRequirements: [
+      'CIPC registration certificate',
+      'Current accreditation documents (BEE, CSD, Tax Clearance if available)',
+      'Industries and sectors your business operates in',
+      'Province(s) you operate in',
+      'Contact email for monthly alerts and reports',
+      'NOTE: Cancel anytime with 30 days written notice.',
+    ],
+  },
+  'Business Growth Essentials (Monthly)': {
+    timeline: 'Month-to-month — onboarding call within 48 hours',
+    clientRequirements: [
+      'CIPC registration certificate',
+      'Business overview (services, target market, goals)',
+      'Current social media accounts (if any)',
+      'Province(s) you operate in',
+      'Primary contact for monthly check-ins',
+    ],
+  },
+  'Brand Launch Package': {
+    timeline: '10 – 15 Business Days (end-to-end)',
+    clientRequirements: [
+      'Certified ID copies of all directors',
+      'Proof of residential address (not older than 3 months)',
+      'Three preferred company name options',
+      'Brand name, tagline (if any), and industry description',
+      'Target audience and colour preferences',
+      'Contact details for business cards',
+      'NOTE: Timeline assumes all documents received upfront.',
+    ],
+  },
+  'Tender Growth Package (Monthly)': {
+    timeline: 'Month-to-month — compliance setup in first 10 business days',
+    clientRequirements: [
+      'All Tender Watch requirements',
+      'CIPC certificate',
+      'Certified ID copies of all directors',
+      'Existing compliance documents (BEE, CSD, Tax Clearance — if any)',
+      'Three months bank statements',
+      'NOTE: Month 1 includes full compliance audit and gap analysis.',
+    ],
+  },
   // ── Compliance ─────────────────────────────────────────────────────────────
   'CIPC Registration': {
     timeline: '2 – 5 Business Days',

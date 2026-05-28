@@ -1,9 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
+export const runtime = 'nodejs';
 
 // WhatsApp Business API Configuration
 const WHATSAPP_API_VERSION = process.env.WHATSAPP_API_VERSION || 'v18.0';

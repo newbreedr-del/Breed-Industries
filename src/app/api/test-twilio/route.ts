@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { testTwilioConnection, sendWhatsAppMessage } from '@/lib/twilio';
 
+export const runtime = 'nodejs';
+
 export async function GET() {
   try {
     // Test Twilio connection

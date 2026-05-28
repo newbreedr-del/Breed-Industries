@@ -29,7 +29,7 @@ export function createSessionCookie(token: string): NextResponse {
   
   response.cookies.set(SESSION_COOKIE_NAME, token, {
     httpOnly: true,
-    secure: false, // Set to false for local development
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     maxAge: SESSION_MAX_AGE,
     path: '/'

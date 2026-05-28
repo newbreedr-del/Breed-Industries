@@ -3,6 +3,8 @@ import { getInvoiceById, updateInvoice } from '@/lib/invoiceStorage';
 import { sendInvoiceEmail } from '@/lib/emailService';
 import jsPDF from 'jspdf';
 
+export const runtime = 'nodejs';
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

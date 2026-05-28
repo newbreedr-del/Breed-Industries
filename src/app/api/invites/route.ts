@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import crypto from 'crypto';
 
+export const runtime = 'nodejs';
+
 // GET all invites (admin)
 export async function GET() {
   try {

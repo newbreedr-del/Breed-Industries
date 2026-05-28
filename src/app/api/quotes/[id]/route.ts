@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin as supabase } from '@/lib/supabase';
 
+export const runtime = 'nodejs';
+
 // GET /api/quotes/[id] - Get single quote
 export async function GET(
   request: NextRequest,

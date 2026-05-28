@@ -6,6 +6,8 @@ import {
   generateInvoiceNumber 
 } from '@/lib/invoiceStorage';
 
+export const runtime = 'nodejs';
+
 // GET /api/invoices - List invoices with filters
 export async function GET(request: NextRequest) {
   try {

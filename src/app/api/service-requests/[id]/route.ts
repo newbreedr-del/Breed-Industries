@@ -6,6 +6,8 @@ import {
   deleteServiceRequest
 } from '@/lib/serviceRequestStorage';
 
+export const runtime = 'nodejs';
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

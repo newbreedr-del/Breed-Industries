@@ -16,6 +16,57 @@ export interface ServiceDefinition {
 }
 
 export const serviceDefinitions: ServiceDefinition[] = [
+  // ── Retainer Packages ────────────────────────────────────────────────────────
+  {
+    id: 'business-watch',
+    category: 'Retainer Packages',
+    name: 'Business Watch (Monthly)',
+    description: 'Funding & Accreditation support service designed to help your business proactively access funding opportunities and maintain essential accreditations. Includes monthly monitoring, alerts, and support.',
+    basePrice: 'R950/mo',
+    requiredDocuments: [
+      { name: 'Company Registration', description: 'CIPC certificate', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Current Accreditations', description: 'Any existing certificates (BEE, CSD, Tax Clearance)', required: false, acceptedFormats: ['.pdf'] },
+    ],
+    additionalInfo: 'Month-to-month. Cancel anytime with 30 days notice.',
+  },
+  {
+    id: 'business-growth-essentials',
+    category: 'Retainer Packages',
+    name: 'Business Growth Essentials (Monthly)',
+    description: 'Monthly business growth retainer: compliance monitoring, tender watch alerts, social media support, monthly strategy check-in, and priority access to all Breed Industries services.',
+    basePrice: 'R950/mo',
+    requiredDocuments: [
+      { name: 'Company Registration', description: 'CIPC certificate', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Business Overview', description: 'Brief description of your business and goals', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+    ],
+    additionalInfo: 'Month-to-month retainer. Includes quarterly business review.',
+  },
+  {
+    id: 'brand-launch-package',
+    category: 'Retainer Packages',
+    name: 'Brand Launch Package',
+    description: 'Everything to get your brand off the ground: Company Registration + Logo Design + Business Profile + Business Cards. Bundled price, one team, one process.',
+    basePrice: 'From R4,500',
+    requiredDocuments: [
+      { name: 'Director ID Copies', description: 'Certified copies', required: true, acceptedFormats: ['.pdf', '.jpg', '.png'] },
+      { name: 'Proof of Address', description: 'Not older than 3 months', required: true, acceptedFormats: ['.pdf', '.jpg', '.png'] },
+      { name: 'Brand Brief', description: 'Business name, industry, colour preferences, style references', required: true, acceptedFormats: ['.pdf', '.doc', '.docx', '.txt'] },
+    ],
+    additionalInfo: 'Bundled package — saves approx. R800 vs. purchasing individually.',
+  },
+  {
+    id: 'tender-growth-package',
+    category: 'Retainer Packages',
+    name: 'Tender Growth Package (Monthly)',
+    description: 'Full compliance stack + active tender hunting: CSD + BEE + Tax Clearance + Tender Watch included. Monthly retainer with guaranteed tender alerts every week.',
+    basePrice: 'R1,950/mo',
+    requiredDocuments: [
+      { name: 'CIPC Certificate', description: 'Company registration', required: true, acceptedFormats: ['.pdf'] },
+      { name: 'Director ID Copies', description: 'Certified copies of all directors', required: true, acceptedFormats: ['.pdf', '.jpg', '.png'] },
+      { name: 'Current Compliance Docs', description: 'Any existing BEE, CSD, Tax Clearance certificates', required: false, acceptedFormats: ['.pdf'] },
+    ],
+    additionalInfo: 'First month includes compliance audit and setup. Ongoing alerts + monthly report thereafter.',
+  },
   // Business Setup & Compliance
   {
     id: 'company-registration',

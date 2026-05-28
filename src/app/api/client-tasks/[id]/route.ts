@@ -1,17 +1,15 @@
-import { createClient } from '@supabase/supabase-js';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
+export const runtime = 'nodejs';
 
 // GET /api/client-tasks/[id] - Get single task
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     
     const { data, error } = await supabase
       .from('client_tasks')
@@ -53,11 +51,11 @@ export async function GET(
 
 // PUT /api/client-tasks/[id] - Update task
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     
     const { data, error } = await supabase
@@ -84,11 +82,11 @@ export async function PUT(
 
 // PATCH /api/client-tasks/[id] - Mark task complete
 export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { status, notes, completed_by } = body;
     
@@ -135,11 +133,11 @@ export async function PATCH(
 
 // DELETE /api/client-tasks/[id] - Delete task
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     
     const { error } = await supabase
       .from('client_tasks')

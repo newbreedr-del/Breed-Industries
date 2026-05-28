@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyWhatsAppWebhook, processWhatsAppWebhook } from '@/lib/whatsapp';
 import { updateNotificationStatus } from '@/lib/notifications';
 
+export const runtime = 'nodejs';
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const mode = searchParams.get('hub.mode');
