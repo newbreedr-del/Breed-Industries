@@ -267,6 +267,38 @@ h1, h2, h3, h4, h5, h6 {
   50% { box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7); }
 }
 
+/* ─── Global Select Dark Theme Fix ─────────────────────────────────────────
+   Forces every <select> on the site to render dark in ALL browsers.
+   Without this, Chrome/Edge show a white dropdown list even if you style the
+   select element itself. color-scheme: dark is the key fix.
+   ──────────────────────────────────────────────────────────────────────── */
+select {
+  color-scheme: dark;
+  background-color: #1a2535;
+  color: #e2e8f0;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+select option {
+  background-color: #1a2535;
+  color: #e2e8f0;
+}
+
+select option:hover,
+select option:focus,
+select option:checked {
+  background-color: #FF9F00;
+  color: #000;
+}
+
+/* Public-facing pages may use light selects — scope dark overrides to admin + dark bg pages */
+.bg-\[\#0B1118\] select,
+.bg-\[\#131c27\] select,
+[style*="0B1118"] select,
+[style*="131c27"] select {
+  color-scheme: dark;
+}
+
 /* Line clamp utilities */
 .line-clamp-2 {
   display: -webkit-box;
