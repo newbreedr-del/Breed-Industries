@@ -32,6 +32,7 @@ export default function InvoiceDetailPage() {
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [loading, setLoading] = useState(true);
   const [pdfLoading, setPdfLoading] = useState(false);
+  const [paying, setPaying] = useState(false);
 
   useEffect(() => {
     if (params.id) {
@@ -76,6 +77,32 @@ export default function InvoiceDetailPage() {
     } catch (error) {
       console.error('Error sending invoice:', error);
       alert('Failed to send invoice');
+    }
+  };
+
+  const handlePayNow = async () => {
+    if (!invoice || paying) return;
+    setPaying(true);
+    try {
+      const response = await fetch('/api/payments/payfast/initiate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'invoice',
+          id: invoice.id,
+        }),
+      });
+      const data = await response.json();
+      if (data.success && data.paymentUrl) {
+        window.location.href = data.paymentUrl;
+      } else {
+        alert('Failed to initiate payment: ' + (data.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error initiating payment:', error);
+      alert('Failed to initiate payment');
+    } finally {
+      setPaying(false);
     }
   };
 
@@ -331,6 +358,16 @@ export default function InvoiceDetailPage() {
             <Send size={16} />
             Send Invoice
           </button>
+          {(invoice.paymentStatus === 'unpaid' || invoice.paymentStatus === 'pending') && (
+            <button
+              onClick={handlePayNow}
+              disabled={paying}
+              className="btn btn-accent disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {paying ? <Loader2 size={16} className="animate-spin" /> : <CreditCard size={16} />}
+              {paying ? 'Initiating...' : 'Pay Now'}
+            </button>
+          )}
         </div>
       </PageHero>
 
