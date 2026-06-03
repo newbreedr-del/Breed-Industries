@@ -1,238 +1,216 @@
-// WhatsApp Business API integration
-// This will use the official WhatsApp Cloud API
+/**
+ * Breed Industries — WhatsApp Service (Evolution API)
+ *
+ * Uses Evolution API (self-hosted on Railway) for session-persistent WhatsApp
+ * messaging via QR code scan — no Meta/Business API approval required.
+ *
+ * Session is stored in PostgreSQL so the container can restart without
+ * requiring a re-scan. One scan = permanent connection.
+ */
 
-interface WhatsAppMessage {
-  messaging_product: 'whatsapp';
-  to: string;
-  type: 'template';
-  template: {
-    name: string;
-    language: {
-      code: string;
-    };
-    components?: Array<{
-      type: 'body' | 'header' | 'footer';
-      parameters: Array<{
-        type: 'text' | 'image' | 'document' | 'video';
-        text?: string;
-        image?: {
-          link: string;
-        };
-        document?: {
-          link: string;
-          filename: string;
-        };
-        video?: {
-          link: string;
-        };
-      }>;
-    }>;
-  };
+import { supabaseAdmin } from '@/lib/supabase';
+
+// ── Config ───────────────────────────────────────────────────────────────────
+
+function evoConfig() {
+  const url = process.env.EVOLUTION_API_URL ?? '';
+  const key = process.env.EVOLUTION_API_KEY ?? '';
+  const instance = process.env.EVOLUTION_INSTANCE_NAME ?? 'breed-agent';
+  return { url: url.startsWith('http') ? url : `https://${url}`, key, instance };
 }
 
-interface WhatsAppResponse {
-  messaging_product: 'whatsapp';
-  contacts: Array<{
-    input: string;
-    wa_id: string;
-  }>;
-  messages: Array<{
-    id: string;
-    status: string;
-  }>;
+export function formatPhone(raw: string): string {
+  let n = raw.replace(/\D/g, '');
+  if (n.startsWith('0') && n.length === 10) n = '27' + n.slice(1);
+  else if (n.length === 9 && !n.startsWith('27')) n = '27' + n;
+  return n;
 }
 
-interface SendWhatsAppParams {
-  to: string;
-  templateName: string;
-  languageCode: string;
-  components?: Array<{
-    type: 'body' | 'header' | 'footer';
-    parameters: Array<{
-      type: 'text' | 'image' | 'document' | 'video';
-      text?: string;
-      image?: { link: string };
-      document?: { link: string; filename: string };
-      video?: { link: string };
-    }>;
-  }>;
-}
+// ── Core send with retry ──────────────────────────────────────────────────────
 
-export async function sendWhatsAppMessage(params: SendWhatsAppParams): Promise<{
-  success: boolean;
-  messageId?: string;
-  error?: string;
-}> {
-  try {
-    const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
-    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
-    const version = process.env.WHATSAPP_API_VERSION || 'v18.0';
+interface SendResult { success: boolean; messageId?: string; error?: string }
 
-    if (!accessToken || !phoneNumberId) {
-      console.error('WhatsApp credentials not configured');
-      return { success: false, error: 'WhatsApp credentials not configured' };
-    }
+export async function sendText(
+  rawPhone: string,
+  message: string,
+  retries = 3,
+): Promise<SendResult> {
+  const { url, key, instance } = evoConfig();
 
-    const message: WhatsAppMessage = {
-      messaging_product: 'whatsapp',
-      to: params.to.replace(/[^\d]/g, ''), // Remove non-digits
-      type: 'template',
-      template: {
-        name: params.templateName,
-        language: {
-          code: params.languageCode
-        }
-      }
-    };
+  if (!url || !key) {
+    console.warn('[WhatsApp] Evolution API not configured — skipping send');
+    return { success: false, error: 'WhatsApp not configured' };
+  }
 
-    // Add components if provided
-    if (params.components && params.components.length > 0) {
-      message.template.components = params.components;
-    }
+  const phone = formatPhone(rawPhone);
+  let lastError = '';
 
-    const response = await fetch(
-      `https://graph.facebook.com/${version}/${phoneNumberId}/messages`,
-      {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch(`${url}/message/sendText/${instance}`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(message)
+        headers: { apikey: key, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ number: phone, text: message }),
+        signal: AbortSignal.timeout(10_000),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        await logMessage({ direction: 'outbound', phone, message, status: 'sent' });
+        return { success: true, messageId: data.key?.id };
       }
-    );
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('WhatsApp API error:', errorData);
-      return {
-        success: false,
-        error: errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`
-      };
+      lastError = data?.message ?? `HTTP ${res.status}`;
+      console.warn(`[WhatsApp] Attempt ${attempt} failed for ${phone}: ${lastError}`);
+    } catch (err: any) {
+      lastError = err.message ?? 'Network error';
+      console.warn(`[WhatsApp] Attempt ${attempt} error: ${lastError}`);
     }
 
-    const data: WhatsAppResponse = await response.json();
-
-    if (data.messages && data.messages.length > 0) {
-      return {
-        success: true,
-        messageId: data.messages[0].id
-      };
-    } else {
-      return {
-        success: false,
-        error: 'No message ID returned from WhatsApp API'
-      };
-    }
-
-  } catch (error) {
-    console.error('WhatsApp send error:', error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error'
-    };
-  }
-}
-
-// Function to verify webhook (for receiving messages)
-export function verifyWhatsAppWebhook(
-  mode: string,
-  token: string,
-  challenge: string
-): { valid: boolean; response?: string } {
-  const verifyToken = process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN;
-
-  if (mode === 'subscribe' && token === verifyToken) {
-    return { valid: true, response: challenge };
+    if (attempt < retries) await sleep(1_000 * attempt);
   }
 
-  return { valid: false };
+  await logMessage({ direction: 'outbound', phone, message, status: 'failed', error: lastError });
+  return { success: false, error: lastError };
 }
 
-// Function to process incoming webhook messages
-export async function processWhatsAppWebhook(data: any): Promise<{
-  processed: boolean;
-  messages?: any[];
+// ── Connection management ─────────────────────────────────────────────────────
+
+export async function getConnectionState(): Promise<{
+  state: 'open' | 'connecting' | 'close' | 'unknown';
+  qrCode?: string;
 }> {
+  const { url, key, instance } = evoConfig();
+  if (!url || !key) return { state: 'unknown' };
+
   try {
-    if (data.object !== 'whatsapp_business_account') {
-      return { processed: false };
-    }
-
-    const messages: any[] = [];
-
-    for (const entry of data.entry || []) {
-      for (const change of entry.changes || []) {
-        if (change.field === 'messages') {
-          for (const message of change.value.messages || []) {
-            // Process incoming message
-            messages.push({
-              from: message.from,
-              id: message.id,
-              timestamp: message.timestamp,
-              type: message.type,
-              text: message.text?.body,
-              // Add other message types as needed
-            });
-          }
-        }
-      }
-    }
-
-    return { processed: true, messages };
-  } catch (error) {
-    console.error('Webhook processing error:', error);
-    return { processed: false };
+    const res = await fetch(`${url}/instance/connectionState/${instance}`, {
+      headers: { apikey: key },
+      signal: AbortSignal.timeout(8_000),
+    });
+    if (!res.ok) return { state: 'unknown' };
+    const data = await res.json();
+    return { state: data?.instance?.state ?? data?.state ?? 'unknown' };
+  } catch {
+    return { state: 'unknown' };
   }
 }
 
-// Template validation helper
-export function validateTemplate(templateName: string): boolean {
-  const approvedTemplates = [
-    'new_client_request',
-    'quote_status_update',
-    'payment_received',
-    'project_milestone',
-    'appointment_reminder',
-    'follow_up_message'
-  ];
+export async function getQRCode(): Promise<{ qrCode?: string; error?: string }> {
+  const { url, key, instance } = evoConfig();
+  if (!url || !key) return { error: 'Not configured' };
 
-  return approvedTemplates.includes(templateName);
+  try {
+    const res = await fetch(`${url}/instance/connect/${instance}`, {
+      headers: { apikey: key },
+      signal: AbortSignal.timeout(15_000),
+    });
+    const data = await res.json().catch(() => ({}));
+    const base64 = data?.base64 ?? data?.qrcode?.base64 ?? data?.code;
+    if (base64) return { qrCode: base64.startsWith('data:') ? base64 : `data:image/png;base64,${base64}` };
+    return { error: data?.message ?? 'QR not available' };
+  } catch (err: any) {
+    return { error: err.message };
+  }
 }
 
-// Rate limiting helper
-const messageTimestamps = new Map<string, number[]>();
+export async function registerWebhook(): Promise<boolean> {
+  const { url, key, instance } = evoConfig();
+  const webhookUrl = process.env.EVOLUTION_WEBHOOK_URL ?? `${process.env.NEXT_PUBLIC_APP_URL}/api/whatsapp/webhook`;
 
-export function checkRateLimit(phoneNumber: string, maxMessages: number = 10, timeWindow: number = 60000): boolean {
-  const now = Date.now();
-  const timestamps = messageTimestamps.get(phoneNumber) || [];
-
-  // Remove old timestamps
-  const recentTimestamps = timestamps.filter(timestamp => now - timestamp < timeWindow);
-
-  // Check if we've exceeded the limit
-  if (recentTimestamps.length >= maxMessages) {
+  try {
+    const res = await fetch(`${url}/webhook/set/${instance}`, {
+      method: 'POST',
+      headers: { apikey: key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        webhook: {
+          enabled: true,
+          url: webhookUrl,
+          events: ['MESSAGES_UPSERT', 'CONNECTION_UPDATE', 'QRCODE_UPDATED'],
+        },
+      }),
+    });
+    return res.ok;
+  } catch {
     return false;
   }
-
-  // Add current timestamp
-  recentTimestamps.push(now);
-  messageTimestamps.set(phoneNumber, recentTimestamps);
-
-  return true;
 }
 
-// Helper to format phone numbers
-export function formatPhoneNumber(phoneNumber: string): string {
-  // Remove all non-digit characters
-  let cleaned = phoneNumber.replace(/\D/g, '');
+// ── Notification helpers ──────────────────────────────────────────────────────
 
-  // Add country code if missing (assuming South Africa)
-  if (cleaned.length === 10 && cleaned.startsWith('0')) {
-    cleaned = '27' + cleaned.substring(1);
-  } else if (cleaned.length === 9 && !cleaned.startsWith('27')) {
-    cleaned = '27' + cleaned;
+const ADMIN_PHONE = () => formatPhone(process.env.WHATSAPP_ADMIN_NUMBER ?? '');
+
+export async function notifyAdmin(message: string): Promise<void> {
+  const phone = ADMIN_PHONE();
+  if (!phone) return;
+  await sendText(phone, message).catch(err => console.error('[WhatsApp] Admin notify error:', err));
+}
+
+export async function notifyClient(rawPhone: string, message: string): Promise<void> {
+  if (!rawPhone) return;
+  await sendText(rawPhone, message).catch(err => console.error('[WhatsApp] Client notify error:', err));
+}
+
+// ── Pre-built notification templates ─────────────────────────────────────────
+
+export const notify = {
+  newLead: (name: string, source: string, email: string, phone?: string) =>
+    notifyAdmin(
+      `🔔 *New Lead*\nName: ${name}\nSource: ${source}\nEmail: ${email}${phone ? `\nPhone: ${phone}` : ''}`,
+    ),
+
+  newPayment: (name: string, amount: number, item: string, phone?: string) =>
+    Promise.all([
+      notifyAdmin(`💰 *Payment Received*\nFrom: ${name}\nItem: ${item}\nAmount: R${amount.toLocaleString('en-ZA')}`),
+      phone ? notifyClient(phone, `Hi ${name}! ✅ We've received your payment of *R${amount.toLocaleString('en-ZA')}* for *${item}*.\n\nThank you! The Breed Industries team will be in touch shortly.\n\n_Breed Industries — 060 496 4105_`) : Promise.resolve(),
+    ]),
+
+  subscriptionStarted: (name: string, plan: string, amount: number, phone?: string) =>
+    Promise.all([
+      notifyAdmin(`✅ *New Subscription*\nClient: ${name}\nPlan: ${plan}\nR${amount.toLocaleString('en-ZA')}/month`),
+      phone ? notifyClient(phone, `Hi ${name}! 🎉 Your *${plan}* subscription is now active.\n\nWelcome to Breed Industries! We'll be in touch within 5 business days to complete your onboarding.\n\nQuestions? Reply here or call 060 496 4105.\n\n_Breed Industries_`) : Promise.resolve(),
+    ]),
+
+  eventRegistration: (name: string, event: string, email: string) =>
+    notifyAdmin(`📋 *Event Registration*\nName: ${name}\nEvent: ${event}\nEmail: ${email}`),
+
+  complianceReminder: (clientName: string, phone: string, item: string, daysLeft: number) =>
+    notifyClient(phone, `Hi ${clientName} 👋\n\nReminder: Your *${item}* is due for renewal in *${daysLeft} days*.\n\nReply YES or call 060 496 4105 and we'll handle the renewal for you.\n\n_Breed Industries Compliance Watch_`),
+
+  adminReminder: (message: string) =>
+    notifyAdmin(`📌 *Reminder*\n${message}`),
+
+  invoiceSent: (clientName: string, phone: string, amount: number, invoiceNum: string) =>
+    notifyClient(phone, `Hi ${clientName} 👋\n\nYour invoice *${invoiceNum}* for *R${amount.toLocaleString('en-ZA')}* has been sent to your email.\n\nPay securely online or via EFT:\nStandard Bank | The Breed Industries (PTY) LTD\nAcc: 10268731932\n\n_Reply if you have questions — Breed Industries_`),
+};
+
+// ── Message logging ───────────────────────────────────────────────────────────
+
+interface LogEntry {
+  direction: 'inbound' | 'outbound';
+  phone: string;
+  message: string;
+  status: 'sent' | 'failed' | 'received';
+  error?: string;
+}
+
+async function logMessage(entry: LogEntry): Promise<void> {
+  try {
+    await supabaseAdmin.from('whatsapp_messages').insert({
+      direction: entry.direction,
+      phone: entry.phone,
+      message: entry.message.slice(0, 2000),
+      status: entry.status,
+      error: entry.error ?? null,
+    });
+  } catch {
+    /* non-critical — don't throw */
   }
+}
 
-  return cleaned;
+// ── Utilities ─────────────────────────────────────────────────────────────────
+
+function sleep(ms: number) {
+  return new Promise(r => setTimeout(r, ms));
 }

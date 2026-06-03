@@ -245,6 +245,14 @@ export default function AdminDashboard() {
       href: '/admin/invites',
       color: 'from-emerald-500 to-emerald-600',
       stats: 'Manage invites'
+    },
+    {
+      title: 'WhatsApp Agent',
+      description: 'Manage WhatsApp connection, send messages, view message log',
+      icon: Mail,
+      href: '/admin/whatsapp',
+      color: 'from-green-500 to-emerald-600',
+      stats: 'Breed Agent'
     }
   ];
 

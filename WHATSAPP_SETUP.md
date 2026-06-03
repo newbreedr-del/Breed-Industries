@@ -1,214 +1,121 @@
-# WhatsApp Notification System Setup Guide
+# WhatsApp Agent Setup — Breed Industries
+## One-time QR scan = permanent session (no re-scanning needed after restarts)
 
-## Overview
-This system automatically sends WhatsApp notifications when:
-- New client requests are submitted via the contact form
-- Quotes are generated
-- Payments are received
-- Project milestones are completed
+Uses **Evolution API** — open source, self-hosted on Railway.
+No Meta/WhatsApp Business API approval required. Uses your own number via QR scan.
 
-## Prerequisites
-1. **WhatsApp Business Account** - Apply at [Meta Business Suite](https://business.facebook.com/)
-2. **Phone Number** - A dedicated business phone number
-3. **Facebook Business Account** - For API access
+---
 
-## Step 1: Apply for WhatsApp Business API
+## Step 1 — Deploy Evolution API on Railway
 
-1. Go to [Meta Business Suite](https://business.facebook.com/)
-2. Create or connect your Business Account
-3. Click "WhatsApp" → "Get Started"
-4. Submit your business details:
-   - Business name: "Breed Industries (PTY) LTD"
-   - Business category: "Business Services"
-   - Website: https://thebreed.co.za
-   - Business address: 4 Ivy Road, Pinetown, 3610
-5. Wait for approval (1-3 business days)
-
-## Step 2: Configure Phone Number
-
-Once approved:
-1. Add your business phone number
-2. Verify the number (receive a verification code via SMS/call)
-3. Note down your **Phone Number ID** from the WhatsApp Manager
-
-## Step 3: Get API Credentials
-
-1. In WhatsApp Manager, go to "Settings" → "API Setup"
-2. Generate an **Access Token** (valid for 60 days, can be refreshed)
-3. Copy these values:
-   - Access Token
-   - Phone Number ID
-   - Webhook Verify Token (create one)
-
-## Step 4: Configure Environment Variables
-
-Create a `.env.local` file in your project root:
+1. Go to [railway.app](https://railway.app) → **New Project → Deploy from image**
+2. Use image: `atendai/evolution-api:latest`
+3. Add the following environment variables in Railway:
 
 ```env
-# WhatsApp Business API Configuration
-WHATSAPP_ACCESS_TOKEN=EAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-WHATSAPP_PHONE_NUMBER_ID=1234567890123456
-WHATSAPP_API_VERSION=v18.0
-WHATSAPP_WEBHOOK_VERIFY_TOKEN=your_secret_verify_token_123
+AUTHENTICATION_TYPE=apikey
+AUTHENTICATION_API_KEY=choose_a_strong_random_key_here
+AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES=true
 
-# Your WhatsApp Number (to receive notifications)
-YOUR_WHATSAPP_NUMBER=27xxxxxxxxxx
+DATABASE_ENABLED=true
+DATABASE_PROVIDER=postgresql
+DATABASE_CONNECTION_URI=postgresql://USER:PASS@HOST:PORT/DB
+DATABASE_SAVE_DATA_INSTANCE=true
+DATABASE_SAVE_DATA_NEW_MESSAGE=true
+DATABASE_SAVE_DATA_CONTACTS=true
+DATABASE_SAVE_DATA_CHATS=true
 
-# App Configuration
-NEXT_PUBLIC_APP_URL=https://thebreed.co.za
+QRCODE_LIMIT=30
+DEL_INSTANCE=false
 ```
 
-## Step 5: Create Message Templates
+> For `DATABASE_CONNECTION_URI`, use the Supabase connection string from:
+> Supabase → Settings → Database → Connection string (URI mode, port 5432)
 
-WhatsApp requires pre-approved templates. Create these in WhatsApp Manager:
+4. Add a **Railway Volume** mounted at `/evolution/instances` — this provides a filesystem
+   backup for session data between deploys.
+5. Deploy. Copy the public Railway URL (e.g. `https://breed-evolution.up.railway.app`)
 
-### Template 1: new_client_request
-```
-New client request from {{1}}
+---
 
-Name: {{1}}
-Email: {{2}}
-Phone: {{3}}
-Service: {{4}}
-Message: {{5}}
-```
+## Step 2 — Create the WhatsApp Instance
 
-### Template 2: quote_status_update
-```
-Quote Update: {{1}}
+In Railway logs or using curl:
 
-Client: {{2}}
-Status: {{3}}
-Amount: R{{4}}
-Updated: {{5}}
+```bash
+curl -X POST https://your-evolution-url.up.railway.app/instance/create \
+  -H "apikey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"instanceName":"breed-agent","qrcode":true}'
 ```
 
-### Template 3: payment_received
-```
-Payment Received!
+---
 
-Client: {{1}}
-Amount: R{{2}}
-Quote: {{3}}
-Method: {{4}}
-Date: {{5}}
-```
+## Step 3 — Add Environment Variables to Breed Industries App
 
-### Template 4: project_milestone
-```
-Project Milestone: {{1}}
+Add to `.env.local` (and to Vercel/Railway environment for production):
 
-Client: {{2}}
-Milestone: {{3}}
-Completed: {{4}}
-Next Steps: {{5}}
+```env
+EVOLUTION_API_URL=https://your-evolution-url.up.railway.app
+EVOLUTION_API_KEY=your_strong_api_key
+EVOLUTION_INSTANCE_NAME=breed-agent
+EVOLUTION_WEBHOOK_URL=https://www.thebreed.co.za/api/whatsapp/webhook
+WHATSAPP_ADMIN_NUMBER=27XXXXXXXXX
 ```
 
-## Step 6: Set Up Webhook
+Replace `27XXXXXXXXX` with your personal WhatsApp number to receive admin alerts.
 
-1. Deploy your app to production (Vercel, etc.)
-2. In WhatsApp Manager, set webhook URL to:
-   `https://your-domain.com/api/whatsapp/webhook`
-3. Subscribe to these webhook events:
-   - `messages`
-   - `message_statuses`
-4. Click "Verify and Save"
+---
 
-## Step 7: Test the System
+## Step 4 — Run SQL Migration
 
-1. **Test Contact Form**:
-   - Go to your website's contact page
-   - Submit a test request
-   - Check your WhatsApp for notification
+Run `SETUP_WHATSAPP.sql` in Supabase SQL Editor to create the message log table.
 
-2. **Test Quote Generation**:
-   - Go to `/lab` and generate a quote
-   - Check for WhatsApp notification
+---
 
-3. **View Admin Dashboard**:
-   - Go to `/admin/notifications`
-   - View notification history and status
+## Step 5 — Connect WhatsApp (One-time QR scan)
 
-## Features
+1. Go to `/admin/whatsapp` in the app
+2. Click **Register Webhook** (once only — registers the webhook with Evolution API)
+3. Click **Get QR Code**
+4. Scan the QR code with the dedicated WhatsApp number
+5. Session is saved to PostgreSQL — **no re-scan needed after restarts**
 
-### Automatic Triggers:
-- ✅ Contact form submissions
-- ✅ Quote generation
-- ✅ Status updates (manual trigger via API)
-- ✅ Payment confirmations
-- ✅ Project milestones
+---
 
-### Admin Dashboard:
-- View all notifications
-- Filter by type/status
-- See success/failure rates
-- View error messages
+## How Session Persistence Works
 
-### API Endpoints:
-- `POST /api/notifications` - Send notification
-- `GET /api/notifications` - View notifications
-- `GET/POST /api/whatsapp/webhook` - WhatsApp webhook
+Evolution API stores the WhatsApp session in PostgreSQL (`DATABASE_CONNECTION_URI`).
+When the Railway container restarts, it loads the session from the database and
+reconnects automatically — no QR scan required.
 
-## Usage Examples
+The `DEL_INSTANCE=false` env var prevents the instance from being deleted on restart.
 
-### Send Custom Notification:
-```javascript
-// Client-side
-import { notifyClientRequest } from '@/lib/notify';
+---
 
-await notifyClientRequest({
-  name: 'John Doe',
-  email: 'john@example.com',
-  phone: '+27821234567',
-  service: 'Business Registration',
-  message: 'Need help registering my company'
-});
-```
+## Automatic Notifications Wired In
 
-### Server-side:
-```javascript
-// In API route
-import { notifyServer } from '@/lib/notify';
+| Event | Admin notified | Client notified |
+|---|---|---|
+| New lead (contact form / event) | ✅ | — |
+| Payment received | ✅ | ✅ (if phone on file) |
+| Subscription started | ✅ | ✅ (if phone on file) |
+| Inbound WhatsApp message | ✅ forwarded | — |
+| Compliance reminder | ✅ | ✅ |
+| Invoice sent | — | ✅ |
+| Session disconnected | ✅ | — |
 
-await notifyServer('payment_received', {
-  clientName: 'John Doe',
-  amount: '5000.00',
-  quoteId: 'Q-2024-1234',
-  paymentMethod: 'EFT'
-});
-```
+---
+
+## Admin Panel
+
+`/admin/whatsapp` — connection status, QR code, message log, manual send, quick templates.
+
+---
 
 ## Troubleshooting
 
-### Common Issues:
-1. **Template Not Approved**: Wait for template approval (can take 24-48 hours)
-2. **Webhook Not Receiving**: Check webhook URL is publicly accessible
-3. **Access Token Expired**: Regenerate token in WhatsApp Manager
-4. **Rate Limits**: WhatsApp has limits (1000 messages/day for free tier)
-
-### Debug Mode:
-Check browser console and server logs for detailed error messages.
-
-## Costs
-
-- **Free Tier**: 1,000 conversations/month
-- **Paid Tier**: ~$0.05 per message after free tier
-- **No additional infrastructure costs**
-
-## Security Notes
-
-- Keep access tokens secure
-- Use HTTPS for webhook URL
-- Validate webhook requests
-- Don't expose API endpoints publicly without authentication
-
-## Support
-
-For WhatsApp API issues:
-- [Meta Business Help Center](https://www.facebook.com/business/help)
-- [WhatsApp Business API Documentation](https://developers.facebook.com/docs/whatsapp)
-
-For code issues:
-- Check the admin dashboard at `/admin/notifications`
-- Review server logs
-- Contact your developer
+- **QR expired**: Click Get QR Code again (expires in ~60 seconds)
+- **Session dropped**: Check Railway logs; container may have restarted without DB persistence
+- **Messages not arriving**: Click Register Webhook again to re-register the endpoint
+- **Evolution API unreachable**: Check Railway service is running and URL is correct

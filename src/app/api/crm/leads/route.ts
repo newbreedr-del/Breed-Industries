@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { notify } from '@/lib/whatsapp';
 
 export const runtime = 'nodejs';
 
@@ -52,6 +53,15 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) throw error;
+
+    // Non-blocking WhatsApp alert to admin
+    notify.newLead(
+      full_name,
+      source_event || 'CRM',
+      email || '',
+      phone || undefined,
+    ).catch(() => {});
+
     return NextResponse.json({ lead: data }, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

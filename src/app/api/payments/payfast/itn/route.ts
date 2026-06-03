@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { validateITNSignature, isValidPayFastIP, PayFastITNData } from '@/lib/payfast';
 import { supabaseAdmin } from '@/lib/supabase';
+import { notify } from '@/lib/whatsapp';
 
 export const runtime = 'nodejs';
 
@@ -106,6 +107,24 @@ export async function POST(request: NextRequest) {
       console.error('Failed to update invoice:', invoiceError);
     } else {
       console.log(`Invoice ${invoiceNumber} marked as paid`);
+    }
+
+    // Non-blocking WhatsApp notifications
+    const clientName = data.name_first ? `${data.name_first} ${data.name_last || ''}`.trim() : 'Client';
+    const isSubscription = data.custom_str2 === 'subscription';
+
+    if (isSubscription) {
+      notify.subscriptionStarted(
+        clientName,
+        data.item_name || 'Subscription',
+        amountGross,
+      ).catch(() => {});
+    } else {
+      notify.newPayment(
+        clientName,
+        amountGross,
+        data.item_name || invoiceNumber || 'Invoice',
+      ).catch(() => {});
     }
 
     // Return success to PayFast
