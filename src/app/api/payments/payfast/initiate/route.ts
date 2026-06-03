@@ -9,9 +9,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { type, id, returnUrl, cancelUrl } = body;
 
-    if (!type || !id) {
+    if (!type) {
       return NextResponse.json(
-        { error: 'Missing type or id' },
+        { error: 'Missing type' },
         { status: 400 }
       );
     }
@@ -19,7 +19,38 @@ export async function POST(request: NextRequest) {
     let paymentData: PayFastPaymentData;
     let reference: string;
 
-    if (type === 'invoice') {
+    if (type === 'subscription') {
+      const {
+        name_first, name_last, email, amount, item_name, item_description,
+        subscription_type, frequency, cycles, billing_date, recurring_amount,
+        custom_str1, custom_str2, custom_str3, custom_str4, plan,
+      } = body;
+
+      if (!name_first || !name_last || !email || !amount || !item_name) {
+        return NextResponse.json(
+          { error: 'Missing required fields: name_first, name_last, email, amount, item_name' },
+          { status: 400 }
+        );
+      }
+
+      paymentData = {
+        name_first, name_last, email_address: email,
+        amount: parseFloat(amount),
+        item_name,
+        item_description,
+        subscription_type: subscription_type || 1,
+        frequency: frequency || 3,
+        cycles: cycles ?? 0,
+        billing_date,
+        recurring_amount: recurring_amount || parseFloat(amount),
+        custom_str1: custom_str1 || plan || item_name,
+        custom_str2: custom_str2 || email,
+        custom_str3, custom_str4,
+        m_payment_id: `SUB-${(plan || 'subscription').replace(/\s+/g, '-')}-${Date.now()}`,
+      };
+      reference = plan || item_name;
+
+    } else if (type === 'invoice') {
       const invoice = await getInvoiceById(id);
       if (!invoice) {
         return NextResponse.json(

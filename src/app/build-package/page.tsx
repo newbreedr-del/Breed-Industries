@@ -8,10 +8,10 @@ import Link from 'next/link';
 import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, CheckCircle2, Download, ArrowRight, Loader2, Send, Award, Bot, Eye, TrendingUp, Rocket } from 'lucide-react';
 
 const retainerOptions = [
-  { id: 'business-watch', name: 'Business Watch (Monthly)', price: 950, pricingType: 'monthly', icon: <Eye size={16} />, description: 'Monthly funding & accreditation monitoring with alerts and support.' },
-  { id: 'business-growth-essentials', name: 'Business Growth Essentials (Monthly)', price: 950, pricingType: 'monthly', icon: <TrendingUp size={16} />, description: 'Monthly retainer: compliance monitoring + tender alerts + social media support + strategy check-in.' },
+  { id: 'business-watch', name: 'Business Watch (Monthly)', price: 950, pricingType: 'monthly', icon: <Eye size={16} />, description: 'Monthly funding & accreditation monitoring — stay ahead of grants, compliance deadlines, and new accreditation opportunities.' },
+  { id: 'business-growth-essentials', name: 'Business Growth Essentials (Monthly)', price: 950, pricingType: 'monthly', icon: <TrendingUp size={16} />, description: 'Monthly retainer: compliance monitoring + social media content support + monthly strategy check-in. General business growth, not tender-specific.' },
   { id: 'brand-launch-package', name: 'Brand Launch Package', price: 4500, pricingType: 'one-time', icon: <Rocket size={16} />, description: 'Company Registration + Logo + Business Profile + Business Cards. Everything to launch your brand.' },
-  { id: 'tender-growth-package', name: 'Tender Growth Package (Monthly)', price: 1950, pricingType: 'monthly', icon: <Award size={16} />, description: 'Full compliance setup + monthly tender watch. Compliance audit in month 1.' },
+  { id: 'tender-growth-package', name: 'Tender Growth Package (Monthly)', price: 1950, pricingType: 'monthly', icon: <Award size={16} />, description: 'Full compliance setup + monthly tender monitoring + social media + strategy. The bundle for businesses that want both growth support and government contract opportunities.' },
 ];
 
 const complianceOptions = [
@@ -21,9 +21,9 @@ const complianceOptions = [
   { id: 'csd', name: 'CSD Registration', price: 450, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Central Supplier Database registration for government tender opportunities. Required documents: CIPC registration certificate, tax clearance, BEE certificate, banking details, and director ID copies' },
   { id: 'coida', name: 'COIDA Registration & Assessment', price: 2490, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Full COIDA registration, assessment calculation, and Letter of Good Standing — covers workplace injury compensation compliance' },
   { id: 'cidb-1', name: 'CIDB Registration — Grade 1', price: 950, pricingType: 'one-time', icon: <FileText size={16} />, description: 'CIDB contractor registration at Grade 1 level — basic online registration for emerging contractors (contracts up to R200K)' },
-  { id: 'cidb-2-4', name: 'CIDB Registration — Grade 2 to 4', price: 2000, pricingType: 'one-time', icon: <FileText size={16} />, description: 'CIDB grading for Grades 2–4 — requires track records, project invoices, and simple financials (R2,000–R4,500)' },
-  { id: 'cidb-5-7', name: 'CIDB Registration — Grade 5 to 7', price: 4500, pricingType: 'one-time', icon: <FileText size={16} />, description: 'CIDB grading for Grades 5–7 — complex financials, net asset value, multi-million Rand project certificates (R4,500–R9,500)' },
-  { id: 'cidb-8-9', name: 'CIDB Registration — Grade 8 to 9', price: 15000, pricingType: 'one-time', icon: <FileText size={16} />, description: 'CIDB grading for Grades 8–9 — corporate-level financials, major track record verification, custom quote (from R15,000)' },
+  { id: 'cidb-2-4', name: 'CIDB Registration — Grade 2 to 4', price: 2000, pricingType: 'one-time', priceFrom: true, icon: <FileText size={16} />, description: 'CIDB grading for Grades 2–4 — requires track records, project invoices, and simple financials (R2,000–R4,500)' },
+  { id: 'cidb-5-7', name: 'CIDB Registration — Grade 5 to 7', price: 4500, pricingType: 'one-time', priceFrom: true, icon: <FileText size={16} />, description: 'CIDB grading for Grades 5–7 — complex financials, net asset value, multi-million Rand project certificates (R4,500–R9,500)' },
+  { id: 'cidb-8-9', name: 'CIDB Registration — Grade 8 to 9', price: 15000, pricingType: 'one-time', priceFrom: true, icon: <FileText size={16} />, description: 'CIDB grading for Grades 8–9 — corporate-level financials, major track record verification, custom quote (from R15,000)' },
   { id: 'uif', name: 'UIF Registration & Compliance Letter', price: 650, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Unemployment Insurance Fund registration and compliance documentation' },
   { id: 'annual', name: 'CIPC Annual Return', price: 450, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Annual CIPC return filing to maintain company compliance and good standing' },
 ];
@@ -495,7 +495,7 @@ export default function LabPage() {
                         </div>
                       </div>
                       <div className="text-accent font-heading font-bold text-left sm:text-right flex-shrink-0 sm:ml-4">
-                        <span className="text-sm sm:text-base">R{option.price.toLocaleString()}</span>
+                        <span className="text-sm sm:text-base">{(option as any).priceFrom && <span className="text-xs font-normal text-white/50 mr-0.5">From </span>}R{option.price.toLocaleString()}</span>
                         {option.pricingType === 'monthly' && <span className="text-xs sm:text-sm text-white/70">/mo</span>}
                       </div>
                     </div>
