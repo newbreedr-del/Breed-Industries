@@ -575,11 +575,11 @@ export default function LearnersToLeaders() {
               reach out and we'll map out next steps with you.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/contact" className="btn btn-primary">
+              <Link href="/learners-to-leaders/register" className="btn btn-primary">
                 Apply for Next Cohort
                 <ChevronRight size={16} className="ml-1" />
               </Link>
-              <Link href="/contact" className="btn btn-outline">
+              <Link href="/learners-to-leaders/register" className="btn btn-outline">
                 Partner With Us
                 <ArrowRight size={16} className="ml-1" />
               </Link>

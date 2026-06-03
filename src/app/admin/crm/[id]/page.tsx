@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Edit2, ExternalLink, Plus, Trash2, Send, X, Check, Loader2, Mail, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Edit2, ExternalLink, Plus, Trash2, Send, X, Check, Loader2, Mail, ChevronDown, Link2, QrCode } from 'lucide-react';
 
 interface Service {
   id: string; service_name: string; service_category: string; billing_type: string;
@@ -78,6 +78,46 @@ export default function ClientDetailPage() {
   const [emailForm, setEmailForm] = useState({ template: 'welcome_client', custom_message: '', custom_subject: '' });
   const [sendingEmail, setSendingEmail] = useState(false);
   const [emailSent, setEmailSent]   = useState(false);
+
+  // Subscription link modal
+  const [showSubModal, setShowSubModal] = useState(false);
+  const [subPlan, setSubPlan] = useState('business-growth-essentials');
+  const [subCopied, setSubCopied] = useState(false);
+
+  const SUB_PLANS = [
+    { id: 'business-growth-essentials', label: 'Business Growth Essentials — R950/mo', url: '/subscribe/business-growth' },
+    { id: 'tender-growth-package',      label: 'Tender Growth Bundle — R1,950/mo',   url: '/subscribe/tender-growth' },
+    { id: 'tender-watch',               label: 'Tender Watch — R350/mo',              url: '/subscribe/tender-watch' },
+  ];
+
+  const getSubUrl = () => {
+    const plan = SUB_PLANS.find(p => p.id === subPlan);
+    return `https://www.thebreed.co.za${plan?.url || '/subscribe/business-growth'}`;
+  };
+
+  const handleCopySubLink = () => {
+    navigator.clipboard.writeText(getSubUrl());
+    setSubCopied(true);
+    setTimeout(() => setSubCopied(false), 2000);
+  };
+
+  const handleSendSubEmail = async () => {
+    if (!client) return;
+    setSendingEmail(true);
+    const plan = SUB_PLANS.find(p => p.id === subPlan);
+    await fetch('/api/crm/email/send', {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        recipient_type: 'client', recipient_id: id,
+        template: 'custom',
+        custom_subject: `Your Subscription Link — ${plan?.label.split(' —')[0]}`,
+        custom_message: `Hi ${client.contact_name || client.company_name},\n\nHere is your subscription link to get started:\n\n${getSubUrl()}\n\nThis link takes you directly to a secure PayFast checkout to set up your monthly subscription.\n\nIf you have any questions, reply to this email or WhatsApp us on 060 496 4105.\n\nBest regards,\nBreed Industries`,
+      }),
+    });
+    setSendingEmail(false);
+    setShowSubModal(false);
+  };
 
   useEffect(() => {
     fetch(`/api/crm/clients/${id}`, { credentials: 'include' })
@@ -163,6 +203,9 @@ export default function ClientDetailPage() {
             )}
             <button onClick={openEditClient} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white transition-colors" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
               <Edit2 size={14} /> Edit
+            </button>
+            <button onClick={() => setShowSubModal(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white transition-colors" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <Link2 size={14} /> Sub Link
             </button>
             <button onClick={() => setShowEmailModal(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-black" style={{ background: '#FF9F00' }}>
               <Send size={14} /> Send Email
@@ -385,6 +428,53 @@ export default function ClientDetailPage() {
                 </div>
               </form>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Subscription Link Modal */}
+      {showSubModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.7)' }}>
+          <div className="w-full max-w-md rounded-2xl p-6" style={{ background: '#131c27', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-white font-semibold flex items-center gap-2"><Link2 size={16} className="text-orange-400" /> Send Subscription Link</h3>
+              <button onClick={() => setShowSubModal(false)} className="text-slate-400 hover:text-white"><X size={18} /></button>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-slate-400 text-xs font-medium mb-1.5">Select Package</label>
+                <select
+                  value={subPlan}
+                  onChange={e => setSubPlan(e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-lg text-white text-sm outline-none"
+                  style={{ background: '#1a2535', border: '1px solid rgba(255,255,255,0.12)', colorScheme: 'dark' }}
+                >
+                  {SUB_PLANS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+                </select>
+              </div>
+              <div className="p-3 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <p className="text-slate-500 text-xs mb-1">Subscription URL</p>
+                <p className="text-orange-400 text-xs font-mono break-all">{getSubUrl()}</p>
+              </div>
+              <div className="flex gap-3 pt-1">
+                <button
+                  onClick={handleCopySubLink}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm text-slate-300 transition-all"
+                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+                >
+                  {subCopied ? <><Check size={14} className="text-green-400" /> Copied!</> : <><QrCode size={14} /> Copy Link</>}
+                </button>
+                <button
+                  onClick={handleSendSubEmail}
+                  disabled={sendingEmail || !client?.contact_email}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium text-black disabled:opacity-50"
+                  style={{ background: '#FF9F00' }}
+                >
+                  {sendingEmail ? <Loader2 size={14} className="animate-spin" /> : <Mail size={14} />} Email to Client
+                </button>
+              </div>
+              {!client?.contact_email && <p className="text-red-400 text-xs text-center">No email on file — copy the link to share manually.</p>}
+            </div>
           </div>
         </div>
       )}
