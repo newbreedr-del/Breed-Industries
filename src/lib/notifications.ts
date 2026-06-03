@@ -201,22 +201,19 @@ export async function retryFailedNotifications(maxRetries: number = 3): Promise<
   for (const log of failedLogs) {
     try {
       // Import here to avoid circular dependency
-      const { sendWhatsAppMessage } = await import('./whatsapp');
-      
+      const { sendText } = await import('./whatsapp');
+
       // Update retry count
       const updatedData = { ...log.data, retryCount: (log.data?.retryCount || 0) + 1 };
-      
-      // Attempt to resend
-      const result = await sendWhatsAppMessage({
-        to: log.recipient,
-        templateName: NOTIFICATION_TEMPLATES[log.type as keyof typeof NOTIFICATION_TEMPLATES]?.templateName || log.type,
-        languageCode: 'en',
-        components: buildComponentsFromData(log.type, updatedData)
-      });
+
+      // Build simple text message from notification data
+      const messageText = buildMessageFromData(log.type, updatedData);
+
+      // Attempt to resend using Evolution API
+      const result = await sendText(log.recipient, messageText);
 
       if (result.success) {
         await updateNotificationStatus(log.id!, 'sent', {
-          messageId: result.messageId,
           data: updatedData
         });
         retriedCount++;
@@ -236,17 +233,20 @@ export async function retryFailedNotifications(maxRetries: number = 3): Promise<
   return retriedCount;
 }
 
-// Helper to build WhatsApp components from notification data
-function buildComponentsFromData(type: string, data: any): any[] {
-  const template = NOTIFICATION_TEMPLATES[type as keyof typeof NOTIFICATION_TEMPLATES];
-  if (!template) return [];
-
-  // This would be customized based on your template structure
-  return [{
-    type: 'body',
-    parameters: template.requiredFields.map(field => ({
-      type: 'text',
-      text: data[field] || 'N/A'
-    }))
-  }];
+// Helper to build simple text message from notification data for Evolution API
+function buildMessageFromData(type: string, data: any): string {
+  switch (type) {
+    case 'NEW_CLIENT_REQUEST':
+      return `New client request from ${data.name || 'Unknown'}\nService: ${data.service || 'N/A'}\nEmail: ${data.email || 'N/A'}\nPhone: ${data.phone || 'N/A'}`;
+    case 'QUOTE_STATUS_UPDATE':
+      return `Quote Update: ${data.quoteId || 'N/A'}\nStatus: ${data.status || 'N/A'}\nClient: ${data.clientName || 'N/A'}`;
+    case 'PAYMENT_RECEIVED':
+      return `Payment Received!\nClient: ${data.clientName || 'N/A'}\nAmount: R${data.amount || '0'}\nMethod: ${data.paymentMethod || 'N/A'}`;
+    case 'PROJECT_MILESTONE':
+      return `Project Milestone: ${data.milestone || 'N/A'}\nClient: ${data.clientName || 'N/A'}`;
+    default:
+      // Generic fallback using available data fields
+      const fields = Object.keys(data || {});
+      return fields.map((f: string) => `${f}: ${data[f] || 'N/A'}`).join('\n');
+  }
 }
