@@ -7,7 +7,7 @@ import {
   Calendar, Clock, Send, CheckCircle, XCircle, AlertCircle, 
   ChevronLeft, ChevronRight, Plus, Search, Phone, User,
   Bell, MessageSquare, LayoutGrid, List, Trash2, RefreshCw,
-  ArrowLeft, FileText, Briefcase
+  ArrowLeft, FileText, Briefcase, RotateCw
 } from 'lucide-react';
 
 interface Reminder {
@@ -21,8 +21,12 @@ interface Reminder {
   whatsapp_sent: boolean;
   phone_number: string;
   message_text: string;
+  client_id?: string;
   client?: { full_name: string; company_name: string; phone: string };
   lead?: { full_name: string; company_name: string; phone: string };
+  is_recurring?: boolean;
+  recurrence_pattern?: string;
+  recurrence_count?: number;
 }
 
 interface CRMClient {
@@ -66,7 +70,12 @@ export default function RemindersAdmin() {
     scheduled_at: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
     message_text: '',
     auto_send: true,
-    notify_admin: true // Send copy to admin
+    notify_admin: true, // Send copy to admin
+    is_recurring: false,
+    recurrence_pattern: 'weekly' as 'daily' | 'weekly' | 'monthly' | 'yearly',
+    recurrence_interval: 1,
+    recurrence_end_date: '',
+    max_recurrences: '' as string | number
   });
 
   const [bulkForm, setBulkForm] = useState({
@@ -140,10 +149,13 @@ export default function RemindersAdmin() {
       });
       if (res.ok) {
         setShowCreateModal(false);
+        setForAdmin(false);
         setCreateForm({
           client_id: '', title: '', description: '', reminder_type: 'custom',
           scheduled_at: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
-          message_text: '', auto_send: true
+          message_text: '', auto_send: true, notify_admin: true,
+          is_recurring: false, recurrence_pattern: 'weekly', recurrence_interval: 1,
+          recurrence_end_date: '', max_recurrences: ''
         });
         fetchReminders();
       }
@@ -561,6 +573,75 @@ export default function RemindersAdmin() {
                   />
                   <label className="text-sm">Send immediately if date is now or past</label>
                 </div>
+
+                {/* Recurring Reminder Section */}
+                <div className="border-t border-slate-600 pt-4 mt-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <input
+                      type="checkbox"
+                      id="is_recurring"
+                      checked={createForm.is_recurring}
+                      onChange={(e) => setCreateForm({...createForm, is_recurring: e.target.checked})}
+                      className="w-4 h-4"
+                    />
+                    <label htmlFor="is_recurring" className="text-sm font-medium text-orange-400">
+                      Repeat this reminder (recurring)
+                    </label>
+                  </div>
+
+                  {createForm.is_recurring && (
+                    <div className="space-y-3 pl-6">
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs text-slate-400 mb-1">Repeat every</label>
+                          <div className="flex gap-2">
+                            <input
+                              type="number"
+                              min={1}
+                              max={52}
+                              value={createForm.recurrence_interval}
+                              onChange={(e) => setCreateForm({...createForm, recurrence_interval: parseInt(e.target.value) || 1})}
+                              className="w-20 px-2 py-1 bg-slate-700 rounded text-center"
+                            />
+                            <select
+                              value={createForm.recurrence_pattern}
+                              onChange={(e) => setCreateForm({...createForm, recurrence_pattern: e.target.value as any})}
+                              className="flex-1 px-2 py-1 bg-slate-700 rounded"
+                            >
+                              <option value="daily">Day(s)</option>
+                              <option value="weekly">Week(s)</option>
+                              <option value="monthly">Month(s)</option>
+                              <option value="yearly">Year(s)</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-xs text-slate-400 mb-1">End date (optional)</label>
+                          <input
+                            type="date"
+                            value={createForm.recurrence_end_date}
+                            onChange={(e) => setCreateForm({...createForm, recurrence_end_date: e.target.value})}
+                            className="w-full px-2 py-1 bg-slate-700 rounded"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs text-slate-400 mb-1">Max occurrences (optional)</label>
+                        <input
+                          type="number"
+                          min={1}
+                          placeholder="e.g., 12"
+                          value={createForm.max_recurrences}
+                          onChange={(e) => setCreateForm({...createForm, max_recurrences: e.target.value})}
+                          className="w-full px-2 py-1 bg-slate-700 rounded"
+                        />
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        Next reminder will auto-generate when this one is sent via WhatsApp
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="flex gap-3 mt-6">
@@ -821,6 +902,12 @@ function ReminderCard({ reminder, onSend, onDelete }: {
           {isAdminReminder && (
             <span className="text-xs px-2 py-0.5 bg-purple-500/20 text-purple-400 rounded">
               Self Reminder
+            </span>
+          )}
+          {reminder.is_recurring && (
+            <span className="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded flex items-center gap-1">
+              <RefreshCw size={10} />
+              {reminder.recurrence_pattern} ({reminder.recurrence_count || 0} sent)
             </span>
           )}
         </div>

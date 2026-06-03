@@ -52,7 +52,12 @@ export async function POST(request: NextRequest) {
       scheduled_at,
       phone_number,
       message_text,
-      auto_send_whatsapp = true
+      auto_send_whatsapp = true,
+      is_recurring = false,
+      recurrence_pattern,
+      recurrence_interval = 1,
+      recurrence_end_date,
+      max_recurrences
     } = body;
 
     if (!title || !scheduled_at) {
@@ -93,6 +98,11 @@ export async function POST(request: NextRequest) {
         scheduled_at,
         phone_number: phone ? formatPhone(phone) : null,
         message_text: message_text || description || title,
+        is_recurring,
+        recurrence_pattern,
+        recurrence_interval,
+        recurrence_end_date,
+        max_recurrences,
         source_type: 'manual',
         created_by: 'admin',
         status: 'pending'
