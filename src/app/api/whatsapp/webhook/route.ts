@@ -1,8 +1,92 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-import { notifyAdmin } from '@/lib/whatsapp';
+import { sendText, notifyAdmin, formatPhone, getConnectionState } from '@/lib/whatsapp';
 
 export const runtime = 'nodejs';
+
+// ── Admin command processor ───────────────────────────────────────────────────
+// When the admin messages the business number, the agent interprets commands.
+//
+// Commands:
+//   SEND 27820001234 <message>   →  forward message to that number
+//   @27820001234 <message>       →  shorthand send
+//   STATUS                       →  reply with connection status
+//   LIST                         →  list CRM clients with phone numbers
+//   HELP                         →  command reference
+
+async function handleAdminCommand(text: string, adminPhone: string): Promise<void> {
+  const raw = text.trim();
+  const upper = raw.toUpperCase();
+
+  // STATUS
+  if (upper === 'STATUS') {
+    const state = await getConnectionState();
+    await sendText(adminPhone, `🤖 *Breed Agent Status*\nConnection: *${state.state}*\nInstance: breed-agent\n\nReply HELP for commands.`);
+    return;
+  }
+
+  // HELP
+  if (upper === 'HELP') {
+    await sendText(adminPhone,
+      `🤖 *Breed Agent — Commands*\n\n` +
+      `*Send to client:*\nSEND 27820001234 Your message here\n\n` +
+      `*Shorthand send:*\n@27820001234 Your message here\n\n` +
+      `*List CRM clients:*\nLIST\n\n` +
+      `*Connection status:*\nSTATUS\n\n` +
+      `*This help:*\nHELP`
+    );
+    return;
+  }
+
+  // LIST — top 20 CRM clients with phones
+  if (upper === 'LIST') {
+    const { data: clients } = await supabaseAdmin
+      .from('crm_clients')
+      .select('company_name, contact_name, contact_phone')
+      .not('contact_phone', 'is', null)
+      .order('company_name')
+      .limit(20);
+
+    if (!clients?.length) {
+      await sendText(adminPhone, '📋 No CRM clients with phone numbers found.');
+      return;
+    }
+
+    const lines = clients.map((c, i) => {
+      const num = formatPhone(c.contact_phone);
+      return `${i + 1}. *${c.company_name || c.contact_name}*\n   ${num}`;
+    }).join('\n\n');
+
+    await sendText(adminPhone, `📋 *CRM Clients (${clients.length})*\n\n${lines}\n\n_Use: SEND <number> <message>_`);
+    return;
+  }
+
+  // SEND <number> <message>
+  const sendMatch = raw.match(/^(?:SEND\s+|@)(\+?[\d\s\-]+)\s+([\s\S]+)$/i);
+  if (sendMatch) {
+    const targetPhone = formatPhone(sendMatch[1].trim());
+    const message = sendMatch[2].trim();
+
+    if (!targetPhone || targetPhone.length < 10) {
+      await sendText(adminPhone, `❌ Invalid number: "${sendMatch[1].trim()}"\n\nFormat: SEND 27820001234 Your message`);
+      return;
+    }
+
+    const result = await sendText(targetPhone, message);
+
+    if (result.success) {
+      await sendText(adminPhone, `✅ *Sent* to ${targetPhone}\n\n"${message.slice(0, 100)}${message.length > 100 ? '…' : ''}"`);
+    } else {
+      await sendText(adminPhone, `❌ *Failed* to send to ${targetPhone}\nError: ${result.error}`);
+    }
+    return;
+  }
+
+  // Unknown command — echo back with hint
+  await sendText(adminPhone, `🤖 Command not recognised.\nReply *HELP* for a list of commands.\n\nYou said: "${raw.slice(0, 100)}"`);
+}
+
+// ── Webhook handler ───────────────────────────────────────────────────────────
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,20 +106,33 @@ export async function POST(request: NextRequest) {
       const pushName: string = data.pushName ?? '';
 
       if (!fromMe && phone && text) {
-        console.log(`[WA Webhook] Inbound from ${pushName || phone}: ${text}`);
+        const adminNumber = formatPhone(process.env.WHATSAPP_ADMIN_NUMBER ?? '');
+        const isAdmin = adminNumber && phone === adminNumber;
 
+        // Log to DB
         try {
           await supabaseAdmin.from('whatsapp_messages').insert({
             direction: 'inbound',
             phone,
             message: text.slice(0, 2000),
             status: 'received',
-            sender_name: pushName || null,
+            sender_name: isAdmin ? 'ADMIN' : (pushName || null),
           });
         } catch { /* non-critical */ }
 
-        // Alert admin about inbound message so it can be actioned
-        await notifyAdmin(`💬 *Inbound WhatsApp*\nFrom: ${pushName || phone}\nNumber: ${phone}\n\n"${text.slice(0, 300)}"`);
+        if (isAdmin) {
+          // Admin messaging the agent — treat as a command
+          console.log(`[WA Webhook] 🔑 Admin command: ${text.slice(0, 100)}`);
+          handleAdminCommand(text, adminNumber).catch(err =>
+            console.error('[WA Webhook] Admin command error:', err.message)
+          );
+        } else {
+          // External client message — forward summary to admin
+          console.log(`[WA Webhook] Inbound from ${pushName || phone}: ${text.slice(0, 100)}`);
+          notifyAdmin(
+            `💬 *Inbound WhatsApp*\nFrom: ${pushName || 'Unknown'}\nNumber: ${phone}\n\n"${text.slice(0, 300)}"\n\n_Reply: SEND ${phone} <your message>_`
+          ).catch(() => {});
+        }
       }
     }
 
@@ -43,12 +140,10 @@ export async function POST(request: NextRequest) {
     if (event === 'CONNECTION_UPDATE' || event === 'connection.update') {
       const state = data?.state ?? data?.instance?.state;
       console.log('[WA Webhook] Connection state:', state);
-
-      if (state === 'open') {
-        console.log('[WA Webhook] ✅ WhatsApp connected');
-      } else if (state === 'close') {
-        console.warn('[WA Webhook] ⚠️ WhatsApp disconnected');
-        await notifyAdmin('⚠️ *Breed Agent Disconnected*\nWhatsApp session dropped. Check the admin panel at /admin/whatsapp to reconnect.').catch(() => {});
+      if (state === 'close') {
+        notifyAdmin(
+          '⚠️ *Breed Agent Disconnected*\nSession dropped. Go to /admin/whatsapp to reconnect.'
+        ).catch(() => {});
       }
     }
 
