@@ -59,7 +59,7 @@ SELECT
     r.status,
     r.whatsapp_sent,
     r.phone_number,
-    COALESCE(c.full_name, l.full_name) as client_name,
+    COALESCE(c.contact_name, l.full_name) as client_name,
     COALESCE(c.company_name, l.company_name) as company_name
 FROM scheduled_reminders r
 LEFT JOIN crm_clients c ON r.client_id = c.id
