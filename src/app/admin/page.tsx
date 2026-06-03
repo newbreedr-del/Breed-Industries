@@ -20,7 +20,8 @@ import {
   Shield,
   Bell,
   UserPlus,
-  Calendar
+  Calendar,
+  CreditCard
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -262,6 +263,14 @@ export default function AdminDashboard() {
       href: '/admin/reminders',
       color: 'from-orange-500 to-amber-600',
       stats: 'Schedule & Send'
+    },
+    {
+      title: 'Subscriptions & Billing',
+      description: 'Manage subscriptions, track unpaid invoices, send payment reminders',
+      icon: CreditCard,
+      href: '/admin/subscriptions',
+      color: 'from-blue-500 to-indigo-600',
+      stats: 'Billing & Reminders'
     }
   ];
 
