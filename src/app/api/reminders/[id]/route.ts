@@ -6,10 +6,10 @@ export const runtime = 'nodejs';
 // PUT /api/reminders/[id] - Update reminder
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     
     const { data, error } = await supabaseAdmin
@@ -35,10 +35,10 @@ export async function PUT(
 // DELETE /api/reminders/[id] - Delete reminder
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     
     const { error } = await supabaseAdmin
       .from('scheduled_reminders')
