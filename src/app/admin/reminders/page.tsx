@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth, isSameDay, addMonths, subMonths, parseISO } from 'date-fns';
 import { 
   Calendar, Clock, Send, CheckCircle, XCircle, AlertCircle, 
   ChevronLeft, ChevronRight, Plus, Search, Phone, User,
-  Bell, MessageSquare, LayoutGrid, List, Trash2, RefreshCw
+  Bell, MessageSquare, LayoutGrid, List, Trash2, RefreshCw,
+  ArrowLeft, FileText, Briefcase
 } from 'lucide-react';
 
 interface Reminder {
@@ -31,17 +33,29 @@ interface CRMClient {
   phone: string;
 }
 
+interface Tender {
+  id: string;
+  title: string;
+  description: string;
+  closing_date: string;
+  status: string;
+  category: string;
+}
+
 export default function RemindersAdmin() {
   const [reminders, setReminders] = useState<Reminder[]>([]);
   const [clients, setClients] = useState<CRMClient[]>([]);
+  const [tenders, setTenders] = useState<Tender[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showBulkModal, setShowBulkModal] = useState(false);
+  const [showTenderModal, setShowTenderModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [forAdmin, setForAdmin] = useState(false); // Self-reminder toggle
 
   // Form states
   const [createForm, setCreateForm] = useState({
@@ -51,7 +65,8 @@ export default function RemindersAdmin() {
     reminder_type: 'custom',
     scheduled_at: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
     message_text: '',
-    auto_send: true
+    auto_send: true,
+    notify_admin: true // Send copy to admin
   });
 
   const [bulkForm, setBulkForm] = useState({
@@ -76,6 +91,7 @@ export default function RemindersAdmin() {
   useEffect(() => {
     fetchReminders();
     fetchClients();
+    fetchTenders();
   }, [filterStatus]);
 
   const fetchReminders = async () => {
@@ -102,6 +118,16 @@ export default function RemindersAdmin() {
       setClients(data.clients || []);
     } catch (err) {
       console.error('Failed to fetch clients:', err);
+    }
+  };
+
+  const fetchTenders = async () => {
+    try {
+      const res = await fetch('/api/tenders?limit=50&status=open');
+      const data = await res.json();
+      setTenders(data.tenders || []);
+    } catch (err) {
+      console.error('Failed to fetch tenders:', err);
     }
   };
 
@@ -209,13 +235,27 @@ export default function RemindersAdmin() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
+            <Link 
+              href="/admin" 
+              className="flex items-center gap-2 text-slate-400 hover:text-white mb-2 transition-colors"
+            >
+              <ArrowLeft size={18} />
+              Back to Admin
+            </Link>
             <h1 className="text-3xl font-bold flex items-center gap-3">
               <Calendar className="w-8 h-8 text-orange-500" />
               Reminders & Calendar
             </h1>
-            <p className="text-slate-400 mt-1">Schedule WhatsApp reminders for clients</p>
+            <p className="text-slate-400 mt-1">Schedule WhatsApp reminders for clients and yourself</p>
           </div>
           <div className="flex gap-3">
+            <button
+              onClick={() => setShowTenderModal(true)}
+              className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+            >
+              <Briefcase size={18} />
+              Share Tenders
+            </button>
             <button
               onClick={() => setViewMode(viewMode === 'calendar' ? 'list' : 'calendar')}
               className="px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 flex items-center gap-2"
@@ -231,7 +271,22 @@ export default function RemindersAdmin() {
               Bulk Schedule
             </button>
             <button
-              onClick={() => setShowCreateModal(true)}
+              onClick={() => {
+                setForAdmin(true);
+                setCreateForm({...createForm, client_id: 'ADMIN', title: '', description: ''});
+                setShowCreateModal(true);
+              }}
+              className="px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 flex items-center gap-2"
+            >
+              <Bell size={18} />
+              Self Reminder
+            </button>
+            <button
+              onClick={() => {
+                setForAdmin(false);
+                setCreateForm({...createForm, client_id: '', title: '', description: ''});
+                setShowCreateModal(true);
+              }}
               className="px-4 py-2 bg-orange-500 rounded-lg hover:bg-orange-600 flex items-center gap-2"
             >
               <Plus size={18} />
@@ -377,26 +432,71 @@ export default function RemindersAdmin() {
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
             <div className="bg-slate-800 rounded-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
               <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <Plus className="text-orange-500" />
-                New Reminder
+                {forAdmin ? <Bell className="text-purple-500" /> : <Plus className="text-orange-500" />}
+                {forAdmin ? 'Self Reminder' : 'New Reminder'}
               </h2>
               
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm text-slate-400 mb-1">Client</label>
-                  <select
-                    value={createForm.client_id}
-                    onChange={(e) => setCreateForm({...createForm, client_id: e.target.value})}
-                    className="w-full px-3 py-2 bg-slate-700 rounded-lg"
-                  >
-                    <option value="">Select client...</option>
-                    {clients.map(c => (
-                      <option key={c.id} value={c.id}>
-                        {c.full_name} {c.company_name ? `(${c.company_name})` : ''} — {c.contact_phone || c.phone || 'No phone'}
-                      </option>
-                    ))}
-                  </select>
+                {/* Toggle between Admin and Client reminder */}
+                <div className="flex items-center gap-4 p-3 bg-slate-700/50 rounded-lg">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={!forAdmin}
+                      onChange={() => { setForAdmin(false); setCreateForm({...createForm, client_id: ''}); }}
+                      className="w-4 h-4"
+                    />
+                    <span className="text-sm">For Client</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={forAdmin}
+                      onChange={() => { setForAdmin(true); setCreateForm({...createForm, client_id: 'ADMIN'}); }}
+                      className="w-4 h-4"
+                    />
+                    <span className="text-sm">For Myself (Admin)</span>
+                  </label>
                 </div>
+
+                {/* Client Selection - only show if not admin reminder */}
+                {!forAdmin && (
+                  <div>
+                    <label className="block text-sm text-slate-400 mb-1">Client</label>
+                    <select
+                      value={createForm.client_id}
+                      onChange={(e) => setCreateForm({...createForm, client_id: e.target.value})}
+                      className="w-full px-3 py-2 bg-slate-700 rounded-lg"
+                    >
+                      <option value="">Select client...</option>
+                      {clients.map(c => (
+                        <option key={c.id} value={c.id}>
+                          {c.contact_name || c.full_name} {c.company_name ? `(${c.company_name})` : ''} — {c.contact_phone || c.phone || 'No phone'}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {/* Admin reminder context - show which client this is about */}
+                {forAdmin && (
+                  <div>
+                    <label className="block text-sm text-slate-400 mb-1">About Client (optional)</label>
+                    <select
+                      value={createForm.client_id === 'ADMIN' ? '' : createForm.client_id}
+                      onChange={(e) => setCreateForm({...createForm, client_id: e.target.value || 'ADMIN'})}
+                      className="w-full px-3 py-2 bg-slate-700 rounded-lg"
+                    >
+                      <option value="">General / Not specific to a client</option>
+                      {clients.map(c => (
+                        <option key={c.id} value={c.id}>
+                          {c.contact_name || c.full_name} {c.company_name ? `(${c.company_name})` : ''}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="text-xs text-slate-500 mt-1">This reminder will be sent to your admin number</p>
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-sm text-slate-400 mb-1">Type</label>
@@ -595,6 +695,91 @@ export default function RemindersAdmin() {
             </div>
           </div>
         )}
+
+        {/* Tender Sharing Modal */}
+        {showTenderModal && (
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+            <div className="bg-slate-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <Briefcase className="text-blue-500" />
+                Share Tender Opportunities
+              </h2>
+              <p className="text-sm text-slate-400 mb-4">
+                Select available tenders and clients to notify them about opportunities
+              </p>
+
+              <div className="space-y-4">
+                {/* Available Tenders */}
+                <div>
+                  <label className="block text-sm text-slate-400 mb-2">Available Tenders ({tenders.length})</label>
+                  <div className="bg-slate-900 rounded-lg p-3 max-h-40 overflow-y-auto space-y-2">
+                    {tenders.map(tender => (
+                      <div key={tender.id} className="flex items-start gap-3 p-2 bg-slate-800 rounded">
+                        <FileText className="text-blue-400 shrink-0 mt-0.5" size={16} />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">{tender.title}</p>
+                          <p className="text-xs text-slate-500">
+                            Closes: {format(parseISO(tender.closing_date), 'MMM d, yyyy')} • {tender.category}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            const message = `Hi {name}, we found a tender opportunity for you:\n\n📋 ${tender.title}\n🏷️ ${tender.category}\n📅 Closes: ${format(parseISO(tender.closing_date), 'MMMM d, yyyy')}\n\nContact us to discuss how we can help you win this tender.\n\n— Breed Industries`;
+                            setBulkForm({
+                              ...bulkForm,
+                              title: `Tender: ${tender.title.slice(0, 30)}...`,
+                              message_template: message,
+                              reminder_type: 'custom'
+                            });
+                            setShowTenderModal(false);
+                            setShowBulkModal(true);
+                          }}
+                          className="px-3 py-1 bg-blue-600 rounded text-xs hover:bg-blue-700"
+                        >
+                          Share
+                        </button>
+                      </div>
+                    ))}
+                    {tenders.length === 0 && (
+                      <p className="text-slate-500 text-center py-4">No open tenders available</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="grid grid-cols-2 gap-3">
+                  <Link
+                    href="/admin/tenders"
+                    onClick={() => setShowTenderModal(false)}
+                    className="flex items-center justify-center gap-2 p-3 bg-slate-700 rounded-lg hover:bg-slate-600 text-sm"
+                  >
+                    <FileText size={16} />
+                    Manage Tenders
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setShowTenderModal(false);
+                      setShowBulkModal(true);
+                    }}
+                    className="flex items-center justify-center gap-2 p-3 bg-orange-600 rounded-lg hover:bg-orange-700 text-sm"
+                  >
+                    <Send size={16} />
+                    Custom Message
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <button
+                  onClick={() => setShowTenderModal(false)}
+                  className="w-full px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -606,12 +791,21 @@ function ReminderCard({ reminder, onSend, onDelete }: {
   onSend: (id: string) => void;
   onDelete: (id: string) => void;
 }) {
-  const contactName = reminder.client?.full_name || reminder.lead?.full_name || 'Unknown';
-  const company = reminder.client?.company_name || reminder.lead?.company_name;
-  const phone = reminder.phone_number || reminder.client?.phone || reminder.lead?.phone;
+  // Check if this is an admin self-reminder
+  const isAdminReminder = reminder.client_id === 'ADMIN' || !reminder.client_id;
+  
+  const contactName = isAdminReminder 
+    ? 'Myself (Admin)' 
+    : (reminder.client?.full_name || reminder.lead?.full_name || 'Unknown');
+  const company = isAdminReminder 
+    ? (reminder.client?.company_name || '') 
+    : (reminder.client?.company_name || reminder.lead?.company_name);
+  const phone = isAdminReminder 
+    ? 'Admin Number' 
+    : (reminder.phone_number || reminder.client?.phone || reminder.lead?.phone);
 
   return (
-    <div className="bg-slate-700/50 rounded-lg p-4 flex items-center justify-between">
+    <div className={`rounded-lg p-4 flex items-center justify-between ${isAdminReminder ? 'bg-purple-500/10 border border-purple-500/20' : 'bg-slate-700/50'}`}>
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-1">
           <span className={`w-2 h-2 rounded-full ${
@@ -624,6 +818,11 @@ function ReminderCard({ reminder, onSend, onDelete }: {
           <span className="text-xs px-2 py-0.5 bg-slate-600 rounded capitalize">
             {reminder.reminder_type.replace('_', ' ')}
           </span>
+          {isAdminReminder && (
+            <span className="text-xs px-2 py-0.5 bg-purple-500/20 text-purple-400 rounded">
+              Self Reminder
+            </span>
+          )}
         </div>
         <p className="text-sm text-slate-400 mb-1">{reminder.description}</p>
         <div className="flex items-center gap-4 text-xs text-slate-500">

@@ -59,9 +59,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Title and scheduled_at are required' }, { status: 400 });
     }
 
-    // Get phone number from client/lead if not provided
+    // Get phone number from client/lead/admin if not provided
     let phone = phone_number;
-    if (!phone && client_id) {
+    
+    // Admin self-reminder
+    if (client_id === 'ADMIN') {
+      phone = process.env.WHATSAPP_ADMIN_NUMBER || '';
+    } else if (!phone && client_id) {
       const { data: client } = await supabaseAdmin
         .from('crm_clients')
         .select('contact_phone, phone')
