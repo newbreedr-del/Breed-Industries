@@ -38,55 +38,21 @@ export interface PayFastPaymentData {
 }
 
 /**
- * Generate PayFast signature for payment data
+ * PHP urlencode equivalent — PayFast signatures use + for spaces, not %20
  */
-function generateSignature(data: Record<string, string | number>): string {
-  const signatureData: Record<string, string> = {};
+function pfEncode(value: string): string {
+  return encodeURIComponent(value).replace(/%20/g, '+');
+}
 
-  // PayFast requires specific field ordering
-  const fieldOrder = [
-    'merchant_id',
-    'merchant_key',
-    'return_url',
-    'cancel_url',
-    'notify_url',
-    'name_first',
-    'name_last',
-    'email_address',
-    'cell_number',
-    'm_payment_id',
-    'amount',
-    'item_name',
-    'item_description',
-    'custom_str1',
-    'custom_str2',
-    'custom_str3',
-    'custom_str4',
-    'custom_str5',
-    'custom_int1',
-    'custom_int2',
-    'custom_int3',
-    'custom_int4',
-    'custom_int5',
-    'email_confirmation',
-    'confirmation_address',
-    'payment_method',
-    'subscription_type',
-    'billing_date',
-    'recurring_amount',
-    'frequency',
-    'cycles',
-  ];
-
-  // Build signature string with passphrase
-  const signatureString = fieldOrder
-    .map(field => {
-      const value = data[field];
-      if (value === undefined || value === null || value === '') return '';
-      return `${field}=${encodeURIComponent(value.toString())}`;
-    })
-    .filter(s => s)
-    .join('&') + `&passphrase=${encodeURIComponent(PASSPHRASE || '')}`;
+/**
+ * Generate PayFast signature from an ordered formData object.
+ * Fields must already be in the correct order (insertion order).
+ */
+function generateSignature(data: Record<string, string>): string {
+  const signatureString =
+    Object.entries(data)
+      .map(([key, value]) => `${key}=${pfEncode(value)}`)
+      .join('&') + `&passphrase=${pfEncode(PASSPHRASE || '')}`;
 
   return crypto.createHash('md5').update(signatureString).digest('hex');
 }
@@ -202,10 +168,10 @@ export function validateITNSignature(data: Record<string, string>): boolean {
     .map(field => {
       const value = dataWithoutSignature[field];
       if (value === undefined || value === null || value === '') return '';
-      return `${field}=${encodeURIComponent(value.toString())}`;
+      return `${field}=${pfEncode(value.toString())}`;
     })
     .filter(s => s)
-    .join('&') + `&passphrase=${encodeURIComponent(PASSPHRASE)}`;
+    .join('&') + `&passphrase=${pfEncode(PASSPHRASE)}`;
 
   const expectedSignature = crypto.createHash('md5').update(signatureString).digest('hex');
 
