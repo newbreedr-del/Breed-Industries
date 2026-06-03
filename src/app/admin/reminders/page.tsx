@@ -31,7 +31,7 @@ interface Reminder {
 
 interface CRMClient {
   id: string;
-  full_name: string;
+  contact_name: string;
   company_name: string;
   contact_phone: string;
   phone: string;
@@ -229,7 +229,7 @@ export default function RemindersAdmin() {
   };
 
   const filteredClients = clients.filter(c => 
-    c.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    c.contact_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     c.company_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     c.contact_phone?.includes(searchQuery)
   );
@@ -483,7 +483,7 @@ export default function RemindersAdmin() {
                       <option value="">Select client...</option>
                       {clients.map(c => (
                         <option key={c.id} value={c.id}>
-                          {c.contact_name || c.full_name} {c.company_name ? `(${c.company_name})` : ''} — {c.contact_phone || c.phone || 'No phone'}
+                          {c.contact_name} {c.company_name ? `(${c.company_name})` : ''} — {c.contact_phone || c.phone || 'No phone'}
                         </option>
                       ))}
                     </select>
@@ -502,7 +502,7 @@ export default function RemindersAdmin() {
                       <option value="">General / Not specific to a client</option>
                       {clients.map(c => (
                         <option key={c.id} value={c.id}>
-                          {c.contact_name || c.full_name} {c.company_name ? `(${c.company_name})` : ''}
+                          {c.contact_name} {c.company_name ? `(${c.company_name})` : ''}
                         </option>
                       ))}
                     </select>
@@ -704,7 +704,7 @@ export default function RemindersAdmin() {
                           }}
                           className="w-4 h-4"
                         />
-                        <span className="text-sm">{c.full_name} — {c.contact_phone || c.phone || 'No phone'}</span>
+                        <span className="text-sm">{c.contact_name} — {c.contact_phone || c.phone || 'No phone'}</span>
                       </label>
                     ))}
                   </div>
