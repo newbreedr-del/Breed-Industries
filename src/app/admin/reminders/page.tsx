@@ -14,6 +14,7 @@ interface Reminder {
   description: string;
   reminder_type: string;
   scheduled_at: string;
+  sent_at?: string;
   status: 'pending' | 'sent' | 'failed' | 'cancelled';
   whatsapp_sent: boolean;
   phone_number: string;
