@@ -185,13 +185,13 @@ export default function WhatsAppAdminPage() {
               <p className="text-slate-500 text-xs">{connected ? 'Session persistent — no re-scan needed' : 'Scan QR to connect'}</p>
             </div>
           </div>
-          {/* Admin number */}
+          {/* Agent / Business number */}
           <div className="flex items-center gap-3 p-4 rounded-xl" style={card}>
             <Hash size={16} className="text-orange-400 shrink-0" />
             <div>
-              <p className="text-white text-sm font-semibold">Your Admin Number</p>
-              <p className="text-orange-400 text-xs font-mono">27604964105</p>
-              <p className="text-slate-600 text-xs">Message the agent → it acts for you</p>
+              <p className="text-white text-sm font-semibold">Agent (Business) Number</p>
+              <p className="text-orange-400 text-xs font-mono">27685834837</p>
+              <p className="text-slate-600 text-xs">Clients message this → you get alerts on 27604964105</p>
             </div>
           </div>
           {/* Message count */}

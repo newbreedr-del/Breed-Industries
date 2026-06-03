@@ -127,8 +127,21 @@ export async function POST(request: NextRequest) {
             console.error('[WA Webhook] Admin command error:', err.message)
           );
         } else {
-          // External client message — forward summary to admin
+          // External client message — auto-reply with admin contact info, then notify admin
           console.log(`[WA Webhook] Inbound from ${pushName || phone}: ${text.slice(0, 100)}`);
+          
+          // Auto-reply: Tell them to contact admin number
+          const adminNumberDisplay = adminNumber ? `0${adminNumber.slice(2)}` : 'admin';
+          sendText(phone, 
+            `Hi ${pushName || 'there'},\n\n` +
+            `This is an automated line for updates and reminders only.\n\n` +
+            `For assistance, please contact us directly:\n` +
+            `📞 WhatsApp: ${adminNumberDisplay}\n` +
+            `🌐 www.thebreed.co.za\n\n` +
+            `— Breed Industries`
+          ).catch(() => {});
+          
+          // Notify admin about the message
           notifyAdmin(
             `💬 *Inbound WhatsApp*\nFrom: ${pushName || 'Unknown'}\nNumber: ${phone}\n\n"${text.slice(0, 300)}"\n\n_Reply: SEND ${phone} <your message>_`
           ).catch(() => {});

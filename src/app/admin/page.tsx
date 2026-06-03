@@ -19,7 +19,8 @@ import {
   Award,
   Shield,
   Bell,
-  UserPlus
+  UserPlus,
+  Calendar
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -253,6 +254,14 @@ export default function AdminDashboard() {
       href: '/admin/whatsapp',
       color: 'from-green-500 to-emerald-600',
       stats: 'Breed Agent'
+    },
+    {
+      title: 'Reminders & Calendar',
+      description: 'Schedule WhatsApp reminders, view calendar, manage follow-ups',
+      icon: Calendar,
+      href: '/admin/reminders',
+      color: 'from-orange-500 to-amber-600',
+      stats: 'Schedule & Send'
     }
   ];
 
