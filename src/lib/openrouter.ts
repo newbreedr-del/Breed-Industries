@@ -55,7 +55,7 @@ export interface CompletionResponse {
 
 function orConfig() {
   const apiKey = process.env.OPENROUTER_API_KEY ?? '';
-  const model = process.env.OPENROUTER_MODEL ?? 'google/gemini-2.0-flash-exp:free';
+  const model = process.env.OPENROUTER_MODEL ?? 'nvidia/nemotron-nano-9b-v2:free';
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://thebreed.co.za';
   return { apiKey, model, appUrl };
 }
