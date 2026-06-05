@@ -55,7 +55,7 @@ export interface CompletionResponse {
 
 function orConfig() {
   const apiKey = process.env.OPENROUTER_API_KEY ?? '';
-  const model = process.env.OPENROUTER_MODEL ?? 'anthropic/claude-3.5-haiku';
+  const model = process.env.OPENROUTER_MODEL ?? 'anthropic/claude-3-haiku';
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://thebreed.co.za';
   return { apiKey, model, appUrl };
 }
@@ -94,7 +94,7 @@ export async function chatCompletion(
       'X-Title': 'Breed Industries Agent',
     },
     body: JSON.stringify(body),
-    signal: AbortSignal.timeout(60_000),
+    signal: AbortSignal.timeout(15_000),
   });
 
   if (!res.ok) {
