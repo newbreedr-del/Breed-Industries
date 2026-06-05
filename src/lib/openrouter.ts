@@ -94,7 +94,7 @@ export async function chatCompletion(
       'X-Title': 'Breed Industries Agent',
     },
     body: JSON.stringify(body),
-    signal: AbortSignal.timeout(15_000),
+    signal: AbortSignal.timeout(45_000),
   });
 
   if (!res.ok) {
