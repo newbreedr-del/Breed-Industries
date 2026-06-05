@@ -51,7 +51,7 @@ export async function sendText(
         method: 'POST',
         headers: { apikey: key, 'Content-Type': 'application/json' },
         body: JSON.stringify({ number: phone, text: message }),
-        signal: AbortSignal.timeout(10_000),
+        signal: AbortSignal.timeout(30_000),
       });
 
       const data = await res.json().catch(() => ({}));
