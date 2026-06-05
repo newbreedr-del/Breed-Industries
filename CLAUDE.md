@@ -160,6 +160,12 @@ ADMIN_PASSWORD
 # Tender engine
 CRON_SECRET                   # secures /api/cron/scrape-tenders
 
+# WhatsApp AI Agent (OpenRouter)
+OPENROUTER_API_KEY            # from openrouter.ai — required for AI agent
+OPENROUTER_MODEL              # optional override, default: google/gemini-2.0-flash-001
+WHATSAPP_OWNER_NUMBER         # owner's number in SA format (e.g. 0604964105 or 27604964105) — gets full admin AI access
+WHATSAPP_ADMIN_NUMBER         # same as owner for most setups; used as fallback notify target
+
 # Optional
 TWILIO_ACCOUNT_SID
 TWILIO_AUTH_TOKEN

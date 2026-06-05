@@ -78,6 +78,9 @@ ORDER BY r.scheduled_at;
 -- RLS Policies
 ALTER TABLE scheduled_reminders ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policy if it exists
+DROP POLICY IF EXISTS "Allow all" ON scheduled_reminders;
+
 CREATE POLICY "Allow all" ON scheduled_reminders
     FOR ALL USING (true) WITH CHECK (true);
 
@@ -89,6 +92,9 @@ BEGIN
     RETURN NEW;
 END;
 $$ language 'plpgsql';
+
+-- Drop existing trigger if it exists
+DROP TRIGGER IF EXISTS update_reminders_updated_at ON scheduled_reminders;
 
 CREATE TRIGGER update_reminders_updated_at 
     BEFORE UPDATE ON scheduled_reminders 
