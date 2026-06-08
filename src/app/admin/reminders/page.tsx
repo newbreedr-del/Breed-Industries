@@ -155,7 +155,8 @@ export default function RemindersAdmin() {
         setShowCreateModal(false);
         setForAdmin(false);
         setCreateForm({
-          client_id: '', title: '', description: '', reminder_type: 'custom',
+          client_id: '', client_name: '', client_phone: '', client_email: '', client_company: '',
+          title: '', description: '', reminder_type: 'custom',
           scheduled_at: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
           message_text: '', auto_send: true, notify_admin: true,
           is_recurring: false, recurrence_pattern: 'weekly', recurrence_interval: 1,
