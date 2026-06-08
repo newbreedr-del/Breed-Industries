@@ -179,25 +179,25 @@ export default function SubscriptionsAdmin() {
       <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="mb-8">
+          <div className="mb-6 md:mb-8">
             <Link 
               href="/admin" 
-              className="flex items-center gap-2 text-gray-400 hover:text-white mb-2 transition-colors"
+              className="flex items-center gap-2 text-gray-400 hover:text-white mb-2 transition-colors text-sm md:text-base"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={16} className="md:w-[18px] md:h-[18px]" />
               Back to Admin
             </Link>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                <CreditCard className="w-5 h-5 text-blue-400" />
+            <div className="flex items-center gap-2 md:gap-3 mb-2">
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                <CreditCard className="w-4 h-4 md:w-5 md:h-5 text-blue-400" />
               </div>
-              <h1 className="text-3xl font-bold text-white">Subscriptions & Billing</h1>
+              <h1 className="text-2xl md:text-3xl font-bold text-white">Subscriptions & Billing</h1>
             </div>
-            <p className="text-gray-400">Manage subscriptions, track payments, and send reminders</p>
+            <p className="text-sm md:text-base text-gray-400">Manage subscriptions, track payments, and send reminders</p>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
             <StatCard 
               icon={<Users className="w-5 h-5" />} 
               label="Active Subs" 
@@ -225,38 +225,39 @@ export default function SubscriptionsAdmin() {
           </div>
 
           {/* Unpaid Invoices Section */}
-          <div className="bg-slate-800/50 rounded-xl p-6 mb-8">
-            <div className="flex items-center justify-between mb-6">
+          <div className="bg-slate-800/50 rounded-xl p-4 md:p-6 mb-6 md:mb-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 md:mb-6 gap-3">
               <div>
-                <h2 className="text-xl font-bold flex items-center gap-2">
-                  <AlertCircle className="text-red-400" />
+                <h2 className="text-lg md:text-xl font-bold flex items-center gap-2">
+                  <AlertCircle className="text-red-400 w-5 h-5" />
                   Unpaid Invoices
                 </h2>
-                <p className="text-sm text-slate-400">
+                <p className="text-xs md:text-sm text-slate-400">
                   {unpaidInvoices.length} unpaid, {stats.overdueCount} overdue
                 </p>
               </div>
-              <div className="flex gap-3">
+              <div className="flex gap-2 md:gap-3">
                 <button
                   onClick={() => setShowReminderModal(true)}
                   disabled={selectedInvoices.length === 0}
-                  className="px-4 py-2 bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50 flex items-center gap-2"
+                  className="px-3 md:px-4 py-2 bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50 flex items-center gap-2 text-sm md:text-base"
                 >
-                  <Bell size={18} />
-                  Bulk Remind ({selectedInvoices.length})
+                  <Bell size={16} className="md:w-[18px] md:h-[18px]" />
+                  <span className="hidden sm:inline">Bulk Remind ({selectedInvoices.length})</span>
+                  <span className="sm:hidden">Remind ({selectedInvoices.length})</span>
                 </button>
                 <button
                   onClick={fetchData}
-                  className="px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 flex items-center gap-2"
+                  className="px-3 md:px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 flex items-center gap-2"
                 >
-                  <RefreshCw size={18} />
-                  Refresh
+                  <RefreshCw size={16} className="md:w-[18px] md:h-[18px]" />
+                  <span className="hidden sm:inline">Refresh</span>
                 </button>
               </div>
             </div>
 
             {/* Filter & Search */}
-            <div className="flex gap-4 mb-4">
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mb-4">
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
                 <input

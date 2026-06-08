@@ -355,28 +355,29 @@ export default function RemindersAdmin() {
 
         {viewMode === 'calendar' ? (
           /* Calendar View */
-          <div className="bg-slate-800 rounded-xl p-6">
+          <div className="bg-slate-800 rounded-xl p-3 md:p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold">
+              <h2 className="text-lg md:text-xl font-semibold">
                 {format(currentMonth, 'MMMM yyyy')}
               </h2>
-              <div className="flex gap-2">
-                <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="p-2 hover:bg-slate-700 rounded">
-                  <ChevronLeft size={20} />
+              <div className="flex gap-1 md:gap-2">
+                <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="p-1.5 md:p-2 hover:bg-slate-700 rounded">
+                  <ChevronLeft size={18} className="md:w-5 md:h-5" />
                 </button>
-                <button onClick={() => setCurrentMonth(new Date())} className="px-3 py-1 bg-slate-700 rounded hover:bg-slate-600 text-sm">
+                <button onClick={() => setCurrentMonth(new Date())} className="px-2 md:px-3 py-1 bg-slate-700 rounded hover:bg-slate-600 text-xs md:text-sm">
                   Today
                 </button>
-                <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="p-2 hover:bg-slate-700 rounded">
-                  <ChevronRight size={20} />
+                <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="p-1.5 md:p-2 hover:bg-slate-700 rounded">
+                  <ChevronRight size={18} className="md:w-5 md:h-5" />
                 </button>
               </div>
             </div>
 
             <div className="grid grid-cols-7 gap-px bg-slate-700 rounded-lg overflow-hidden">
-              {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                <div key={day} className="bg-slate-800 p-3 text-center text-sm text-slate-400 font-medium">
-                  {day}
+              {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, i) => (
+                <div key={day} className="bg-slate-800 p-1 md:p-3 text-center text-[10px] md:text-sm text-slate-400 font-medium">
+                  <span className="hidden sm:inline">{day}</span>
+                  <span className="sm:hidden">{day.charAt(0)}</span>
                 </div>
               ))}
               {calendarDays.map((day, idx) => {
@@ -389,29 +390,30 @@ export default function RemindersAdmin() {
                     key={idx}
                     onClick={() => setSelectedDate(day)}
                     className={`
-                      bg-slate-800 p-2 min-h-[100px] cursor-pointer transition-colors
+                      bg-slate-800 p-1 md:p-2 min-h-[60px] md:min-h-[100px] cursor-pointer transition-colors
                       ${isSelected ? 'ring-2 ring-orange-500' : 'hover:bg-slate-700'}
                       ${!isCurrentMonth ? 'opacity-50' : ''}
                     `}
                   >
-                    <div className={`text-sm font-medium mb-1 ${isSameDay(day, new Date()) ? 'text-orange-400' : 'text-slate-300'}`}>
+                    <div className={`text-xs md:text-sm font-medium mb-0.5 md:mb-1 ${isSameDay(day, new Date()) ? 'text-orange-400' : 'text-slate-300'}`}>
                       {format(day, 'd')}
                     </div>
-                    <div className="space-y-1">
-                      {dayReminders.slice(0, 3).map((r, i) => (
+                    <div className="space-y-0.5 md:space-y-1">
+                      {dayReminders.slice(0, 2).map((r, i) => (
                         <div
                           key={i}
-                          className={`text-xs p-1 rounded truncate ${
+                          className={`text-[9px] md:text-xs p-0.5 md:p-1 rounded truncate ${
                             r.status === 'sent' ? 'bg-green-500/20 text-green-400' :
                             r.status === 'failed' ? 'bg-red-500/20 text-red-400' :
                             'bg-yellow-500/20 text-yellow-400'
                           }`}
                         >
-                          {r.title}
+                          <span className="hidden md:inline">{r.title}</span>
+                          <span className="md:hidden">•</span>
                         </div>
                       ))}
-                      {dayReminders.length > 3 && (
-                        <div className="text-xs text-slate-500">+{dayReminders.length - 3} more</div>
+                      {dayReminders.length > 2 && (
+                        <div className="text-[9px] md:text-xs text-slate-500">+{dayReminders.length - 2}</div>
                       )}
                     </div>
                   </div>
@@ -420,8 +422,8 @@ export default function RemindersAdmin() {
             </div>
 
             {/* Selected Day Details */}
-            <div className="mt-6">
-              <h3 className="text-lg font-semibold mb-4">
+            <div className="mt-4 md:mt-6">
+              <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4">
                 {format(selectedDate, 'EEEE, MMMM do')} — {getRemindersForDay(selectedDate).length} reminders
               </h3>
               <div className="space-y-2">
