@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
     const pdfBuffer = generateQuotePDF(quoteData);
 
     // Return PDF as download
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(Buffer.from(pdfBuffer), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
