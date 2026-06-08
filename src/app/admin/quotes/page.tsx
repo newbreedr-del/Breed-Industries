@@ -309,6 +309,15 @@ export default function QuotesPage() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right">
                           <div className="flex items-center justify-end gap-2">
+                            <a
+                              href={`/api/quotes/download?id=${quote.id}`}
+                              download
+                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-green-500/20 hover:bg-green-500/30 text-green-400 text-xs font-medium transition-colors"
+                              title="Download PDF"
+                            >
+                              <Download size={14} />
+                              PDF
+                            </a>
                             <button
                               onClick={() => sendQuoteEmail(quote)}
                               disabled={sending === quote.id}
