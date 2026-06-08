@@ -45,6 +45,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       client_id,
+      client_name,
+      client_phone,
+      client_email,
+      client_company,
       lead_id,
       title,
       description,
@@ -64,8 +68,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Title and scheduled_at are required' }, { status: 400 });
     }
 
-    // Get phone number from client/lead/admin if not provided
-    let phone = phone_number;
+    // Get phone number from manual input, client/lead/admin
+    let phone = phone_number || client_phone;
     
     // Admin self-reminder
     if (client_id === 'ADMIN') {

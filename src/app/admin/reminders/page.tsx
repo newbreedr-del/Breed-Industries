@@ -64,6 +64,10 @@ export default function RemindersAdmin() {
   // Form states
   const [createForm, setCreateForm] = useState({
     client_id: '',
+    client_name: '',
+    client_phone: '',
+    client_email: '',
+    client_company: '',
     title: '',
     description: '',
     reminder_type: 'custom',
@@ -242,10 +246,10 @@ export default function RemindersAdmin() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white p-6">
+    <div className="min-h-screen bg-slate-900 text-white p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 md:mb-8 gap-4">
           <div>
             <Link 
               href="/admin" 
@@ -260,55 +264,59 @@ export default function RemindersAdmin() {
             </h1>
             <p className="text-slate-400 mt-1">Schedule WhatsApp reminders for clients and yourself</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-2 md:gap-3 w-full md:w-auto">
             <button
               onClick={() => setShowTenderModal(true)}
-              className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+              className="px-3 md:px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 flex items-center gap-2 text-sm md:text-base"
             >
-              <Briefcase size={18} />
-              Share Tenders
+              <Briefcase size={16} className="md:w-[18px] md:h-[18px]" />
+              <span className="hidden sm:inline">Share Tenders</span>
+              <span className="sm:hidden">Tenders</span>
             </button>
             <button
               onClick={() => setViewMode(viewMode === 'calendar' ? 'list' : 'calendar')}
-              className="px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 flex items-center gap-2"
+              className="px-3 md:px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 flex items-center gap-2 text-sm md:text-base"
             >
-              {viewMode === 'calendar' ? <List size={18} /> : <LayoutGrid size={18} />}
-              {viewMode === 'calendar' ? 'List View' : 'Calendar'}
+              {viewMode === 'calendar' ? <List size={16} className="md:w-[18px] md:h-[18px]" /> : <LayoutGrid size={16} className="md:w-[18px] md:h-[18px]" />}
+              <span className="hidden sm:inline">{viewMode === 'calendar' ? 'List View' : 'Calendar'}</span>
             </button>
             <button
               onClick={() => setShowBulkModal(true)}
-              className="px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 flex items-center gap-2"
+              className="px-3 md:px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 flex items-center gap-2 text-sm md:text-base"
             >
-              <Send size={18} />
-              Bulk Schedule
+              <Send size={16} className="md:w-[18px] md:h-[18px]" />
+              <span className="hidden sm:inline">Bulk Schedule</span>
+              <span className="sm:hidden">Bulk</span>
             </button>
             <button
               onClick={() => {
                 setForAdmin(true);
-                setCreateForm({...createForm, client_id: 'ADMIN', title: '', description: ''});
+                setCreateForm({...createForm, client_id: 'ADMIN', client_name: '', client_phone: '', client_email: '', client_company: '', title: '', description: ''});
                 setShowCreateModal(true);
               }}
-              className="px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 flex items-center gap-2"
+              className="px-3 md:px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 flex items-center gap-2 text-sm md:text-base"
             >
-              <Bell size={18} />
-              Self Reminder
+              <Bell size={16} className="md:w-[18px] md:h-[18px]" />
+              <span className="hidden sm:inline">Self Reminder</span>
+              <span className="sm:hidden">Self</span>
             </button>
             <button
               onClick={() => {
                 setForAdmin(false);
-                setCreateForm({...createForm, client_id: '', title: '', description: ''});
+                setCreateForm({...createForm, client_id: '', client_name: '', client_phone: '', client_email: '', client_company: '', title: '', description: ''});
                 setShowCreateModal(true);
               }}
-              className="px-4 py-2 bg-orange-500 rounded-lg hover:bg-orange-600 flex items-center gap-2"
+              className="px-3 md:px-4 py-2 bg-orange-500 rounded-lg hover:bg-orange-600 flex items-center gap-2 text-sm md:text-base"
             >
-              <Plus size={18} />
-              New Reminder
+              <Plus size={16} className="md:w-[18px] md:h-[18px]" />
+              <span className="hidden sm:inline">New Reminder</span>
+              <span className="sm:hidden">New</span>
             </button>
           </div>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
           {[
             { label: 'Pending', value: reminders.filter(r => r.status === 'pending').length, color: 'text-yellow-400' },
             { label: 'Sent Today', value: reminders.filter(r => r.status === 'sent' && isSameDay(parseISO(r.sent_at || r.scheduled_at), new Date())).length, color: 'text-green-400' },
@@ -471,22 +479,52 @@ export default function RemindersAdmin() {
                   </label>
                 </div>
 
-                {/* Client Selection - only show if not admin reminder */}
+                {/* Client Details - manual input instead of dropdown */}
                 {!forAdmin && (
-                  <div>
-                    <label className="block text-sm text-slate-400 mb-1">Client</label>
-                    <select
-                      value={createForm.client_id}
-                      onChange={(e) => setCreateForm({...createForm, client_id: e.target.value})}
-                      className="w-full px-3 py-2 bg-slate-700 rounded-lg"
-                    >
-                      <option value="">Select client...</option>
-                      {clients.map(c => (
-                        <option key={c.id} value={c.id}>
-                          {c.contact_name} {c.company_name ? `(${c.company_name})` : ''} — {c.contact_phone || c.phone || 'No phone'}
-                        </option>
-                      ))}
-                    </select>
+                  <div className="space-y-3 p-4 bg-slate-700/30 rounded-lg border border-slate-600">
+                    <p className="text-sm font-medium text-orange-400">Client Details</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs text-slate-400 mb-1">Name *</label>
+                        <input
+                          type="text"
+                          value={createForm.client_name}
+                          onChange={(e) => setCreateForm({...createForm, client_name: e.target.value})}
+                          className="w-full px-3 py-2 bg-slate-700 rounded-lg text-sm"
+                          placeholder="Client name"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-slate-400 mb-1">Phone Number *</label>
+                        <input
+                          type="tel"
+                          value={createForm.client_phone}
+                          onChange={(e) => setCreateForm({...createForm, client_phone: e.target.value})}
+                          className="w-full px-3 py-2 bg-slate-700 rounded-lg text-sm"
+                          placeholder="0821234567"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-slate-400 mb-1">Email</label>
+                        <input
+                          type="email"
+                          value={createForm.client_email}
+                          onChange={(e) => setCreateForm({...createForm, client_email: e.target.value})}
+                          className="w-full px-3 py-2 bg-slate-700 rounded-lg text-sm"
+                          placeholder="client@example.com"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-slate-400 mb-1">Company</label>
+                        <input
+                          type="text"
+                          value={createForm.client_company}
+                          onChange={(e) => setCreateForm({...createForm, client_company: e.target.value})}
+                          className="w-full px-3 py-2 bg-slate-700 rounded-lg text-sm"
+                          placeholder="Company name"
+                        />
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -653,7 +691,7 @@ export default function RemindersAdmin() {
                 </button>
                 <button
                   onClick={createReminder}
-                  disabled={!createForm.title || !createForm.scheduled_at}
+                  disabled={!createForm.title || !createForm.scheduled_at || (!forAdmin && (!createForm.client_name || !createForm.client_phone))}
                   className="flex-1 px-4 py-2 bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50"
                 >
                   Create Reminder
