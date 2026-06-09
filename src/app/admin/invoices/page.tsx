@@ -26,7 +26,6 @@ export default function InvoicesPage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [paymentFilter, setPaymentFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -34,7 +33,7 @@ export default function InvoicesPage() {
 
   useEffect(() => {
     fetchInvoices();
-  }, [statusFilter, paymentFilter, searchQuery, page]);
+  }, [statusFilter, searchQuery, page]);
 
   const fetchInvoices = async () => {
     setLoading(true);
@@ -45,7 +44,6 @@ export default function InvoicesPage() {
       });
 
       if (statusFilter !== 'all') params.append('status', statusFilter);
-      if (paymentFilter !== 'all') params.append('paymentStatus', paymentFilter);
       if (searchQuery) params.append('customerEmail', searchQuery);
 
       const response = await fetch(`/api/invoices?${params}`);
@@ -172,7 +170,7 @@ export default function InvoicesPage() {
         <div className="container mx-auto px-4 relative z-10">
           {/* Filters */}
           <div className="glass-card p-6 mb-8">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-white/70 text-sm mb-2">
                   <Search size={14} className="inline mr-1" />
@@ -206,28 +204,10 @@ export default function InvoicesPage() {
                 </select>
               </div>
 
-              <div>
-                <label className="block text-white/70 text-sm mb-2">
-                  <DollarSign size={14} className="inline mr-1" />
-                  Payment Status
-                </label>
-                <select
-                  value={paymentFilter}
-                  onChange={(e) => setPaymentFilter(e.target.value)}
-                  className="w-full rounded-lg bg-white/5 border border-white/10 p-3 text-white"
-                >
-                  <option value="all">All Payment Statuses</option>
-                  <option value="unpaid">Unpaid</option>
-                  <option value="partial">Partial</option>
-                  <option value="paid">Paid</option>
-                </select>
-              </div>
-
               <div className="flex items-end">
                 <button
                   onClick={() => {
                     setStatusFilter('all');
-                    setPaymentFilter('all');
                     setSearchQuery('');
                   }}
                   className="btn btn-outline w-full"
@@ -267,9 +247,6 @@ export default function InvoicesPage() {
                           Status
                         </th>
                         <th className="px-6 py-4 text-left text-xs font-medium text-white/70 uppercase tracking-wider">
-                          Payment
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-medium text-white/70 uppercase tracking-wider">
                           Due Date
                         </th>
                         <th className="px-6 py-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider">
@@ -297,10 +274,15 @@ export default function InvoicesPage() {
                             )}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            {getStatusBadge(invoice.status)}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            {getPaymentBadge(invoice.paymentStatus)}
+                            <div className="flex items-center gap-2">
+                              {getStatusBadge(invoice.status)}
+                              {invoice.paymentStatus === 'paid' && (
+                                <span className="text-xs text-green-400 flex items-center gap-1">
+                                  <CheckCircle size={12} />
+                                  Paid
+                                </span>
+                              )}
+                            </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-white/70">
                             {new Date(invoice.dueDate).toLocaleDateString('en-ZA')}

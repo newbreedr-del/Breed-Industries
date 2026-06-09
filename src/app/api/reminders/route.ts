@@ -45,10 +45,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       client_id,
-      client_name,
-      client_phone,
-      client_email,
-      client_company,
       lead_id,
       title,
       description,
@@ -64,11 +60,14 @@ export async function POST(request: NextRequest) {
       max_recurrences
     } = body;
 
+    // Extract manual client fields (frontend only, not stored in DB)
+    const { client_phone } = body;
+
     if (!title || !scheduled_at) {
       return NextResponse.json({ error: 'Title and scheduled_at are required' }, { status: 400 });
     }
 
-    // Get phone number from manual input, client/lead/admin
+    // Get phone number from manual input, phone_number field, client/lead/admin
     let phone = phone_number || client_phone;
     
     // Admin self-reminder
