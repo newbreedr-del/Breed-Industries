@@ -163,9 +163,12 @@ export default function RemindersAdmin() {
           recurrence_end_date: '', max_recurrences: ''
         });
         fetchReminders();
+      } else {
+        const errorData = await res.json();
+        alert(`Failed to create reminder: ${errorData.error || res.statusText}`);
       }
-    } catch (err) {
-      alert('Failed to create reminder');
+    } catch (err: any) {
+      alert(`Failed to create reminder: ${err.message}`);
     }
   };
 

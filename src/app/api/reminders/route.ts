@@ -16,11 +16,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabaseAdmin
       .from('scheduled_reminders')
-      .select(`
-        *,
-        client:client_id(full_name, company_name, phone),
-        lead:lead_id(full_name, company_name, phone)
-      `)
+      .select('*')
       .order('scheduled_at', { ascending: true })
       .limit(limit);
 
