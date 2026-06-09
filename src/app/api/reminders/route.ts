@@ -86,26 +86,41 @@ export async function POST(request: NextRequest) {
       phone = lead?.phone;
     }
 
+    // Build insert object, converting empty strings to null for foreign keys
+    const insertData: any = {
+      title,
+      description,
+      reminder_type: reminder_type || 'custom',
+      scheduled_at,
+      phone_number: phone ? formatPhone(phone) : null,
+      message_text: message_text || description || title,
+      is_recurring: is_recurring || false,
+      source_type: 'manual',
+      created_by: 'admin',
+      status: 'pending'
+    };
+
+    // Only add client_id if it's not empty and not 'ADMIN'
+    if (client_id && client_id !== 'ADMIN') {
+      insertData.client_id = client_id;
+    }
+    
+    // Only add lead_id if it exists
+    if (lead_id) {
+      insertData.lead_id = lead_id;
+    }
+
+    // Add recurrence fields only if recurring
+    if (is_recurring) {
+      insertData.recurrence_pattern = recurrence_pattern || 'weekly';
+      insertData.recurrence_interval = recurrence_interval || 1;
+      if (recurrence_end_date) insertData.recurrence_end_date = recurrence_end_date;
+      if (max_recurrences) insertData.max_recurrences = max_recurrences;
+    }
+
     const { data, error } = await supabaseAdmin
       .from('scheduled_reminders')
-      .insert([{
-        client_id,
-        lead_id,
-        title,
-        description,
-        reminder_type: reminder_type || 'custom',
-        scheduled_at,
-        phone_number: phone ? formatPhone(phone) : null,
-        message_text: message_text || description || title,
-        is_recurring,
-        recurrence_pattern,
-        recurrence_interval,
-        recurrence_end_date,
-        max_recurrences,
-        source_type: 'manual',
-        created_by: 'admin',
-        status: 'pending'
-      }])
+      .insert([insertData])
       .select()
       .single();
 
