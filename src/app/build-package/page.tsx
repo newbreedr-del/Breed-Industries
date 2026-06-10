@@ -214,7 +214,7 @@ const clientRequirementsMap: Record<string, string[]> = {
   'Tender Full Service': ['All documents listed under Tender Apply', 'Signed Power of Attorney / mandate for site meetings', 'Representative availability for site briefings', 'Any previous tender submissions for reference', 'Company bank statement (3 months)'],
 };
 
-export default function LabPage() {
+export default function BuildPackagePage() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [activeStep, setActiveStep] = useState('compliance');
   const [selectedBundle, setSelectedBundle] = useState<string | null>(null);

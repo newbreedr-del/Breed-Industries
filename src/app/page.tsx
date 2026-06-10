@@ -134,7 +134,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
               >
-                <span className="text-gradient-gold">Creative & Innovative</span> Ideas for Your Business
+                From <span className="text-gradient-gold">CIPC to Digital Empire</span> — We Launch South African Businesses End to End
               </motion.h1>
               
               <motion.p 
@@ -143,8 +143,8 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
-                From registration to unstoppable branding & tech – we get you seen, trusted, and profitable.
-                Work with the team built for ambitious South African entrepreneurs.
+                Registration, compliance, branding, websites, and tenders — all under one roof. 
+                Built for ambitious South African entrepreneurs who refuse to stay small.
               </motion.p>
               
               <motion.div 
