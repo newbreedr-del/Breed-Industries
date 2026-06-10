@@ -54,20 +54,20 @@ const navItems = [
 const tiers = [
   {
     name: 'Launch Essentials',
-    price: 'From R3,950',
+    price: 'R2,500',
     description: 'CIPC registration, basic logo, and business cards',
     link: '/build-package'
   },
   {
     name: 'Growth Momentum',
-    price: 'From R9,800',
+    price: 'R8,500',
     description: 'Full branding, 5-page website, and business plan',
     link: '/build-package',
     featured: true
   },
   {
     name: 'Empire Ascend',
-    price: 'From R18,500',
+    price: 'R16,500',
     description: 'E-commerce portal, premium branding & social media',
     link: '/build-package'
   }
@@ -239,13 +239,15 @@ export const Header = () => {
               </ul>
 
               {/* CTA Button */}
-              <Link 
-                href="/contact"
+              <a
+                href="https://wa.me/27604964105?text=Hi%20Breed%20Industries!%20I'd%20like%20to%20book%20a%20strategy%20call."
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn btn-primary"
               >
                 <MessageSquare size={16} className="mr-2" />
                 Book Strategy Call
-              </Link>
+              </a>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -367,14 +369,16 @@ export const Header = () => {
                 
                 {/* Mobile Contact */}
                 <div className="mt-6 flex flex-col gap-4">
-                  <Link 
-                    href="/contact"
+                  <a
+                    href="https://wa.me/27604964105?text=Hi%20Breed%20Industries!%20I'd%20like%20to%20book%20a%20strategy%20call."
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="btn btn-primary w-full justify-center"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <MessageSquare size={16} className="mr-2" />
                     Book Strategy Call
-                  </Link>
+                  </a>
                   
                   <div className="flex flex-col items-center gap-1">
                     <a 

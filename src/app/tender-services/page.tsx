@@ -358,10 +358,10 @@ export default function TenderServicesPage() {
               </div>
               <div className="md:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-3">
                 {[
-                  { name: 'Per Tender Applied',       price: 'R800' },
-                  { name: 'Site Meeting Attendance',  price: 'R1,500' },
-                  { name: 'Compliance Audit',         price: 'R1,200' },
-                  { name: 'Company Profile Update',   price: 'R450' },
+                  { name: 'Per Tender (under R500k)',  price: 'R1,200' },
+                  { name: 'Per Tender (R500k–R2m)',    price: 'R2,000' },
+                  { name: 'Per Tender (over R2m)',     price: 'Custom' },
+                  { name: 'Site Meeting Attendance',   price: 'R1,500' },
                 ].map(a => (
                   <div key={a.name} className="flex items-center justify-between p-3 bg-white/4 rounded-lg">
                     <span className="text-white/60 text-xs">{a.name}</span>

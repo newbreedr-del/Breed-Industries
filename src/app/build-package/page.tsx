@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, CheckCircle2, Download, ArrowRight, Loader2, Send, Award, Bot, Eye, TrendingUp, Rocket } from 'lucide-react';
 
 const retainerOptions = [
-  { id: 'business-watch', name: 'Business Watch (Monthly)', price: 950, pricingType: 'monthly', icon: <Eye size={16} />, description: 'Monthly funding & accreditation monitoring — stay ahead of grants, compliance deadlines, and new accreditation opportunities.' },
+  { id: 'business-watch', name: 'Business Watch (Monthly)', price: 650, pricingType: 'monthly', icon: <Eye size={16} />, description: 'Monitoring only (no implementation): monthly funding & accreditation monitoring — stay ahead of grants, compliance deadlines, and new accreditation opportunities.' },
   { id: 'business-growth-essentials', name: 'Business Growth Essentials (Monthly)', price: 950, pricingType: 'monthly', icon: <TrendingUp size={16} />, description: 'Monthly retainer: compliance monitoring + social media content support + monthly strategy check-in. General business growth, not tender-specific.' },
   { id: 'brand-launch-package', name: 'Brand Launch Package', price: 4500, pricingType: 'one-time', icon: <Rocket size={16} />, description: 'Company Registration + Logo + Business Profile + Business Cards. Everything to launch your brand.' },
   { id: 'tender-growth-package', name: 'Tender Growth Package (Monthly)', price: 1950, pricingType: 'monthly', icon: <Award size={16} />, description: 'Full compliance setup + monthly tender monitoring + social media + strategy. The bundle for businesses that want both growth support and government contract opportunities.' },
@@ -44,8 +44,8 @@ const digitalOptions = [
   { id: 'website', name: 'Website Development', price: 5000, pricingType: 'one-time', icon: <Layers size={16} />, description: 'Custom responsive website development with up to 5 pages, CMS integration, and mobile optimization' },
   { id: 'app', name: 'Mobile App Development', price: 15000, pricingType: 'one-time', icon: <Layers size={16} />, description: 'Native mobile app development for iOS and Android with backend integration and deployment' },
   { id: 'ecommerce', name: 'E-commerce Solutions', price: 8000, pricingType: 'one-time', icon: <Layers size={16} />, description: 'Full e-commerce platform with product catalog, shopping cart, payment gateway, and order management' },
-  { id: 'seo', name: 'SEO & Digital Marketing (Setup)', price: 2500, pricingType: 'one-time', icon: <Layers size={16} />, description: 'One-time SEO setup: keyword research, on-page optimization, and digital marketing strategy' },
-  { id: 'seo-monthly', name: 'SEO & Digital Marketing (Monthly)', price: 2500, pricingType: 'monthly', icon: <Layers size={16} />, description: 'Ongoing monthly SEO and digital marketing management with reporting and optimization' },
+  { id: 'seo', name: 'SEO Audit & Setup (Once-off)', price: 1500, pricingType: 'one-time', icon: <Layers size={16} />, description: 'One-time SEO setup: keyword research, on-page optimization, and digital marketing strategy' },
+  { id: 'seo-monthly', name: 'Monthly SEO & Content Management', price: 2500, pricingType: 'monthly', icon: <Layers size={16} />, description: 'Ongoing monthly SEO and digital marketing management with reporting and optimization' },
   { id: 'social', name: 'Social Media Management (Monthly)', price: 3500, pricingType: 'monthly', icon: <Layers size={16} />, description: 'Monthly social media management including content creation, posting, and analytics reporting' },
 ];
 
@@ -78,14 +78,6 @@ const platformOptions = [
 ];
 
 const builderSteps = [
-  {
-    id: 'retainer',
-    title: 'Retainer Packages',
-    description: 'Monthly and bundled packages for ongoing business support, compliance monitoring, and growth.',
-    options: retainerOptions,
-    icon: <TrendingUp className="w-5 h-5" />,
-    shortLabel: 'Retainers',
-  },
   {
     id: 'compliance',
     title: 'Pick your foundation',
@@ -134,38 +126,54 @@ const builderSteps = [
     icon: <Bot className="w-5 h-5" />,
     shortLabel: 'AI Platform',
   },
+  {
+    id: 'retainer',
+    title: 'Ongoing support & retainers',
+    description: 'Monthly and bundled packages for ongoing business support, compliance monitoring, and growth — add these once your foundation is in place.',
+    options: retainerOptions,
+    icon: <TrendingUp className="w-5 h-5" />,
+    shortLabel: 'Retainers',
+  },
 ];
 
 const quickBundles = [
   {
     id: 'launch',
     name: 'Launch Essentials',
-    price: 'R3,950',
-    numericPrice: 3950,
+    price: 'R2,500',
+    numericPrice: 2500,
+    regularPrice: 'R2,850',
+    saving: 'R350',
     items: ['CIPC Registration', 'Basic Logo Suite', 'Business Cards x250'],
     components: ['cipc', 'logo-basic', 'business-cards']
   },
   {
     id: 'growth',
     name: 'Growth Momentum',
-    price: 'R9,800',
-    numericPrice: 9800,
+    price: 'R8,500',
+    numericPrice: 8500,
+    regularPrice: 'R9,000',
+    saving: 'R500',
     items: ['Premium Branding', '5-Page Website', 'Business Plan'],
     components: ['brand-guide', 'website', 'marketing-materials']
   },
   {
     id: 'empire',
     name: 'Empire Ascend',
-    price: 'R18,500',
-    numericPrice: 18500,
+    price: 'R16,500',
+    numericPrice: 16500,
+    regularPrice: 'R17,500',
+    saving: 'R1,000',
     items: ['Custom Web Portal', 'Media Kit', '3 Months Social Management'],
     components: ['logo-premium', 'brand-guide', 'ecommerce', 'social']
   },
   {
     id: 'tender-starter',
     name: 'Tender Starter Pack',
-    price: 'R4,450',
-    numericPrice: 4450,
+    price: 'R3,500',
+    numericPrice: 3500,
+    regularPrice: 'R3,850',
+    saving: 'R350',
     items: ['CSD + CIDB + BBBEE + Tax Pin', 'Company Profile', 'Tender Watch (1st month)'],
     components: ['tender-ready', 'tender-watch']
   },
@@ -760,7 +768,15 @@ export default function BuildPackagePage() {
                         </div>
                         <h3 className="text-white font-semibold text-sm md:text-base">{bundle.name}</h3>
                       </div>
-                      <span className="text-accent font-heading font-bold text-sm md:text-base">{bundle.price}</span>
+                      <div className="text-right">
+                        <div className="flex items-center gap-2 justify-end">
+                          <span className="text-white/40 text-xs line-through">{bundle.regularPrice}</span>
+                          <span className="text-accent font-heading font-bold text-sm md:text-base">{bundle.price}</span>
+                        </div>
+                        <span className="inline-block mt-0.5 text-[10px] font-semibold text-green-400 bg-green-400/10 px-1.5 py-0.5 rounded">
+                          Save {bundle.saving}
+                        </span>
+                      </div>
                     </div>
                     <ul className="space-y-1.5 md:space-y-2 text-white/60 text-xs md:text-sm">
                       {bundle.items.map((item) => (

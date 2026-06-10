@@ -5,7 +5,8 @@ import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
 import {
   Shield, Briefcase, Layers,
-  Check, ChevronRight, ArrowRight, TrendingUp, Bot
+  Check, ChevronRight, ArrowRight, TrendingUp, Bot,
+  FileText, GraduationCap
 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://thebreed.co.za/services' },
   openGraph: {
     title: 'Business Services - Breed Industries',
-    description: 'Complete business launch packages from R3,950. Registration, branding, websites, and compliance.',
+    description: 'Complete business launch packages from R2,500. Registration, branding, websites, and compliance.',
     url: 'https://thebreed.co.za/services',
     images: [{ url: '/assets/images/services-og.jpg', width: 1200, height: 630 }],
   },
@@ -29,9 +30,9 @@ const serviceCategories = [
     icon: <Shield className="w-8 h-8" />,
     description: 'Complete registration and compliance services to establish your business on solid legal ground.',
     services: [
-      { name: 'Company Registration (CIPC)', price: 'From R550' },
-      { name: 'Tax Compliance (SARS)', price: 'From R850' },
-      { name: 'BEE Certification', price: 'From R250' },
+      { name: 'Company Registration (CIPC)', price: 'R550' },
+      { name: 'Tax Compliance (SARS)', price: 'R850' },
+      { name: 'BEE Certification', price: 'R250' },
       { name: 'CSD Registration', price: 'R450' },
       { name: 'COIDA Registration & Assessment', price: 'R2,490' },
       { name: 'CIDB Registration — Grade 1', price: 'R950' },
@@ -47,29 +48,37 @@ const serviceCategories = [
     description: 'Strategic brand development that positions your business for recognition and trust in your market.',
     services: [
       { name: 'Logo Design', price: 'From R1,500' },
-      { name: 'Business Branding Package', price: 'From R2,500' },
-      { name: 'Business Cards (250)', price: 'From R800' },
-      { name: 'Simple Social Media Flyer', price: 'From R650' },
-      { name: 'Standard Digital Flyer', price: 'From R950' },
-      { name: 'Premium Event/Brand Flyer', price: 'From R1,250' },
-      { name: 'Digital Artwork / Graphic Design', price: 'From R750' },
-      { name: 'Marketing Materials', price: 'From R1,500' }
+      { name: 'Business Branding Package', price: 'R2,500' },
+      { name: 'Business Cards (250)', price: 'R800' },
+      { name: 'Simple Social Media Flyer', price: 'R650' },
+      { name: 'Standard Digital Flyer', price: 'R950' },
+      { name: 'Premium Event/Brand Flyer', price: 'R1,250' },
+      { name: 'Digital Artwork / Graphic Design', price: 'R750' },
+      { name: 'Marketing Materials', price: 'R1,500' }
     ]
   },
   {
     id: 'business-documents',
-    title: 'Business Documents & Training',
-    icon: <Shield className="w-8 h-8" />,
-    description: 'Professional business documents, training materials, and resources designed for tenders, stakeholders, and learning programmes.',
+    title: 'Business Documents',
+    icon: <FileText className="w-8 h-8" />,
+    description: 'Professional business profiles and plans designed for tenders, funding applications, and stakeholders.',
     services: [
-      { name: 'Business Profile – Starter (1–4 Pages)', price: 'From R850' },
-      { name: 'Business Profile – Standard (5–10 Pages)', price: 'From R2,500' },
-      { name: 'Business Plan – Basic', price: 'From R1,190' },
-      { name: 'Business Plan – Comprehensive', price: 'From R3,000' },
-      { name: 'Training Workbook / Study Guide', price: 'From R2,800' },
-      { name: "Facilitator's / Lecturer's Guide", price: 'From R2,500' },
-      { name: 'Training PowerPoint Presentation', price: 'From R1,800' },
-      { name: 'Full Training Package (All Three)', price: 'From R6,500' }
+      { name: 'Business Profile – Starter (1–4 Pages)', price: 'R850' },
+      { name: 'Business Profile – Standard (5–10 Pages)', price: 'R2,500' },
+      { name: 'Business Plan – Basic', price: 'R1,190' },
+      { name: 'Business Plan – Comprehensive', price: 'R3,000' }
+    ]
+  },
+  {
+    id: 'training-materials',
+    title: 'Training & Learning Materials',
+    icon: <GraduationCap className="w-8 h-8" />,
+    description: 'Accredited-style learning materials for training providers, SETAs, and HR teams: workbooks, facilitator guides, and presentations.',
+    services: [
+      { name: 'Training Workbook / Study Guide', price: 'R2,800' },
+      { name: "Facilitator's / Lecturer's Guide", price: 'R2,500' },
+      { name: 'Training PowerPoint Presentation', price: 'R1,800' },
+      { name: 'Full Training Package (All Three)', price: 'R6,500' }
     ]
   },
   {
@@ -107,7 +116,7 @@ const servicePackages = [
   {
     id: 'launch-starter',
     name: 'Launch Essentials',
-    price: 'From R3,950',
+    price: 'From R2,500',
     description: 'Perfect for new businesses looking to establish a professional foundation fast.',
     features: [
       'CIPC Company Registration',
@@ -120,7 +129,7 @@ const servicePackages = [
   {
     id: 'growth-professional',
     name: 'Growth Momentum',
-    price: 'From R9,800',
+    price: 'From R8,500',
     description: 'For businesses ready to expand their market presence and digital footprint.',
     features: [
       'Business Branding Package',
@@ -134,7 +143,7 @@ const servicePackages = [
   {
     id: 'empire-premium',
     name: 'Empire Ascend',
-    price: 'From R18,500',
+    price: 'From R16,500',
     description: 'The complete digital presence package for serious growth and market dominance.',
     features: [
       'Premium Logo + Full Branding',
