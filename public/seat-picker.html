@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seat Picker — Breed Industries</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0B1118;
+    color: #e5e7eb;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 48px;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #FF9F00;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 32px;
+  }
+
+  /* ── Stats bar ── */
+  .stats {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .stat-card {
+    background: #121820;
+    border: 1px solid #1f2937;
+    border-radius: 10px;
+    padding: 12px 24px;
+    text-align: center;
+    min-width: 110px;
+  }
+
+  .stat-card .num {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .stat-card .lbl {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #6b7280;
+    margin-top: 4px;
+  }
+
+  .stat-card.selected .num  { color: #FF9F00; }
+  .stat-card.available .num { color: #22c55e; }
+  .stat-card.remaining .num { color: #60a5fa; }
+
+  /* ── Venue wrapper ── */
+  .venue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    max-width: 640px;
+  }
+
+  /* ── Stage ── */
+  .stage {
+    width: 60%;
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    border: 1.5px solid #334155;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 0;
+  }
+
+  .stage-line {
+    width: 60%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #FF9F00, #FF9F00, transparent);
+    margin-bottom: 24px;
+    border-radius: 0 0 2px 2px;
+    opacity: 0.7;
+  }
+
+  /* ── Seat rows ── */
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 7px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .row-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #4b5563;
+    width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+  }
+
+  .aisle {
+    width: 28px;
+    flex-shrink: 0;
+  }
+
+  /* ── Seat button ── */
+  .seat {
+    width: 36px;
+    height: 32px;
+    border-radius: 6px 6px 3px 3px;
+    border: 1.5px solid #374151;
+    background: #1f2937;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.12s, border-color 0.12s, transform 0.08s;
+    flex-shrink: 0;
+    outline: none;
+  }
+
+  /* seat back nub */
+  .seat::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 5px;
+    background: #374151;
+    border-radius: 3px 3px 0 0;
+    transition: background 0.12s;
+  }
+
+  .seat:hover {
+    background: #2d3a4a;
+    border-color: #FF9F00;
+    transform: scale(1.08);
+  }
+
+  .seat:hover::before { background: #FF9F00; }
+
+  .seat.selected {
+    background: #FF9F00;
+    border-color: #e88a00;
+  }
+
+  .seat.selected::before {
+    background: #e88a00;
+  }
+
+  .seat.selected:hover {
+    background: #e88a00;
+    transform: scale(1.05);
+  }
+
+  .seat.reserved {
+    background: #111827;
+    border-color: #1f2937;
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  .seat.reserved::before { background: #1f2937; }
+  .seat.reserved:hover { transform: none; border-color: #1f2937; background: #111827; }
+
+  .seat-num {
+    position: absolute;
+    bottom: 3px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 9px;
+    font-weight: 600;
+    color: #6b7280;
+    pointer-events: none;
+  }
+
+  .seat.selected .seat-num { color: #7c3a00; }
+
+  /* ── Accessible seat variant ── */
+  .seat.accessible {
+    border-radius: 50% 50% 3px 3px;
+    background: #1a2535;
+    border-color: #2d4a6e;
+  }
+
+  .seat.accessible::before { background: #2d4a6e; }
+  .seat.accessible.selected { background: #FF9F00; border-color: #e88a00; }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    gap: 20px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: #9ca3af;
+  }
+
+  .legend-dot {
+    width: 20px;
+    height: 18px;
+    border-radius: 4px 4px 2px 2px;
+    border: 1.5px solid;
+    flex-shrink: 0;
+  }
+
+  /* ── Book button ── */
+  .book-btn {
+    margin-top: 32px;
+    padding: 14px 48px;
+    background: #FF9F00;
+    color: #0B1118;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: background 0.15s, transform 0.1s;
+  }
+
+  .book-btn:hover { background: #e88a00; transform: translateY(-1px); }
+  .book-btn:active { transform: translateY(0); }
+  .book-btn:disabled {
+    background: #374151;
+    color: #6b7280;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .selection-info {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #6b7280;
+    text-align: center;
+    min-height: 18px;
+  }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 14px;
+    color: #e5e7eb;
+    transition: transform 0.3s ease;
+    z-index: 200;
+    white-space: nowrap;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── Modal overlay ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 150;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: #121820;
+    border: 1px solid #1f2937;
+    border-radius: 14px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 440px;
+    position: relative;
+    animation: slideUp 0.25s ease;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+  }
+
+  .modal-close:hover { color: #e5e7eb; }
+
+  .modal h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #FF9F00;
+    margin-bottom: 4px;
+  }
+
+  .modal .modal-sub {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 20px;
+  }
+
+  .seat-summary {
+    background: #0B1118;
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+
+  .seat-summary .ss-label { color: #6b7280; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; }
+  .seat-summary .ss-seats { color: #FF9F00; font-weight: 600; font-size: 15px; }
+  .seat-summary .ss-count { color: #9ca3af; font-size: 12px; margin-top: 2px; }
+
+  .form-group { margin-bottom: 16px; }
+
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #9ca3af;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+
+  .form-group input {
+    width: 100%;
+    background: #0B1118;
+    border: 1px solid #374151;
+    border-radius: 7px;
+    padding: 10px 14px;
+    color: #e5e7eb;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .form-group input:focus { border-color: #FF9F00; }
+  .form-group input::placeholder { color: #4b5563; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .submit-btn {
+    width: 100%;
+    padding: 13px;
+    background: #FF9F00;
+    color: #0B1118;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.15s, transform 0.1s;
+  }
+
+  .submit-btn:hover { background: #e88a00; transform: translateY(-1px); }
+  .submit-btn:active { transform: translateY(0); }
+
+  .form-note {
+    text-align: center;
+    font-size: 11px;
+    color: #4b5563;
+    margin-top: 12px;
+  }
+
+  /* ── Confirmation screen ── */
+  .confirm-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 12px 0;
+  }
+
+  .confirm-screen.show { display: flex; }
+
+  .confirm-icon {
+    width: 64px; height: 64px;
+    background: #FF9F00;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
+    margin-bottom: 16px;
+  }
+
+  .confirm-screen h3 { font-size: 20px; font-weight: 700; color: #e5e7eb; margin-bottom: 8px; }
+  .confirm-screen p { font-size: 13px; color: #9ca3af; line-height: 1.6; max-width: 300px; }
+  .confirm-ref { color: #FF9F00; font-weight: 700; font-size: 16px; margin: 12px 0; letter-spacing: 1px; }
+
+  .close-confirm-btn {
+    margin-top: 20px;
+    padding: 11px 32px;
+    background: #1f2937;
+    color: #e5e7eb;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .close-confirm-btn:hover { background: #374151; }
+</style>
+</head>
+<body>
+
+<h1>🎭 Seat Selection</h1>
+<p class="subtitle">Click a seat to select · Click again to deselect</p>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stat-card selected">
+    <div class="num" id="count-selected">0</div>
+    <div class="lbl">Selected</div>
+  </div>
+  <div class="stat-card available">
+    <div class="num" id="count-available">70</div>
+    <div class="lbl">Available</div>
+  </div>
+  <div class="stat-card remaining">
+    <div class="num" id="count-remaining">70</div>
+    <div class="lbl">Remaining</div>
+  </div>
+</div>
+
+<!-- Venue -->
+<div class="venue">
+  <div class="stage">Stage</div>
+  <div class="stage-line"></div>
+
+  <!-- Seat rows rendered by JS -->
+  <div id="seat-grid"></div>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#1f2937; border-color:#374151;"></div> Available
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#FF9F00; border-color:#e88a00;"></div> Selected
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#111827; border-color:#1f2937; opacity:0.45;"></div> Reserved
+  </div>
+</div>
+
+<!-- Book -->
+<button class="book-btn" id="book-btn" onclick="handleBook()" disabled>
+  Select seats to continue
+</button>
+<p class="selection-info" id="selection-info"></p>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Sign-up Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+
+    <!-- Sign-up form -->
+    <div id="signup-form">
+      <h2>Complete Your Booking</h2>
+      <p class="modal-sub">Enter your details to confirm your seats</p>
+
+      <div class="seat-summary">
+        <div class="ss-label">Your selected seats</div>
+        <div class="ss-seats" id="modal-seats">—</div>
+        <div class="ss-count" id="modal-count">—</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>First name</label>
+          <input type="text" id="f-first" placeholder="Themba" required>
+        </div>
+        <div class="form-group">
+          <label>Last name</label>
+          <input type="text" id="f-last" placeholder="Dlamini" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" id="f-email" placeholder="themba@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label>Phone number</label>
+        <input type="tel" id="f-phone" placeholder="060 123 4567">
+      </div>
+
+      <button class="submit-btn" onclick="submitBooking()">
+        Confirm Reservation →
+      </button>
+      <p class="form-note">You'll receive a confirmation via email · No payment required now</p>
+    </div>
+
+    <!-- Confirmation screen -->
+    <div class="confirm-screen" id="confirm-screen">
+      <div class="confirm-icon">✓</div>
+      <h3>You're booked!</h3>
+      <p>Your seats have been reserved. Check your email for confirmation details.</p>
+      <div class="confirm-ref" id="confirm-ref">REF-000000</div>
+      <p id="confirm-name" style="color:#e5e7eb; font-weight:500;"></p>
+      <p id="confirm-seats" style="font-size:12px; color:#9ca3af; margin-top:4px;"></p>
+      <button class="close-confirm-btn" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Seat layout ──────────────────────────────────────────────────────────────
+  // 70 available seats across 7 rows (A-G), split left / right of center aisle
+  // format: { row, leftSeats, rightSeats, leftStart, rightStart }
+  const LAYOUT = [
+    { row: 'A', left: 4, right: 4 },  // 8  — front row
+    { row: 'B', left: 5, right: 5 },  // 10
+    { row: 'C', left: 5, right: 5 },  // 10
+    { row: 'D', left: 5, right: 5 },  // 10
+    { row: 'E', left: 5, right: 5 },  // 10
+    { row: 'F', left: 6, right: 6 },  // 12
+    { row: 'G', left: 5, right: 5 },  // 10
+  ];
+  // Total: 70 ✓
+
+  // Reserved seats will be loaded from API
+  let RESERVED = new Set();
+
+  // ── State ────────────────────────────────────────────────────────────────────
+  const selected = new Set();
+  let TOTAL = 70;
+
+  // ── Render ───────────────────────────────────────────────────────────────────
+  function render() {
+    const grid = document.getElementById('seat-grid');
+    grid.innerHTML = '';
+    let seatNum = 1;
+
+    for (const { row, left, right } of LAYOUT) {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'row';
+
+      // Row label (left)
+      const lbl = document.createElement('div');
+      lbl.className = 'row-label';
+      lbl.textContent = row;
+      rowEl.appendChild(lbl);
+
+      // Left seats
+      for (let i = 1; i <= left; i++) {
+        rowEl.appendChild(makeSeat(row, seatNum++));
+      }
+
+      // Aisle
+      const aisle = document.createElement('div');
+      aisle.className = 'aisle';
+      rowEl.appendChild(aisle);
+
+      // Right seats
+      for (let i = 1; i <= right; i++) {
+        rowEl.appendChild(makeSeat(row, seatNum++));
+      }
+
+      // Row label (right)
+      const lbl2 = document.createElement('div');
+      lbl2.className = 'row-label';
+      lbl2.textContent = row;
+      rowEl.appendChild(lbl2);
+
+      grid.appendChild(rowEl);
+    }
+  }
+
+  function makeSeat(row, num) {
+    const id = `${row}-${num}`;
+    const btn = document.createElement('button');
+    btn.className = 'seat' + (RESERVED.has(id) ? ' reserved' : '');
+    btn.dataset.id = id;
+    btn.setAttribute('aria-label', `Seat ${id}`);
+    btn.disabled = RESERVED.has(id);
+
+    const numEl = document.createElement('span');
+    numEl.className = 'seat-num';
+    numEl.textContent = num;
+    btn.appendChild(numEl);
+
+    if (!RESERVED.has(id)) {
+      btn.addEventListener('click', () => toggleSeat(id, btn));
+    }
+
+    return btn;
+  }
+
+  // ── Toggle ───────────────────────────────────────────────────────────────────
+  function toggleSeat(id, btn) {
+    if (selected.has(id)) {
+      selected.delete(id);
+      btn.classList.remove('selected');
+    } else {
+      selected.add(id);
+      btn.classList.add('selected');
+    }
+    updateStats();
+  }
+
+  // ── Stats ────────────────────────────────────────────────────────────────────
+  function updateStats() {
+    const s = selected.size;
+    const remaining = TOTAL - s;
+
+    document.getElementById('count-selected').textContent = s;
+    document.getElementById('count-available').textContent = TOTAL;
+    document.getElementById('count-remaining').textContent = remaining;
+
+    const btn = document.getElementById('book-btn');
+    const info = document.getElementById('selection-info');
+
+    if (s === 0) {
+      btn.textContent = 'Select seats to continue';
+      btn.disabled = true;
+      info.textContent = '';
+    } else {
+      btn.textContent = `Book ${s} Seat${s !== 1 ? 's' : ''} →`;
+      btn.disabled = false;
+      const ids = [...selected].sort().join(', ');
+      info.textContent = `Selected: ${ids}`;
+    }
+  }
+
+  // ── Book action → open sign-up modal ─────────────────────────────────────────
+  function handleBook() {
+    const s = selected.size;
+    const ids = [...selected].sort().join(', ');
+
+    // Populate modal summary
+    document.getElementById('modal-seats').textContent = ids;
+    document.getElementById('modal-count').textContent = `${s} seat${s !== 1 ? 's' : ''} selected`;
+
+    // Reset to form view
+    document.getElementById('signup-form').style.display = 'block';
+    document.getElementById('confirm-screen').classList.remove('show');
+
+    // Open modal
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  }
+
+  async function submitBooking() {
+    const first = document.getElementById('f-first').value.trim();
+    const last  = document.getElementById('f-last').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+
+    if (!first || !last || !email) {
+      showToast('⚠️ Please fill in your name and email');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showToast('⚠️ Please enter a valid email address');
+      return;
+    }
+
+    const ids = [...selected].sort();
+    const s = selected.size;
+
+    // Show loading state
+    const submitBtn = document.querySelector('.submit-btn');
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.textContent = 'Booking...';
+    submitBtn.disabled = true;
+
+    try {
+      const res = await fetch('/api/book-seats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: first,
+          lastName: last,
+          email: email,
+          phone: phone,
+          seats: ids,
+          seatCount: s
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Booking failed');
+      }
+
+      // Lock the seats locally
+      selected.forEach(id => {
+        RESERVED.add(id);
+        const btn = document.querySelector(`[data-id="${id}"]`);
+        if (btn) {
+          btn.classList.remove('selected');
+          btn.classList.add('reserved');
+          btn.disabled = true;
+        }
+      });
+      selected.clear();
+      TOTAL = 70 - RESERVED.size;
+      updateStats();
+
+      // Show confirmation with reference from API
+      document.getElementById('confirm-ref').textContent = data.booking.reference;
+      document.getElementById('confirm-name').textContent = `${first} ${last}`;
+      document.getElementById('confirm-seats').textContent = `Seats: ${ids.join(', ')}`;
+      document.getElementById('signup-form').style.display = 'none';
+      document.getElementById('confirm-screen').classList.add('show');
+
+    } catch (err) {
+      showToast('❌ ' + err.message);
+      submitBtn.textContent = originalBtnText;
+      submitBtn.disabled = false;
+    }
+  }
+
+  // ── Toast ─────────────────────────────────────────────────────────────────────
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────────
+  loadReservedSeats().then(() => {
+    render();
+    updateStats();
+  });
+
+  // ── Load reserved seats from API ──────────────────────────────────────────────
+  async function loadReservedSeats() {
+    try {
+      const res = await fetch('/api/book-seats');
+      if (!res.ok) throw new Error('Failed to load reserved seats');
+      const data = await res.json();
+      if (data.reservedSeats && Array.isArray(data.reservedSeats)) {
+        RESERVED = new Set(data.reservedSeats);
+        TOTAL = 70 - RESERVED.size;
+        updateStats();
+      }
+    } catch (err) {
+      console.error('Error loading reserved seats:', err);
+      // Continue with empty reserved set if API fails
+    }
+  }
+</script>
+</body>
+</html>
