@@ -36,6 +36,41 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // ── Guard rails: prevent duplicate bookings by email or phone ──
+    const { data: existingByEmail, error: dupEmailErr } = await supabaseAdmin
+      .from('seat_bookings')
+      .select('id, reference')
+      .eq('email', email.toLowerCase())
+      .maybeSingle();
+
+    if (dupEmailErr) {
+      console.error('[Book Seats] Duplicate email check error:', dupEmailErr);
+    }
+    if (existingByEmail) {
+      return NextResponse.json(
+        { error: `This email already has a booking (Ref: ${existingByEmail.reference}). Contact us to modify your seats.` },
+        { status: 409 }
+      );
+    }
+
+    if (phone) {
+      const { data: existingByPhone, error: dupPhoneErr } = await supabaseAdmin
+        .from('seat_bookings')
+        .select('id, reference')
+        .eq('phone', phone)
+        .maybeSingle();
+
+      if (dupPhoneErr) {
+        console.error('[Book Seats] Duplicate phone check error:', dupPhoneErr);
+      }
+      if (existingByPhone) {
+        return NextResponse.json(
+          { error: `This phone number already has a booking (Ref: ${existingByPhone.reference}). Contact us to modify your seats.` },
+          { status: 409 }
+        );
+      }
+    }
+
     const reference = generateReference();
 
     // Save booking to seat_bookings table

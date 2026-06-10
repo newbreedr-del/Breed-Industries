@@ -198,7 +198,9 @@ export function SeatPicker() {
           alt="Breed Industries" 
           className="w-6 h-6 sm:w-8 sm:h-8 object-contain"
         />
-        <h1 className="text-lg sm:text-xl font-semibold text-[#FF9F00] tracking-wide">Seat Selection</h1>
+        <h1 className="text-base sm:text-lg font-bold text-white tracking-wide">
+          The Future Proof Business <span className="text-[#FF9F00]">event</span>
+        </h1>
       </div>
       <p className="text-center text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6">Click a seat to select · Click again to deselect</p>
 
