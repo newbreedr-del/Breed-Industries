@@ -133,7 +133,7 @@ export default function Home() {
           <div className="text-center mb-14">
             <p className="text-accent text-sm uppercase tracking-widest font-medium mb-3">What We Do</p>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-              We Build Businesses: <span className="text-accent">From Idea to Empire</span>
+              We Build Businesses: <span className="text-accent">From Idea to Industry Leader</span>
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto">
               Whether you need to register your company, create your brand, write your business plan, or build a custom digital product, we do it all under one roof. Here's exactly how we help:
@@ -381,15 +381,20 @@ export default function Home() {
           <div className="glass-card-accent p-8 md:p-12">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-6">
-                Ready to Build Your Empire?
+                Ready to Build Your Business?
               </h2>
               <p className="text-white/70 text-lg mb-8">
                 Whether you're starting from scratch or scaling up, book a strategy call and we'll map out exactly what you need and how much it'll cost.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link href="/contact" className="btn btn-primary">
+                <a
+                  href="https://wa.me/27604964105?text=Hi%20Breed%20Industries!%20I'd%20like%20to%20book%20a%20strategy%20call."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                >
                   Book Strategy Call
-                </Link>
+                </a>
                 <Link href="/portfolio" className="btn btn-outline">
                   View Our Work
                 </Link>
