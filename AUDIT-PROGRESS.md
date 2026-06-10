@@ -1,5 +1,52 @@
 # Site Audit Progress Tracker
-_Started: June 10, 2026_
+_Started: June 10, 2026 · Full sweep completed: June 10, 2026_
+
+## Summary: 23 of 27 issues resolved + WhatsApp event reminders shipped
+
+Remaining 4 are content/strategy items that need owner input (see bottom).
+
+---
+
+## Session 2 — Full Fix Sweep (authoritative)
+
+### Resolved this session
+| # | Issue | What changed |
+|---|---|---|
+| #2 | Bundles cost more than parts | Prices cut below component totals + struck-through regular price and **Save** badges. Launch R2,500 / Growth R8,500 / Empire R16,500 / Tender Starter R3,500 |
+| #3 | Tender fee inconsistent | Removed R800. Unified to tiered **R1,200 / R2,000 / Custom** per tender |
+| #4 | "Book Strategy Call" went to form | All CTAs (header desktop+mobile, homepage) now open **WhatsApp** booking chat |
+| #11 | "Empire" overused | Homepage reduced from 3x to 1x (hero only). Package name "Empire Ascend" kept |
+| #12 | Fresh Start buried | Already in main nav + homepage callout (verified) |
+| #13 | Builder started with Retainers | Reordered: **Compliance first**, Retainers last |
+| #14 | Training in wrong category | Split into dedicated **Training & Learning Materials** category |
+| #15 | Duplicate Shield icon | Business Documents now uses **FileText** icon |
+| #16 | Blog used portfolio hero | Switched to **blueprint pattern** background |
+| #17 | Business Watch overpriced | Dropped to **R650**, labelled monitoring-only |
+| #18 | SEO setup = monthly price | Setup now **R1,500 once-off**, renamed; monthly stays R2,500 |
+| #19 | "From R" on fixed prices | Removed "From" on fixed items (kept on genuine ranges like CIDB grades, Logo) |
+| #24 | business-growth not in nav | Added to Services mega menu |
+| #25 | learners-to-leaders not in nav | Added to Services mega menu |
+| #26 | Meaningless floating icons | Removed from homepage hero |
+| #27 | Popup fired on scroll | Now **exit-intent + 45s fallback** |
+
+### New feature shipped
+**WhatsApp reminders for event signups** (`The Future Proof Business` bookings)
+- API: `POST /api/admin/bookings/remind` — single (`id`) or bulk (omit `id`)
+- Admin `/admin/bookings`: **Remind All** button + per-row reminder button (disabled if no phone)
+- Editable message composer with `{{name}}` `{{fullName}}` `{{reference}}` `{{seats}}` placeholders
+- Returns sent / failed / skipped summary via toast
+- Uses existing Evolution API `sendText` (retry + DB logging)
+
+### Still needs owner input (not fabricated)
+| # | Issue | Why blocked |
+|---|---|---|
+| #7 | No clear primary audience | Strategy decision (who is the hero customer?) |
+| #8 | About page weak story/stats | Needs real founding story + real outcome numbers |
+| #9 | Portfolio shows no results | Needs real metrics per case study |
+| #10 | Testimonials are a logo wall | Needs **real client quotes** — will not invent fake testimonials |
+
+---
+
 
 ## ✅ Completed Fixes
 
