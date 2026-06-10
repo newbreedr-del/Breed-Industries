@@ -63,54 +63,6 @@ export default function Home() {
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 blur-3xl rounded-full"></div>
         </div>
         
-        {/* Floating Tech Elements */}
-        <div className="absolute inset-0 pointer-events-none">
-          <motion.div 
-            className="hidden sm:block absolute top-[12%] left-[4%] md:left-[6%] text-accent/20"
-            animate={{ 
-              y: [0, -15, 0],
-              rotate: [0, 5, 0]
-            }}
-            transition={{ 
-              duration: 6,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          >
-            <Shield size={60} />
-          </motion.div>
-          
-          <motion.div 
-            className="hidden sm:block absolute bottom-[10%] right-[4%] md:right-[6%] text-accent/20"
-            animate={{ 
-              y: [0, 15, 0],
-              rotate: [0, -5, 0]
-            }}
-            transition={{ 
-              duration: 7,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          >
-            <Rocket size={80} />
-          </motion.div>
-          
-          <motion.div 
-            className="hidden sm:block absolute top-[35%] left-[75%] md:left-[78%] text-accent/20"
-            animate={{ 
-              y: [0, -20, 0],
-              rotate: [0, 10, 0]
-            }}
-            transition={{ 
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          >
-            <Zap size={70} />
-          </motion.div>
-        </div>
-        
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto">
             <motion.div 

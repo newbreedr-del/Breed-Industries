@@ -49,7 +49,7 @@ export default async function BlogPage() {
           { label: 'Home', href: '/' },
           { label: 'Blog', href: '/blog' },
         ]}
-        backgroundImage="/assets/images/portfolio-hero.png"
+        backgroundPattern="blueprint"
         size="default"
       />
 

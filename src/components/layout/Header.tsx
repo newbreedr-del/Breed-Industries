@@ -8,7 +8,7 @@ import {
   Menu, X, ChevronDown, Phone,
   MessageSquare, Layers, Briefcase,
   Users, LayoutGrid, Settings,
-  Search, Award
+  Search, Award, TrendingUp, GraduationCap
 } from 'lucide-react';
 
 const navItems = [
@@ -41,6 +41,18 @@ const navItems = [
         icon: <Award className="w-5 h-5" />,
         description: 'Find, apply & win government tenders',
         link: '/tender-services'
+      },
+      {
+        title: 'Business Growth',
+        icon: <TrendingUp className="w-5 h-5" />,
+        description: 'Monthly retainers for ongoing growth support',
+        link: '/business-growth'
+      },
+      {
+        title: 'Learners to Leaders',
+        icon: <GraduationCap className="w-5 h-5" />,
+        description: 'Training materials & development programmes',
+        link: '/learners-to-leaders'
       }
     ]
   },
