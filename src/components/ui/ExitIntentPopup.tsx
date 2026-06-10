@@ -11,8 +11,8 @@ export function ExitIntentPopup() {
   const [isDismissed, setIsDismissed] = useState(false);
   const pathname = usePathname();
 
-  // Don't show on admin or invite pages
-  const isExcludedPage = pathname?.startsWith('/admin') || pathname?.startsWith('/invite');
+  // Don't show on admin, invite, or FPB-event pages
+  const isExcludedPage = pathname?.startsWith('/admin') || pathname?.startsWith('/invite') || pathname?.toLowerCase().includes('fpb-event');
 
   useEffect(() => {
     if (isExcludedPage) {

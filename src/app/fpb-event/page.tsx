@@ -1,6 +1,8 @@
+import { SeatPicker } from '@/components/events/SeatPicker';
+
 export const metadata = {
-  title: 'Seat Picker — Breed Industries',
-  description: 'Select your seats for the event.',
+  title: 'FPB Event — Breed Industries',
+  description: 'Select your seats for the FPB event',
 };
 
 export default function SeatPickerPage() {
@@ -24,21 +26,16 @@ export default function SeatPickerPage() {
       <div
         style={{
           width: '100%',
-          maxWidth: '700px',
-          height: 'auto',
-          background: 'rgba(11, 17, 24, 0.85)',
+          maxWidth: '750px',
+          background: 'rgba(11, 17, 24, 0.75)',
           borderRadius: '16px',
           border: '1px solid rgba(255, 159, 0, 0.2)',
           boxShadow: '0 25px 50px rgba(0, 0, 0, 0.5)',
-          overflow: 'hidden',
+          padding: '12px',
+          backdropFilter: 'blur(10px)',
         }}
       >
-        <iframe
-          src="/seat-picker.html"
-          style={{ width: '100%', height: '95vh', border: 'none', display: 'block', overflow: 'hidden' }}
-          title="Seat Picker"
-          scrolling="no"
-        />
+        <SeatPicker />
       </div>
     </div>
   );

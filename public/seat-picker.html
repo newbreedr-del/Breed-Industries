@@ -15,9 +15,22 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 24px 16px 24px;
+    padding: 24px 16px 80px;
     overflow-y: auto;
     overflow-x: hidden;
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .logo-img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
   }
 
   h1 {
@@ -25,7 +38,7 @@
     font-weight: 600;
     color: #FF9F00;
     letter-spacing: 0.5px;
-    margin-bottom: 4px;
+    margin: 0;
   }
 
   .subtitle {
@@ -455,7 +468,10 @@
 </head>
 <body>
 
-<h1>🎭 Seat Selection</h1>
+<div class="header-container">
+  <img src="/assets/images/The Breed Industries Just Logo-01-01.png" alt="Breed Industries" class="logo-img">
+  <h1>Seat Selection</h1>
+</div>
 <p class="subtitle">Click a seat to select · Click again to deselect</p>
 
 <!-- Stats -->
