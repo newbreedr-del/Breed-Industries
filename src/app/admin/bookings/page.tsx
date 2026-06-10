@@ -4,8 +4,17 @@ import { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
-import { Trash2, Plus, Users, Armchair, Search, X, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Trash2, Plus, Users, Armchair, Search, X, CheckCircle, AlertTriangle, MessageCircle, Send, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+
+const DEFAULT_REMINDER =
+  `Hi {{name}} 👋\n\n` +
+  `This is a friendly reminder about *The Future Proof Business* event.\n\n` +
+  `🎟️ Booking Ref: *{{reference}}*\n` +
+  `💺 Your Seats: {{seats}}\n\n` +
+  `Please arrive 30 minutes early and have your booking reference ready at the door.\n\n` +
+  `See you there! 🎉\n\n` +
+  `_Breed Industries — 060 496 4105_`;
 
 interface Booking {
   id: string;
@@ -26,6 +35,11 @@ export default function AdminBookingsPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [toast, setToast] = useState('');
+
+  // Reminder state: target is a booking id, 'all', or null (closed)
+  const [reminderTarget, setReminderTarget] = useState<string | 'all' | null>(null);
+  const [reminderMessage, setReminderMessage] = useState(DEFAULT_REMINDER);
+  const [sendingReminder, setSendingReminder] = useState(false);
 
   const [form, setForm] = useState({
     firstName: '',
@@ -104,9 +118,37 @@ export default function AdminBookingsPage() {
     }
   }
 
+  async function handleSendReminder() {
+    if (reminderTarget === null) return;
+    setSendingReminder(true);
+    try {
+      const res = await fetch('/api/admin/bookings/remind', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: reminderTarget === 'all' ? undefined : reminderTarget,
+          message: reminderMessage,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        const s = data.summary;
+        showToast(`Reminders: ${s.sent} sent, ${s.failed} failed, ${s.skipped} skipped (no phone)`);
+        setReminderTarget(null);
+        setReminderMessage(DEFAULT_REMINDER);
+      } else {
+        showToast('Error: ' + (data.error || 'Failed to send reminders'));
+      }
+    } catch (err: any) {
+      showToast('Error: ' + err.message);
+    } finally {
+      setSendingReminder(false);
+    }
+  }
+
   function showToast(msg: string) {
     setToast(msg);
-    setTimeout(() => setToast(''), 3000);
+    setTimeout(() => setToast(''), 4000);
   }
 
   const filtered = bookings.filter((b) => {
@@ -192,6 +234,13 @@ export default function AdminBookingsPage() {
               )}
             </div>
             <button
+              onClick={() => { setReminderMessage(DEFAULT_REMINDER); setReminderTarget('all'); }}
+              className="flex items-center gap-2 px-4 py-2.5 bg-green-600 text-white rounded-lg text-sm font-bold hover:bg-green-700 transition-colors"
+            >
+              <MessageCircle size={16} />
+              Remind All
+            </button>
+            <button
               onClick={() => setShowAddModal(true)}
               className="flex items-center gap-2 px-4 py-2.5 bg-[#FF9F00] text-gray-900 rounded-lg text-sm font-bold hover:bg-[#e88a00] transition-colors"
             >
@@ -242,13 +291,23 @@ export default function AdminBookingsPage() {
                           {new Date(b.created_at).toLocaleDateString('en-ZA')}
                         </td>
                         <td className="px-4 py-3 text-right">
-                          <button
-                            onClick={() => setDeleteId(b.id)}
-                            className="p-1.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded transition-colors"
-                            title="Delete booking"
-                          >
-                            <Trash2 size={16} />
-                          </button>
+                          <div className="flex items-center justify-end gap-1">
+                            <button
+                              onClick={() => { setReminderMessage(DEFAULT_REMINDER); setReminderTarget(b.id); }}
+                              disabled={!b.phone}
+                              className="p-1.5 text-green-400 hover:text-green-300 hover:bg-green-500/10 rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                              title={b.phone ? 'Send WhatsApp reminder' : 'No phone number on file'}
+                            >
+                              <MessageCircle size={16} />
+                            </button>
+                            <button
+                              onClick={() => setDeleteId(b.id)}
+                              className="p-1.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded transition-colors"
+                              title="Delete booking"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -261,6 +320,54 @@ export default function AdminBookingsPage() {
       </section>
 
       <Footer />
+
+      {/* Reminder Modal */}
+      {reminderTarget !== null && (
+        <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50" onClick={(e) => e.target === e.currentTarget && !sendingReminder && setReminderTarget(null)}>
+          <div className="bg-[#0B1118] border border-gray-800 rounded-2xl p-6 w-full max-w-lg animate-in zoom-in-95">
+            <div className="flex items-center justify-between mb-1">
+              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <MessageCircle size={18} className="text-green-400" />
+                {reminderTarget === 'all' ? 'Remind All Attendees' : 'Send WhatsApp Reminder'}
+              </h2>
+              <button onClick={() => setReminderTarget(null)} disabled={sendingReminder} className="text-white/40 hover:text-white disabled:opacity-30">
+                <X size={20} />
+              </button>
+            </div>
+            <p className="text-sm text-gray-500 mb-4">
+              {reminderTarget === 'all'
+                ? `Sends a WhatsApp message to all attendees with a phone number (${bookings.filter(b => b.phone).length} of ${bookings.length}).`
+                : 'Sends a WhatsApp message to this attendee.'}
+            </p>
+            <label className="block text-xs text-gray-400 uppercase tracking-wider mb-1.5">Message</label>
+            <textarea
+              value={reminderMessage}
+              onChange={(e) => setReminderMessage(e.target.value)}
+              rows={9}
+              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:border-[#FF9F00] focus:outline-none font-mono resize-none"
+            />
+            <p className="text-[11px] text-gray-600 mt-1.5 mb-4">
+              Placeholders: <code className="text-gray-400">{'{{name}}'}</code>, <code className="text-gray-400">{'{{fullName}}'}</code>, <code className="text-gray-400">{'{{reference}}'}</code>, <code className="text-gray-400">{'{{seats}}'}</code>
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setReminderTarget(null)}
+                disabled={sendingReminder}
+                className="flex-1 py-2.5 bg-gray-800 text-white rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSendReminder}
+                disabled={sendingReminder}
+                className="flex-1 py-2.5 bg-green-600 text-white rounded-lg text-sm font-bold hover:bg-green-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+              >
+                {sendingReminder ? <><Loader2 size={16} className="animate-spin" /> Sending...</> : <><Send size={16} /> Send Reminder</>}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Add Booking Modal */}
       {showAddModal && (
