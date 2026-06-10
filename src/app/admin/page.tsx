@@ -21,7 +21,8 @@ import {
   Bell,
   UserPlus,
   Calendar,
-  CreditCard
+  CreditCard,
+  Armchair
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -183,6 +184,14 @@ export default function AdminDashboard() {
       href: '/admin/crm/email',
       color: 'from-indigo-500 to-purple-600',
       stats: 'Send emails'
+    },
+    {
+      title: 'Event Bookings',
+      description: 'Manage seat reservations for The Future Proof Business event',
+      icon: Armchair,
+      href: '/admin/bookings',
+      color: 'from-amber-500 to-orange-600',
+      stats: 'View bookings'
     },
     {
       title: 'Contacts',
