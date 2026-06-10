@@ -25,6 +25,7 @@ export default function SeatPickerPage() {
         style={{
           width: '100%',
           maxWidth: '700px',
+          height: 'auto',
           background: 'rgba(11, 17, 24, 0.85)',
           borderRadius: '16px',
           border: '1px solid rgba(255, 159, 0, 0.2)',
@@ -34,8 +35,9 @@ export default function SeatPickerPage() {
       >
         <iframe
           src="/seat-picker.html"
-          style={{ width: '100%', height: '100vh', maxHeight: '900px', border: 'none', display: 'block' }}
+          style={{ width: '100%', height: '95vh', border: 'none', display: 'block', overflow: 'hidden' }}
           title="Seat Picker"
+          scrolling="no"
         />
       </div>
     </div>
