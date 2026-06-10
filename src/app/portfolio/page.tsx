@@ -6,7 +6,7 @@ import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ExternalLink, Code2, Palette, FileText, CheckCircle2, ChevronLeft, ChevronRight, ImageIcon } from 'lucide-react';
+import { ExternalLink, Code2, Palette, FileText, CheckCircle2, ChevronLeft, ChevronRight, ImageIcon, Zap } from 'lucide-react';
 
 // ─── Digital Products Built for Clients ──────────────────────────────────────
 const digitalProjects = [
@@ -19,6 +19,7 @@ const digitalProjects = [
     summary:
       'A production-grade AI-powered customer engagement platform built for African businesses. Features AI agents, WhatsApp Business integration, visual flow builder, knowledge base management, and real-time analytics. All in one dashboard.',
     highlights: ['AI chat agents with custom knowledge bases', 'WhatsApp Business API integration', 'Visual no-code workflow builder', 'Multi-channel analytics dashboard'],
+    result: 'Built in 3 weeks from concept to production. An ongoing platform that continues to grow — currently in active development with new features shipping regularly.',
     image: '/assets/images/portfolio/engage-africa-dashboard.png',
     screenshots: [
       '/assets/images/portfolio/engage-africa-dashboard.png',
@@ -37,6 +38,7 @@ const digitalProjects = [
     summary:
       'A full-featured faith-driven fashion e-commerce store. "Rooted in Faith, Growing in Purpose." Built with multi-payment support (Stripe, Paystack, PayPal), product filtering, wishlist functionality, and analytics including Facebook Pixel, TikTok Pixel, and Pinterest Tag.',
     highlights: ['Stripe, Paystack & PayPal checkout', 'Facebook, TikTok & Pinterest pixel tracking', 'Flash sale & countdown timer system', 'Full admin dashboard'],
+    result: 'Designed, built and delivered in 14 days. Full e-commerce store with multi-payment gateway, pixel tracking, and admin dashboard — from brief to live in two weeks.',
     image: '/assets/images/portfolio/mlk-apparel-hero.png',
     screenshots: [
       '/assets/images/portfolio/mlk-apparel-hero.png',
@@ -53,6 +55,7 @@ const digitalProjects = [
     summary:
       'A purpose-built church management platform for House of Grace International. Features member management, event planning, task management, live video meetings with prayer requests, analytics & reports, and enterprise-grade security.',
     highlights: ['Live video meetings with chat & prayer requests', 'Member & attendance tracking', 'Event planning & volunteer management', 'Analytics, reports & task management'],
+    result: 'A complex, purpose-built platform currently in active development — over 2 months in the making. Live video, member management, event planning and analytics built specifically for House of Grace International.',
     image: '/assets/images/portfolio/hogi-church-home.png',
     screenshots: ['/assets/images/portfolio/hogi-church-home.png'],
     link: null,
@@ -246,6 +249,12 @@ export default function PortfolioPage() {
                 </div>
                 <h3 className="text-2xl md:text-3xl font-heading font-bold text-white">{engageProject.title}</h3>
                 <p className="text-white/70 leading-relaxed text-sm">{engageProject.summary}</p>
+                {'result' in engageProject && engageProject.result && (
+                  <div className="rounded-lg border border-accent/20 bg-accent/5 p-3">
+                    <p className="text-accent text-xs uppercase tracking-wider font-bold mb-1 flex items-center gap-1.5"><Zap className="w-3.5 h-3.5" /> Result</p>
+                    <p className="text-white/70 text-sm">{engageProject.result}</p>
+                  </div>
+                )}
                 <ul className="grid grid-cols-1 gap-2">
                   {engageProject.highlights.map(h => (
                     <li key={h} className="flex items-start gap-2 text-sm text-white/60">
@@ -302,6 +311,9 @@ export default function PortfolioPage() {
                   <span className="text-xs uppercase tracking-[0.2em] text-accent/70">{project.category}</span>
                   <h3 className="text-white font-semibold font-heading leading-tight">{project.title}</h3>
                   <p className="text-white/50 text-xs leading-relaxed line-clamp-3">{project.summary}</p>
+                  {'result' in project && project.result && (
+                    <p className="text-accent/80 text-xs leading-relaxed border-l-2 border-accent/40 pl-2 mt-1">{project.result}</p>
+                  )}
                   {project.link && (
                     <a href={project.link} target="_blank" rel="noopener noreferrer"
                       className="mt-auto flex items-center gap-1 text-accent text-xs pt-2 hover:underline">

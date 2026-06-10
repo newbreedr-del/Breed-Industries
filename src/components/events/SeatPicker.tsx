@@ -215,8 +215,8 @@ export function SeatPicker() {
           <div className="text-[10px] sm:text-xs uppercase tracking-wider text-gray-500 mt-0.5">Available</div>
         </div>
         <div className="bg-gray-900 border border-gray-800 rounded-lg px-3 sm:px-4 py-2 text-center min-w-[80px] sm:min-w-[90px]">
-          <div className="text-xl sm:text-2xl font-bold text-blue-400">{total - selected.size}</div>
-          <div className="text-[10px] sm:text-xs uppercase tracking-wider text-gray-500 mt-0.5">Remaining</div>
+          <div className="text-xl sm:text-2xl font-bold text-blue-400">{reserved.size}</div>
+          <div className="text-[10px] sm:text-xs uppercase tracking-wider text-gray-500 mt-0.5">Reserved</div>
         </div>
       </div>
 

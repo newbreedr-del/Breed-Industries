@@ -78,19 +78,26 @@ export default function AboutPage() {
           <div className="glass-card p-8 space-y-6">
             <h2 className="text-3xl font-heading font-bold text-white">Our Origin Story</h2>
             <p className="text-white/70 text-lg">
-              Breed Industries was founded in Durban with one mission: eliminate the friction between idea and execution for ambition-fueled founders. Our lobby’s blueprint aesthetic is more than a design cue,it is a promise that every project starts with solid architecture.
+              Breed Industries was registered in 2021 (Reg: 2021/963126/07) with a simple but contrarian observation: everyone was talking about unemployment, but very few people were building the businesses that actually create jobs.
             </p>
             <p className="text-white/60">
-              Today, our team spans Durban and Johannesburg, serving clients across sectors like fintech, telecom, healthcare, and public procurement. We combine compliance expertise, branded storytelling, and digital engineering under one roof so you can launch faster.
+              Founder Sabelo Mandubu chose a different path. Working alongside private organisations, NPOs, NGOs, and municipal structures connected to community development across KwaZulu-Natal, he set out to remove every barrier between a South African entrepreneur and a fully operational, compliant, market-ready business — not by talking about it, by building it.
+            </p>
+            <p className="text-white/60">
+              Five years later, Breed Industries has processed over 250 registrations and accreditations, serves approximately 45 active clients, and operates across Durban and Johannesburg — supporting everyone from first-time entrepreneurs registering their first company to established SMEs upgrading their CIDB grade and winning government contracts.
             </p>
             <div className="flex flex-wrap gap-4">
               <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-                <p className="text-sm text-white/60 uppercase">Businesses launched</p>
-                <p className="text-2xl font-heading font-bold text-accent">45</p>
+                <p className="text-sm text-white/60 uppercase">Founded</p>
+                <p className="text-2xl font-heading font-bold text-accent">2021</p>
               </div>
               <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-                <p className="text-sm text-white/60 uppercase">Average launch timeline</p>
-                <p className="text-2xl font-heading font-bold text-accent">3–14 days</p>
+                <p className="text-sm text-white/60 uppercase">Registrations &amp; accreditations</p>
+                <p className="text-2xl font-heading font-bold text-accent">250+</p>
+              </div>
+              <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+                <p className="text-sm text-white/60 uppercase">Active clients</p>
+                <p className="text-2xl font-heading font-bold text-accent">45</p>
               </div>
               <div className="rounded-lg border border-white/10 bg-white/5 p-4">
                 <p className="text-sm text-white/60 uppercase">Team hubs</p>
