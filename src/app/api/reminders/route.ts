@@ -48,7 +48,6 @@ export async function POST(request: NextRequest) {
       scheduled_at,
       phone_number,
       message_text,
-      auto_send_whatsapp = true,
       is_recurring = false,
       recurrence_pattern,
       recurrence_interval = 1,
@@ -56,8 +55,11 @@ export async function POST(request: NextRequest) {
       max_recurrences
     } = body;
 
+    // Form sends 'auto_send'; API originally used 'auto_send_whatsapp' — support both
+    const auto_send_whatsapp: boolean = body.auto_send ?? body.auto_send_whatsapp ?? true;
+
     // Extract manual client fields (frontend only, not stored in DB)
-    const { client_phone } = body;
+    const { client_phone, client_name } = body;
 
     if (!title || !scheduled_at) {
       return NextResponse.json({ error: 'Title and scheduled_at are required' }, { status: 400 });
@@ -126,16 +128,20 @@ export async function POST(request: NextRequest) {
 
     if (error) throw error;
 
-    // If scheduled for now or past, send immediately
+    // If scheduled for now or past, send immediately (failure must not 500 the creation)
     const scheduledTime = new Date(scheduled_at);
     const now = new Date();
     if (auto_send_whatsapp && phone && scheduledTime <= now) {
-      const result = await sendText(formatPhone(phone), message_text || description || title);
-      if (result.success) {
-        await supabaseAdmin
-          .from('scheduled_reminders')
-          .update({ status: 'sent', sent_at: new Date().toISOString(), whatsapp_sent: true })
-          .eq('id', data.id);
+      try {
+        const result = await sendText(formatPhone(phone), message_text || description || title);
+        if (result.success) {
+          await supabaseAdmin
+            .from('scheduled_reminders')
+            .update({ status: 'sent', sent_at: new Date().toISOString(), whatsapp_sent: true })
+            .eq('id', data.id);
+        }
+      } catch (sendErr: any) {
+        console.error('[Reminders API] Auto-send failed (reminder still created):', sendErr.message);
       }
     }
 

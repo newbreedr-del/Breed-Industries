@@ -13,15 +13,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'reminder_id required' }, { status: 400 });
     }
 
-    // Get reminder
+    // Get reminder (no join — phone_number & message_text already stored on row)
     const { data: reminder, error: fetchError } = await supabaseAdmin
       .from('scheduled_reminders')
-      .select('*, client:client_id(full_name, contact_phone), lead:lead_id(full_name, phone)')
+      .select('*')
       .eq('id', reminder_id)
       .single();
 
     if (fetchError || !reminder) {
-      return NextResponse.json({ error: 'Reminder not found' }, { status: 404 });
+      console.error('[send-now] Reminder fetch error:', fetchError?.message);
+      return NextResponse.json({ error: `Reminder not found: ${fetchError?.message || reminder_id}` }, { status: 404 });
     }
 
     // Determine phone number
