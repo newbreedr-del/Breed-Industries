@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { sendText, formatPhone } from '@/lib/whatsapp';
 
-const POSTER_IMAGE_URL = 'https://thebreed.co.za/assets/images/breed-poster.jpg';
+const POSTER_IMAGE_URL = 'https://thebreed.co.za/assets/images/fpb-event-flyer.jpg';
 const COMPANY_EMAIL = process.env.COMPANY_EMAIL ?? 'info@thebreed.co.za';
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
@@ -165,9 +165,21 @@ export async function POST(request: NextRequest) {
                 Thank you ${firstName}!
               </h1>
               
-              <p style="color: #e5e7eb; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0; text-align: center;">
-                Your seats are confirmed for our special event.
+              <p style="color: #e5e7eb; font-size: 16px; line-height: 1.6; margin: 0 0 8px 0; text-align: center;">
+                Your seats are confirmed. We'll see you on the 1st! 🎉
               </p>
+
+              <!-- Event Details Banner -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #FF9F00; border-radius: 10px; margin: 20px 0;">
+                <tr>
+                  <td style="padding: 20px 24px;">
+                    <p style="color: #0B1118; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px 0;">📅 Date &amp; Time</p>
+                    <p style="color: #0B1118; font-size: 18px; font-weight: 800; margin: 0 0 14px 0;">Wednesday, 1 July 2026 — 10:00 AM</p>
+                    <p style="color: #0B1118; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px 0;">📍 Venue</p>
+                    <p style="color: #0B1118; font-size: 16px; font-weight: 700; margin: 0;">65 St Johns Avenue, Nisbett Rd, Pinetown, 3610</p>
+                  </td>
+                </tr>
+              </table>
               
               <!-- Booking Details -->
               <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #0B1118; border-radius: 12px; margin: 24px 0; border: 1px solid #1f2937;">
@@ -221,7 +233,7 @@ export async function POST(request: NextRequest) {
           body: JSON.stringify({
             from: `Breed Industries <${COMPANY_EMAIL}>`,
             to: email,
-            subject: '🎭 Your Seat Booking Confirmation',
+            subject: '�️ Your Seats Are Confirmed — The Future-Proof Business | 1 July 2026',
             html: emailHtml,
           }),
         });
