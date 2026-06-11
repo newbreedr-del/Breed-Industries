@@ -92,14 +92,47 @@ export default function RemindersAdmin() {
   });
 
   const reminderTypes = [
-    { value: 'appointment', label: 'Appointment', icon: Calendar },
-    { value: 'follow_up', label: 'Follow Up', icon: RefreshCw },
-    { value: 'payment_due', label: 'Payment Due', icon: AlertCircle },
-    { value: 'milestone', label: 'Project Milestone', icon: CheckCircle },
-    { value: 'quote_followup', label: 'Quote Follow-up', icon: MessageSquare },
-    { value: 'subscription_renewal', label: 'Subscription Renewal', icon: Bell },
-    { value: 'custom', label: 'Custom', icon: LayoutGrid }
+    { value: 'appointment', label: '📅 Appointment', icon: Calendar },
+    { value: 'follow_up', label: '🤝 Follow Up', icon: RefreshCw },
+    { value: 'payment_due', label: '💳 Payment Due', icon: AlertCircle },
+    { value: 'milestone', label: '🚀 Project Milestone', icon: CheckCircle },
+    { value: 'quote_followup', label: '📋 Quote Follow-up', icon: MessageSquare },
+    { value: 'subscription_renewal', label: '🔄 Subscription Renewal', icon: Bell },
+    { value: 'custom', label: '✏️ Custom', icon: LayoutGrid }
   ];
+
+  const REMINDER_TEMPLATE_DEFAULTS: Record<string, { title: string; description: string; message_text: string }> = {
+    appointment: {
+      title: '📅 Confirmed: Upcoming Scheduled Strategy Session',
+      description: `This is a quick reminder regarding your upcoming appointment with Breed Industries. We are looking forward to connecting and diving into your project goals.\n\nEvent: Strategy & Tech Consultation\nHost: Breed Industries 🚀\nLocation/Platform: [Insert Link / Venue]\n\nPlease ensure you are in a quiet space with a stable internet connection. If you need to reschedule, please let us know at least 24 hours in advance.`,
+      message_text: `Hi [Client Name]! 👋 Just a quick reminder from Breed Industries about our upcoming appointment on [Date] at [Time]. 🧠💻 Looking forward to connecting! Here is the link to join: [Insert Link]\n\n_Breed Industries — 060 496 4105_`,
+    },
+    follow_up: {
+      title: '🤝 Following Up: Next Steps for Your Digital Infrastructure',
+      description: `We are checking in regarding our recent discussion about your web application and AI workflows.\n\nAt Breed Industries, we want to ensure you have everything you need to make an informed decision.\n\nStatus: Awaiting Feedback / Next Steps 🚀\nSubject: Custom Business Automation & Administration`,
+      message_text: `Hi [Client Name]! 👋 Just following up on our recent chat regarding your tech infrastructure with Breed Industries. 🛠️✨ Let me know if you've had a chance to review the details or if you have any quick questions I can jump on!\n\n_Breed Industries — 060 496 4105_`,
+    },
+    payment_due: {
+      title: '💳 Service Reminder: Monthly Administration Fees',
+      description: `This is a friendly notification that the current billing cycle for your Webapp & AI Platform Administration is now due.\n\nService: Monthly Administration & Support\nProvider: Breed Industries 🚀\nStatus: Invoice Sent Separately\n\nTo avoid any service interruptions to your live apps, please arrange payment at your earliest convenience.`,
+      message_text: `Hi [Client Name]! 👋 This is a quick heads-up from Breed Industries that your monthly platform administration cycle is up. 🧠💻 Your official invoice is being sent over separately today for your records. Thank you for your continued partnership! 🙏\n\n_Breed Industries — 060 496 4105_`,
+    },
+    milestone: {
+      title: '🚀 Project Milestone Achieved & Ready for Review',
+      description: `Great news! We have successfully completed a major milestone for your custom application development.\n\nProject: Custom Webapp & AI Integration\nMilestone: [Insert Milestone Name]\nAction Required: Client Review & Feedback 📋\n\nPlease review the latest updates on your staging URL and reply with your sign-off so we can move into the next phase.`,
+      message_text: `Hi [Client Name]! 🚀 Exciting news from Breed Industries — we've officially completed [Milestone Name]! 💻✨ The updates are live on your staging link for you to look at. Let us know your thoughts so we can jump straight into the next phase! 🛠️\n\n_Breed Industries — 060 496 4105_`,
+    },
+    quote_followup: {
+      title: '📋 Reviewing Your Custom Tech Proposal',
+      description: `We are following up on the custom technology implementation proposal prepared for your business.\n\nProposal Type: Webapp Development & AI Integration Strategy\nStatus: Quote Sent Separately 🚀\n\nIf you would like to adjust the scope, remove features, or fast-track the launch date, please let us know.`,
+      message_text: `Hi [Client Name]! 👋 Just checking in to see if you and the team had a look over the custom tech proposal from Breed Industries? 🧠📊 Keep in mind the official quote details were sent over separately. Let me know if you want to tweak anything! 🛠️\n\n_Breed Industries — 060 496 4105_`,
+    },
+    subscription_renewal: {
+      title: '🔄 Notice: Upcoming Subscription Renewal',
+      description: `Your automated Webapp & AI Platform Administration agreement with Breed Industries is approaching its scheduled renewal date.\n\nService Plan: Monthly Core Platform Administration\nRenewal Date: [Insert Date]\nBilling: Subscription Invoice Sent Separately 🚀\n\nNo action required if you wish to maintain your current tier.`,
+      message_text: `Hi [Client Name]! 👋 Quick heads-up that your platform administration subscription with Breed Industries is renewing on [Date]. 🚀🧠 Your renewal invoice will be sent over separately today. We're excited to keep your apps fast and secure! 💻🔒\n\n_Breed Industries — 060 496 4105_`,
+    },
+  };
 
   useEffect(() => {
     fetchReminders();
@@ -207,6 +240,22 @@ export default function RemindersAdmin() {
       }
     } catch (err) {
       alert('Failed to send');
+    }
+  };
+
+  const handleTypeChange = (type: string) => {
+    const tpl = REMINDER_TEMPLATE_DEFAULTS[type];
+    if (tpl) {
+      const name = createForm.client_name?.trim() || '[Client Name]';
+      setCreateForm({
+        ...createForm,
+        reminder_type: type,
+        title: tpl.title,
+        description: tpl.description,
+        message_text: tpl.message_text.replace(/\[Client Name\]/g, name),
+      });
+    } else {
+      setCreateForm({ ...createForm, reminder_type: type, title: '', description: '', message_text: '' });
     }
   };
 
@@ -555,10 +604,10 @@ export default function RemindersAdmin() {
                 )}
 
                 <div>
-                  <label className="block text-sm text-slate-400 mb-1">Type</label>
+                  <label className="block text-sm text-slate-400 mb-1">Type <span className="text-slate-500 text-xs">(auto-fills template)</span></label>
                   <select
                     value={createForm.reminder_type}
-                    onChange={(e) => setCreateForm({...createForm, reminder_type: e.target.value})}
+                    onChange={(e) => handleTypeChange(e.target.value)}
                     className="w-full px-3 py-2 bg-slate-700 rounded-lg"
                   >
                     {reminderTypes.map(t => (
@@ -642,16 +691,17 @@ export default function RemindersAdmin() {
                             <input
                               type="number"
                               min={1}
-                              max={52}
+                              max={createForm.recurrence_pattern === 'hourly' ? 12 : 52}
                               value={createForm.recurrence_interval}
                               onChange={(e) => setCreateForm({...createForm, recurrence_interval: parseInt(e.target.value) || 1})}
                               className="w-20 px-2 py-1 bg-slate-700 rounded text-center"
                             />
                             <select
                               value={createForm.recurrence_pattern}
-                              onChange={(e) => setCreateForm({...createForm, recurrence_pattern: e.target.value as any})}
+                              onChange={(e) => setCreateForm({...createForm, recurrence_pattern: e.target.value as any, recurrence_interval: 1})}
                               className="flex-1 px-2 py-1 bg-slate-700 rounded"
                             >
+                              <option value="hourly">Hour(s)</option>
                               <option value="daily">Day(s)</option>
                               <option value="weekly">Week(s)</option>
                               <option value="monthly">Month(s)</option>
