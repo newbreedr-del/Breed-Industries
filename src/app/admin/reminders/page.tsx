@@ -76,7 +76,7 @@ export default function RemindersAdmin() {
     auto_send: true,
     notify_admin: true, // Send copy to admin
     is_recurring: false,
-    recurrence_pattern: 'weekly' as 'daily' | 'weekly' | 'monthly' | 'yearly',
+    recurrence_pattern: 'weekly' as 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly',
     recurrence_interval: 1,
     recurrence_end_date: '',
     max_recurrences: '' as string | number
