@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS scheduled_reminders (
     
     -- Recurring reminders
     is_recurring BOOLEAN DEFAULT false,
-    recurrence_pattern TEXT CHECK (recurrence_pattern IN ('daily', 'weekly', 'monthly', 'yearly')),
-    recurrence_interval INTEGER DEFAULT 1, -- Every N days/weeks/months/years
+    recurrence_pattern TEXT CHECK (recurrence_pattern IN ('hourly', 'daily', 'weekly', 'monthly', 'yearly')),
+    recurrence_interval INTEGER DEFAULT 1, -- Every N hours/days/weeks/months/years
     recurrence_end_date TIMESTAMP WITH TIME ZONE,
     parent_reminder_id UUID REFERENCES scheduled_reminders(id) ON DELETE CASCADE, -- Link to original
     recurrence_count INTEGER DEFAULT 0, -- How many times sent
