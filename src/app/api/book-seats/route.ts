@@ -1,12 +1,23 @@
 export const runtime = 'nodejs';
 
 import { NextRequest, NextResponse } from 'next/server';
+import nodemailer from 'nodemailer';
 import { supabaseAdmin } from '@/lib/supabase';
 import { sendText, formatPhone } from '@/lib/whatsapp';
 
 const POSTER_IMAGE_URL = 'https://thebreed.co.za/assets/images/fpb-event-flyer.jpg';
 const COMPANY_EMAIL = process.env.COMPANY_EMAIL ?? 'info@thebreed.co.za';
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
+
+// Hostinger SMTP transporter
+const smtpTransporter = nodemailer.createTransport({
+  host: 'smtp.hostinger.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.SALES_EMAIL_USER ?? 'sales@thebreed.co.za',
+    pass: process.env.SALES_EMAIL_PASSWORD ?? '',
+  },
+});
 
 // Generate a unique booking reference
 function generateReference(): string {
@@ -135,8 +146,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Send email confirmation via Resend
-    if (RESEND_API_KEY) {
+    // Send email confirmation via Hostinger SMTP
+    if (process.env.SALES_EMAIL_PASSWORD) {
       try {
         const emailHtml = `
 <!DOCTYPE html>
@@ -224,19 +235,14 @@ export async function POST(request: NextRequest) {
 </body>
 </html>`;
 
-        await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${RESEND_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            from: `Breed Industries <${COMPANY_EMAIL}>`,
-            to: email,
-            subject: '�️ Your Seats Are Confirmed — The Future-Proof Business | 1 July 2026',
-            html: emailHtml,
-          }),
+        const info = await smtpTransporter.sendMail({
+          from: `Breed Industries <${process.env.SALES_EMAIL_USER ?? 'sales@thebreed.co.za'}>`,
+          to: email,
+          bcc: COMPANY_EMAIL,
+          subject: '🎟️ Your Seats Are Confirmed — The Future-Proof Business | 1 July 2026',
+          html: emailHtml,
         });
+        console.log('[Book Seats] Email sent:', info.messageId);
       } catch (err) {
         console.error('[Book Seats] Email send error:', err);
         // Non-critical - don't fail the booking
