@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { sendText, notifyAdmin, formatPhone } from '@/lib/whatsapp';
 import { processMessage, isOwner, routeClientMessageToAdmin } from '@/lib/whatsappAgent';
+import { handleInbound as handleCampaignInbound } from '@/lib/campaigns/engine';
 
 export const runtime = 'nodejs';
 
@@ -37,6 +38,19 @@ export async function POST(request: NextRequest) {
             sender_name: ownerSending ? 'OWNER' : (pushName || null),
           });
         } catch { /* non-critical */ }
+
+        // ── Questionnaire participant? Capture the reply, skip the AI agent ──
+        if (!ownerSending) {
+          try {
+            const campaignResult = await handleCampaignInbound(phone, text);
+            if (campaignResult.handled) {
+              if (campaignResult.reply) await sendText(phone, campaignResult.reply);
+              return NextResponse.json({ ok: true, handledBy: 'campaign' });
+            }
+          } catch (err: any) {
+            console.error('[WA Webhook] Campaign engine error:', err.message);
+          }
+        }
 
         if (ownerSending) {
           // ── Owner / admin message → full AI agent ──────────────────────────
