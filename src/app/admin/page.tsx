@@ -146,6 +146,22 @@ export default function AdminDashboard() {
 
   const quickLinks = [
     {
+      title: 'Client Tracker',
+      description: 'Documents, deadlines, ops & training clients owe — chased automatically',
+      icon: CheckCircle,
+      href: '/admin/tracker',
+      color: 'from-amber-500 to-orange-600',
+      stats: 'Who\'s behind'
+    },
+    {
+      title: 'WhatsApp Campaigns',
+      description: 'Upload numbers, send questionnaires, capture leads — consent-first',
+      icon: Mail,
+      href: '/admin/campaigns',
+      color: 'from-emerald-500 to-green-600',
+      stats: 'Reach out'
+    },
+    {
       title: 'Invoices',
       description: 'Manage invoices, track payments, and send to customers',
       icon: FileText,

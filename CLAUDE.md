@@ -210,3 +210,53 @@ The two endpoints serve different callers:
 - Currency is always South African Rand (ZAR). Format as `R {amount}` with no space between R and digits in headings, but `R {amount}` in body text. Breed Industries is not VAT registered — all quotes/invoices are VAT-exclusive.
 - All monetary values stored in Supabase are in **cents** for tender `estimated_value` (`tender.estimated_value / 100` to display), but in **rands** for quotes and invoices.
 - **Never expose `CRON_SECRET` to the browser.** Do not add a `NEXT_PUBLIC_CRON_SECRET` env var — if you need to trigger a scrape from the admin UI, use `/api/admin/run-scrape` instead.
+
+---
+
+## Authentication (June 2026 rewrite) — Important
+
+The old "any cookie longer than 10 chars" check is GONE. Auth now works like this:
+
+- `src/lib/auth/session.ts` — HMAC-SHA256 signed, expiring session tokens (Web Crypto, so the same code runs in Edge middleware and Node routes). Signed with the **`SESSION_SECRET`** env var. **If `SESSION_SECRET` is missing, login fails with a 500 — this is intentional fail-closed behaviour, not a bug.**
+- `src/middleware.ts` — the single auth gate. It verifies the signed `admin_session` cookie for: `/admin/*`, `/api/admin/*`, `/api/agent/*`, `/api/commitments/*`, `/api/campaigns/*`, `/api/quotes/*`, `/api/invoices/*`, `/api/crm/*`. Emailed PDF/download links (`/api/quotes/download`, `*/pdf`) are carved out. **To protect a new API area, add its prefix to `config.matcher` — do not write per-route auth checks.**
+- `/api/admin/login` issues the signed token, is rate-limited (8 tries/min/IP), and has **no default-password fallback** — `ADMIN_USERNAME`/`ADMIN_PASSWORD` env vars must be set.
+- Old code in `src/lib/adminAuth.ts` (length-check `isAuthenticated`) is legacy; do not use it for new routes. Cron routes still authenticate separately via `Bearer ${CRON_SECRET}` and must fail closed if the secret is unset.
+
+## Operations Agent (the "super agent")
+
+One brain, reachable from the ⌘K / Ctrl+K command bar anywhere in the admin panel:
+
+- `src/lib/agent/registry.ts` — **the single source of truth for every agent capability.** Each tool = one object with `name`, `description`, `permission` (`read` | `write` | `sensitive`), JSON-schema `parameters`, and a `handler`. **To give the agent a new skill, append one object here — nothing else changes.**
+- `src/lib/agent/run.ts` — the run loop (OpenRouter chatCompletion). `read` tools execute immediately; `write`/`sensitive` tools are NOT executed — they return as `pendingActions` for the UI confirm card, and only run when the request is re-sent with `confirm: true`. Keep this gate intact: anything touching money or sending messages must be `write` or `sensitive`.
+- `POST /api/agent` — secured endpoint; `src/components/agent/CommandBar.tsx` — the UI; mounted by `src/app/admin/layout.tsx`.
+- The WhatsApp owner agent (`src/lib/whatsappAgent.ts`) still has its own older tool list — migrating it to `runAgent()` is a planned follow-up.
+
+## Client Tracker (commitments system)
+
+The accountability engine: tracks what clients owe (documents, statutory filings, tender deadlines, ops tasks like stock-takes/targets, training events) and chases them automatically.
+
+- Schema: `src/db/commitments-schema.sql` (tables `client_commitments`, `commitment_reminders`) — run once in Supabase.
+- `src/lib/commitments/` — `types.ts` (incl. `daysUntil`, `nextDueDate`), `store.ts` (all DB access; `completeCommitment` rolls recurring items forward instead of closing), `followup.ts` (the daily engine: flags overdue, sends WhatsApp+email nudges per each item's `reminder_offsets`, max once/day/item, then emails+WhatsApps the owner a digest), `templates.ts` + `applyTemplate.ts` (onboarding templates: new_company, vat_vendor, tender_ready, ops_baseline — **edit `templates.ts` only; API/agent/UI read from it**).
+- Routes: `/api/commitments` (+`[id]`, `/templates`), cron `/api/cron/commitment-followups` (daily 07:00), manual `/api/admin/run-followups`. UI: `/admin/tracker`.
+
+## WhatsApp Campaigns (CSV → questionnaire → leads)
+
+Consent-first questionnaire campaigns over the Evolution WhatsApp pipe.
+
+- Schema: `src/db/campaigns-schema.sql` (tables `campaigns`, `campaign_contacts`, `campaign_optouts`) — run once in Supabase.
+- `src/lib/campaigns/` — `csv.ts` (dependency-free parser, normalises SA numbers to `27XXXXXXXXX`), `store.ts` (CRUD, import skips global opt-outs), `engine.ts` (**two halves**: `handleInbound` = the reply state machine — consent gate requires YES before questions, STOP opts out globally forever; `dripCampaign`/`dripAllSending` = throttled outbound sender, ~1 msg/1.5s, batch-sized).
+- **Webhook integration:** `src/app/api/whatsapp/webhook/route.ts` calls `handleCampaignInbound` for non-owner messages BEFORE the AI agent; if `handled`, the AI agent is skipped. Preserve this ordering.
+- Routes: `/api/campaigns` (+`[id]`, `[id]/contacts` CSV import, `[id]/drip`), cron `/api/cron/campaign-drip` (every 15 min, weekday business hours). UI: `/admin/campaigns`.
+- **Compliance invariants — do not remove:** the consent-first intro, STOP → `campaign_optouts` (honoured across ALL campaigns), and send throttling. POPIA + WhatsApp ban risk are the reasons.
+
+## New environment variables (June 2026)
+
+```
+SESSION_SECRET   # REQUIRED — signs admin sessions; login 500s without it (fail-closed)
+```
+
+No other new vars: the agent uses OPENROUTER_*, tracker/campaigns reuse RESEND_*, Evolution WhatsApp vars, and CRON_SECRET.
+
+## Docs written this session
+
+`ADMIN-PANEL-AUDIT.md` (full audit + roadmap), `AGENT-SETUP.md`, `CLIENT-TRACKER.md`, `WHATSAPP-CAMPAIGNS.md`, `GIT-COMMIT-PLAN.md` (what to commit and in what order).
