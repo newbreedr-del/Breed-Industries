@@ -55,6 +55,8 @@ export interface CompletionResponse {
 
 function orConfig() {
   const apiKey = process.env.OPENROUTER_API_KEY ?? '';
+  // Free model by default. Override with OPENROUTER_MODEL (keep ':free' suffix to
+  // stay free). Paid models like google/gemini-2.0-flash-001 are better but cost.
   const model = process.env.OPENROUTER_MODEL ?? 'nvidia/nemotron-nano-9b-v2:free';
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://thebreed.co.za';
   return { apiKey, model, appUrl };

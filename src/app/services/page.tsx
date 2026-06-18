@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
+import { BOOKING_URL } from '@/lib/booking';
 import {
   Shield, Briefcase, Layers,
   Check, ChevronRight, ArrowRight, TrendingUp, Bot,
@@ -464,7 +465,7 @@ export default function ServicesPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { name: 'Per Tender Applied',       price: 'R800' },
+                  { name: 'Per Tender (from, tiered by value)', price: 'R1,200' },
                   { name: 'Site Meeting Attendance',  price: 'R1,500' },
                   { name: 'Tender Compliance Audit',  price: 'R1,200' },
                   { name: 'Company Profile Update',   price: 'R450' },
@@ -495,12 +496,14 @@ export default function ServicesPage() {
                 Let's build the compliant, credible, and captivating brand your business deserves.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link 
-                  href="/contact"
+                <a
+                  href={BOOKING_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="btn btn-primary"
                 >
                   Book Strategy Call
-                </Link>
+                </a>
                 <Link 
                   href="/portfolio"
                   className="btn btn-outline"

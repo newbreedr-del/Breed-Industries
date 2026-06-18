@@ -14,7 +14,7 @@ interface Message {
   message: string; status: string; sender_name?: string; error?: string; created_at: string;
 }
 interface StatusData {
-  connection: { state: 'open' | 'connecting' | 'close' | 'unknown' };
+  connection: { state: 'open' | 'connecting' | 'close' | 'unknown'; phone?: string };
   messages: Message[]; configured: boolean;
 }
 interface CRMClient {
@@ -190,7 +190,9 @@ export default function WhatsAppAdminPage() {
             <Hash size={16} className="text-orange-400 shrink-0" />
             <div>
               <p className="text-white text-sm font-semibold">Agent (Business) Number</p>
-              <p className="text-orange-400 text-xs font-mono">27685834837</p>
+              <p className="text-orange-400 text-xs font-mono">
+                {status?.connection?.phone ?? '—'}
+              </p>
               <p className="text-slate-600 text-xs">Clients message this → you get alerts on 27604964105</p>
             </div>
           </div>

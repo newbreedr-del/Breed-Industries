@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
+import { BOOKING_URL } from '@/lib/booking';
 import {
   Shield, Award, Search, TrendingUp, FileText, Users,
   Check, ChevronRight, ArrowRight, AlertCircle, Clock,
@@ -250,6 +251,27 @@ export default function TenderServicesPage() {
               ))}
             </div>
           </div>
+
+          {/*
+            ── TENDER WIN / TRACK RECORD ──────────────────────────────────
+            Replace the copy below with a REAL, specific win as soon as you have
+            one (e.g. "In March 2026 we helped [Client] secure a R[amount]
+            [department] contract for [scope]."). Keep it truthful — a real,
+            named result here converts far better than a generic claim, and an
+            invented one is a credibility risk.
+          */}
+          <div className="mt-12 rounded-2xl border border-accent/25 bg-accent/5 p-8 md:p-10">
+            <span className="inline-flex items-center gap-2 text-accent text-xs font-bold uppercase tracking-widest mb-4">
+              <Award size={14} /> Track Record
+            </span>
+            <p className="text-white/80 text-lg md:text-xl leading-relaxed max-w-3xl">
+              Our tender engine is live and already matching registered clients to live
+              government opportunities across all nine provinces, every single day. We
+              handle the monitoring, compliance and submission so our clients can focus on
+              delivering the work — and bid with confidence on contracts they&apos;d otherwise
+              never have seen.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -432,9 +454,9 @@ export default function TenderServicesPage() {
               and have you live in the tender engine within 48 hours.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact" className="btn btn-primary">
+              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
                 Book Strategy Call <ChevronRight size={16} className="ml-1" />
-              </Link>
+              </a>
               <a href="https://tenders.thebreed.co.za" target="_blank" rel="noopener noreferrer"
                  className="btn btn-outline">
                 Launch Tender Portal <ArrowRight size={16} className="ml-1" />

@@ -39,7 +39,15 @@ export async function sendText(
 
   if (!url || !key) {
     console.warn('[WhatsApp] Evolution API not configured — skipping send');
-    return { success: false, error: 'WhatsApp not configured' };
+    return { success: false, error: 'WhatsApp not configured (EVOLUTION_API_URL / EVOLUTION_API_KEY missing)' };
+  }
+
+  // Common misconfiguration: a URL pasted into the API key slot. The key must be
+  // the Evolution AUTHENTICATION_API_KEY (a secret token), not a URL.
+  if (/^https?:\/\//i.test(key)) {
+    const msg = 'EVOLUTION_API_KEY is set to a URL, not an API key. Set it to your Evolution AUTHENTICATION_API_KEY (Railway → Evolution service → Variables).';
+    console.error('[WhatsApp] ' + msg);
+    return { success: false, error: msg };
   }
 
   const phone = formatPhone(rawPhone);
@@ -80,6 +88,7 @@ export async function sendText(
 export async function getConnectionState(): Promise<{
   state: 'open' | 'connecting' | 'close' | 'unknown';
   qrCode?: string;
+  phone?: string;
 }> {
   const { url, key, instance } = evoConfig();
   if (!url || !key) return { state: 'unknown' };
@@ -91,7 +100,13 @@ export async function getConnectionState(): Promise<{
     });
     if (!res.ok) return { state: 'unknown' };
     const data = await res.json();
-    return { state: data?.instance?.state ?? data?.state ?? 'unknown' };
+    const state = data?.instance?.state ?? data?.state ?? 'unknown';
+
+    // Extract the connected phone number (owner) if available
+    const rawOwner: string = data?.instance?.owner ?? data?.owner ?? '';
+    const phone = rawOwner.replace('@s.whatsapp.net', '').replace('@c.us', '') || undefined;
+
+    return { state, phone };
   } catch {
     return { state: 'unknown' };
   }
@@ -102,6 +117,32 @@ export async function getQRCode(): Promise<{ qrCode?: string; error?: string }> 
   if (!url || !key) return { error: 'Not configured' };
 
   try {
+    // Step 1 — ensure the instance exists; create it if not
+    const stateRes = await fetch(`${url}/instance/connectionState/${instance}`, {
+      headers: { apikey: key },
+      signal: AbortSignal.timeout(8_000),
+    });
+
+    if (stateRes.status === 404) {
+      // Instance doesn't exist yet — create it
+      console.log(`[WhatsApp] Instance "${instance}" not found — creating it`);
+      const createRes = await fetch(`${url}/instance/create`, {
+        method: 'POST',
+        headers: { apikey: key, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          instanceName: instance,
+          qrcode: true,
+          integration: 'WHATSAPP-BAILEYS',
+        }),
+        signal: AbortSignal.timeout(15_000),
+      });
+      if (!createRes.ok) {
+        const err = await createRes.json().catch(() => ({}));
+        return { error: err?.message ?? `Failed to create instance (${createRes.status})` };
+      }
+    }
+
+    // Step 2 — fetch QR code
     const res = await fetch(`${url}/instance/connect/${instance}`, {
       headers: { apikey: key },
       signal: AbortSignal.timeout(15_000),
@@ -109,7 +150,7 @@ export async function getQRCode(): Promise<{ qrCode?: string; error?: string }> 
     const data = await res.json().catch(() => ({}));
     const base64 = data?.base64 ?? data?.qrcode?.base64 ?? data?.code;
     if (base64) return { qrCode: base64.startsWith('data:') ? base64 : `data:image/png;base64,${base64}` };
-    return { error: data?.message ?? 'QR not available' };
+    return { error: data?.message ?? 'QR not available — try refreshing in a few seconds' };
   } catch (err: any) {
     return { error: err.message };
   }

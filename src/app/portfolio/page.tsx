@@ -44,7 +44,7 @@ const digitalProjects = [
       '/assets/images/portfolio/mlk-apparel-hero.png',
       '/assets/images/portfolio/mlk-apparel-products.png',
     ],
-    link: null,
+    link: 'https://mlkapparel.shop',
   },
   {
     id: 'hogi-church',
@@ -58,7 +58,7 @@ const digitalProjects = [
     result: 'A complex, purpose-built platform currently in active development — over 2 months in the making. Live video, member management, event planning and analytics built specifically for House of Grace International.',
     image: '/assets/images/portfolio/hogi-church-home.png',
     screenshots: ['/assets/images/portfolio/hogi-church-home.png'],
-    link: null,
+    link: 'https://hogiagent.com',
   },
   {
     id: 'igroup-website',

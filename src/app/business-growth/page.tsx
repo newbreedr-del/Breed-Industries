@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import Link from 'next/link';
+import { BOOKING_URL } from '@/lib/booking';
 import {
   TrendingUp, Check, ChevronRight, ArrowRight, CheckCircle,
   Shield, BarChart3, Megaphone, Users, Target, Lightbulb,
@@ -401,9 +402,9 @@ export default function BusinessGrowthPage() {
               <Link href="/subscribe/business-growth" className="btn btn-primary">
                 Subscribe Now <ChevronRight size={16} className="ml-1" />
               </Link>
-              <Link href="/contact" className="btn btn-outline">
+              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
                 Book a Strategy Call <ArrowRight size={16} className="ml-1" />
-              </Link>
+              </a>
             </div>
           </div>
         </div>

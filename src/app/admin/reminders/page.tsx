@@ -243,6 +243,26 @@ export default function RemindersAdmin() {
     }
   };
 
+  // Test the scheduler end-to-end: sends every reminder that is currently due.
+  const [runningDue, setRunningDue] = useState(false);
+  const runDueNow = async () => {
+    setRunningDue(true);
+    try {
+      const res = await fetch('/api/reminders/process', { method: 'POST' });
+      const data = await res.json();
+      if (data.ok) {
+        alert(`Processed ${data.due} due reminder(s): ${data.sent} sent, ${data.failed} failed, ${data.skippedNoPhone} skipped (no phone).`);
+        fetchReminders();
+      } else {
+        alert('Failed: ' + (data.error?.message ?? 'unknown error'));
+      }
+    } catch (err) {
+      alert('Failed to run due reminders');
+    } finally {
+      setRunningDue(false);
+    }
+  };
+
   const handleTypeChange = (type: string) => {
     const tpl = REMINDER_TEMPLATE_DEFAULTS[type];
     if (tpl) {
@@ -318,6 +338,16 @@ export default function RemindersAdmin() {
             <p className="text-slate-400 mt-1">Schedule WhatsApp reminders for clients and yourself</p>
           </div>
           <div className="flex flex-wrap gap-2 md:gap-3 w-full md:w-auto">
+            <button
+              onClick={runDueNow}
+              disabled={runningDue}
+              title="Send every reminder that is currently due — use this to test that sending works"
+              className="px-3 md:px-4 py-2 bg-green-600 rounded-lg hover:bg-green-700 flex items-center gap-2 text-sm md:text-base disabled:opacity-50"
+            >
+              <RefreshCw size={16} className={`md:w-[18px] md:h-[18px] ${runningDue ? 'animate-spin' : ''}`} />
+              <span className="hidden sm:inline">{runningDue ? 'Running…' : 'Run Due Now'}</span>
+              <span className="sm:hidden">Run</span>
+            </button>
             <button
               onClick={() => setShowTenderModal(true)}
               className="px-3 md:px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 flex items-center gap-2 text-sm md:text-base"
@@ -1030,15 +1060,15 @@ function ReminderCard({ reminder, onSend, onDelete }: {
         </div>
       </div>
       <div className="flex gap-2">
-        {reminder.status === 'pending' && (
-          <button
-            onClick={() => onSend(reminder.id)}
-            className="p-2 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30"
-            title="Send now"
-          >
-            <Send size={16} />
-          </button>
-        )}
+        {/* Always available so you can (re)send a reminder at any time —
+            pending, already sent, or failed. */}
+        <button
+          onClick={() => onSend(reminder.id)}
+          className="p-2 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30"
+          title={reminder.whatsapp_sent ? 'Resend now' : 'Send now'}
+        >
+          {reminder.whatsapp_sent ? <RefreshCw size={16} /> : <Send size={16} />}
+        </button>
         <button
           onClick={() => onDelete(reminder.id)}
           className="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30"

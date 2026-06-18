@@ -116,7 +116,7 @@ export default function CommandBar() {
       <button
         onClick={() => setOpen(true)}
         aria-label="Open command bar"
-        className="fixed bottom-6 right-6 z-[60] flex items-center gap-2 rounded-full bg-[#FF9F00] px-4 py-3 font-heading text-sm font-semibold text-[#0B1118] shadow-lg shadow-black/40 transition hover:scale-105"
+        className="fixed bottom-24 right-6 z-[60] flex items-center gap-2 rounded-full bg-[#FF9F00] px-4 py-3 font-heading text-sm font-semibold text-[#0B1118] shadow-lg shadow-black/40 transition hover:scale-105"
       >
         <Sparkles size={18} />
         Ask Agent

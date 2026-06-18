@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRight, ArrowRight, Zap, Rocket, Shield, CheckCircle2, Code2, Palette, FileText, Users, Sprout, Award, TrendingUp, Search, Star, Quote } from 'lucide-react';
 import { FreshStartPopup } from '@/components/ui/FreshStartPopup';
+import { BOOKING_URL } from '@/lib/booking';
 
 export default function Home() {
   const featuredServices = [
@@ -329,19 +330,19 @@ export default function Home() {
           <div className="grid gap-6 md:grid-cols-3">
             {[
               {
-                quote: "Breed handled our company registration and branding end to end. We went from an idea to a fully compliant, professional business in under two weeks.",
-                name: 'Thabo M.',
-                company: 'GoBizz',
-              },
-              {
-                quote: "The team built our online store exactly how we imagined it and delivered it fast. Sales started coming through the same week we launched.",
-                name: 'Lerato K.',
+                quote: "Breed built our entire online store — clean, fast, and with the marketing baked right in. We went live in two weeks and started taking orders almost immediately.",
+                name: 'Maliakaa Hlombe',
                 company: 'MLK Apparel',
               },
               {
-                quote: "They sorted out our CIDB grading and tender compliance so we could finally bid on government contracts with confidence.",
-                name: 'Sipho D.',
-                company: 'MC Ways Construction',
+                quote: "They built a complete management platform for our church — members, events, live services and giving, all in one place. The team understood our vision and delivered something we actually use every week.",
+                name: 'House of Grace International',
+                company: 'Church Management Platform',
+              },
+              {
+                quote: "Breed developed the backend system that powers our engagement platform. Reliable, well-built and delivered on time — exactly what we needed to scale.",
+                name: 'Engage Africa',
+                company: 'AI Engagement Platform',
               },
             ].map((t) => (
               <div key={t.name} className="glass-card p-6 flex flex-col gap-4">
@@ -435,7 +436,7 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a
-                  href="https://wa.me/27604964105?text=Hi%20Breed%20Industries!%20I'd%20like%20to%20book%20a%20strategy%20call."
+                  href={BOOKING_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-primary"
