@@ -11,7 +11,7 @@ import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Brie
 const retainerOptions = [
   { id: 'business-watch', name: 'Business Watch (Monthly)', price: 650, pricingType: 'monthly', icon: <Eye size={16} />, description: 'Monitoring only (no implementation): monthly funding & accreditation monitoring — stay ahead of grants, compliance deadlines, and new accreditation opportunities.' },
   { id: 'business-growth-essentials', name: 'Business Growth Essentials (Monthly)', price: 950, pricingType: 'monthly', icon: <TrendingUp size={16} />, description: 'Monthly retainer: compliance monitoring + social media content support + monthly strategy check-in. General business growth, not tender-specific.' },
-  { id: 'brand-launch-package', name: 'Brand Launch Package', price: 4500, pricingType: 'one-time', icon: <Rocket size={16} />, description: 'CIPC Registration + Premium Logo + Business Profile + 250 Business Cards. Everything to launch your brand — R5,700 value, save R1,200 vs buying separately.' },
+  { id: 'brand-launch-package', name: 'Brand Launch Package', price: 2999, pricingType: 'one-time', icon: <Rocket size={16} />, description: 'CIPC Registration + Basic Logo + Starter Business Profile + 250 Business Cards. Everything to launch your brand — R3,700 value, save R700 vs buying separately.' },
   { id: 'tender-growth-package', name: 'Tender Growth Package (Monthly)', price: 1950, pricingType: 'monthly', icon: <Award size={16} />, description: 'Full compliance setup + monthly tender monitoring + social media + strategy. The bundle for businesses that want both growth support and government contract opportunities.' },
 ];
 

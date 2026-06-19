@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/Footer';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronRight, ArrowRight, Zap, Rocket, Shield, CheckCircle2, Code2, Palette, FileText, Users, Sprout, Award, TrendingUp, Search, Star, Quote } from 'lucide-react';
+import { ChevronRight, ArrowRight, Zap, Rocket, Shield, CheckCircle2, Code2, Palette, FileText, Users, Sprout, Award, TrendingUp, Search } from 'lucide-react';
 import { FreshStartPopup } from '@/components/ui/FreshStartPopup';
 import { BOOKING_URL } from '@/lib/booking';
 
@@ -310,52 +310,6 @@ export default function Home() {
               <div key={c.name} className="glass-card p-3 flex flex-col items-center justify-center gap-1.5 opacity-70 hover:opacity-100 transition-opacity bg-white/10">
                 <Image src={c.logo} alt={c.name} width={80} height={36} className="object-contain max-h-9 w-auto" />
                 <span className="text-white/40 text-[10px] text-center leading-tight">{c.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Testimonials ───────────────────────────────────── */}
-      <section className="py-16 bg-color-bg-secondary relative">
-        <div className="absolute inset-0 grid-overlay grid-overlay-half" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Quote className="w-4 h-4 text-accent" />
-              <p className="text-accent text-sm uppercase tracking-widest font-medium">What Clients Say</p>
-            </div>
-            <h2 className="text-2xl md:text-3xl font-heading font-bold text-white">Trusted by founders across South Africa</h2>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              {
-                quote: "Breed built our entire online store — clean, fast, and with the marketing baked right in. We went live in two weeks and started taking orders almost immediately.",
-                name: 'Maliakaa Hlombe',
-                company: 'MLK Apparel',
-              },
-              {
-                quote: "They built a complete management platform for our church — members, events, live services and giving, all in one place. The team understood our vision and delivered something we actually use every week.",
-                name: 'House of Grace International',
-                company: 'Church Management Platform',
-              },
-              {
-                quote: "Breed developed the backend system that powers our engagement platform. Reliable, well-built and delivered on time — exactly what we needed to scale.",
-                name: 'Engage Africa',
-                company: 'AI Engagement Platform',
-              },
-            ].map((t) => (
-              <div key={t.name} className="glass-card p-6 flex flex-col gap-4">
-                <div className="flex gap-1 text-accent">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-accent" />
-                  ))}
-                </div>
-                <p className="text-white/70 text-sm leading-relaxed flex-1">&ldquo;{t.quote}&rdquo;</p>
-                <div className="pt-2 border-t border-white/10">
-                  <p className="text-white font-semibold text-sm">{t.name}</p>
-                  <p className="text-accent/70 text-xs">{t.company}</p>
-                </div>
               </div>
             ))}
           </div>
