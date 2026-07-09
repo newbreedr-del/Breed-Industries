@@ -9,7 +9,7 @@ interface SeatLayout {
 }
 
 const LAYOUT: SeatLayout[] = [
-  { row: 'A', left: 4, right: 4 },  // 8  — front row
+  { row: 'A', left: 4, right: 4 },  // 8  - front row
   { row: 'B', left: 5, right: 5 },  // 10
   { row: 'C', left: 5, right: 5 },  // 10
   { row: 'D', left: 5, right: 5 },  // 10

@@ -5,7 +5,7 @@ import nodemailer from 'nodemailer';
 import { supabaseAdmin } from '@/lib/supabase';
 import { sendText, formatPhone } from '@/lib/whatsapp';
 
-const POSTER_IMAGE_URL = 'https://thebreed.co.za/assets/images/fpb-event-flyer.jpg';
+const POSTER_IMAGE_URL = 'https://thebreed.co.za/assets/images/fpb-event-flyer-v2.jpg';
 const COMPANY_EMAIL = process.env.COMPANY_EMAIL ?? 'info@thebreed.co.za';
 
 // Hostinger SMTP transporter
@@ -129,7 +129,9 @@ export async function POST(request: NextRequest) {
       const whatsappMessage = 
         `🎭 *Breed Industries Event Booking Confirmed!*\n\n` +
         `Hi ${firstName}, your seats are reserved.\n\n` +
-        `📅 Event: Breed Industries Special Event\n` +
+        `📅 Event: The Future-Proof Business\n` +
+        `🗓️ Tuesday, 14 July 2026 — 10:00 AM\n` +
+        `📍 65 St Johns Ave, Nisbett Rd, Pinetown\n` +
         `🎟️ Reference: *${reference}*\n` +
         `💺 Seats: ${seats.join(', ')}\n\n` +
         `Check your email for full details.\n` +
@@ -177,7 +179,7 @@ export async function POST(request: NextRequest) {
               </h1>
               
               <p style="color: #e5e7eb; font-size: 16px; line-height: 1.6; margin: 0 0 8px 0; text-align: center;">
-                Your seats are confirmed. We'll see you on the 1st! 🎉
+                Your seats are confirmed. We'll see you on the 14th! 🎉
               </p>
 
               <!-- Event Details Banner -->
@@ -185,7 +187,7 @@ export async function POST(request: NextRequest) {
                 <tr>
                   <td style="padding: 20px 24px;">
                     <p style="color: #0B1118; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px 0;">📅 Date &amp; Time</p>
-                    <p style="color: #0B1118; font-size: 18px; font-weight: 800; margin: 0 0 14px 0;">Wednesday, 1 July 2026 — 10:00 AM</p>
+                    <p style="color: #0B1118; font-size: 18px; font-weight: 800; margin: 0 0 14px 0;">Tuesday, 14 July 2026 — 10:00 AM</p>
                     <p style="color: #0B1118; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px 0;">📍 Venue</p>
                     <p style="color: #0B1118; font-size: 16px; font-weight: 700; margin: 0;">65 St Johns Avenue, Nisbett Rd, Pinetown, 3610</p>
                   </td>
@@ -239,7 +241,7 @@ export async function POST(request: NextRequest) {
           from: `Breed Industries <${process.env.SALES_EMAIL_USER ?? 'sales@thebreed.co.za'}>`,
           to: email,
           bcc: COMPANY_EMAIL,
-          subject: '🎟️ Your Seats Are Confirmed — The Future-Proof Business | 1 July 2026',
+          subject: '🎟️ Your Seats Are Confirmed — The Future-Proof Business | 14 July 2026',
           html: emailHtml,
         });
         console.log('[Book Seats] Email sent:', info.messageId);

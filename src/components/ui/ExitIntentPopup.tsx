@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, ArrowRight, CheckCircle2, Sprout } from 'lucide-react';
+import { X, ArrowRight, Users, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -11,13 +11,10 @@ export function ExitIntentPopup() {
   const [isDismissed, setIsDismissed] = useState(false);
   const pathname = usePathname();
 
-  // Don't show on admin, invite, or FPB-event pages
   const isExcludedPage = pathname?.startsWith('/admin') || pathname?.startsWith('/invite') || pathname?.toLowerCase().includes('fpb-event');
 
   useEffect(() => {
-    if (isExcludedPage) {
-      return;
-    }
+    if (isExcludedPage) return;
 
     const sessionDismissed = sessionStorage.getItem('exitPopupDismissed');
     if (sessionDismissed) {
@@ -27,11 +24,9 @@ export function ExitIntentPopup() {
 
     let mouseY = 0;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseY = e.clientY;
-    };
+    const handleMouseMove = (e: MouseEvent) => { mouseY = e.clientY; };
 
-    const handleMouseLeave = (e: MouseEvent) => {
+    const handleMouseLeave = () => {
       if (mouseY < 50 && !hasShown && !isDismissed) {
         setIsVisible(true);
         setHasShown(true);
@@ -81,93 +76,89 @@ export function ExitIntentPopup() {
             <X size={20} />
           </button>
 
-          {/* Icon + heading */}
-          <div className="text-center mb-6">
+          {/* Heading */}
+          <div className="mb-6">
             <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
+              className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
               style={{ background: 'rgba(255,159,0,0.15)' }}
             >
-              <CheckCircle2 size={28} style={{ color: '#FF9F00' }} />
+              <Users size={24} style={{ color: '#FF9F00' }} />
             </div>
             <h3 className="text-white text-2xl font-bold mb-2">
-              Don&apos;t Leave Empty-Handed!
+              The Breed Business Network is open.
             </h3>
             <p className="text-white/60 text-sm leading-relaxed">
-              Whether you're ready to build now or need funding first, we've got a path for you.
+              Join 250+ South African business owners getting the tools, training, and community they need to grow. Not someday — now.
             </p>
           </div>
 
-          {/* Two path cards */}
-          <div className="grid grid-cols-2 gap-3 mb-5">
-            {/* Ready to build */}
+          {/* Two CTAs */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
             <Link
-              href="/build-package"
+              href="/network"
               onClick={handleDismiss}
               className="group rounded-xl p-4 transition-all hover:scale-[1.02]"
-              style={{ background: 'rgba(255,159,0,0.1)', border: '1px solid rgba(255,159,0,0.25)' }}
+              style={{ background: 'rgba(255,159,0,0.1)', border: '1px solid rgba(255,159,0,0.3)' }}
             >
               <div className="flex items-center gap-2 mb-2">
-                <CheckCircle2 size={15} style={{ color: '#FF9F00' }} />
+                <Users size={14} style={{ color: '#FF9F00' }} />
                 <span style={{ color: '#FF9F00' }} className="text-xs font-bold uppercase tracking-wide">
-                  I&apos;m Ready
+                  The Network
                 </span>
               </div>
-              <p className="text-white font-bold text-sm mb-1">Build a Package</p>
+              <p className="text-white font-bold text-sm mb-1">Join the Network</p>
               <p className="text-white/50 text-xs leading-relaxed">
-                Get a free custom quote and pricing estimate.
+                From R950/month. No lock-in. Cancel anytime.
               </p>
               <div className="flex items-center gap-1 mt-3 text-xs" style={{ color: '#FF9F00' }}>
-                Get Free Quote <ArrowRight size={12} />
+                See membership tiers <ArrowRight size={12} />
               </div>
             </Link>
 
-            {/* Need funding first */}
-            <Link
-              href="/fresh-start"
+            <a
+              href="https://wa.me/27604964105?text=Hi%2C%20I%20want%20to%20book%20a%20free%20strategy%20call"
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={handleDismiss}
               className="group rounded-xl p-4 transition-all hover:scale-[1.02]"
               style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}
             >
               <div className="flex items-center gap-2 mb-2">
-                <Sprout size={15} style={{ color: '#FF9F00' }} />
+                <Phone size={14} style={{ color: '#FF9F00' }} />
                 <span style={{ color: '#FF9F00' }} className="text-xs font-bold uppercase tracking-wide">
-                  Fresh Start
+                  Talk First
                 </span>
               </div>
-              <p className="text-white font-bold text-sm mb-1">Need Funding First?</p>
+              <p className="text-white font-bold text-sm mb-1">Free Strategy Call</p>
               <p className="text-white/50 text-xs leading-relaxed">
-                We help you access capital before you build.
+                30 minutes. No pressure. We identify your biggest gap.
               </p>
               <div className="flex items-center gap-1 mt-3 text-xs" style={{ color: '#FF9F00' }}>
-                Learn More <ArrowRight size={12} />
+                WhatsApp us <ArrowRight size={12} />
               </div>
-            </Link>
+            </a>
           </div>
 
-          {/* Benefits */}
+          {/* Pillars */}
           <div className="grid grid-cols-3 gap-2 mb-5">
             {[
-              'Instant pricing estimate',
-              'Custom package tailored to you',
-              'Expert consultation included',
-            ].map((benefit) => (
-              <div key={benefit} className="flex items-start gap-1.5">
-                <CheckCircle2 size={12} style={{ color: '#FF9F00', flexShrink: 0, marginTop: 2 }} />
-                <span className="text-white/50 text-xs leading-tight">{benefit}</span>
+              'Education & training events',
+              'Isivuno community fund',
+              'Compliance & web infrastructure',
+            ].map((item) => (
+              <div key={item} className="flex items-start gap-1.5">
+                <div className="w-1 h-1 rounded-full mt-1.5 flex-shrink-0" style={{ background: '#FF9F00' }} />
+                <span className="text-white/40 text-xs leading-tight">{item}</span>
               </div>
             ))}
           </div>
 
           <button
             onClick={handleDismiss}
-            className="w-full text-white/30 hover:text-white/60 transition-colors text-xs py-2"
+            className="w-full text-white/25 hover:text-white/50 transition-colors text-xs py-2"
           >
             No thanks, I&apos;ll continue browsing
           </button>
-
-          <p className="text-center text-white/20 text-xs mt-2">
-            Trusted by 500+ South African businesses
-          </p>
         </div>
       </div>
     </div>

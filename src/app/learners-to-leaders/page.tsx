@@ -394,7 +394,7 @@ export default function LearnersToLeaders() {
               {
                 icon: <Briefcase className="w-6 h-6 text-accent" />,
                 title: 'Any Industry',
-                desc: 'Construction, retail, food, tech, creative services — all sectors are welcome.',
+                desc: 'Construction, retail, food, tech, creative services - all sectors are welcome.',
               },
               {
                 icon: <Award className="w-6 h-6 text-accent" />,

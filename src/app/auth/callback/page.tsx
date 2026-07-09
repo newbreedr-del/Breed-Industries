@@ -5,7 +5,7 @@
  *
  * The Supabase client (detectSessionInUrl: true) automatically exchanges the
  * token_hash / code in the URL as soon as this page loads. We must NOT call
- * verifyOtp or exchangeCodeForSession ourselves — the SDK already did it.
+ * verifyOtp or exchangeCodeForSession ourselves - the SDK already did it.
  *
  * Instead we listen via onAuthStateChange for the SIGNED_IN event, then
  * exchange the resulting access_token for our admin_session cookie.
@@ -31,7 +31,7 @@ function CallbackHandler() {
     if (urlError) {
       setStatus('error');
       if (urlErrorCode === 'otp_expired') {
-        setMessage('This login link has expired. Links are valid for 1 hour — please request a new one.');
+        setMessage('This login link has expired. Links are valid for 1 hour - please request a new one.');
       } else {
         setMessage(urlErrorDesc?.replace(/\+/g, ' ') ?? 'Authentication failed. Please try again.');
       }
@@ -83,12 +83,12 @@ function CallbackHandler() {
       }
     );
 
-    // Timeout — if no auth event fires within 10 s, something went wrong
+    // Timeout - if no auth event fires within 10 s, something went wrong
     const timeout = setTimeout(() => {
       if (!done) {
         done = true;
         setStatus('error');
-        setMessage('Sign-in timed out. The link may have expired or already been used — please request a new one.');
+        setMessage('Sign-in timed out. The link may have expired or already been used - please request a new one.');
       }
     }, 10_000);
 

@@ -13,7 +13,7 @@ import {
 export const metadata: Metadata = {
   title: 'Business Growth Services | Monthly Retainer | Breed Industries',
   description:
-    'Keep your business compliant, visible, and growing with Breed Industries monthly retainer packages. From R950/month — compliance monitoring, social media, strategy, and funding alerts.',
+    'Keep your business compliant, visible, and growing with Breed Industries monthly retainer packages. From R950/month - compliance monitoring, social media, strategy, and funding alerts.',
   keywords: [
     'business growth South Africa', 'monthly business retainer', 'compliance monitoring',
     'social media management Durban', 'BEE compliance', 'business strategy KZN',
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://thebreed.co.za/business-growth' },
   openGraph: {
     title: 'Business Growth Services - Breed Industries',
-    description: 'Compliance, social media, strategy and funding monitoring — all in one monthly retainer from R950.',
+    description: 'Compliance, social media, strategy and funding monitoring - all in one monthly retainer from R950.',
     url: 'https://thebreed.co.za/business-growth',
   },
 };
@@ -43,7 +43,7 @@ const packages = [
       'Accreditation renewal reminders',
       'Business health check-in report',
       'WhatsApp alert notifications',
-      'Cancel anytime — no lock-in',
+      'Cancel anytime - no lock-in',
     ],
     cta: 'Start Watching',
     ctaHref: '/subscribe/business-growth',
@@ -93,7 +93,7 @@ const howItWorks = [
   {
     step: '01',
     title: 'Onboarding',
-    body: "We map your business — CIPC registration status, BEE level, tax compliance, and any upcoming deadlines. This becomes your compliance fingerprint.",
+    body: "We map your business - CIPC registration status, BEE level, tax compliance, and any upcoming deadlines. This becomes your compliance fingerprint.",
     icon: Target,
   },
   {
@@ -111,7 +111,7 @@ const howItWorks = [
   {
     step: '04',
     title: 'Social Presence',
-    body: "On the Essentials package, our team produces content for your business each month — consistent branding and messaging without you lifting a finger.",
+    body: "On the Essentials package, our team produces content for your business each month - consistent branding and messaging without you lifting a finger.",
     icon: Megaphone,
   },
   {
@@ -123,7 +123,7 @@ const howItWorks = [
   {
     step: '06',
     title: 'Scale When Ready',
-    body: 'Add tender monitoring, upgrade to Full Service, or bring in our team for a specific project — all on your terms, no long-term commitment required.',
+    body: 'Add tender monitoring, upgrade to Full Service, or bring in our team for a specific project - all on your terms, no long-term commitment required.',
     icon: Rocket,
   },
 ];
@@ -138,7 +138,7 @@ const stats = [
 const faqs = [
   {
     q: 'What is the difference between Business Watch and Business Growth Essentials?',
-    a: 'Business Watch is pure monitoring — we track compliance deadlines, funding windows, and accreditation renewals and alert you. Business Growth Essentials adds active support: social media content, a monthly strategy call, and a growth roadmap. Both are R950/month.',
+    a: 'Business Watch is pure monitoring - we track compliance deadlines, funding windows, and accreditation renewals and alert you. Business Growth Essentials adds active support: social media content, a monthly strategy call, and a growth roadmap. Both are R950/month.',
   },
   {
     q: 'Can I cancel at any time?',
@@ -154,7 +154,7 @@ const faqs = [
   },
   {
     q: 'What kind of social media content do you produce?',
-    a: 'We create 4 branded posts per month tailored to your industry and audience — designed to position you as credible and professional on platforms like Facebook, LinkedIn, and Instagram.',
+    a: 'We create 4 branded posts per month tailored to your industry and audience - designed to position you as credible and professional on platforms like Facebook, LinkedIn, and Instagram.',
   },
   {
     q: 'Is there a setup fee?',
@@ -177,7 +177,7 @@ export default function BusinessGrowthPage() {
       <PageHero
         title="Business Growth Services"
         subtitle="Monthly Retainer"
-        description="Most South African SMMEs lose compliance status, miss funding windows, and fade from view — not because they don't care, but because no one is watching. We watch so you can focus on running your business."
+        description="Most South African SMMEs lose compliance status, miss funding windows, and fade from view - not because they don't care, but because no one is watching. We watch so you can focus on running your business."
         breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'Services', href: '/services' },
@@ -209,7 +209,7 @@ export default function BusinessGrowthPage() {
               <div className="space-y-4 text-white/65 leading-relaxed">
                 <p>
                   South Africa has <strong className="text-white">over R4 billion</strong> in annual SMME funding, grants, and
-                  government incentives — but most small businesses never access a cent because they don't know
+                  government incentives - but most small businesses never access a cent because they don't know
                   it exists, or they miss the application window.
                 </p>
                 <p>
@@ -218,7 +218,7 @@ export default function BusinessGrowthPage() {
                 </p>
                 <p className="text-white font-medium">
                   We built a system that watches your compliance, alerts you to funding windows, and keeps your
-                  brand visible — so none of that is ever your problem again.
+                  brand visible - so none of that is ever your problem again.
                 </p>
               </div>
             </div>
@@ -244,7 +244,7 @@ export default function BusinessGrowthPage() {
               How Business Growth Works
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto">
-              From onboarding to ongoing support — here's how we keep your business ahead.
+              From onboarding to ongoing support - here's how we keep your business ahead.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -396,7 +396,7 @@ export default function BusinessGrowthPage() {
             </h2>
             <p className="text-white/65 text-lg mb-8 max-w-xl mx-auto">
               Start with Business Watch at R950/month. Onboarding takes 5 days.
-              No lock-in, no setup fee — just results.
+              No lock-in, no setup fee - just results.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/subscribe/business-growth" className="btn btn-primary">

@@ -1544,10 +1544,12 @@ export function generateInvoicePDF(data: InvoicePDFData): Buffer {
     doc.text('MONTHLY SUBSCRIPTIONS:', MARGIN + 6, y + 6);
     setFont('normal', 8);
     doc.setTextColor(...DARK);
-    doc.text(
-      `Recurring fee of ${fmt(data.monthlyTotal)}/mo will be invoiced separately after initial payment is received.`,
-      MARGIN + 6, y + 12
-    );
+    // Subscription-only invoice: monthly amount IS what's due now; subsequent months billed separately.
+    // Mixed invoice: monthly amount is deferred until after one-time payment is received.
+    const subscriptionNote = data.oneTimeTotal === 0
+      ? `This invoice covers the current month's subscription. Subsequent months will be invoiced on a recurring basis.`
+      : `Recurring fee of ${fmt(data.monthlyTotal)}/mo will be invoiced separately after initial payment is received.`;
+    doc.text(subscriptionNote, MARGIN + 6, y + 12);
     y += 22;
   }
 

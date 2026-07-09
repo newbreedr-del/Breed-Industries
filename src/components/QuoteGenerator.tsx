@@ -45,8 +45,8 @@ const tenderServices = [
 
 const platformServices = [
   // ── Setup / build (once-off) ──────────────────────────────────────────
-  { id: 'platform-starter',   category: 'AI Platforms & Automation', name: 'AI Platform — Starter',          basePrice: 'R9,500',   pricingType: 'one-time' as const },
-  { id: 'platform-pro',       category: 'AI Platforms & Automation', name: 'AI Platform — Pro',              basePrice: 'R18,500',  pricingType: 'one-time' as const },
+  { id: 'platform-starter',   category: 'AI Platforms & Automation', name: 'AI Platform - Starter',          basePrice: 'R9,500',   pricingType: 'one-time' as const },
+  { id: 'platform-pro',       category: 'AI Platforms & Automation', name: 'AI Platform - Pro',              basePrice: 'R18,500',  pricingType: 'one-time' as const },
   { id: 'platform-mobile',    category: 'AI Platforms & Automation', name: 'Mobile App (iOS & Android)',     basePrice: 'R15,000',  pricingType: 'one-time' as const },
   { id: 'platform-app-store', category: 'AI Platforms & Automation', name: 'App Store Submission (Both)',    basePrice: 'R2,500',   pricingType: 'one-time' as const },
   // ── Monthly maintenance ───────────────────────────────────────────────

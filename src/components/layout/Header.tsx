@@ -5,90 +5,23 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Menu, X, ChevronDown, Phone,
-  MessageSquare, Layers, Briefcase,
-  Users, LayoutGrid, Settings,
-  Search, Award, TrendingUp, GraduationCap
+  Menu, X, Phone,
+  MessageSquare, Search
 } from 'lucide-react';
 
 const navItems = [
   { name: 'Home', path: '/' },
-  { 
-    name: 'Services', 
-    path: '/services',
-    megaMenu: true,
-    children: [
-      {
-        title: 'Business Setup',
-        icon: <Settings className="w-5 h-5" />,
-        description: 'Registration, compliance, and documentation',
-        link: '/services#business-setup'
-      },
-      {
-        title: 'Branding',
-        icon: <Briefcase className="w-5 h-5" />,
-        description: 'Logo design, identity systems, and guidelines',
-        link: '/services#branding'
-      },
-      {
-        title: 'Digital',
-        icon: <Layers className="w-5 h-5" />,
-        description: 'Web, mobile, and digital marketing solutions',
-        link: '/services#digital'
-      },
-      {
-        title: 'Tender Services',
-        icon: <Award className="w-5 h-5" />,
-        description: 'Find, apply & win government tenders',
-        link: '/tender-services'
-      },
-      {
-        title: 'Business Growth',
-        icon: <TrendingUp className="w-5 h-5" />,
-        description: 'Monthly retainers for ongoing growth support',
-        link: '/business-growth'
-      },
-      {
-        title: 'Learners to Leaders',
-        icon: <GraduationCap className="w-5 h-5" />,
-        description: 'Training materials & development programmes',
-        link: '/learners-to-leaders'
-      }
-    ]
-  },
-  { name: 'Build Package', path: '/build-package' },
-  { name: 'Fresh Start', path: '/fresh-start' },
+  { name: 'Network', path: '/network' },
+  { name: 'Services', path: '/services' },
+  { name: 'Tender Services', path: '/tender-services' },
   { name: 'Portfolio', path: '/portfolio' },
   { name: 'About', path: '/about' },
   { name: 'Contact', path: '/contact' },
 ];
 
-const tiers = [
-  {
-    name: 'Launch Essentials',
-    price: 'R2,500',
-    description: 'CIPC registration, basic logo, and business cards',
-    link: '/build-package'
-  },
-  {
-    name: 'Growth Momentum',
-    price: 'R8,500',
-    description: 'Full branding, 5-page website, and business plan',
-    link: '/build-package',
-    featured: true
-  },
-  {
-    name: 'Empire Ascend',
-    price: 'R16,500',
-    description: 'E-commerce portal, premium branding & social media',
-    link: '/build-package'
-  }
-];
-
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
 
   // Handle scroll effect
   useEffect(() => {
@@ -101,7 +34,6 @@ export const Header = () => {
   }, []);
 
   const toggleMobileMenu = () => {
-    setActiveMegaMenu(null);
     setIsMobileMenuOpen((prev) => !prev);
   };
 
@@ -121,10 +53,6 @@ export const Header = () => {
       document.body.style.overflow = '';
     };
   }, [isMobileMenuOpen]);
-
-  const toggleMegaMenu = (name: string) => {
-    setActiveMegaMenu(activeMegaMenu === name ? null : name);
-  };
 
   return (
     <header 
@@ -160,106 +88,24 @@ export const Header = () => {
               <ul className="flex items-center gap-6">
                 {navItems.map((item) => (
                   <li key={item.name} className="relative">
-                    {item.megaMenu ? (
-                      <button 
-                        className="flex items-center gap-1 text-white hover:text-accent transition-colors py-2"
-                        onClick={() => toggleMegaMenu(item.name)}
-                        onMouseEnter={() => setActiveMegaMenu(item.name)}
-                        onMouseLeave={() => setActiveMegaMenu(null)}
-                      >
-                        {item.name}
-                        <ChevronDown 
-                          size={16} 
-                          className={`transition-transform ${activeMegaMenu === item.name ? 'rotate-180 text-accent' : ''}`} 
-                        />
-                      </button>
-                    ) : (
-                      <Link 
-                        href={item.path} 
-                        className="text-white hover:text-accent active:text-accent focus:text-accent transition-colors py-2"
-                      >
-                        {item.name}
-                      </Link>
-                    )}
-
-                    {/* Mega Menu */}
-                    {item.megaMenu && item.children && (
-                      <AnimatePresence>
-                        {activeMegaMenu === item.name && (
-                          <motion.div
-                            className="absolute top-full left-0 mt-2 w-[780px] glass-card-strong p-5 rounded-xl"
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2 }}
-                            onMouseEnter={() => setActiveMegaMenu(item.name)}
-                            onMouseLeave={() => setActiveMegaMenu(null)}
-                          >
-                            <div className="grid grid-cols-[200px_1fr] gap-5">
-                              {/* Service Categories */}
-                              <div>
-                                <h3 className="text-xs uppercase tracking-wider text-accent mb-3">Categories</h3>
-                                <div className="space-y-2">
-                                  {item.children.map((child) => (
-                                    <Link
-                                      key={child.title}
-                                      href={child.link}
-                                      className="flex items-start gap-2 p-2 rounded-lg hover:bg-white/5 transition-colors group"
-                                    >
-                                      <div className="mt-0.5 text-accent">{child.icon}</div>
-                                      <div>
-                                        <h4 className="text-sm font-medium text-white group-hover:text-accent transition-colors">
-                                          {child.title}
-                                        </h4>
-                                        <p className="text-xs text-white/60 leading-tight">{child.description}</p>
-                                      </div>
-                                    </Link>
-                                  ))}
-                                </div>
-                              </div>
-
-                              {/* Package Tiers */}
-                              <div>
-                                <h3 className="text-xs uppercase tracking-wider text-accent mb-3">Service Packages</h3>
-                                <div className="grid grid-cols-3 gap-3">
-                                  {tiers.map((tier) => (
-                                    <Link
-                                      key={tier.name}
-                                      href={tier.link}
-                                      className={`p-3 rounded-lg transition-all ${
-                                        tier.featured
-                                          ? 'glass-card-accent'
-                                          : 'hover:bg-white/5'
-                                      }`}
-                                    >
-                                      <h4 className={`text-sm font-medium ${tier.featured ? 'text-accent' : 'text-white'}`}>
-                                        {tier.name}
-                                      </h4>
-                                      <p className="text-base font-heading font-bold mt-1">{tier.price}</p>
-                                      <p className="text-xs text-white/60 mt-1 leading-tight">{tier.description}</p>
-                                    </Link>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    )}
+                    <Link 
+                      href={item.path} 
+                      className="text-white hover:text-accent active:text-accent focus:text-accent transition-colors py-2"
+                    >
+                      {item.name}
+                    </Link>
                   </li>
                 ))}
               </ul>
 
               {/* CTA Button */}
-              <a
-                href="https://wa.me/27604964105?text=Hi%20Breed%20Industries!%20I'd%20like%20to%20book%20a%20strategy%20call."
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/network"
                 className="btn btn-primary"
               >
                 <MessageSquare size={16} className="mr-2" />
-                Book Strategy Call
-              </a>
+                Join the Network
+              </Link>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -314,83 +160,26 @@ export const Header = () => {
               <nav className="flex flex-col flex-1 overflow-y-auto pr-1">
                 {navItems.map((item) => (
                   <div key={item.name} className="border-b border-white/10 py-3">
-                    {item.megaMenu ? (
-                      <div>
-                        <button 
-                          className="flex items-center justify-between w-full text-white text-lg font-heading"
-                          onClick={() => toggleMegaMenu(item.name)}
-                        >
-                          {item.name}
-                          <ChevronDown 
-                            size={20} 
-                            className={`transition-transform ${activeMegaMenu === item.name ? 'rotate-180 text-accent' : ''}`} 
-                          />
-                        </button>
-                        
-                        {activeMegaMenu === item.name && item.children && (
-                          <div className="mt-3 bg-navy-dark/90 border-l-2 border-accent">
-                            <div className="py-1">
-                              {item.children.map((child) => (
-                              <Link 
-                                key={child.title} 
-                                href={child.link}
-                                className="flex items-center gap-3 text-white hover:text-accent py-3 px-4 border-b border-white/10"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                              >
-                                <div className="text-accent">{child.icon}</div>
-                                <span>{child.title}</span>
-                              </Link>
-                            ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <Link 
-                        href={item.path} 
-                        className="text-white text-lg font-heading hover:text-accent active:text-accent focus:text-accent block py-3"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    )}
+                    <Link 
+                      href={item.path} 
+                      className="text-white text-lg font-heading hover:text-accent active:text-accent focus:text-accent block py-3"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
                   </div>
                 ))}
                 
-                {/* Mobile Service Tiers */}
-                <div className="mt-6 pt-2">
-                  <h3 className="text-sm uppercase tracking-wider text-accent mb-4">Service Packages</h3>
-                  <div className="space-y-4">
-                    {tiers.map((tier) => (
-                      <Link 
-                        key={tier.name} 
-                        href={tier.link}
-                        className={`block p-4 rounded-lg ${
-                          tier.featured ? 'glass-card-accent' : 'glass-card-light'
-                        }`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <h4 className={`font-medium ${tier.featured ? 'text-accent' : 'text-white'}`}>
-                          {tier.name}
-                        </h4>
-                        <p className="text-lg font-heading font-bold mt-1">{tier.price}</p>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-                
                 {/* Mobile Contact */}
                 <div className="mt-6 flex flex-col gap-4">
-                  <a
-                    href="https://wa.me/27604964105?text=Hi%20Breed%20Industries!%20I'd%20like%20to%20book%20a%20strategy%20call."
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    href="/network"
                     className="btn btn-primary w-full justify-center"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <MessageSquare size={16} className="mr-2" />
-                    Book Strategy Call
-                  </a>
+                    Join the Network
+                  </Link>
                   
                   <div className="flex flex-col items-center gap-1">
                     <a 

@@ -35,7 +35,7 @@ export const Footer = () => {
             </Link>
             
             <p className="text-white/70 mb-6">
-              Premium South African business agency providing registration, branding, and digital solutions for ambitious entrepreneurs.
+              Breed Industries builds the infrastructure serious businesses run on - community, compliance, capital, and custom-built systems.
             </p>
             
             <div className="flex gap-4">
@@ -99,97 +99,46 @@ export const Footer = () => {
           <div className="md:col-span-2">
             <h3 className="text-white font-heading font-bold text-lg mb-6">Quick Links</h3>
             <ul className="space-y-3">
-              <li>
-                <Link href="/" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>Home</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>Services</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/build-package" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>Build Package</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/portfolio" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>Portfolio</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>About</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>Contact</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>Blog</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>FAQ</span>
-                </Link>
-              </li>
+              {[
+                { href: '/', label: 'Home' },
+                { href: '/network', label: 'Network' },
+                { href: '/services', label: 'Services' },
+                { href: '/tender-services', label: 'Tender Services' },
+                { href: '/portfolio', label: 'Portfolio' },
+                { href: '/about', label: 'About' },
+                { href: '/contact', label: 'Contact' },
+                { href: '/blog', label: 'Blog' },
+                { href: '/faq', label: 'FAQ' },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="text-white/70 hover:text-accent transition-colors flex items-center">
+                    <ChevronRight size={14} className="mr-1" />
+                    <span>{item.label}</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           
-          {/* Services */}
+          {/* Build Services */}
           <div className="md:col-span-3">
-            <h3 className="text-white font-heading font-bold text-lg mb-6">Our Services</h3>
+            <h3 className="text-white font-heading font-bold text-lg mb-6">Build Services</h3>
             <ul className="space-y-3">
-              <li>
-                <Link href="/services#business-setup" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>Business Setup</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/services#branding" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>Branding & Identity</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/services#digital" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>Digital Solutions</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/services#launch-starter" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>Launch Essentials</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/services#growth-professional" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>Growth Momentum</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/services#empire-premium" className="text-white/70 hover:text-accent transition-colors flex items-center">
-                  <ChevronRight size={14} className="mr-1" />
-                  <span>Empire Ascend</span>
-                </Link>
-              </li>
+              {[
+                { href: '/services#web-applications', label: 'Web Applications' },
+                { href: '/services#accreditation', label: 'Accreditation & Compliance' },
+                { href: '/services#tender-strategy', label: 'Tender Strategy' },
+                { href: '/tender-services', label: 'Tender Intelligence Engine' },
+                { href: '/network', label: 'The Breed Business Network' },
+                { href: '/network#isivuno', label: 'The Isivuno Fund' },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="text-white/70 hover:text-accent transition-colors flex items-center">
+                    <ChevronRight size={14} className="mr-1" />
+                    <span>{item.label}</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           

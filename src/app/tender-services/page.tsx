@@ -82,7 +82,7 @@ const packages = [
       'Application status tracking & updates',
       'Clarification queries handled by our team',
     ],
-    addons: ['+ From R1,200 per document set (tiered by tender value — see pricing below)'],
+    addons: ['+ From R1,200 per document set (tiered by tender value - see pricing below)'],
     cta: 'Start Applying',
   },
   {
@@ -163,7 +163,7 @@ const faqs = [
   },
   {
     q: 'How many tenders will I receive per month?',
-    a: 'It depends entirely on your profile — province, CIDB grade, and service categories. Clients in construction with KZN + GP typically see 15–40 matches per month. Niche service providers may see fewer but more targeted results.',
+    a: 'It depends entirely on your profile - province, CIDB grade, and service categories. Clients in construction with KZN + GP typically see 15–40 matches per month. Niche service providers may see fewer but more targeted results.',
   },
   {
     q: 'Can I upgrade or downgrade my package?',
@@ -175,11 +175,11 @@ const faqs = [
   },
   {
     q: 'How does the per-document-set fee work on Apply and Full?',
-    a: 'The fee applies per tender where we compile and submit the full bid document. On Tender Watch we only notify — no application charge. On Apply and Full, you choose which matched tenders to apply for and the per-document fee is tiered by tender value: R1,200 for tenders under R500k, R2,000 for R500k–R2M, and quote-based above R2M.',
+    a: 'The fee applies per tender where we compile and submit the full bid document. On Tender Watch we only notify - no application charge. On Apply and Full, you choose which matched tenders to apply for and the per-document fee is tiered by tender value: R1,200 for tenders under R500k, R2,000 for R500k–R2M, and quote-based above R2M.',
   },
   {
     q: 'Do you guarantee tender wins?',
-    a: 'No. No one can ethically guarantee that. What we guarantee is that your business is compliant, your bids are complete and on time, and that you\'re in front of every relevant opportunity — which is what most businesses miss out on.',
+    a: 'No. No one can ethically guarantee that. What we guarantee is that your business is compliant, your bids are complete and on time, and that you\'re in front of every relevant opportunity - which is what most businesses miss out on.',
   },
 ];
 
@@ -256,7 +256,7 @@ export default function TenderServicesPage() {
             ── TENDER WIN / TRACK RECORD ──────────────────────────────────
             Replace the copy below with a REAL, specific win as soon as you have
             one (e.g. "In March 2026 we helped [Client] secure a R[amount]
-            [department] contract for [scope]."). Keep it truthful — a real,
+            [department] contract for [scope]."). Keep it truthful - a real,
             named result here converts far better than a generic claim, and an
             invented one is a credibility risk.
           */}
@@ -268,7 +268,7 @@ export default function TenderServicesPage() {
               Our tender engine is live and already matching registered clients to live
               government opportunities across all nine provinces, every single day. We
               handle the monitoring, compliance and submission so our clients can focus on
-              delivering the work — and bid with confidence on contracts they&apos;d otherwise
+              delivering the work - and bid with confidence on contracts they&apos;d otherwise
               never have seen.
             </p>
           </div>

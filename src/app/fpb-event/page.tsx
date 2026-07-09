@@ -1,7 +1,7 @@
 import { SeatPicker } from '@/components/events/SeatPicker';
 
 export const metadata = {
-  title: 'FPB Event — Breed Industries',
+  title: 'FPB Event - Breed Industries',
   description: 'Select your seats for the FPB event',
 };
 

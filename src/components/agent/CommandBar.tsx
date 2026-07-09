@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Breed Industries — ⌘K Command Bar (the "whisper" interface)
+ * Breed Industries - ⌘K Command Bar (the "whisper" interface)
  * ──────────────────────────────────────────────────────────
  * Press ⌘K (Mac) / Ctrl+K (Windows) anywhere in the admin panel to summon the
  * super-agent. Type a request in plain English:
@@ -12,7 +12,7 @@
  *   "whatsapp 0821234567 that their documents are ready"
  *
  * Read requests answer instantly. Anything that changes data or sends a message
- * comes back as a confirm card — nothing happens until you click Confirm.
+ * comes back as a confirm card - nothing happens until you click Confirm.
  *
  * Mounted globally via src/app/admin/layout.tsx.
  */
@@ -76,7 +76,7 @@ export default function CommandBar() {
       if (!res.ok || !data.ok) {
         const msg =
           data?.error?.code === 'UNAUTHENTICATED'
-            ? 'Your session expired — please sign in again.'
+            ? 'Your session expired - please sign in again.'
             : data?.error?.message || 'Something went wrong.';
         setTurns((t) => [...t, { role: 'agent', text: msg }]);
         return;
@@ -86,7 +86,7 @@ export default function CommandBar() {
         { role: 'agent', text: data.reply, pending: confirm ? [] : data.pendingActions },
       ]);
     } catch {
-      setTurns((t) => [...t, { role: 'agent', text: 'Network error — try again.' }]);
+      setTurns((t) => [...t, { role: 'agent', text: 'Network error - try again.' }]);
     } finally {
       setLoading(false);
     }

@@ -9,7 +9,9 @@ import Link from 'next/link';
 
 const DEFAULT_REMINDER =
   `Hi {{name}} 👋\n\n` +
-  `This is a friendly reminder about *The Future Proof Business* event.\n\n` +
+  `This is a friendly reminder about *The Future-Proof Business* event.\n\n` +
+  `🗓️ Tuesday, 14 July 2026 — 10:00 AM\n` +
+  `📍 65 St Johns Ave, Nisbett Rd, Pinetown\n\n` +
   `🎟️ Booking Ref: *{{reference}}*\n` +
   `💺 Your Seats: {{seats}}\n\n` +
   `Please arrive 30 minutes early and have your booking reference ready at the door.\n\n` +

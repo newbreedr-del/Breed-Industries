@@ -19,7 +19,7 @@ const digitalProjects = [
     summary:
       'A production-grade AI-powered customer engagement platform built for African businesses. Features AI agents, WhatsApp Business integration, visual flow builder, knowledge base management, and real-time analytics. All in one dashboard.',
     highlights: ['AI chat agents with custom knowledge bases', 'WhatsApp Business API integration', 'Visual no-code workflow builder', 'Multi-channel analytics dashboard'],
-    result: 'Built in 3 weeks from concept to production. An ongoing platform that continues to grow — currently in active development with new features shipping regularly.',
+    result: 'Built in 3 weeks from concept to production. An ongoing platform that continues to grow - currently in active development with new features shipping regularly.',
     image: '/assets/images/portfolio/engage-africa-dashboard.png',
     screenshots: [
       '/assets/images/portfolio/engage-africa-dashboard.png',
@@ -38,7 +38,7 @@ const digitalProjects = [
     summary:
       'A full-featured faith-driven fashion e-commerce store. "Rooted in Faith, Growing in Purpose." Built with multi-payment support (Stripe, Paystack, PayPal), product filtering, wishlist functionality, and analytics including Facebook Pixel, TikTok Pixel, and Pinterest Tag.',
     highlights: ['Stripe, Paystack & PayPal checkout', 'Facebook, TikTok & Pinterest pixel tracking', 'Flash sale & countdown timer system', 'Full admin dashboard'],
-    result: 'Designed, built and delivered in 14 days. Full e-commerce store with multi-payment gateway, pixel tracking, and admin dashboard — from brief to live in two weeks.',
+    result: 'Designed, built and delivered in 14 days. Full e-commerce store with multi-payment gateway, pixel tracking, and admin dashboard - from brief to live in two weeks.',
     image: '/assets/images/portfolio/mlk-apparel-hero.png',
     screenshots: [
       '/assets/images/portfolio/mlk-apparel-hero.png',
@@ -55,7 +55,7 @@ const digitalProjects = [
     summary:
       'A purpose-built church management platform for House of Grace International. Features member management, event planning, task management, live video meetings with prayer requests, analytics & reports, and enterprise-grade security.',
     highlights: ['Live video meetings with chat & prayer requests', 'Member & attendance tracking', 'Event planning & volunteer management', 'Analytics, reports & task management'],
-    result: 'A complex, purpose-built platform currently in active development — over 2 months in the making. Live video, member management, event planning and analytics built specifically for House of Grace International.',
+    result: 'A complex, purpose-built platform currently in active development - over 2 months in the making. Live video, member management, event planning and analytics built specifically for House of Grace International.',
     image: '/assets/images/portfolio/hogi-church-home.png',
     screenshots: ['/assets/images/portfolio/hogi-church-home.png'],
     link: 'https://hogiagent.com',

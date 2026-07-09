@@ -9,9 +9,9 @@ import { BOOKING_URL } from '@/lib/booking';
 import { Calculator, Check, ClipboardList, Sparkles, Plus, Minus, FileText, Briefcase, Layers, Shield, CheckCircle2, Download, ArrowRight, Loader2, Send, Award, Bot, Eye, TrendingUp, Rocket } from 'lucide-react';
 
 const retainerOptions = [
-  { id: 'business-watch', name: 'Business Watch (Monthly)', price: 650, pricingType: 'monthly', icon: <Eye size={16} />, description: 'Monitoring only (no implementation): monthly funding & accreditation monitoring — stay ahead of grants, compliance deadlines, and new accreditation opportunities.' },
+  { id: 'business-watch', name: 'Business Watch (Monthly)', price: 650, pricingType: 'monthly', icon: <Eye size={16} />, description: 'Monitoring only (no implementation): monthly funding & accreditation monitoring - stay ahead of grants, compliance deadlines, and new accreditation opportunities.' },
   { id: 'business-growth-essentials', name: 'Business Growth Essentials (Monthly)', price: 950, pricingType: 'monthly', icon: <TrendingUp size={16} />, description: 'Monthly retainer: compliance monitoring + social media content support + monthly strategy check-in. General business growth, not tender-specific.' },
-  { id: 'brand-launch-package', name: 'Brand Launch Package', price: 2999, pricingType: 'one-time', icon: <Rocket size={16} />, description: 'CIPC Registration + Basic Logo + Starter Business Profile + 250 Business Cards. Everything to launch your brand — R3,700 value, save R700 vs buying separately.' },
+  { id: 'brand-launch-package', name: 'Brand Launch Package', price: 2999, pricingType: 'one-time', icon: <Rocket size={16} />, description: 'CIPC Registration + Basic Logo + Starter Business Profile + 250 Business Cards. Everything to launch your brand - R3,700 value, save R700 vs buying separately.' },
   { id: 'tender-growth-package', name: 'Tender Growth Package (Monthly)', price: 1950, pricingType: 'monthly', icon: <Award size={16} />, description: 'Full compliance setup + monthly tender monitoring + social media + strategy. The bundle for businesses that want both growth support and government contract opportunities.' },
 ];
 
@@ -20,11 +20,11 @@ const complianceOptions = [
   { id: 'tax', name: 'Tax Compliance', price: 850, pricingType: 'one-time', icon: <FileText size={16} />, description: 'SARS tax registration, income tax number, and initial tax compliance setup' },
   { id: 'bee', name: 'BEE Certification', price: 250, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Basic BEE verification certificate and scorecard for procurement opportunities' },
   { id: 'csd', name: 'CSD Registration', price: 450, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Central Supplier Database registration for government tender opportunities. Required documents: CIPC registration certificate, tax clearance, BEE certificate, banking details, and director ID copies' },
-  { id: 'coida', name: 'COIDA Registration & Assessment', price: 2490, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Full COIDA registration, assessment calculation, and Letter of Good Standing — covers workplace injury compensation compliance' },
-  { id: 'cidb-1', name: 'CIDB Registration — Grade 1', price: 950, pricingType: 'one-time', icon: <FileText size={16} />, description: 'CIDB contractor registration at Grade 1 level — basic online registration for emerging contractors (contracts up to R200K)' },
-  { id: 'cidb-2-4', name: 'CIDB Registration — Grade 2 to 4', price: 2000, pricingType: 'one-time', priceFrom: true, icon: <FileText size={16} />, description: 'CIDB grading for Grades 2–4 — requires track records, project invoices, and simple financials (R2,000–R4,500)' },
-  { id: 'cidb-5-7', name: 'CIDB Registration — Grade 5 to 7', price: 4500, pricingType: 'one-time', priceFrom: true, icon: <FileText size={16} />, description: 'CIDB grading for Grades 5–7 — complex financials, net asset value, multi-million Rand project certificates (R4,500–R9,500)' },
-  { id: 'cidb-8-9', name: 'CIDB Registration — Grade 8 to 9', price: 15000, pricingType: 'one-time', priceFrom: true, icon: <FileText size={16} />, description: 'CIDB grading for Grades 8–9 — corporate-level financials, major track record verification, custom quote (from R15,000)' },
+  { id: 'coida', name: 'COIDA Registration & Assessment', price: 2490, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Full COIDA registration, assessment calculation, and Letter of Good Standing - covers workplace injury compensation compliance' },
+  { id: 'cidb-1', name: 'CIDB Registration - Grade 1', price: 950, pricingType: 'one-time', icon: <FileText size={16} />, description: 'CIDB contractor registration at Grade 1 level - basic online registration for emerging contractors (contracts up to R200K)' },
+  { id: 'cidb-2-4', name: 'CIDB Registration - Grade 2 to 4', price: 2000, pricingType: 'one-time', priceFrom: true, icon: <FileText size={16} />, description: 'CIDB grading for Grades 2–4 - requires track records, project invoices, and simple financials (R2,000–R4,500)' },
+  { id: 'cidb-5-7', name: 'CIDB Registration - Grade 5 to 7', price: 4500, pricingType: 'one-time', priceFrom: true, icon: <FileText size={16} />, description: 'CIDB grading for Grades 5–7 - complex financials, net asset value, multi-million Rand project certificates (R4,500–R9,500)' },
+  { id: 'cidb-8-9', name: 'CIDB Registration - Grade 8 to 9', price: 15000, pricingType: 'one-time', priceFrom: true, icon: <FileText size={16} />, description: 'CIDB grading for Grades 8–9 - corporate-level financials, major track record verification, custom quote (from R15,000)' },
   { id: 'uif', name: 'UIF Registration & Compliance Letter', price: 650, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Unemployment Insurance Fund registration and compliance documentation' },
   { id: 'annual', name: 'CIPC Annual Return', price: 450, pricingType: 'one-time', icon: <FileText size={16} />, description: 'Annual CIPC return filing to maintain company compliance and good standing' },
 ];
@@ -69,8 +69,8 @@ const tenderOptions = [
 ];
 
 const platformOptions = [
-  { id: 'platform-starter',   name: 'AI Platform — Starter',        price: 9500,  pricingType: 'one-time', icon: <Sparkles size={16} />, description: 'WhatsApp Business API integration, AI-powered conversation inbox, basic AI agent, contact management, and analytics dashboard. White-label branded to your business.' },
-  { id: 'platform-pro',       name: 'AI Platform — Pro',             price: 18500, pricingType: 'one-time', icon: <Sparkles size={16} />, description: 'Everything in Starter plus visual automation flow builder, knowledge base with AI document indexing, message templates, team assignment, and advanced analytics.' },
+  { id: 'platform-starter',   name: 'AI Platform - Starter',        price: 9500,  pricingType: 'one-time', icon: <Sparkles size={16} />, description: 'WhatsApp Business API integration, AI-powered conversation inbox, basic AI agent, contact management, and analytics dashboard. White-label branded to your business.' },
+  { id: 'platform-pro',       name: 'AI Platform - Pro',             price: 18500, pricingType: 'one-time', icon: <Sparkles size={16} />, description: 'Everything in Starter plus visual automation flow builder, knowledge base with AI document indexing, message templates, team assignment, and advanced analytics.' },
   { id: 'platform-mobile',    name: 'Mobile App (iOS & Android)',    price: 15000, pricingType: 'one-time', icon: <Sparkles size={16} />, description: 'React Native cross-platform mobile app for iOS and Android. Mirrors the platform inbox, real-time push notifications, reply to conversations, and contact view.' },
   { id: 'platform-app-store', name: 'App Store Submission (Both)',   price: 2500,  pricingType: 'one-time', icon: <Sparkles size={16} />, description: 'Full App Store and Google Play submission: developer account setup, store listing, screenshots, descriptions, and approval management for both platforms.' },
   { id: 'platform-hosting',   name: 'Platform Hosting',              price: 1500,  pricingType: 'monthly',  icon: <Sparkles size={16} />, description: 'Monthly infrastructure hosting on Railway. Covers server uptime, database backups, SSL, and uptime monitoring. Required for all deployed platforms.' },
@@ -122,7 +122,7 @@ const builderSteps = [
   {
     id: 'platform',
     title: 'AI platforms & automation',
-    description: 'Deploy a white-label AI-powered WhatsApp engagement platform for your business — with optional mobile app for iOS and Android.',
+    description: 'Deploy a white-label AI-powered WhatsApp engagement platform for your business - with optional mobile app for iOS and Android.',
     options: platformOptions,
     icon: <Bot className="w-5 h-5" />,
     shortLabel: 'AI Platform',
@@ -130,7 +130,7 @@ const builderSteps = [
   {
     id: 'retainer',
     title: 'Ongoing support & retainers',
-    description: 'Monthly and bundled packages for ongoing business support, compliance monitoring, and growth — add these once your foundation is in place.',
+    description: 'Monthly and bundled packages for ongoing business support, compliance monitoring, and growth - add these once your foundation is in place.',
     options: retainerOptions,
     icon: <TrendingUp className="w-5 h-5" />,
     shortLabel: 'Retainers',
@@ -188,10 +188,10 @@ const clientRequirementsMap: Record<string, string[]> = {
   'BEE Certification': ['Latest financial statements or management accounts', 'Signed BEE declaration (EME/QSE affidavit)', 'Payroll records (if applicable)', 'Skills development records'],
   'CSD Registration': ['CIPC registration certificate', 'Tax clearance certificate', 'BEE certificate or affidavit', 'Banking details and bank letter', 'Certified ID copies of all directors', 'Proof of business address'],
   'COIDA Registration & Assessment': ['CIPC registration documents', 'Annual payroll / wage bill (total gross earnings of all employees)', 'Employee schedule (names, ID numbers, job titles, monthly earnings)', 'Nature of business / industry classification (SIC code if known)', 'Number of employees (permanent, temporary, and contract)', 'Director / owner ID copies', 'Previous COIDA documentation (if renewing)'],
-  'CIDB Registration — Grade 1': ['CIPC / CK documents', 'Director / owner ID copies', 'CSD registration number', 'Tax clearance certificate or tax pin'],
-  'CIDB Registration — Grade 2 to 4': ['CIPC / CK documents', 'Director / owner ID copies', 'CSD number', 'Tax clearance certificate', 'Track record / completed project invoices', 'Simple financial statements (signed by accountant)', 'COIDA Letter of Good Standing'],
-  'CIDB Registration — Grade 5 to 7': ['CIPC / CK documents', 'Director / owner ID copies', 'CSD number', 'Tax clearance certificate', 'Audited financial statements (showing net asset value)', 'Multi-million Rand project completion certificates', 'COIDA Letter of Good Standing', 'SARS tax compliance status'],
-  'CIDB Registration — Grade 8 to 9': ['CIPC / CK documents and shareholding structure', 'Director ID copies', 'CSD number', 'Full audited financials (2–3 years)', 'Major project completion certificates', 'COIDA Letter of Good Standing', 'SARS full tax compliance', 'Net asset value & financial capacity analysis', 'BEE certificate', 'Organogram & key personnel CVs'],
+  'CIDB Registration - Grade 1': ['CIPC / CK documents', 'Director / owner ID copies', 'CSD registration number', 'Tax clearance certificate or tax pin'],
+  'CIDB Registration - Grade 2 to 4': ['CIPC / CK documents', 'Director / owner ID copies', 'CSD number', 'Tax clearance certificate', 'Track record / completed project invoices', 'Simple financial statements (signed by accountant)', 'COIDA Letter of Good Standing'],
+  'CIDB Registration - Grade 5 to 7': ['CIPC / CK documents', 'Director / owner ID copies', 'CSD number', 'Tax clearance certificate', 'Audited financial statements (showing net asset value)', 'Multi-million Rand project completion certificates', 'COIDA Letter of Good Standing', 'SARS tax compliance status'],
+  'CIDB Registration - Grade 8 to 9': ['CIPC / CK documents and shareholding structure', 'Director ID copies', 'CSD number', 'Full audited financials (2–3 years)', 'Major project completion certificates', 'COIDA Letter of Good Standing', 'SARS full tax compliance', 'Net asset value & financial capacity analysis', 'BEE certificate', 'Organogram & key personnel CVs'],
   'UIF Registration & Compliance Letter': ['CIPC registration documents', 'Employee details (ID numbers, start dates)', 'Monthly payroll figures', 'Employer banking details'],
   'CIPC Annual Return': ['CIPC customer code and password', 'Current registered office address confirmation', 'Director changes (if any)', 'Annual return fee (paid to CIPC)'],
   'Basic Logo Design': ['Brand name and tagline (if applicable)', 'Preferred colours and style references', 'Industry and target audience description', 'Any existing brand assets'],

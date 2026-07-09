@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { Award, Users2, Target, Lightbulb, Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About Us | Breed Industries - Business Agency Durban & Johannesburg',
-  description: 'Meet the team behind Breed Industries. Founded in Durban, we help entrepreneurs launch investment-ready businesses across South Africa with registration, branding, and digital solutions.',
+  title: 'About | Breed Industries - From PINC to a Business Ecosystem',
+  description: 'Breed Industries grew out of PINC Community NPC - a community infrastructure model applied to business. A network, a community-pooled funding mechanism, and a digital build team for serious South African owners.',
   keywords: ['about Breed Industries', 'business agency Durban', 'startup launch South Africa', 'business consultancy Durban', 'entrepreneur support South Africa'],
   alternates: { canonical: 'https://thebreed.co.za/about' },
   openGraph: {
@@ -20,18 +20,18 @@ export const metadata: Metadata = {
 
 const values = [
   {
-    title: 'Credibility First',
-    description: 'We build businesses that pass due diligence, impress investors, and win procurement bids.',
+    title: 'Build, don\'t talk',
+    description: 'We don\'t lecture about entrepreneurship. We register, file, deploy, and ship - and we expect members to do the same.',
     icon: <Award className="w-5 h-5 text-accent" />,
   },
   {
-    title: 'Velocity & Clarity',
-    description: 'Every engagement has clear milestones, documented deliverables, and rapid iteration cycles.',
+    title: 'Community over committee',
+    description: 'The Isivuno Fund is run by members, not a panel. Decisions are public, votes are transparent, accountability is shared.',
     icon: <Target className="w-5 h-5 text-accent" />,
   },
   {
-    title: 'Design-Led Innovation',
-    description: 'Our creatives and engineers co-design solutions so form and function are perfectly aligned.',
+    title: 'Infrastructure, not theatre',
+    description: 'A real business needs compliance, capital, and systems that don\'t collapse under pressure. That\'s what we build.',
     icon: <Lightbulb className="w-5 h-5 text-accent" />,
   },
 ];
@@ -60,15 +60,15 @@ export default function AboutPage() {
       <Header />
 
       <PageHero
-        title="The Empire Behind the Blueprint"
+        title="From fixing streets to building businesses"
         subtitle="About Breed Industries"
-        description="We translate visionary ideas into compliant, investment-ready brands built for the African market and beyond."
+        description="We started by organising communities to fix infrastructure. We apply the same model to business - because most South African businesses don't fail because of bad ideas. They fail because the infrastructure underneath them was never properly built."
         breadcrumbs={[{ label: 'About', href: '/about' }]}
         backgroundImage="/assets/images/about-hero.jpg"
         align="left"
       >
-        <Link href="/contact" className="btn btn-primary">
-          Let’s Talk
+        <Link href="/network" className="btn btn-primary">
+          Join the Network
         </Link>
       </PageHero>
 
@@ -76,15 +76,18 @@ export default function AboutPage() {
         <div className="absolute inset-0 grid-overlay"></div>
         <div className="container mx-auto px-4 relative z-10 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-start">
           <div className="glass-card p-8 space-y-6">
-            <h2 className="text-3xl font-heading font-bold text-white">Our Origin Story</h2>
+            <h2 className="text-3xl font-heading font-bold text-white">From PINC to Breed</h2>
             <p className="text-white/70 text-lg">
-              Breed Industries was registered in 2021 (Reg: 2021/963126/07) with a simple but contrarian observation: everyone was talking about unemployment, but very few people were building the businesses that actually create jobs.
+              Breed Industries grew out of <span className="text-accent font-semibold">PINC Community NPC</span> - an organisation that fixed real infrastructure: streets, lights, public spaces. The method was simple. Organise the community, agree on the problem, fix the problem, document the work.
             </p>
             <p className="text-white/60">
-              Founder Sabelo Mandubu chose a different path. Working alongside private organisations, NPOs, NGOs, and municipal structures connected to community development across KwaZulu-Natal, he set out to remove every barrier between a South African entrepreneur and a fully operational, compliant, market-ready business — not by talking about it, by building it.
+              We took the same model and applied it to business. Most South African businesses don't fail because of bad ideas. They fail because of three systemic problems: financial illiteracy, accreditation gaps, and the absence of any succession plan. Owners don't know their numbers. They miss tenders because of one missing certificate. And when the founder steps back, the whole thing collapses because nothing was ever documented.
             </p>
             <p className="text-white/60">
-              Five years later, Breed Industries has processed over 250 registrations and accreditations, serves approximately 45 active clients, and operates across Durban and Johannesburg — supporting everyone from first-time entrepreneurs registering their first company to established SMEs upgrading their CIDB grade and winning government contracts.
+              Breed Industries was registered in 2021 (Reg: 2021/963126/07) to solve all three - not by selling courses or templates, but by building a community, a funding mechanism, and a digital infrastructure team that members can actually use.
+            </p>
+            <p className="text-white/60">
+              Five years in: 250+ registrations and accreditations processed, ~45 active clients, two hubs (Durban &amp; Johannesburg), and a partner network that now includes <span className="text-white">Peter William Mather</span> - bringing lobbying, safety management, ISO quality standards, and formal training frameworks into the ecosystem.
             </p>
             <div className="flex flex-wrap gap-4">
               <div className="rounded-lg border border-white/10 bg-white/5 p-4">
