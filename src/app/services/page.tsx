@@ -12,7 +12,7 @@ const CONTACT_HREF = '/contact?subject=Scope%20a%20project';
 
 export const metadata: Metadata = {
   title: 'Services | Systems, Funding Navigation & Ventures | Breed Industries',
-  description: 'Breed Industries diagnoses what limits your business and builds the fix — technical systems, compliance, training frameworks. We navigate funding that already exists. And for the right businesses, we invest.',
+  description: 'Breed Industries diagnoses what limits your business and builds the fix - technical systems, compliance, training frameworks. We navigate funding that already exists. And for the right businesses, we invest.',
   keywords: ['business systems South Africa', 'SEDA funding navigation', 'NYDA grants South Africa', 'NEF IDC funding', 'B-BBEE enterprise development', 'web applications Durban', 'compliance CIPC SARS', 'equity partnership South Africa', 'Breed Ventures'],
   alternates: { canonical: 'https://thebreed.co.za/services' },
   openGraph: {
@@ -28,9 +28,9 @@ const pillars = [
     title: 'Business Systems',
     icon: <Wrench className="w-8 h-8 text-accent" />,
     tagline: 'We find what\'s limiting you. Then we build the fix.',
-    description: 'We go into your business, map the constraint — whether it\'s technical, operational, compliance-related, or structural — and build the system to fix it. Not a package. Not a template. The actual thing.',
+    description: 'We go into your business, map the constraint - whether it\'s technical, operational, compliance-related, or structural - and build the system to fix it. Not a package. Not a template. The actual thing.',
     deliverables: [
-      'Business diagnosis workshop — map the constraint before quoting',
+      'Business diagnosis workshop - map the constraint before quoting',
       'Custom web applications & admin platforms',
       'E-commerce with SA payment gateways (Stripe, Paystack)',
       'AI agents, chatbots & WhatsApp automation',
@@ -39,9 +39,9 @@ const pillars = [
       'Partner-delivered solutions (ISO, safety management, HR systems)',
     ],
     process: [
-      'Diagnosis session — we map what\'s limiting growth before quoting',
-      'Fixed-scope proposal — clear deliverables, no hidden extras',
-      'Build or implementation — sprint-based with weekly check-ins',
+      'Diagnosis session - we map what\'s limiting growth before quoting',
+      'Fixed-scope proposal - clear deliverables, no hidden extras',
+      'Build or implementation - sprint-based with weekly check-ins',
       'Handover, training, and ongoing support',
     ],
     examples: [
@@ -55,21 +55,21 @@ const pillars = [
     title: 'Funding & Programme Navigation',
     icon: <Search className="w-8 h-8 text-accent" />,
     tagline: 'The money exists. We help you find it and qualify for it.',
-    description: 'Most businesses don\'t know what government and private funding is available to them — or they don\'t qualify yet because of compliance gaps. We map the landscape, close the gaps, and navigate the application process alongside you. We\'re the navigator. Not the bank.',
+    description: 'Most businesses don\'t know what government and private funding is available to them - or they don\'t qualify yet because of compliance gaps. We map the landscape, close the gaps, and navigate the application process alongside you. We\'re the navigator. Not the bank.',
     deliverables: [
-      'Funding landscape assessment — what you qualify for right now',
-      'SEDA — enterprise development grants & business support',
-      'NYDA — youth business funding and incubation programmes',
-      'NEF — black business equity financing',
-      'IDC — industrial development and sector funding',
-      'SETA grants — skills development funding for employers',
+      'Funding landscape assessment - what you qualify for right now',
+      'SEDA - enterprise development grants & business support',
+      'NYDA - youth business funding and incubation programmes',
+      'NEF - black business equity financing',
+      'IDC - industrial development and sector funding',
+      'SETA grants - skills development funding for employers',
       'B-BBEE enterprise & supplier development funds',
       'Application preparation and submission support',
     ],
     process: [
-      'Eligibility assessment — what you qualify for now vs. post-compliance',
-      'Compliance alignment — CIPC, SARS, B-BBEE, CSD closed where needed',
-      'Application preparation — business plans, financials, motivation letters',
+      'Eligibility assessment - what you qualify for now vs. post-compliance',
+      'Compliance alignment - CIPC, SARS, B-BBEE, CSD closed where needed',
+      'Application preparation - business plans, financials, motivation letters',
       'Submission management and follow-up',
     ],
     examples: null,
@@ -81,18 +81,18 @@ const pillars = [
     tagline: 'For the right businesses, we don\'t just build. We invest.',
     description: 'When we see a business with real potential and the right operator behind it, we take an equity stake and grow alongside you. For the right ideas, we build from scratch under the Breed umbrella. Minimum 10% equity. Assessed by Directors and Partners. Deal structures include sweat equity, revenue share, and convertible agreements.',
     deliverables: [
-      'Investment Assessment Scorecard — structured evaluation by Directors & Partners',
-      'Term Sheet — non-binding equity proposal',
-      'Equity Partnership Agreement — formal binding deal',
+      'Investment Assessment Scorecard - structured evaluation by Directors & Partners',
+      'Term Sheet - non-binding equity proposal',
+      'Equity Partnership Agreement - formal binding deal',
       'R950/month management retainer (compliance, admin, processing)',
       'Two investment tracks: client equity partnership or Breed-built portfolio company',
       'Ongoing operational support and network access',
       'Access to Breed partner ecosystem (lobbying, ISO, safety, training)',
     ],
     process: [
-      'Expression of interest — brief conversation to understand the business',
-      'Scorecard evaluation — Directors & Partners assess 6 weighted criteria',
-      'Term Sheet presentation — if score qualifies (minimum 50%)',
+      'Expression of interest - brief conversation to understand the business',
+      'Scorecard evaluation - Directors & Partners assess 6 weighted criteria',
+      'Term Sheet presentation - if score qualifies (minimum 50%)',
       'Due diligence and Equity Partnership Agreement signing',
     ],
     examples: null,
@@ -108,7 +108,7 @@ export default function ServicesPage() {
       <PageHero
         title="How we work"
         subtitle="Our Services"
-        description="Diagnose what's limiting your business. Build the systems to fix it. Find the funding that already exists. And for the right businesses — invest."
+        description="Diagnose what's limiting your business. Build the systems to fix it. Find the funding that already exists. And for the right businesses - invest."
         breadcrumbs={[{ label: 'Services', href: '/services' }]}
         backgroundImage="/assets/images/about-hero.jpg"
         align="left"
@@ -233,7 +233,7 @@ export default function ServicesPage() {
               Not sure where to start?
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto mb-6">
-              Most engagements begin with a conversation. Tell us where the business is and what it&apos;s running into —
+              Most engagements begin with a conversation. Tell us where the business is and what it&apos;s running into -
               we&apos;ll tell you what we can actually do about it.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

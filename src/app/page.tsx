@@ -65,7 +65,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.25 }}
             >
-              We diagnose what&apos;s limiting your business, build the systems to fix it, find the funding that already exists to accelerate it — and for the right businesses, we invest.
+              We diagnose what&apos;s limiting your business, build the systems to fix it, find the funding that already exists to accelerate it - and for the right businesses, we invest.
             </motion.p>
 
             <motion.div
@@ -129,7 +129,7 @@ export default function Home() {
 
           <div className="mt-12 text-center">
             <p className="text-white/80 text-lg max-w-2xl mx-auto">
-              Breed Industries exists to solve <span className="text-accent font-semibold">all three</span> — through diagnosis, the right systems, and access to capital that already exists.
+              Breed Industries exists to solve <span className="text-accent font-semibold">all three</span> - through diagnosis, the right systems, and access to capital that already exists.
             </p>
           </div>
         </div>
@@ -174,7 +174,7 @@ export default function Home() {
                 <p className="text-accent text-xs uppercase tracking-widest font-bold mb-2">02 · Access</p>
                 <h3 className="text-2xl font-heading font-bold text-white mb-3">Funding & Programme Navigation</h3>
                 <p className="text-white/65 text-sm leading-relaxed mb-5 flex-1">
-                  We find the money and programmes that already exist and help you qualify for them. SEDA, NYDA, NEF, IDC, SETA grants, B-BBEE enterprise development funds. We&apos;re the navigator — not the bank.
+                  We find the money and programmes that already exist and help you qualify for them. SEDA, NYDA, NEF, IDC, SETA grants, B-BBEE enterprise development funds. We&apos;re the navigator - not the bank.
                 </p>
                 <div className="flex items-center text-accent font-medium text-sm">
                   Talk To Us
@@ -238,7 +238,7 @@ export default function Home() {
               {
                 icon: <Search className="w-6 h-6 text-accent" />,
                 title: 'Funding & Programme Navigation',
-                description: 'We find the funding that already exists for your business and help you qualify for it — SEDA, NYDA, NEF, IDC, SETA grants, B-BBEE enterprise development funds.',
+                description: 'We find the funding that already exists for your business and help you qualify for it - SEDA, NYDA, NEF, IDC, SETA grants, B-BBEE enterprise development funds.',
                 items: ['Funding landscape assessment', 'SEDA, NYDA, NEF & IDC access', 'SETA grants & skills funding', 'B-BBEE enterprise development funds'],
                 href: '/contact',
               },
