@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
-import { Trash2, Plus, Users, Armchair, Search, X, CheckCircle, AlertTriangle, MessageCircle, Send, Loader2 } from 'lucide-react';
+import { Trash2, Plus, Users, Armchair, Search, X, CheckCircle, AlertTriangle, MessageCircle, Send, Loader2, Download } from 'lucide-react';
 import Link from 'next/link';
 
 const DEFAULT_REMINDER =
@@ -205,6 +205,37 @@ export default function AdminBookingsPage() {
     setTimeout(() => setToast(''), 4000);
   }
 
+  function toInternational(phone: string) {
+    const digits = phone.replace(/\D/g, '');
+    if (digits.startsWith('27')) return digits;
+    if (digits.startsWith('0')) return '27' + digits.slice(1);
+    return digits;
+  }
+
+  function downloadCSV() {
+    const rows = [
+      ['phone', 'name', 'fullName', 'reference', 'seats', 'seat_count', 'email', 'date'],
+      ...filtered.map((b) => [
+        b.phone ? toInternational(b.phone) : '',
+        b.first_name,
+        `${b.first_name} ${b.last_name}`,
+        b.reference,
+        b.seats,
+        b.seat_count,
+        b.email,
+        new Date(b.created_at).toLocaleDateString('en-ZA'),
+      ]),
+    ];
+    const csv = rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `bookings-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   const filtered = bookings.filter((b) => {
     const q = search.toLowerCase();
     return (
@@ -287,6 +318,14 @@ export default function AdminBookingsPage() {
                 </button>
               )}
             </div>
+            <button
+              onClick={downloadCSV}
+              className="flex items-center gap-2 px-4 py-2.5 bg-gray-700 text-white rounded-lg text-sm font-bold hover:bg-gray-600 transition-colors"
+              title="Download as CSV (ready for bulk WA sender)"
+            >
+              <Download size={16} />
+              Export CSV
+            </button>
             <button
               onClick={() => { setReminderType('event'); setReminderMessage(DEFAULT_REMINDER); setReminderTarget('all'); }}
               className="flex items-center gap-2 px-4 py-2.5 bg-green-600 text-white rounded-lg text-sm font-bold hover:bg-green-700 transition-colors"
