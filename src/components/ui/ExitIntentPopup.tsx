@@ -85,17 +85,17 @@ export function ExitIntentPopup() {
               <Users size={24} style={{ color: '#FF9F00' }} />
             </div>
             <h3 className="text-white text-2xl font-bold mb-2">
-              The Breed Business Network is open.
+              Breed Industries builds the infrastructure serious businesses run on.
             </h3>
             <p className="text-white/60 text-sm leading-relaxed">
-              Join 250+ South African business owners getting the tools, training, and community they need to grow. Not someday — now.
+              We diagnose what&apos;s limiting your business, build the systems to fix it, and find the funding that already exists to accelerate it.
             </p>
           </div>
 
           {/* Two CTAs */}
           <div className="grid grid-cols-2 gap-3 mb-6">
             <Link
-              href="/network"
+              href="/services"
               onClick={handleDismiss}
               className="group rounded-xl p-4 transition-all hover:scale-[1.02]"
               style={{ background: 'rgba(255,159,0,0.1)', border: '1px solid rgba(255,159,0,0.3)' }}
@@ -103,15 +103,15 @@ export function ExitIntentPopup() {
               <div className="flex items-center gap-2 mb-2">
                 <Users size={14} style={{ color: '#FF9F00' }} />
                 <span style={{ color: '#FF9F00' }} className="text-xs font-bold uppercase tracking-wide">
-                  The Network
+                  How We Work
                 </span>
               </div>
-              <p className="text-white font-bold text-sm mb-1">Join the Network</p>
+              <p className="text-white font-bold text-sm mb-1">See Our Services</p>
               <p className="text-white/50 text-xs leading-relaxed">
-                From R950/month. No lock-in. Cancel anytime.
+                Systems, funding navigation, and equity partnerships.
               </p>
               <div className="flex items-center gap-1 mt-3 text-xs" style={{ color: '#FF9F00' }}>
-                See membership tiers <ArrowRight size={12} />
+                Explore the pillars <ArrowRight size={12} />
               </div>
             </Link>
 
@@ -142,9 +142,9 @@ export function ExitIntentPopup() {
           {/* Pillars */}
           <div className="grid grid-cols-3 gap-2 mb-5">
             {[
-              'Education & training events',
-              'Isivuno community fund',
-              'Compliance & web infrastructure',
+              'Diagnose & build systems',
+              'Funding & programme navigation',
+              'Breed Ventures equity partnerships',
             ].map((item) => (
               <div key={item} className="flex items-start gap-1.5">
                 <div className="w-1 h-1 rounded-full mt-1.5 flex-shrink-0" style={{ background: '#FF9F00' }} />

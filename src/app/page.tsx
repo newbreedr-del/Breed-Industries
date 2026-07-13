@@ -6,8 +6,8 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  ChevronRight, ArrowRight, Users, Coins, Wrench,
-  Code2, ShieldCheck, FileSearch, CheckCircle2, Quote
+  ChevronRight, ArrowRight, Wrench, TrendingUp,
+  Code2, ShieldCheck, CheckCircle2, Quote, Search
 } from 'lucide-react';
 
 export default function Home() {
@@ -42,7 +42,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              Community · Capital · Infrastructure
+              Diagnose · Build · Access · Invest
             </motion.p>
 
             <motion.h2
@@ -65,7 +65,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.25 }}
             >
-              We are not a marketing agency. We are an ecosystem - community, capital, and infrastructure for serious South African business owners.
+              We diagnose what&apos;s limiting your business, build the systems to fix it, find the funding that already exists to accelerate it — and for the right businesses, we invest.
             </motion.p>
 
             <motion.div
@@ -74,8 +74,8 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <Link href="/network" className="btn btn-primary">
-                Join the Network
+              <Link href="/contact" className="btn btn-primary">
+                Work With Us
                 <ChevronRight size={16} className="ml-1" />
               </Link>
 
@@ -129,76 +129,73 @@ export default function Home() {
 
           <div className="mt-12 text-center">
             <p className="text-white/80 text-lg max-w-2xl mx-auto">
-              Breed Industries exists to solve <span className="text-accent font-semibold">all three</span> - through one connected ecosystem.
+              Breed Industries exists to solve <span className="text-accent font-semibold">all three</span> — through diagnosis, the right systems, and access to capital that already exists.
             </p>
           </div>
         </div>
       </section>
 
-      {/* The Ecosystem - three entry points */}
+      {/* How We Work - three pillars */}
       <section className="py-20 relative">
         <div className="absolute inset-0 grid-overlay"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-14">
-            <p className="text-accent text-sm uppercase tracking-widest font-medium mb-3">The Ecosystem</p>
+            <p className="text-accent text-sm uppercase tracking-widest font-medium mb-3">How We Work</p>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
               Three pillars. One outcome: <span className="text-accent">a business that lasts.</span>
             </h2>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {/* Network */}
-            <Link href="/network" className="group">
-              <div className="glass-card p-8 h-full flex flex-col transition-all duration-300 group-hover:-translate-y-2 group-hover:ring-1 group-hover:ring-accent/40">
-                <div className="w-14 h-14 rounded-full bg-accent/15 flex items-center justify-center mb-5">
-                  <Users className="w-7 h-7 text-accent" />
-                </div>
-                <p className="text-accent text-xs uppercase tracking-widest font-bold mb-2">01 · Community</p>
-                <h3 className="text-2xl font-heading font-bold text-white mb-3">The Breed Business Network</h3>
-                <p className="text-white/65 text-sm leading-relaxed mb-5 flex-1">
-                  Monthly retainer. Access to education, peers, compliance support, and the tools that keep a business running.
-                  Pay to grow - not to start. Four tiers from R950 to R3,200 per month.
-                </p>
-                <div className="flex items-center text-accent font-medium text-sm">
-                  Explore the Network
-                  <ArrowRight size={14} className="ml-2 transition-transform group-hover:translate-x-1" />
-                </div>
-              </div>
-            </Link>
-
-            {/* Isivuno */}
-            <Link href="/network#isivuno" className="group">
-              <div className="glass-card p-8 h-full flex flex-col transition-all duration-300 group-hover:-translate-y-2 group-hover:ring-1 group-hover:ring-accent/40">
-                <div className="w-14 h-14 rounded-full bg-accent/15 flex items-center justify-center mb-5">
-                  <Coins className="w-7 h-7 text-accent" />
-                </div>
-                <p className="text-accent text-xs uppercase tracking-widest font-bold mb-2">02 · Capital</p>
-                <h3 className="text-2xl font-heading font-bold text-white mb-3">The Isivuno Fund</h3>
-                <p className="text-white/65 text-sm leading-relaxed mb-5 flex-1">
-                  Isivuno - isiZulu for harvest. A community-pooled capital fund. Compliant, trained, contributing members
-                  apply for funding banks would never approve. 60% community vote decides who gets funded.
-                </p>
-                <div className="flex items-center text-accent font-medium text-sm">
-                  How the Fund Works
-                  <ArrowRight size={14} className="ml-2 transition-transform group-hover:translate-x-1" />
-                </div>
-              </div>
-            </Link>
-
-            {/* Build */}
+            {/* Systems */}
             <Link href="/services" className="group">
               <div className="glass-card p-8 h-full flex flex-col transition-all duration-300 group-hover:-translate-y-2 group-hover:ring-1 group-hover:ring-accent/40">
                 <div className="w-14 h-14 rounded-full bg-accent/15 flex items-center justify-center mb-5">
                   <Wrench className="w-7 h-7 text-accent" />
                 </div>
-                <p className="text-accent text-xs uppercase tracking-widest font-bold mb-2">03 · Infrastructure</p>
-                <h3 className="text-2xl font-heading font-bold text-white mb-3">Build Services</h3>
+                <p className="text-accent text-xs uppercase tracking-widest font-bold mb-2">01 · Diagnose & Build</p>
+                <h3 className="text-2xl font-heading font-bold text-white mb-3">Business Systems</h3>
                 <p className="text-white/65 text-sm leading-relaxed mb-5 flex-1">
-                  When you're ready, we build the systems your business runs on. Web applications, accreditation, tender strategy.
-                  Scoped per project. Not packaged. Not commoditised.
+                  We go into your business, find what&apos;s limiting growth, and build the solution. Technical systems, compliance stacks, operational programmes, training frameworks. Scoped per problem. Charged per outcome.
                 </p>
                 <div className="flex items-center text-accent font-medium text-sm">
-                  See Build Services
+                  See Our Services
+                  <ArrowRight size={14} className="ml-2 transition-transform group-hover:translate-x-1" />
+                </div>
+              </div>
+            </Link>
+
+            {/* Access */}
+            <Link href="/contact" className="group">
+              <div className="glass-card p-8 h-full flex flex-col transition-all duration-300 group-hover:-translate-y-2 group-hover:ring-1 group-hover:ring-accent/40">
+                <div className="w-14 h-14 rounded-full bg-accent/15 flex items-center justify-center mb-5">
+                  <Search className="w-7 h-7 text-accent" />
+                </div>
+                <p className="text-accent text-xs uppercase tracking-widest font-bold mb-2">02 · Access</p>
+                <h3 className="text-2xl font-heading font-bold text-white mb-3">Funding & Programme Navigation</h3>
+                <p className="text-white/65 text-sm leading-relaxed mb-5 flex-1">
+                  We find the money and programmes that already exist and help you qualify for them. SEDA, NYDA, NEF, IDC, SETA grants, B-BBEE enterprise development funds. We&apos;re the navigator — not the bank.
+                </p>
+                <div className="flex items-center text-accent font-medium text-sm">
+                  Talk To Us
+                  <ArrowRight size={14} className="ml-2 transition-transform group-hover:translate-x-1" />
+                </div>
+              </div>
+            </Link>
+
+            {/* Ventures */}
+            <Link href="/contact" className="group">
+              <div className="glass-card p-8 h-full flex flex-col transition-all duration-300 group-hover:-translate-y-2 group-hover:ring-1 group-hover:ring-accent/40">
+                <div className="w-14 h-14 rounded-full bg-accent/15 flex items-center justify-center mb-5">
+                  <TrendingUp className="w-7 h-7 text-accent" />
+                </div>
+                <p className="text-accent text-xs uppercase tracking-widest font-bold mb-2">03 · Invest</p>
+                <h3 className="text-2xl font-heading font-bold text-white mb-3">Breed Ventures</h3>
+                <p className="text-white/65 text-sm leading-relaxed mb-5 flex-1">
+                  For businesses we believe in, we don&apos;t just build and walk away. We take an equity stake and grow alongside you. For the right idea, we build it from scratch under the Breed umbrella.
+                </p>
+                <div className="flex items-center text-accent font-medium text-sm">
+                  Learn More
                   <ArrowRight size={14} className="ml-2 transition-transform group-hover:translate-x-1" />
                 </div>
               </div>
@@ -239,11 +236,11 @@ export default function Home() {
                 href: '/services#accreditation',
               },
               {
-                icon: <FileSearch className="w-6 h-6 text-accent" />,
-                title: 'Tender Strategy',
-                description: 'AI-powered tender matching across 26+ SA government sources. We find, prepare, submit, and manage relationships. From R350/month, or fully managed.',
-                items: ['Daily scraping of 26+ portals', 'AI scoring on your profile', 'End-to-end bid preparation', 'Site meeting attendance'],
-                href: '/tender-services',
+                icon: <Search className="w-6 h-6 text-accent" />,
+                title: 'Funding & Programme Navigation',
+                description: 'We find the funding that already exists for your business and help you qualify for it — SEDA, NYDA, NEF, IDC, SETA grants, B-BBEE enterprise development funds.',
+                items: ['Funding landscape assessment', 'SEDA, NYDA, NEF & IDC access', 'SETA grants & skills funding', 'B-BBEE enterprise development funds'],
+                href: '/contact',
               },
             ].map((pillar) => (
               <Link key={pillar.title} href={pillar.href} className="group">
@@ -389,16 +386,16 @@ export default function Home() {
                 <span className="block text-accent mt-2">You need infrastructure.</span>
               </h2>
               <p className="text-white/75 text-lg mb-8 max-w-2xl mx-auto">
-                Join the network. Get the tools, the training, the community, and the compliance support.
-                When you're ready to build - we build with you.
+                We diagnose what&apos;s holding your business back, build the systems to fix it, and find the
+                funding that already exists to accelerate it. For the right businesses, we go further and invest.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link href="/network" className="btn btn-primary">
-                  Join the Network
+                <Link href="/contact" className="btn btn-primary">
+                  Work With Us
                   <ChevronRight size={16} className="ml-1" />
                 </Link>
-                <Link href="/contact" className="btn btn-outline">
-                  Scope a Project
+                <Link href="/services" className="btn btn-outline">
+                  See Our Services
                   <ArrowRight size={16} className="ml-1" />
                 </Link>
               </div>

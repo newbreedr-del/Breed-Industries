@@ -11,9 +11,7 @@ import {
 
 const navItems = [
   { name: 'Home', path: '/' },
-  { name: 'Network', path: '/network' },
   { name: 'Services', path: '/services' },
-  { name: 'Tender Services', path: '/tender-services' },
   { name: 'Portfolio', path: '/portfolio' },
   { name: 'About', path: '/about' },
   { name: 'Contact', path: '/contact' },
@@ -66,14 +64,14 @@ export const Header = () => {
     >
       <div className="grid-overlay">
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between relative gap-4">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-4">
-              <Image 
-                src="/assets/images/logos/breed-logo-just.png" 
-                alt="Breed Industries Mark" 
-                width={56} 
-                height={56} 
+            <Link href="/" className="flex items-center gap-4 relative z-10">
+              <Image
+                src="/assets/images/logos/breed-logo-just.png"
+                alt="Breed Industries Mark"
+                width={56}
+                height={56}
                 className="w-14 h-14"
                 priority
               />
@@ -83,13 +81,13 @@ export const Header = () => {
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-8">
+            {/* Desktop Navigation — centred in the row */}
+            <nav className="hidden lg:flex flex-1 items-center justify-center">
               <ul className="flex items-center gap-6">
                 {navItems.map((item) => (
                   <li key={item.name} className="relative">
-                    <Link 
-                      href={item.path} 
+                    <Link
+                      href={item.path}
                       className="text-white hover:text-accent active:text-accent focus:text-accent transition-colors py-2"
                     >
                       {item.name}
@@ -97,25 +95,26 @@ export const Header = () => {
                   </li>
                 ))}
               </ul>
-
-              {/* CTA Button */}
-              <Link
-                href="/network"
-                className="btn btn-primary"
-              >
-                <MessageSquare size={16} className="mr-2" />
-                Join the Network
-              </Link>
             </nav>
 
-            {/* Mobile Menu Button */}
-            <button 
-              className="lg:hidden text-white hover:text-accent transition-colors"
-              onClick={toggleMobileMenu}
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Right: CTA + Mobile toggle */}
+            <div className="flex items-center gap-4 relative z-10">
+              <Link
+                href="/contact"
+                className="btn btn-primary hidden lg:flex"
+              >
+                <MessageSquare size={16} className="mr-2" />
+                Work With Us
+              </Link>
+
+              <button
+                className="lg:hidden text-white hover:text-accent transition-colors"
+                onClick={toggleMobileMenu}
+                aria-label="Toggle menu"
+              >
+                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -173,12 +172,12 @@ export const Header = () => {
                 {/* Mobile Contact */}
                 <div className="mt-6 flex flex-col gap-4">
                   <Link
-                    href="/network"
+                    href="/contact"
                     className="btn btn-primary w-full justify-center"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <MessageSquare size={16} className="mr-2" />
-                    Join the Network
+                    Work With Us
                   </Link>
                   
                   <div className="flex flex-col items-center gap-1">

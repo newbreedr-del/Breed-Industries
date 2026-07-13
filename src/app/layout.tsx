@@ -27,17 +27,17 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Breed Industries | Business Setup, Branding & Digital Solutions South Africa',
-  description: 'Complete business launch services in South Africa: CIPC registration from R550, professional branding, website development, business plans, and compliance. Durban-based, serving nationwide.',
-  keywords: ['business registration South Africa', 'CIPC registration', 'company registration Durban', 'business branding South Africa', 'website development Durban', 'business plan writing', 'logo design South Africa', 'digital marketing South Africa', 'B-BBEE certificate', 'tax clearance SARS', 'company profile design', 'app development South Africa'],
+  title: 'Breed Industries | Business Infrastructure for Serious South African Businesses',
+  description: 'Breed Industries diagnoses what limits your business, builds the systems to fix it, and navigates the funding that already exists. Web applications, compliance, funding access, and equity partnerships for serious SA businesses.',
+  keywords: ['business systems South Africa', 'business infrastructure Durban', 'SEDA funding South Africa', 'NYDA grants', 'NEF funding South Africa', 'B-BBEE enterprise development', 'web application development South Africa', 'CIPC SARS compliance', 'CIDB registration', 'business equity partnership', 'Breed Ventures', 'business investment South Africa'],
   authors: [{ name: 'Breed Industries' }],
   creator: 'Breed Industries',
   publisher: 'Breed Industries',
   metadataBase: new URL('https://thebreed.co.za'),
   alternates: { canonical: 'https://thebreed.co.za' },
   openGraph: {
-    title: 'Breed Industries | Build Your Business Empire',
-    description: 'From idea to launch in days. Business registration, branding, websites, and compliance services across South Africa.',
+    title: 'Breed Industries | Infrastructure for Serious Businesses',
+    description: 'We diagnose what limits your business, build the systems to fix it, and find the funding that already exists. Durban-based. Serving SA.',
     url: 'https://thebreed.co.za',
     siteName: 'Breed Industries',
     images: [{ url: '/api/og?title=Breed%20Industries&subtitle=Build%20Your%20Business%20Empire', width: 1200, height: 630, alt: 'Breed Industries - Business Solutions South Africa' }],

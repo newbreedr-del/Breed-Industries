@@ -25,8 +25,8 @@ const values = [
     icon: <Award className="w-5 h-5 text-accent" />,
   },
   {
-    title: 'Community over committee',
-    description: 'The Isivuno Fund is run by members, not a panel. Decisions are public, votes are transparent, accountability is shared.',
+    title: 'Accountability, not authority',
+    description: 'We don\'t make decisions for clients. We build the systems and create the access that lets them make better decisions themselves.',
     icon: <Target className="w-5 h-5 text-accent" />,
   },
   {
@@ -67,8 +67,8 @@ export default function AboutPage() {
         backgroundImage="/assets/images/about-hero.jpg"
         align="left"
       >
-        <Link href="/network" className="btn btn-primary">
-          Join the Network
+        <Link href="/contact" className="btn btn-primary">
+          Work With Us
         </Link>
       </PageHero>
 

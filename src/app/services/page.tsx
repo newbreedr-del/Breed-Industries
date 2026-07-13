@@ -4,44 +4,45 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageHero } from '@/components/layout/PageHero';
 import {
-  Code2, ShieldCheck, FileSearch,
+  Wrench, Search, TrendingUp,
   CheckCircle2, ArrowRight, ChevronRight,
 } from 'lucide-react';
 
 const CONTACT_HREF = '/contact?subject=Scope%20a%20project';
 
 export const metadata: Metadata = {
-  title: 'Build Services | Web Applications, Accreditation & Tender Strategy | Breed Industries',
-  description: 'Breed Industries builds three categories of operational infrastructure: custom web applications, full accreditation & compliance, and AI-powered tender strategy. Scoped per project - not packaged.',
-  keywords: ['web applications South Africa', 'business compliance South Africa', 'CIPC SARS CIDB', 'tender strategy', 'B-BBEE certification', 'custom platforms Durban'],
+  title: 'Services | Systems, Funding Navigation & Ventures | Breed Industries',
+  description: 'Breed Industries diagnoses what limits your business and builds the fix — technical systems, compliance, training frameworks. We navigate funding that already exists. And for the right businesses, we invest.',
+  keywords: ['business systems South Africa', 'SEDA funding navigation', 'NYDA grants South Africa', 'NEF IDC funding', 'B-BBEE enterprise development', 'web applications Durban', 'compliance CIPC SARS', 'equity partnership South Africa', 'Breed Ventures'],
   alternates: { canonical: 'https://thebreed.co.za/services' },
   openGraph: {
-    title: 'Build Services - Breed Industries',
-    description: 'Custom web applications, accreditation & compliance, and tender strategy. The infrastructure serious businesses run on.',
+    title: 'Services - Breed Industries',
+    description: 'Diagnose. Build. Access. Invest. Three pillars for serious South African businesses.',
     url: 'https://thebreed.co.za/services',
   },
 };
 
 const pillars = [
   {
-    id: 'web-applications',
-    title: 'Web Applications',
-    icon: <Code2 className="w-8 h-8 text-accent" />,
-    tagline: 'Operational systems. Not brochure sites.',
-    description: 'We build the platforms a serious business actually runs on - internal admin systems, customer-facing products, e-commerce, AI agents, and WhatsApp automations.',
+    id: 'systems',
+    title: 'Business Systems',
+    icon: <Wrench className="w-8 h-8 text-accent" />,
+    tagline: 'We find what\'s limiting you. Then we build the fix.',
+    description: 'We go into your business, map the constraint — whether it\'s technical, operational, compliance-related, or structural — and build the system to fix it. Not a package. Not a template. The actual thing.',
     deliverables: [
-      'Custom platforms & admin dashboards',
-      'E-commerce with multiple SA payment gateways',
+      'Business diagnosis workshop — map the constraint before quoting',
+      'Custom web applications & admin platforms',
+      'E-commerce with SA payment gateways (Stripe, Paystack)',
       'AI agents, chatbots & WhatsApp automation',
-      'Member portals, booking and CRM systems',
-      'Integrations with Xero, Sage, Supabase, Stripe, Paystack',
-      'Hosted, monitored and maintained by us',
+      'Accreditation & compliance stack (CIPC, SARS, B-BBEE, CSD, CIDB)',
+      'Operational programmes and training frameworks',
+      'Partner-delivered solutions (ISO, safety management, HR systems)',
     ],
     process: [
-      'Scoping workshop - we map the system end-to-end before quoting',
-      'Fixed-scope quote with banking details and 50% deposit terms',
-      'Sprint-based build with weekly demos',
-      'Handover, training, and a 30-day defect period',
+      'Diagnosis session — we map what\'s limiting growth before quoting',
+      'Fixed-scope proposal — clear deliverables, no hidden extras',
+      'Build or implementation — sprint-based with weekly check-ins',
+      'Handover, training, and ongoing support',
     ],
     examples: [
       { name: 'Engage Africa IO', tag: 'AI customer engagement platform', href: '/portfolio#engage-africa' },
@@ -50,50 +51,52 @@ const pillars = [
     ],
   },
   {
-    id: 'accreditation',
-    title: 'Accreditation & Compliance',
-    icon: <ShieldCheck className="w-8 h-8 text-accent" />,
-    tagline: 'The full compliance stack - end to end.',
-    description: 'We remove every barrier between you and the contracts, grants and funding you should be qualifying for. No piecemeal certificates. The whole stack, properly aligned, kept current.',
+    id: 'funding-navigation',
+    title: 'Funding & Programme Navigation',
+    icon: <Search className="w-8 h-8 text-accent" />,
+    tagline: 'The money exists. We help you find it and qualify for it.',
+    description: 'Most businesses don\'t know what government and private funding is available to them — or they don\'t qualify yet because of compliance gaps. We map the landscape, close the gaps, and navigate the application process alongside you. We\'re the navigator. Not the bank.',
     deliverables: [
-      'CIPC company registration, amendments & annual returns',
-      'SARS tax registration, tax clearance & filing support',
-      'B-BBEE affidavit & certification (Levels 1–8)',
-      'CSD profile registration & maintenance',
-      'CIDB grading - Grade 1 through Grade 9',
-      'COIDA registration and Letter of Good Standing',
-      'Tender-ready documentation pack',
+      'Funding landscape assessment — what you qualify for right now',
+      'SEDA — enterprise development grants & business support',
+      'NYDA — youth business funding and incubation programmes',
+      'NEF — black business equity financing',
+      'IDC — industrial development and sector funding',
+      'SETA grants — skills development funding for employers',
+      'B-BBEE enterprise & supplier development funds',
+      'Application preparation and submission support',
     ],
     process: [
-      'Compliance audit - we map what you have, what you\'re missing, and what you actually qualify for',
-      'Document collection checklist via member portal',
-      'Filings submitted, tracked, and confirmed in writing',
-      'Renewal calendar maintained for you (Network members)',
+      'Eligibility assessment — what you qualify for now vs. post-compliance',
+      'Compliance alignment — CIPC, SARS, B-BBEE, CSD closed where needed',
+      'Application preparation — business plans, financials, motivation letters',
+      'Submission management and follow-up',
     ],
     examples: null,
   },
   {
-    id: 'tender-strategy',
-    title: 'Tender Strategy',
-    icon: <FileSearch className="w-8 h-8 text-accent" />,
-    tagline: 'AI-matched. Bid-ready. Fully managed if needed.',
-    description: 'Our tender intelligence engine scrapes 26+ South African government sources twice a day and scores each opportunity against your CIDB grade, BEE level, commodity codes, and operating province. Then we help you actually win.',
+    id: 'ventures',
+    title: 'Breed Ventures',
+    icon: <TrendingUp className="w-8 h-8 text-accent" />,
+    tagline: 'For the right businesses, we don\'t just build. We invest.',
+    description: 'When we see a business with real potential and the right operator behind it, we take an equity stake and grow alongside you. For the right ideas, we build from scratch under the Breed umbrella. Minimum 10% equity. Assessed by Directors and Partners. Deal structures include sweat equity, revenue share, and convertible agreements.',
     deliverables: [
-      'Daily monitoring across 26+ portals (national, SOE, provincial)',
-      'AI matching against your business profile',
-      'Email alerts for high-score matches, weekly digest',
-      'Bid preparation: pricing schedule, returnable docs, technical responses',
-      'Submission management, site meeting attendance, queries handled',
-      'Post-award contract & relationship support',
+      'Investment Assessment Scorecard — structured evaluation by Directors & Partners',
+      'Term Sheet — non-binding equity proposal',
+      'Equity Partnership Agreement — formal binding deal',
+      'R950/month management retainer (compliance, admin, processing)',
+      'Two investment tracks: client equity partnership or Breed-built portfolio company',
+      'Ongoing operational support and network access',
+      'Access to Breed partner ecosystem (lobbying, ISO, safety, training)',
     ],
     process: [
-      'Profile setup - we capture grade, province, categories, commodity codes',
-      'Engine starts matching within 24 hours',
-      'Bid-by-bid scope: alerts-only, bid-prep, or fully-managed',
-      'Win-rate review every 90 days',
+      'Expression of interest — brief conversation to understand the business',
+      'Scorecard evaluation — Directors & Partners assess 6 weighted criteria',
+      'Term Sheet presentation — if score qualifies (minimum 50%)',
+      'Due diligence and Equity Partnership Agreement signing',
     ],
     examples: null,
-    cta: { label: 'See the Tender Services page', href: '/tender-services' },
+    cta: { label: 'Talk to us about a partnership', href: CONTACT_HREF },
   },
 ];
 
@@ -103,15 +106,15 @@ export default function ServicesPage() {
       <Header />
 
       <PageHero
-        title="What we build"
-        subtitle="Build Services"
-        description="Three categories of operational infrastructure. Scoped per project - not packaged. Quoted only after we understand what you actually need."
+        title="How we work"
+        subtitle="Our Services"
+        description="Diagnose what's limiting your business. Build the systems to fix it. Find the funding that already exists. And for the right businesses — invest."
         breadcrumbs={[{ label: 'Services', href: '/services' }]}
         backgroundImage="/assets/images/about-hero.jpg"
         align="left"
       >
         <Link href={CONTACT_HREF} className="btn btn-primary">
-          Scope a Project
+          Work With Us
           <ChevronRight size={16} className="ml-1" />
         </Link>
       </PageHero>
@@ -150,7 +153,7 @@ export default function ServicesPage() {
                     {pillar.icon}
                   </div>
                   <p className="text-accent text-xs uppercase tracking-widest font-bold mb-2">
-                    0{idx + 1} · Build Pillar
+                    0{idx + 1} · {idx === 0 ? 'Diagnose & Build' : idx === 1 ? 'Access' : 'Invest'}
                   </p>
                   <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-3">
                     {pillar.title}
@@ -160,7 +163,7 @@ export default function ServicesPage() {
 
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Link href={CONTACT_HREF} className="btn btn-primary">
-                      Scope your project
+                      Work With Us
                       <ArrowRight size={14} className="ml-2" />
                     </Link>
                     {pillar.cta && (
@@ -174,7 +177,7 @@ export default function ServicesPage() {
                 {/* Right: deliverables + process */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="glass-card p-6">
-                    <h3 className="text-sm uppercase tracking-widest text-accent font-bold mb-4">What's included</h3>
+                    <h3 className="text-sm uppercase tracking-widest text-accent font-bold mb-4">What&apos;s included</h3>
                     <ul className="space-y-2.5">
                       {pillar.deliverables.map((d) => (
                         <li key={d} className="flex items-start gap-2 text-sm text-white/75">
@@ -221,24 +224,25 @@ export default function ServicesPage() {
         </section>
       ))}
 
-      {/* Network reminder */}
+      {/* Final CTA */}
       <section className="py-20 relative">
         <div className="absolute inset-0 grid-overlay"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="glass-card-accent p-8 md:p-12 max-w-4xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-4">
-              Network members get preferential rates on every Build Service.
+              Not sure where to start?
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto mb-6">
-              If you're going to invest in infrastructure, do it inside the ecosystem that supports you afterwards.
+              Most engagements begin with a conversation. Tell us where the business is and what it&apos;s running into —
+              we&apos;ll tell you what we can actually do about it.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/network" className="btn btn-primary">
-                Join the Network
+              <Link href={CONTACT_HREF} className="btn btn-primary">
+                Start the Conversation
                 <ChevronRight size={16} className="ml-1" />
               </Link>
-              <Link href={CONTACT_HREF} className="btn btn-outline">
-                Scope a Project
+              <Link href="/portfolio" className="btn btn-outline">
+                See Our Work
                 <ArrowRight size={16} className="ml-1" />
               </Link>
             </div>

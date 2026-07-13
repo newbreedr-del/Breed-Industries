@@ -7,7 +7,9 @@ const nextConfig = {
     APP_ENV: process.env.NODE_ENV,
   },
   serverExternalPackages: ['@sparticuz/chrome-aws-lambda', 'puppeteer-core', 'puppeteer'],
-  turbopack: {},
+  turbopack: {
+    root: __dirname,
+  },
   async redirects() {
     return [
       {
